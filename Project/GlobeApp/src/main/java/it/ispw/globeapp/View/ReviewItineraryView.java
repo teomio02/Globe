@@ -53,8 +53,9 @@ public class ReviewItineraryView {
 
     }
 
-    public void backHandler(ActionEvent actionEvent){
-
+    public void backHandler(ActionEvent event) throws IOException {
+        Navigator navigator = new Navigator();
+        navigator.goToGuestTrip(event);
     }
 
     public void GuestHomeHandler(ActionEvent event) throws IOException {
