@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.ispw.globeapp.View.GuestTripView">
+   <children>
+      <VBox prefHeight="630.0" prefWidth="640.0" spacing="30.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox prefHeight="63.0" prefWidth="279.0">
+               <children>
+                  <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="GL">
+                     <font>
+                        <Font name="Arial Bold" size="56.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Text>
+                  <Pane prefHeight="60.0" prefWidth="60.0">
+                     <children>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../resources/it/ispw/globeapp/Ellipse.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="44.0" fitWidth="44.0" layoutX="8.0" layoutY="8.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../resources/it/ispw/globeapp/iconGlobe.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+                  <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="BE">
+                     <font>
+                        <Font name="Arial Bold" size="56.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="30.0">
+               <children>
+                  <Button fx:id="ImageButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#imageHandler" style="-fx-background-color: #314c1c;" text="Copertina" textFill="#97c093">
+                     <graphic>
+                        <Pane prefHeight="160.0" prefWidth="160.0">
+                           <children>
+                              <Arc fill="#98bf9300" layoutX="80.0" layoutY="80.0" length="345.0" radiusX="80.0" radiusY="80.0" startAngle="146.3" stroke="#97c093" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="7.0" />
+                              <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="40.0" layoutY="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../../resources/it/ispw/globeapp/plus.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <VBox spacing="10.0">
+                     <children>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="nameErrorLabel" alignment="CENTER" prefHeight="13.0" prefWidth="254.0" text="Inserire nome itinerario" textAlignment="CENTER" textFill="RED" visible="false">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="tripNameField" alignment="CENTER" prefHeight="32.0" prefWidth="254.0" promptText="Trip Name" style="-fx-text-fill: #FFFFFF; -fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3;">
+                                       <font>
+                                          <Font name="Arial" size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Day:">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Text>
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="dayErrorLabel" alignment="CENTER" prefHeight="13.0" prefWidth="123.0" text="Inserire numero giorni" textAlignment="CENTER" textFill="RED" visible="false">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefHeight="36.0" prefWidth="123.0" style="-fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3;">
+                                       <children>
+                                          <Button fx:id="minusButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#minusHandler" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../../../../resources/it/ispw/globeapp/dminus.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                          <Label fx:id="dayLabel" alignment="CENTER" prefHeight="18.0" prefWidth="58.0" text="0" textAlignment="CENTER" textFill="#97c093" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="plusButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#plusHandler" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../../../../resources/it/ispw/globeapp/dplus.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <VBox>
+                           <children>
+                              <Label fx:id="descriptionErrorLabel" alignment="CENTER" prefHeight="13.0" prefWidth="431.0" text="Inserire descrizione viaggio" textAlignment="CENTER" textFill="RED" visible="false">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="tripDescriptionField" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="431.0" promptText="Description" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Button fx:id="nextButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#nextHandler" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../resources/it/ispw/globeapp/next.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <VBox.margin>
+                  <Insets left="548.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
+         <image>
+            <Image url="@../../../../../resources/it/ispw/globeapp/Background.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #97c093;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="HomeButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#GuestHomeHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Home" textFill="#314c1c">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../resources/it/ispw/globeapp/ihome.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="loginButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#loginHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Log in" textFill="#314c1c">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../resources/it/ispw/globeapp/iaccount.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="TripButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#GuestTripHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #314c1c; -fx-background-radius: 40;" text="Trip" textFill="#97c093">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../resources/it/ispw/globeapp/atrip.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
