@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.Navigator;
 import it.uniroma2.ispw.globe.model.Bean.ItineraryBean;
 import javafx.event.ActionEvent;
@@ -94,6 +95,8 @@ public class CreateTripViewController {
 
         if (count == 0 ){
             ItineraryBean itineraryBean = new ItineraryBean(tripName, description, dayNum);
+            ManageItineraryController controller = new ManageItineraryController();
+            controller.addItinerary(itineraryBean);
         }
     }
 }
