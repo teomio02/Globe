@@ -1,4 +1,4 @@
-package it.uniroma2.ispw.globe.model.Bean;
+package it.uniroma2.ispw.globe.model.bean;
 
 public class ItineraryBean {
     private String name;

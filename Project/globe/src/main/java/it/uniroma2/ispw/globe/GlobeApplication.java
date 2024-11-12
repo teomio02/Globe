@@ -4,10 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.File;
+import java.awt.Taskbar;
 import java.io.IOException;
+import java.io.File;
 import java.net.URL;
 
 public class GlobeApplication extends Application {
@@ -21,6 +23,8 @@ public class GlobeApplication extends Application {
         stage.setTitle("GLOBE");
         stage.setScene(scene);
         stage.show();
+        Image icon = new Image("file:src/main/resources/it/uniroma2/ispw/globe/logo.png");
+        stage.getIcons().add(icon);
     }
 
     public static void main(String[] args) {

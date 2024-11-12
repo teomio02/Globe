@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 
+import it.uniroma2.ispw.globe.controller.guicontroller.CreateTripViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,15 +16,25 @@ import java.net.URL;
 public class Navigator {
     private String page;
 
-    public void goToTrip(ActionEvent event) throws IOException {
-        page = "src/main/java/it/uniroma2/ispw/globe/view/UserTripView.fxml";
+    public void goToManageItinerary(ActionEvent event) throws IOException {
+        page = "src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml";
         FXMLLoader loader = goToPage(page, event);
     }
 
-    public void goToAddTrip(ActionEvent event) throws IOException {
+    public void goToCreateTrip(ActionEvent event) throws IOException {
         page = "src/main/java/it/uniroma2/ispw/globe/view/CreateTripView.fxml";
         FXMLLoader loader = goToPage(page, event);
+        CreateTripViewController controller = loader.getController();
+        controller.initialize();
     }
+
+/*    public void  goToAddCity(ActionEvent event, String tripName) throws IOException {
+        page = "src/main/java/it/uniroma2/ispw/globe/view/AddCityView.fxml";
+        FXMLLoader loader = goToPage(page, event);
+        AddCityViewController controller = loader.getController();
+    }
+ */
+
 
     public FXMLLoader goToPage(String Page, ActionEvent event) throws IOException {
         URL url = new File(Page).toURI().toURL();

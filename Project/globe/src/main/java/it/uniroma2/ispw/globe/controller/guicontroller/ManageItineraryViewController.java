@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class UserTripViewController {
+public class ManageItineraryViewController {
     @FXML
     private Button addButton;
     @FXML
@@ -20,7 +20,7 @@ public class UserTripViewController {
     //HANDLER
     public void addHandler (ActionEvent event) throws IOException {
         Navigator navigator = new Navigator();
-        navigator.goToAddTrip(event);
+        navigator.goToCreateTrip(event);
     }
 
     public void userTripHandler (ActionEvent event) {}

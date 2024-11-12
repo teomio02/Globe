@@ -33,7 +33,7 @@ public class LoginViewController {
     public void loginHandler(ActionEvent event) throws IOException {
         Navigator navigator = new Navigator();
         // da cambiare in goToHome (lo stiamo facendo per implementare la schermata trip)
-        navigator.goToTrip(event);
+        navigator.goToManageItinerary(event);
     }
 
     public void singinHandler(ActionEvent event) throws IOException {

@@ -2,12 +2,18 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.Navigator;
-import it.uniroma2.ispw.globe.model.Bean.ItineraryBean;
+import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateTripViewController {
     @FXML
@@ -38,8 +44,16 @@ public class CreateTripViewController {
     private Label descriptionErrorLabel;
     @FXML
     private Button imageButton;
+    @FXML
+    private HBox daysHBox;
+
+    private List<Button> dayButtons;
 
     //HANDLER
+    public void initialize() {
+        dayButtons = new ArrayList<>();
+    }
+
     public void userTripHandler (ActionEvent event) {}
 
     public void userProfileHandler (ActionEvent event) {}
@@ -54,6 +68,8 @@ public class CreateTripViewController {
         int dayNum = Integer.valueOf(dayLabel.getText());
         if(dayNum>0){
             dayLabel.setText(String.valueOf(dayNum-1));
+            daysHBox.getChildren().remove(dayButtons.get(dayNum));
+            this.dayButtons.remove(dayNum);
         }
     }
 
@@ -61,10 +77,13 @@ public class CreateTripViewController {
         int dayNum = Integer.valueOf(dayLabel.getText());
         if(dayNum<99){
             dayLabel.setText(String.valueOf(dayNum+1));
+            Button button = new Button(dayLabel.getText());
+            this.dayButtons.add(button);
+            daysHBox.getChildren().add(dayButtons.get(dayNum));
         }
     }
 
-    public void nextHandler (ActionEvent event) {
+    public void nextHandler (ActionEvent event) throws SQLException, IOException {
         String tripName, description;
         int dayNum;
         int count=0;
@@ -98,5 +117,8 @@ public class CreateTripViewController {
             ManageItineraryController controller = new ManageItineraryController();
             controller.addItinerary(itineraryBean);
         }
+
+       // Navigator navigator = new Navigator();
+       // navigator.goToAddCity(event,tripName);
     }
 }
