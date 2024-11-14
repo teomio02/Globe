@@ -1,14 +1,20 @@
 package it.uniroma2.ispw.globe.model;
 
+import it.uniroma2.ispw.globe.model.bean.CityBean;
+
+import java.util.List;
+
 public class ItineraryEntity {
     private String name;
     private String description;
     private int numberOfDays;
+    private List<CityEntity> cities;
 
-    public ItineraryEntity(String name, String description, int numberOfDays) {
+    public ItineraryEntity(String name, String description, int numberOfDays, List<CityEntity> cities) {
         this.name = name;
         this.description = description;
         this.numberOfDays = numberOfDays;
+        this.cities = cities;
     }
 
     public String getName() {
@@ -31,4 +37,12 @@ public class ItineraryEntity {
     public void setNumberOfDays(int numberOfDays) {
         this.numberOfDays = numberOfDays;
     }
+
+    public List<CityEntity> getCities() {
+        return cities;
+    }
+    public void setCities(List<CityEntity> cities) {
+        this.cities = cities;
+    }
+
 }

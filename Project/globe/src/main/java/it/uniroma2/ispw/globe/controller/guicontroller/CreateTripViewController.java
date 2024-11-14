@@ -2,13 +2,17 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.Navigator;
+import it.uniroma2.ispw.globe.model.bean.AccommodationBean;
+import it.uniroma2.ispw.globe.model.bean.AttractionBean;
+import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.other.Session;
+import it.uniroma2.ispw.globe.view.DayTab;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -45,14 +49,15 @@ public class CreateTripViewController {
     @FXML
     private Button imageButton;
     @FXML
-    private HBox daysHBox;
+    private TabPane daysTabPane;
 
-    private List<Button> dayButtons;
+    private DayTab dayTab;
+
+    public void initialize() {
+        dayTab = new DayTab();
+    }
 
     //HANDLER
-    public void initialize() {
-        dayButtons = new ArrayList<>();
-    }
 
     public void userTripHandler (ActionEvent event) {}
 
@@ -68,8 +73,7 @@ public class CreateTripViewController {
         int dayNum = Integer.valueOf(dayLabel.getText());
         if(dayNum>0){
             dayLabel.setText(String.valueOf(dayNum-1));
-            daysHBox.getChildren().remove(dayButtons.get(dayNum));
-            this.dayButtons.remove(dayNum);
+            dayTab.removeTab(daysTabPane);
         }
     }
 
@@ -77,9 +81,7 @@ public class CreateTripViewController {
         int dayNum = Integer.valueOf(dayLabel.getText());
         if(dayNum<99){
             dayLabel.setText(String.valueOf(dayNum+1));
-            Button button = new Button(dayLabel.getText());
-            this.dayButtons.add(button);
-            daysHBox.getChildren().add(dayButtons.get(dayNum));
+            dayTab.setTab(daysTabPane);
         }
     }
 
@@ -87,6 +89,7 @@ public class CreateTripViewController {
         String tripName, description;
         int dayNum;
         int count=0;
+        List<CityBean> cities = new ArrayList<>();
 
         tripName = this.tripNameField.getText();
         if(tripName.isEmpty()){
@@ -111,14 +114,50 @@ public class CreateTripViewController {
         }else{
             this.dayErrorLabel.setVisible(false);
         }
+        for(Tab tab : daysTabPane.getTabs()){
+            int attraction_count=2;
+            List<AttractionBean> attractions = new ArrayList<>();
+
+            VBox vbox = (VBox) tab.getContent();
+            HBox cityHbox = (HBox) vbox.getChildren().get(0);
+            HBox attractionHbox = (HBox) vbox.getChildren().get(1);
+
+            TextField city_tf = (TextField) cityHbox.getChildren().get(0);
+            TextField accommodation_tf = (TextField) cityHbox.getChildren().get(1);
+            if (city_tf.getText().isEmpty() || accommodation_tf.getText().isEmpty()) {
+                count++;
+            }else{
+                while(vbox.getChildren().size()>attraction_count){
+                    AttractionBean attraction;
+                    Label attraction_label = (Label) vbox.getChildren().get(attraction_count);
+                    attraction = new AttractionBean(attraction_label.getText());
+                    if (attraction_label.getText().isEmpty()) {
+                        count++;
+                    }
+                    attractions.add(attraction);
+                    attraction_count++;
+                }
+                AccommodationBean accommodation = new AccommodationBean(accommodation_tf.getText());
+                CityBean city = new CityBean(city_tf.getText(),accommodation,attractions);
+                cities.add(city);
+            }
+
+
+            
+        }
 
         if (count == 0 ){
-            ItineraryBean itineraryBean = new ItineraryBean(tripName, description, dayNum);
+            List<ItineraryBean> itineraries = new ArrayList<>();
+            ItineraryBean itineraryBean = new ItineraryBean(tripName, description, dayNum, cities);
+            itineraries = Session.getInstance().getUser().getItineraries();
+            itineraries.add(itineraryBean);
+            Session.getInstance().getUser().setItineraries(itineraries);
+
             ManageItineraryController controller = new ManageItineraryController();
             controller.addItinerary(itineraryBean);
         }
 
-       // Navigator navigator = new Navigator();
-       // navigator.goToAddCity(event,tripName);
+        Navigator navigator = new Navigator();
+        navigator.goToManageItinerary(event);
     }
 }

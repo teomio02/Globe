@@ -2,6 +2,8 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 
 import it.uniroma2.ispw.globe.controller.guicontroller.CreateTripViewController;
+import it.uniroma2.ispw.globe.controller.guicontroller.DisplayItineraryViewController;
+import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -26,6 +28,13 @@ public class Navigator {
         FXMLLoader loader = goToPage(page, event);
         CreateTripViewController controller = loader.getController();
         controller.initialize();
+    }
+
+    public void goToDispalyItinerary (ActionEvent event, ItineraryBean itineraryBean) throws IOException {
+        page = "src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml";
+        FXMLLoader loader = goToPage(page, event);
+        DisplayItineraryViewController controller = loader.getController();
+        controller.setItineraryData(itineraryBean);
     }
 
 /*    public void  goToAddCity(ActionEvent event, String tripName) throws IOException {
