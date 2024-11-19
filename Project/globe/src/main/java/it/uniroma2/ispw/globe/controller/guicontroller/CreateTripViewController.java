@@ -114,6 +114,7 @@ public class CreateTripViewController {
         }else{
             this.dayErrorLabel.setVisible(false);
         }
+
         for(Tab tab : daysTabPane.getTabs()){
             int attraction_count=2;
             List<AttractionBean> attractions = new ArrayList<>();
@@ -128,22 +129,26 @@ public class CreateTripViewController {
                 count++;
             }else{
                 while(vbox.getChildren().size()>attraction_count){
-                    AttractionBean attraction;
+
                     Label attraction_label = (Label) vbox.getChildren().get(attraction_count);
-                    attraction = new AttractionBean(attraction_label.getText());
-                    if (attraction_label.getText().isEmpty()) {
+                    if (attraction_label.getText()=="") {
                         count++;
                     }
-                    attractions.add(attraction);
+
+                    if (count==0) {
+                        AttractionBean attraction;
+                        attraction = new AttractionBean(attraction_label.getText());
+                        attractions.add(attraction);
+                    }
                     attraction_count++;
                 }
-                AccommodationBean accommodation = new AccommodationBean(accommodation_tf.getText());
-                CityBean city = new CityBean(city_tf.getText(),accommodation,attractions);
-                cities.add(city);
+
+                if (count==0) {
+                    AccommodationBean accommodation = new AccommodationBean(accommodation_tf.getText());
+                    CityBean city = new CityBean(city_tf.getText(),accommodation,attractions);
+                    cities.add(city);
+                }
             }
-
-
-            
         }
 
         if (count == 0 ){
@@ -155,9 +160,9 @@ public class CreateTripViewController {
 
             ManageItineraryController controller = new ManageItineraryController();
             controller.addItinerary(itineraryBean);
-        }
 
-        Navigator navigator = new Navigator();
-        navigator.goToManageItinerary(event);
+            Navigator navigator = new Navigator();
+            navigator.goToManageItinerary(event);
+        }
     }
 }

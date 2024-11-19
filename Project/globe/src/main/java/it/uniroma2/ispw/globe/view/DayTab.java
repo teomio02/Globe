@@ -12,10 +12,11 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class DayTab {
-    int count=1;
+    int count=0;
     int day=1;
 
     public void setTab(TabPane daysTabPane) {
+        count++;
         Tab tab = new Tab(String.valueOf(count));
         daysTabPane.getTabs().add(tab);
 
@@ -50,7 +51,6 @@ public class DayTab {
         vbox.getChildren().addAll(cityHBox,attractionHBox);
 
         tab.setContent(vbox);
-        count++;
     }
 
     public void removeTab(TabPane daysTabPane) {
