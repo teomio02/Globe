@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/itinerary.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.ManageItineraryViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/itinerary.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.ManageItineraryGUIController">
    <children>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
          <image>
@@ -53,31 +53,42 @@
                   </Text>
                </children>
             </HBox>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="460.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
-               <content>
-                  <VBox fx:id="itinerariesVBox" prefHeight="460.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" />
-               </content></ScrollPane>
-            <HBox alignment="CENTER_RIGHT" spacing="30.0">
-               <children>
-                  <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#addHandler" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
-                     <font>
-                        <Font name="Arial Bold" size="1.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dplus.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
+            <TabPane prefHeight="554.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="My Itinerary">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ListView fx:id="itineraryListView" prefHeight="466.0" prefWidth="640.0" style="-fx-background-color: transparent;" />
+                              <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                                 <font>
+                                    <Font name="Arial Bold" size="1.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dplus.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </content>
+                  </Tab>
+                <Tab text="Agency Proposal">
+                     <content>
+                        <ListView fx:id="proposalListView" prefHeight="466.0" prefWidth="640.0" style="-fx-background-color: transparent;" />
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <HBox alignment="CENTER_RIGHT" spacing="30.0" />
          </children>
       </VBox>
       <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #97c093;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="homeButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#userHomeHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Home" textFill="#314c1c">
+            <Button fx:id="homeButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Home" textFill="#2f471a">
                <font>
                   <Font name="Arial Bold" size="18.0" />
                </font>
@@ -89,7 +100,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="tripButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#userTripHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #314c1c; -fx-background-radius: 40;" text="Trip" textFill="#97c093">
+            <Button fx:id="tripButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #314c1c; -fx-background-radius: 40;" text="Trip" textFill="#97c093">
                <font>
                   <Font name="Arial Bold" size="18.0" />
                </font>
@@ -101,7 +112,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="profileButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#userProfileHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Profile" textFill="#314c1c">
+            <Button fx:id="profileButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Profile" textFill="#314c1c">
                <font>
                   <Font name="Arial Bold" size="18.0" />
                </font>

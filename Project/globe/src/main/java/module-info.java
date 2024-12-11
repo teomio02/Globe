@@ -1,9 +1,9 @@
 module it.uniroma2.ispw.globe {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
-    requires java.desktop;
-    requires java.net.http;
+    requires java.xml;
+    requires com.google.gson;
+    requires okhttp3;
 
 
     opens it.uniroma2.ispw.globe to javafx.fxml;

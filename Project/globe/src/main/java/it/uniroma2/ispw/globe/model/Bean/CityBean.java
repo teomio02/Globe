@@ -1,34 +1,34 @@
 package it.uniroma2.ispw.globe.model.bean;
 
-import java.util.List;
-
 public class CityBean {
+    private String id;
     private String name;
-    private AccommodationBean accommodation;
-    private List<AttractionBean> attractions;
+    private String country;;
 
-    public CityBean(String name, AccommodationBean accommodation, List<AttractionBean> attractions) {
+    public CityBean(String id, String name, String country) {
+        this.id = id;
         this.name = name;
-        this.accommodation = accommodation;
-        this.attractions = attractions;
+        this.country = country;
     }
 
-    public String getName() { return name; }
-    public void setName(String newName) { this.name = newName; }
+    public String getId() { return id; }
 
-    public AccommodationBean getAccommodation() { return accommodation; }
-    public void setAccommodation(AccommodationBean newAccommodation) { this.accommodation = newAccommodation; }
+    public void setId(String id) { this.id = id; }
 
-    public List<AttractionBean> getAttractions() { return attractions; }
-    public void setAttractions(List<AttractionBean> newAttractions) { this.attractions = newAttractions; }
+    public String getName() {
+        return name;
+    }
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(name+"-"+accommodation.toString()+"\n");
-        for(AttractionBean attraction : attractions) {
-            builder.append(attraction.toString()+"\n");
-        }
-        return builder.toString();
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }
+

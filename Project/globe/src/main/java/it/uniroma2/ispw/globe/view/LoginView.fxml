@@ -59,7 +59,7 @@
                               <Font name="Arial Bold" size="21.0" />
                            </font>
                         </Button>
-                        <Button fx:id="singinButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#singinHandler" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #314c1c; -fx-border-color: #97c093; -fx-border-width: 4; -fx-border-radius: 40; -fx-background-radius: 40;" text="Sing in" textFill="#97c093">
+                        <Button fx:id="singinButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#signInHandler" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #314c1c; -fx-border-color: #97c093; -fx-border-width: 4; -fx-border-radius: 40; -fx-background-radius: 40;" text="Sing in" textFill="#97c093">
                            <font>
                               <Font name="Arial Bold" size="18.0" />
                            </font>
