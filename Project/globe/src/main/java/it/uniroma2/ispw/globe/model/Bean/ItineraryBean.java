@@ -30,6 +30,18 @@ public class ItineraryBean {
         this.accommodations = accommodations;
     }
 
+    public ItineraryBean(String name, String description, String type, int duration, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.duration = duration;
+        this.outboundFlightDepartureTime = outboundFlightDepartureTime;
+        this.outboundFlightDuration = outboundFlightDuration;
+        this.inboundFlightDepartureTime = inboundFlightDepartureTime;
+        this.inboundFlightDuration = inboundFlightDuration;
+        this.accommodations = accommodations;
+    }
+
     public String getName() {
         return name;
     }

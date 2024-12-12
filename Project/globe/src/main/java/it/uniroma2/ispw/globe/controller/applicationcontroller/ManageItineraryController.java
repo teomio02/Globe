@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.model.dao.AttractionDao;
+import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.model.Attraction;
@@ -166,6 +168,28 @@ public class ManageItineraryController {
         return path;
     }
 
+    public List<StepBean> getSteps(String itineraryName) {
+        List<StepBean> steps = new ArrayList<>();
+
+        ItineraryDao itineraryDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getItineraryDao();
+        Itinerary itinerary = itineraryDao.getItinerary(itineraryName);
+
+        List<Day> days = itinerary.getDays();
+        for (Day day : days) {
+            List<String> attractions = new ArrayList<>();
+            for (Attraction attraction : day.getAttractions()) {
+                attractions.add(attraction.getPlaceID());
+            }
+            List<String> cities = new ArrayList<>();
+            for (City city : day.getCities()) {
+                cities.add(city.getPlaceID());
+            }
+            StepBean stepBean = new StepBean(cities,attractions);
+            steps.add(stepBean);
+        }
+        return steps;
+    }
+
     public List<JsonObject> getPlaces(String name, String type) {
         APIClient api = new APIClient();
         List<JsonObject> apiPlaces = null;
@@ -213,6 +237,28 @@ public class ManageItineraryController {
             citiesBeans.add(cityBean);
         }
         return citiesBeans;
+    }
+
+    public ItineraryBean getItinerary(String itineraryName) {
+        ItineraryDao itineraryDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getItineraryDao();
+        Itinerary itinerary = itineraryDao.getItinerary(itineraryName);
+
+        ItineraryBean itineraryBean = new ItineraryBean(itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
+        return itineraryBean;
+    }
+
+    public CityBean getCity(String cityID) {
+        CityDao cityDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getCityDao();
+        City city = cityDao.getCity(cityID);
+        CityBean cityBean = new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+        return cityBean;
+    }
+
+    public AttractionBean getAttraction(String attractionID) {
+        AttractionDao attractionDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getAttractionDao();
+        Attraction attraction = attractionDao.getAttraction(attractionID);
+        AttractionBean attractionBean = new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+        return attractionBean;
     }
 
     public AgencyBean getAgency(AgencyBean agencyBean) {

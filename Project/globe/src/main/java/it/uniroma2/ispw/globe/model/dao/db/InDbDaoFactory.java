@@ -1,9 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.model.dao.AttractionDao;
-import it.uniroma2.ispw.globe.model.dao.CityDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
+import it.uniroma2.ispw.globe.model.dao.*;
+import it.uniroma2.ispw.globe.model.dao.memory.InMemoryDayDao;
 import it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao;
 
 public class InDbDaoFactory extends DaoFactory {
@@ -20,5 +18,10 @@ public class InDbDaoFactory extends DaoFactory {
     @Override
     public CityDao getCityDao() {
         return new InDbCityDao();
+    }
+
+    @Override
+    public DayDao getDayDao() {
+        return new InDbDayDao();
     }
 }

@@ -80,6 +80,8 @@ public class CreateItineraryGUIController {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             root = loader.load();
+            DisplayItineraryGUIController controller = loader.getController();
+            controller.init(itinerary);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

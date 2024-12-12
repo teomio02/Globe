@@ -1,9 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.model.dao.AttractionDao;
-import it.uniroma2.ispw.globe.model.dao.CityDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
+import it.uniroma2.ispw.globe.model.dao.*;
 
 
 public class InMemoryDaoFactory extends DaoFactory {
@@ -16,6 +13,11 @@ public class InMemoryDaoFactory extends DaoFactory {
     @Override
     public CityDao getCityDao() {
         return InMemoryCityDao.getInstance();
+    }
+
+    @Override
+    public DayDao getDayDao() {
+        return InMemoryDayDao.getInstance();
     }
 
     @Override
