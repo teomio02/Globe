@@ -50,7 +50,7 @@ public class ManageItineraryController {
                 }
             }
             if (!attractionsByCity.containsKey(attraction.getCity())){
-                // cosa fare con le attrazioni di nessuna città
+                otherAttractions.add(attraction);
             }
         }
 
@@ -66,23 +66,18 @@ public class ManageItineraryController {
 
             List<Attraction> attractionPath = getShortestPath(attractionsByCity.get(city));
 
-            int daysForCity = (int)Math.round(((double)attractionsByCity.get(city).size()/(double)attrNum)*(double)itinerary.getDaysNumber());
-            System.out.println(daysForCity+"="+attractionsByCity.get(city).size()+"/"+attrNum+" * "+itinerary.getDaysNumber());
+            int daysForCity = (int)Math.round(((double)attractionsByCity.get(city).size()/(double)attrNum)*itinerary.getDaysNumber());
             if (daysForCity !=0) {
                 int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);;
-                System.out.println("attrazioni al giorno:"+attrDayNum);
                 int curAttr = 0;
                 for (int i = 0; i<daysForCity ; i++) {
-                    System.out.println(city.getName()+", day "+curDay+"("+i+")");
                     List<Attraction> attractionsForDay = new ArrayList<>();
                     int curAttrOnDay = 0;
                     while (curAttrOnDay < attrDayNum && curAttr<attractionPath.size()) {
                         attractionsForDay.add(attractionPath.get(curAttr));
-                        System.out.print(attractionPath.get(curAttr).getName()+" - ");
                         curAttr++;
                         curAttrOnDay++;
                     }
-                    System.out.println();
                     Day day = itinerary.getDays().get(curDay);
                     day.setDayNum(curDay);
                     day.setAttractions(attractionsForDay);
@@ -93,21 +88,6 @@ public class ManageItineraryController {
             }
         }
         itinerary.setDays(newDays);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(itinerary.getName()).append("-").append(itinerary.getDaysNumber()).append("\n");
-        for (Day day : itinerary.getDays()) {
-            stringBuilder.append(day.getDayNum()).append("\n");
-            for (Attraction attraction : day.getAttractions()) {
-                stringBuilder.append(attraction.getName()).append(" - ");
-            }
-            stringBuilder.append("\n");
-            for (City city : day.getCities()) {
-                stringBuilder.append(city.getName()).append(" - ");
-            }
-            stringBuilder.append("\n");
-        }
-        System.out.println(stringBuilder.toString());
     }
 
     public List<Attraction> getShortestPath(List<Attraction> attractions) {
