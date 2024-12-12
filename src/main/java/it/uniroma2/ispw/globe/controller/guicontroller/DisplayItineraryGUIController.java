@@ -45,7 +45,7 @@ public class DisplayItineraryGUIController {
 
                 Label city_l = (Label) cityBox.getChildren().get(1);
 
-                CityBean city = new ManageItineraryController().getCity(step.getCity().getFirst());
+                CityBean city = new ManageItineraryController().getCity(step.getCity().get(0));
                 city_l.setText(city.getName()+", "+city.getCountry());
 
                 Label accommodation_l = (Label) cityBox.getChildren().get(3);

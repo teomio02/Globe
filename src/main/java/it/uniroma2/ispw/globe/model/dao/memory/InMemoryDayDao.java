@@ -29,7 +29,7 @@ public class InMemoryDayDao extends DayDao {
         days.add(day);
         int id = 0;
         if (!days.isEmpty()) {
-            id = days.getLast().getId()+1;
+            id = days.get(days.size()-1).getId()+1;
         }
         day.setId(id);
         for (City city : day.getCities()) {

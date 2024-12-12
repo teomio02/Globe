@@ -32,8 +32,8 @@ public class ManageItineraryController {
 
     public void calculateItinerary(Itinerary itinerary) {
         List<Day> days = itinerary.getDays();
-        List<City> cities = days.getFirst().getCities();
-        List<Attraction> attractions = days.getFirst().getAttractions();
+        List<City> cities = days.get(0).getCities();
+        List<Attraction> attractions = days.get(0).getAttractions();
         List<Attraction> otherAttractions = new ArrayList<>();
 
         int curDay=1;
@@ -111,7 +111,7 @@ public class ManageItineraryController {
     }
 
     public List<Attraction> getShortestPath(List<Attraction> attractions) {
-        System.out.println("Calcolo del percorso più corto per "+attractions.getFirst().getCity());
+        System.out.println("Calcolo del percorso più corto per "+attractions.get(0).getCity());
         System.out.printf("path iniziale: ");
         for (Attraction attraction : attractions) {
             System.out.print(attraction.getName()+", ");
