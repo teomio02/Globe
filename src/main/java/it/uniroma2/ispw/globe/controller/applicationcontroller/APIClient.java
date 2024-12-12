@@ -19,14 +19,15 @@ public class APIClient {
     private static final Gson gson = new Gson();
     private final OkHttpClient httpClient;
 
+    private static final String TYPE = "addresstype";
+
     public APIClient() {
         this.httpClient = new OkHttpClient();
     }
 
     public List<JsonObject> getPlaces(String query, String type) throws IOException {
         String url = String.format("%ssearch?q=%s&format=json&addressdetails=1", BASE_URL, query.replace(" ", "+"));
-        List<JsonObject> places = getPlace(url, type);
-        return places;
+        return getPlace(url, type);
     }
 
     public JsonObject getPlaceByID(String id) throws IOException {
@@ -43,32 +44,26 @@ public class APIClient {
 
         Request request = new Request.Builder().url(url).header("User-Agent", "Globe/1.0").build();
 
-        // Esegui la richiesta
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
 
-            // Leggi il corpo della risposta
             String responseBody = response.body().string();
 
-            // Parsea il JSON
             JsonArray results = gson.fromJson(responseBody, JsonArray.class);
 
-            // Stampa i risultati
             for (int i = 0; i < results.size() && i < 10; i++) {
                 JsonObject place = results.get(i).getAsJsonObject();;
                 if (type.equals("id")) {
                     places.add(place);
                 } else if (type.equals("administrative")) {
-                    if (place.get("addresstype").getAsString().equals("city")||place.get("addresstype").getAsString().equals("town")||place.get("addresstype").getAsString().equals("village")) {
+                    if (place.get(TYPE).getAsString().equals("city")||place.get(TYPE).getAsString().equals("town")||place.get(TYPE).getAsString().equals("village")) {
                         places.add(place);
-//                        System.out.println("API CLIENT ATTR -> "+place.get("name").getAsString());
                     }
                 } else {
                     if (!place.get("type").getAsString().equals(type)) {
                         places.add(place);
-//                        System.out.println("API CLIENT ATTR -> "+place.get("name").getAsString());
                     }
                 }
             }
