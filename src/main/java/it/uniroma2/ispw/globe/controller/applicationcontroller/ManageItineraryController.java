@@ -69,7 +69,7 @@ public class ManageItineraryController {
             int daysForCity = (int)Math.round(((double)attractionsByCity.get(city).size()/(double)attrNum)*(double)itinerary.getDaysNumber());
             System.out.println(daysForCity+"="+attractionsByCity.get(city).size()+"/"+attrNum+" * "+itinerary.getDaysNumber());
             if (daysForCity !=0) {
-                int attrDayNum = Math.ceilDiv(attractionPath.size(),daysForCity);
+                int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);;
                 System.out.println("attrazioni al giorno:"+attrDayNum);
                 int curAttr = 0;
                 for (int i = 0; i<daysForCity ; i++) {
