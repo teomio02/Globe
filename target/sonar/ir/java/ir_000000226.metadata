@@ -1,0 +1,7 @@
+it.uniroma2.ispw.globe.util.adapter.PlaceAdapter#getPlaceID()Ljava/lang/String;
+false
+b925ac9b81e4671fbd81406921d90fd1
+com.google.gson.JsonObject#get(Ljava/lang/String;)Lcom/google/gson/JsonElement;
+java.lang.String#charAt(I)C
+==
+getAsString com.google.gson.JsonElement#getAsString()Ljava/lang/String;

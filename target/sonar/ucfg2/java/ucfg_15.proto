@@ -1,0 +1,29 @@
+
+€it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDao#getAttraction(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Attraction;y
+o/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/dao/db/InDbAttractionDao.java (#"startingBlock*–
+startingBlock# (8“
+
+ (
+%0"
+__annotate*2
+
+__unknown_file (
+java.lang.Override*>
+
+__unknown_file ("
+ 
+attractionIDjava.lang.String`
+^
++ (7 
+attractionIDjava.lang.String"__annotation*"
+
+__unknown_file (
+
+%0*
+1*!
+1 ("
+ (
+"":,
+$ (7 
+attractionIDjava.lang.StringB97
+5it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDaoH

@@ -1,0 +1,15 @@
+
+@it.uniroma2.ispw.globe.model.Itinerary#getDays()Ljava/util/List;j
+`/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/Itinerary.java1 1("1*­
+12 2(z
+x
+2 2(
+%0java.util.List"__id*P
+
+__unknown_file (4*2(
+&it.uniroma2.ispw.globe.model.Itinerary"
+days""
+2 2(
+
+%0java.util.ListB*(
+&it.uniroma2.ispw.globe.model.ItineraryH

@@ -1,0 +1,30 @@
+it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController#getShortestPath(Ljava/util/List;)Ljava/util/List;
+false
+894e407869c8c2ed5e813b6a8c24eec0
+java.lang.Math#pow(DD)D
+java.lang.Math#sqrt(D)D
+java.util.ArrayList#<init>()V
+java.util.ArrayList#instance-init#
+java.util.HashMap#<init>()V
+java.util.HashMap#instance-init#
+javafx.util.Pair#<init>(Ljava/lang/Object;Ljava/lang/Object;)V
+javafx.util.Pair#instance-init#
+==
+add java.util.List#add(Ljava/lang/Object;)Z
+contains java.util.List#contains(Ljava/lang/Object;)Z
+equals java.lang.Object#equals(Ljava/lang/Object;)Z
+get java.util.List#get(I)Ljava/lang/Object;
+get java.util.Map#get(Ljava/lang/Object;)Ljava/lang/Object;
+getCity it.uniroma2.ispw.globe.model.Attraction#getCity()Ljava/lang/String;
+getFirst java.util.List#getFirst()Ljava/lang/Object;
+getKey javafx.util.Pair#getKey()Ljava/lang/Object;
+getLatitude it.uniroma2.ispw.globe.model.Attraction#getLatitude()D
+getLongitude it.uniroma2.ispw.globe.model.Attraction#getLongitude()D
+getName it.uniroma2.ispw.globe.model.Attraction#getName()Ljava/lang/String;
+getValue javafx.util.Pair#getValue()Ljava/lang/Object;
+print java.io.PrintStream#print(Ljava/lang/String;)V
+printf java.io.PrintStream#printf(Ljava/lang/String;[Ljava/lang/Object;)Ljava/io/PrintStream;
+println java.io.PrintStream#println()V
+println java.io.PrintStream#println(Ljava/lang/String;)V
+put java.util.Map#put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+size java.util.List#size()I

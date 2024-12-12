@@ -1,0 +1,14 @@
+
+qit.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#getCityDao()Lit/uniroma2/ispw/globe/model/dao/CityDao;~
+t/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/dao/memory/InMemoryDaoFactory.java ("1*‚
+1 (¥
+¢
+ (,=
+%07it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDao"~it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDao#getInstance()Lit/uniroma2/ispw/globe/model/dao/memory/InMemoryCityDao;*W
+
+__unknown_file (;"9
+7it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDao"K
+ (-?
+=
+%07it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDaoB><
+:it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactoryH

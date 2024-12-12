@@ -1,0 +1,12 @@
+it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController#getItinerary(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/bean/ItineraryBean;
+false
+d8d1e7fbc7403dac42d50a57261e4437
+it.uniroma2.ispw.globe.model.bean.ItineraryBean#<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IDDDDLjava/util/Map;)V
+it.uniroma2.ispw.globe.model.bean.ItineraryBean#instance-init#
+it.uniroma2.ispw.globe.model.dao.DaoFactory#getFactory(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/dao/DaoFactory;
+==
+getDaysNumber it.uniroma2.ispw.globe.model.Itinerary#getDaysNumber()I
+getDescription it.uniroma2.ispw.globe.model.Itinerary#getDescription()Ljava/lang/String;
+getItinerary it.uniroma2.ispw.globe.model.dao.ItineraryDao#getItinerary(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Itinerary;
+getItineraryDao it.uniroma2.ispw.globe.model.dao.DaoFactory#getItineraryDao()Lit/uniroma2/ispw/globe/model/dao/ItineraryDao;
+getName it.uniroma2.ispw.globe.model.Itinerary#getName()Ljava/lang/String;

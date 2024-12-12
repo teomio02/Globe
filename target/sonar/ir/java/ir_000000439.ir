@@ -1,0 +1,12 @@
+
+J
+mainBit.uniroma2.ispw.globe.GlobeApplication#main([Ljava/lang/String;)V4
+0int&args   ()"java.lang.String[]&args   ()"java.lang.String[]"¶F
+D
+! !("
+#new-object##new-object#"*2java.lang.String[]^
+\
+! !("E
+launch;javafx.application.Application#launch([Ljava/lang/String;)V*2void
+
+" "(*a/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/GlobeApplication.java

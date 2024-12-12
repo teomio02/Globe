@@ -1,0 +1,6 @@
+it.uniroma2.ispw.globe.view.DayTab#removeTab(Ljavafx/scene/control/TabPane;)V
+false
+a78284a0236dabc71a8e277792894d0c
+javafx.scene.control.TabPane#getTabs()Ljavafx/collections/ObservableList;
+==
+remove java.util.List#remove(I)Ljava/lang/Object;

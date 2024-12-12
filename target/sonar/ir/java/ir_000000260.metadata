@@ -1,0 +1,24 @@
+it.uniroma2.ispw.globe.view.DayTab#setTab(Ljavafx/scene/control/TabPane;)V
+false
+069a155254cd0363ce5e901aac8e9cd3
+java.lang.String#valueOf(I)Ljava/lang/String;
+javafx.scene.control.Button#<init>(Ljava/lang/String;)V
+javafx.scene.control.Button#instance-init#
+javafx.scene.control.ButtonBase#setOnAction(Ljavafx/event/EventHandler;)V
+javafx.scene.control.Tab#<init>(Ljava/lang/String;)V
+javafx.scene.control.Tab#instance-init#
+javafx.scene.control.Tab#setContent(Ljavafx/scene/Node;)V
+javafx.scene.control.TabPane#getTabs()Ljavafx/collections/ObservableList;
+javafx.scene.control.TextField#<init>()V
+javafx.scene.control.TextField#instance-init#
+javafx.scene.control.TextInputControl#setPromptText(Ljava/lang/String;)V
+javafx.scene.layout.HBox#<init>(D[Ljavafx/scene/Node;)V
+javafx.scene.layout.HBox#instance-init#
+javafx.scene.layout.Region#getWidth()D
+javafx.scene.layout.Region#setPrefWidth(D)V
+javafx.scene.layout.VBox#<init>(D)V
+javafx.scene.layout.VBox#instance-init#
+==
+add java.util.List#add(Ljava/lang/Object;)Z
+addAll javafx.collections.ObservableList#addAll([Ljava/lang/Object;)Z
+getChildren javafx.scene.layout.Pane#getChildren()Ljavafx/collections/ObservableList;

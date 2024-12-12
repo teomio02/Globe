@@ -1,0 +1,72 @@
+
+vit.uniroma2.ispw.globe.util.ModelFactory#createAttraction(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Attraction;l
+b/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/util/ModelFactory.javaG G(&"7*ï
+2J J(GÄ
+~
+J J(G,
+jsonAttractioncom.google.gson.JsonObject"__id*>
+
+__unknown_file ("
+ 
+%2com.google.gson.JsonObject*
+1*ç
+5J: J(F¯ı
+J J(G 
+%2com.google.gson.JsonObject"~it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#getPlaceByID(Ljava/lang/String;)Lcom/google/gson/JsonObject;*e
+
+__unknown_file (I
+G
+%0Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient*>
+
+__unknown_file ("
+ 
+attractionIdjava.lang.String2 getPlaceByID(Ljava/lang/String;)*
+2*¯
+6J J(,ôñ
+J! J(*G
+%0Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient"Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient«
+ƒ
+J J(,
+%1"Kit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#<init>()V*e
+
+__unknown_file (I
+G
+%0Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient*
+5*x
+7H H("d
+b
+H H(",
+jsonAttractioncom.google.gson.JsonObject"__id*"
+
+__unknown_file (
+""*
+6*˝
+1N1 N(?vt
+N$ N(06
+%50it.uniroma2.ispw.globe.util.adapter.PlaceAdapter"0it.uniroma2.ispw.globe.util.adapter.PlaceAdapterç
+ä
+N  N(@
+%6"Vit.uniroma2.ispw.globe.util.adapter.PlaceAdapter#<init>(Lcom/google/gson/JsonObject;)V*T
+
+__unknown_file (8
+6
+%50it.uniroma2.ispw.globe.util.adapter.PlaceAdapter*J
+
+__unknown_file (.
+,
+jsonAttractioncom.google.gson.JsonObject†
+ù
+N N(A5
+
+attraction'it.uniroma2.ispw.globe.model.Attraction"__id*T
+
+__unknown_file (8
+6
+%50it.uniroma2.ispw.globe.util.adapter.PlaceAdapter"C
+O O(7
+5
+
+attraction'it.uniroma2.ispw.globe.model.Attraction:,
+G' G(: 
+attractionIdjava.lang.StringB,*
+(it.uniroma2.ispw.globe.util.ModelFactoryH`

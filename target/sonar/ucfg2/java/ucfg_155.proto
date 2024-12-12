@@ -1,0 +1,17 @@
+
+iit.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#getCityDao()Lit/uniroma2/ispw/globe/model/dao/CityDao;v
+l/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/dao/db/InDbDaoFactory.java ("1*î
+1 ( tr
+ (5
+%0/it.uniroma2.ispw.globe.model.dao.db.InDbCityDao"/it.uniroma2.ispw.globe.model.dao.db.InDbCityDao£
+ 
+ ( 
+%1"9it.uniroma2.ispw.globe.model.dao.db.InDbCityDao#<init>()V*S
+
+__unknown_file (7
+5
+%0/it.uniroma2.ispw.globe.model.dao.db.InDbCityDao"C
+ (!7
+5
+%0/it.uniroma2.ispw.globe.model.dao.db.InDbCityDaoB64
+2it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactoryH
