@@ -1,9 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.Itinerary;
-import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 
 import java.util.ArrayList;

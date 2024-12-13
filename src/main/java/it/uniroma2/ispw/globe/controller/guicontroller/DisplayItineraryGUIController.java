@@ -43,12 +43,12 @@ public class DisplayItineraryGUIController {
                 HBox cityBox = (HBox) vbox.getChildren().get(0);
                 VBox attractionBox = (VBox) vbox.getChildren().get(1);
 
-                Label city_l = (Label) cityBox.getChildren().get(1);
+                Label cityLabel = (Label) cityBox.getChildren().get(1);
 
                 CityBean city = new ManageItineraryController().getCity(step.getCity().get(0));
-                city_l.setText(city.getName()+", "+city.getCountry());
+                cityLabel.setText(city.getName()+", "+city.getCountry());
 
-                Label accommodation_l = (Label) cityBox.getChildren().get(3);
+                Label accommodationLabel = (Label) cityBox.getChildren().get(3);
 
                 int i = 0;
                 for (String attractionID : step.getAttractions()) {

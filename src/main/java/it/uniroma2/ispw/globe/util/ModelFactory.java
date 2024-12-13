@@ -64,8 +64,7 @@ public class ModelFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        City city = new PlaceAdapter(jsonCity);
-        return city;
+        return new PlaceAdapter(jsonCity);
     }
 
     public Attraction createAttraction(String attractionId) {
@@ -75,7 +74,6 @@ public class ModelFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Attraction attraction = new PlaceAdapter(jsonAttraction);
-        return attraction;
+        return new PlaceAdapter(jsonAttraction);
     }
 }

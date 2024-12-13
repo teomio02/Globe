@@ -12,8 +12,6 @@ public class Itinerary {
     private List<Day> days;
     private ItineraryType type;
 
-    public Itinerary() {}
-
     public int getItineraryID() {
         return itineraryID;
     }

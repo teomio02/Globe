@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
 import it.uniroma2.ispw.globe.model.Attraction;
-import it.uniroma2.ispw.globe.model.City;
 
 public abstract class AttractionDao {
     public abstract void addAttraction(Attraction attraction);

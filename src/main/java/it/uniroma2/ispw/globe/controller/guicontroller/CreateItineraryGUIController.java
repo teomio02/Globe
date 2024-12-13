@@ -99,12 +99,12 @@ public class CreateItineraryGUIController {
         String city = cityField.getText();
 
         cities = new ManageItineraryController().getCities(city);
-        if (cities.size() != 0) {
+        if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
                 cityButton.setOnAction(event -> {
                     int count=0;
-                    if(cityVBox.getChildren().size()==0){
+                    if(cityVBox.getChildren().isEmpty()){
                         Label cityLabel = new Label(cityResult.getName());
                         cityLabel.setUserData(cityResult.getId());
                         cityVBox.getChildren().add(cityLabel);
@@ -139,12 +139,12 @@ public class CreateItineraryGUIController {
 
         attractions = new ManageItineraryController().getAttractions(attraction);
 
-        if (attractions.size() != 0) {
+        if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
                 Button attractionButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
                 attractionButton.setOnAction(event -> {
                     int count=0;
-                    if(attractionVBox.getChildren().size()==0){
+                    if(attractionVBox.getChildren().isEmpty()){
                         Label attractionLabel = new Label(attractionResult.getName());
                         attractionLabel.setUserData(attractionResult.getId());
                         attractionVBox.getChildren().add(attractionLabel);

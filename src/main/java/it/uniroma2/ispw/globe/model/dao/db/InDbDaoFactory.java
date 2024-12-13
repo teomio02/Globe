@@ -1,8 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.model.dao.memory.InMemoryDayDao;
-import it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao;
 
 public class InDbDaoFactory extends DaoFactory {
     @Override

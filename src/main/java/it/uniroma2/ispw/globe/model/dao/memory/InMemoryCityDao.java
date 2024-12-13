@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.City;
 

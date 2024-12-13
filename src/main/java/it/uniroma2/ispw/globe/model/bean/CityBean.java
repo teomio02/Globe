@@ -3,7 +3,7 @@ package it.uniroma2.ispw.globe.model.bean;
 public class CityBean {
     private String id;
     private String name;
-    private String country;;
+    private String country;
 
     public CityBean(String id, String name, String country) {
         this.id = id;

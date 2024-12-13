@@ -7,13 +7,15 @@ import it.uniroma2.ispw.globe.model.City;
 public class PlaceAdapter implements Attraction, City {
     private JsonObject place;
 
+    private static final String ADDR = "address";
+    private static final String UNKNOWN = "Unknown";
+
     public PlaceAdapter(JsonObject place) {
         this.place = place;
     }
 
     public String getPlaceID() {
-        String placeID= (place.get("osm_type").getAsString()).charAt(0)+place.get("osm_id").getAsString();
-        return placeID;
+        return (place.get("osm_type").getAsString()).charAt(0)+place.get("osm_id").getAsString();
     }
 
     public String getName() {
@@ -21,29 +23,29 @@ public class PlaceAdapter implements Attraction, City {
     }
 
     public String getCountry() {
-        JsonObject address = place.getAsJsonObject("address");
+        JsonObject address = place.getAsJsonObject(ADDR);
         try {
             return address.get("country").getAsString();
         } catch (NullPointerException e) {
-            return "UNKOWN";
+            return UNKNOWN;
         }
     }
 
     public String getCity() {
         try {
-            JsonObject address = place.getAsJsonObject("address");
+            JsonObject address = place.getAsJsonObject(ADDR);
             return address.get("city").getAsString();
         } catch (NullPointerException e) {
-            return "UNKOWN";
+            return UNKNOWN;
         }
     }
 
     public String getAddress() {
-        JsonObject address = place.getAsJsonObject("address");
+        JsonObject address = place.getAsJsonObject(ADDR);
         try {
             return address.get("road").getAsString();
         } catch (NullPointerException e) {
-            return "UNKOWN";
+            return UNKNOWN;
         }
     }
 

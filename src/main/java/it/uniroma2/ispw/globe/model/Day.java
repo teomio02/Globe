@@ -8,8 +8,6 @@ public class Day {
     private List<City> cities;
     private List<Attraction> attractions;
 
-    public Day() {}
-
     public int getId() {
         return id;
     }

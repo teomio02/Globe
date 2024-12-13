@@ -15,30 +15,30 @@ public class DayTab {
 
         VBox vbox = new VBox(5);
 
-        TextField city_tf = new TextField();
-        city_tf.setPromptText("City");
+        TextField cityTF = new TextField();
+        cityTF.setPromptText("City");
 
-        TextField accommodation_tf = new TextField();
-        accommodation_tf.setPromptText("Accommodation");
+        TextField accommodationTF = new TextField();
+        accommodationTF.setPromptText("Accommodation");
 
-        HBox cityHBox = new HBox(5, city_tf, accommodation_tf);
+        HBox cityHBox = new HBox(5, cityTF, accommodationTF);
         cityHBox.setPrefWidth(vbox.getWidth());
 
-        TextField attraction_tf = new TextField();
-        attraction_tf.setPromptText("Attraction");
+        TextField attractionTF = new TextField();
+        attractionTF.setPromptText("Attraction");
 
         //probabilmente l'handler del bottone va messo nel viewcontroller
-        Button newAttraction_button = new Button("+");
-        newAttraction_button.setOnAction(e -> {
-            if (!attraction_tf.getText().isEmpty()){
-                Label label = new Label(attraction_tf.getText());
+        Button newAttractionButton = new Button("+");
+        newAttractionButton.setOnAction(e -> {
+            if (!attractionTF.getText().isEmpty()){
+                Label label = new Label(attractionTF.getText());
                 label.getStyleClass().add("body");
                 vbox.getChildren().add(label);
-                attraction_tf.setText("");
+                attractionTF.setText("");
             }
         });
 
-        HBox attractionHBox = new HBox(5, attraction_tf, newAttraction_button);
+        HBox attractionHBox = new HBox(5, attractionTF, newAttractionButton);
         attractionHBox.setPrefWidth(vbox.getWidth());
 
         vbox.getChildren().addAll(cityHBox,attractionHBox);
@@ -51,7 +51,7 @@ public class DayTab {
         daysTabPane.getTabs().remove(count);
     }
 
-    public void setViewTab (TabPane daysTabPane, int attr_num) {
+    public void setViewTab (TabPane daysTabPane, int attrNum) {
         Tab tab = new Tab(String.valueOf(day));
         daysTabPane.getTabs().add(tab);
 
@@ -59,25 +59,25 @@ public class DayTab {
 
         Label city = new Label("City");
         city.getStyleClass().add("subtitle");
-        Label city_l = new Label();
-        city_l.getStyleClass().add("body");
+        Label cityLabel = new Label();
+        cityLabel.getStyleClass().add("body");
 
         Label accommodation = new Label("Accommodation");
         accommodation.getStyleClass().add("subtitle");
-        Label accommodation_l = new Label();
-        accommodation_l.getStyleClass().add("body");
+        Label accommodationLabel = new Label();
+        accommodationLabel.getStyleClass().add("body");
 
-        HBox cityHBox = new HBox(5, city, city_l,accommodation ,accommodation_l);
+        HBox cityHBox = new HBox(5, city, cityLabel,accommodation , accommodationLabel);
         cityHBox.setPrefWidth(vbox.getWidth());
 
-        Label attraction_l = new Label("Attraction");
-        attraction_l.getStyleClass().add("subtitle");
+        Label attractionLabel = new Label("Attraction");
+        attractionLabel.getStyleClass().add("subtitle");
 
-        VBox attractionVBox = new VBox(2, attraction_l);
-        for (int i = 0; i < attr_num; i++) {
-            Label attractionLabel = new Label();
-            attractionLabel.getStyleClass().add("body");
-            attractionVBox.getChildren().add(attractionLabel);
+        VBox attractionVBox = new VBox(2, attractionLabel);
+        for (int i = 0; i < attrNum; i++) {
+            Label attractionL = new Label();
+            attractionL.getStyleClass().add("body");
+            attractionVBox.getChildren().add(attractionL);
         }
 
         vbox.getChildren().addAll(cityHBox,attractionVBox);
