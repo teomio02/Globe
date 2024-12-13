@@ -2,11 +2,9 @@ package it.uniroma2.ispw.globe.util;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient;
-import it.uniroma2.ispw.globe.model.Attraction;
-import it.uniroma2.ispw.globe.model.City;
-import it.uniroma2.ispw.globe.model.Day;
-import it.uniroma2.ispw.globe.model.Itinerary;
+import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.model.bean.UserBean;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
 import java.io.IOException;
@@ -14,6 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFactory {
+
+    public User createUser(UserBean userBean) {
+        User user = new User();
+        user.setUsername(userBean.getUsername());
+        user.setPassword(userBean.getPassword());
+        user.setItineraries(new ArrayList<>());
+        user.setProposals(new ArrayList<>());
+        return user;
+    }
+
     public Itinerary createItinerary(ItineraryBean itineraryBean) {
         Itinerary itinerary = new Itinerary();
         List<Day> days = new ArrayList<>();

@@ -6,13 +6,22 @@ import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.StepBean;
 import it.uniroma2.ispw.globe.view.DayTab;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 public class DisplayItineraryGUIController {
@@ -26,7 +35,14 @@ public class DisplayItineraryGUIController {
     @FXML
     private Label nameLabel;
 
-    public void init(String itineraryName) {
+    private String sessionId;
+    private String itineraryName;
+
+    public DisplayItineraryGUIController(String sessionId, String itineraryName) {
+        this.sessionId = sessionId;
+        this.itineraryName = itineraryName;
+    }
+    public void initialize() {
         if (itineraryName != null) {
             ItineraryBean itinerary = new ManageItineraryController().getItinerary(itineraryName);
             List<StepBean> steps = new ManageItineraryController().getSteps(itineraryName);
@@ -61,4 +77,25 @@ public class DisplayItineraryGUIController {
             }
         }
     }
+
+    public void showItineraries(ActionEvent event) {
+        URL url;
+        Parent root;
+
+        try {
+            url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
+            loader.setController(controller);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
 }

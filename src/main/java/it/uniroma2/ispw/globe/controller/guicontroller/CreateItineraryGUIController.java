@@ -44,7 +44,11 @@ public class CreateItineraryGUIController {
     @FXML
     private VBox attractionResultVBox;
 
+    private String sessionId;
 
+    public CreateItineraryGUIController(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public void saveItinerary(ActionEvent event) {
         String city;
@@ -71,7 +75,7 @@ public class CreateItineraryGUIController {
 
         ItineraryBean itineraryBean = new ItineraryBean(itinerary,description,"",day,cities,attractions,0,0,0,0,attractionMap);
 
-        new ManageItineraryController().saveItinerary(itineraryBean,null);
+        new ManageItineraryController().saveItinerary(itineraryBean,sessionId);
 
         URL url;
         Parent root;
@@ -79,9 +83,9 @@ public class CreateItineraryGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
+            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itinerary);
+            loader.setController(controller);
             root = loader.load();
-            DisplayItineraryGUIController controller = loader.getController();
-            controller.init(itinerary);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

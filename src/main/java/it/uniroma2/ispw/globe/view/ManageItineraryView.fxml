@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/itinerary.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.ManageItineraryGUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/itinerary.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
          <image>
@@ -57,9 +57,13 @@
               <tabs>
                 <Tab text="My Itinerary">
                      <content>
-                        <VBox prefHeight="200.0" prefWidth="100.0">
+                        <VBox prefHeight="110.0" prefWidth="640.0">
                            <children>
-                              <ListView fx:id="itineraryListView" prefHeight="466.0" prefWidth="640.0" style="-fx-background-color: transparent;" />
+                              <ScrollPane prefHeight="446.0" prefWidth="640.0">
+                                 <content>
+                                    <VBox fx:id="itinerariesVBox" prefHeight="446.0" prefWidth="640.0" />
+                                 </content>
+                              </ScrollPane>
                               <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
                                  <font>
                                     <Font name="Arial Bold" size="1.0" />
@@ -78,7 +82,15 @@
                   </Tab>
                 <Tab text="Agency Proposal">
                      <content>
-                        <ListView fx:id="proposalListView" prefHeight="466.0" prefWidth="640.0" style="-fx-background-color: transparent;" />
+                        <VBox prefHeight="110.0" prefWidth="640.0">
+                           <children>
+                              <ScrollPane prefHeight="446.0" prefWidth="640.0">
+                                 <content>
+                                    <VBox fx:id="proposalsVBox" prefHeight="446.0" prefWidth="640.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
                      </content>
                   </Tab>
               </tabs>

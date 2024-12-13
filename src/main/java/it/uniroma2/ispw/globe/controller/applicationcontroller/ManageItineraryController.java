@@ -1,15 +1,13 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.model.Day;
-import it.uniroma2.ispw.globe.model.Itinerary;
+import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
-import it.uniroma2.ispw.globe.model.Attraction;
-import it.uniroma2.ispw.globe.model.City;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.ModelFactory;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import javafx.util.Pair;
@@ -22,11 +20,12 @@ public class ManageItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
-    public void saveItinerary(ItineraryBean itineraryBean, UserBean userBean) {
+    public void saveItinerary(ItineraryBean itineraryBean, String sessionID) {
         Itinerary itinerary = new ModelFactory().createItinerary(itineraryBean);
         calculateItinerary(itinerary);
+        User user = SessionManager.getInstance().getSession(sessionID).getUser();
         ItineraryDao itineraryDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getItineraryDao();
-        itineraryDao.addItinerary(itinerary);
+        itineraryDao.addItinerary(itinerary, user);
     }
 
     public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {}
@@ -237,8 +236,16 @@ public class ManageItineraryController {
         return agencyBean;
     }
 
-    public List<ItineraryBean> getUserItineraries(UserBean userBean) {
-        return new ArrayList<>();
+    public List<ItineraryBean> getUserItineraries(String sessionId) {
+
+        User user = SessionManager.getInstance().getSession(sessionId).getUser();
+        List<Itinerary> itineraries = user.getItineraries();
+        List<ItineraryBean> itineraryBeans = new ArrayList<>();
+        for (Itinerary itinerary : itineraries) {
+            ItineraryBean itineraryBean = new ItineraryBean(itinerary.getName(),itinerary.getDescription(),"",itinerary.getDaysNumber());
+            itineraryBeans.add(itineraryBean);
+        }
+        return itineraryBeans;
     }
 
 }

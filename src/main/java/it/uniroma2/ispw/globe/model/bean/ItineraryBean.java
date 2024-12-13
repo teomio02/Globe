@@ -16,6 +16,13 @@ public class ItineraryBean {
     private double inboundFlightDuration;
     private Map<String, String> accommodations;
 
+    public ItineraryBean(String name, String description, String type, int duration) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.duration = duration;
+    }
+
     public ItineraryBean(String name, String description, String type, int duration, List<String> cities, List<String> attractions, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
         this.name = name;
         this.description = description;

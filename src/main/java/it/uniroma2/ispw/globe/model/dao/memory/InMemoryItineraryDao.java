@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.model.dao.memory;
 
 import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.Itinerary;
+import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 
 import java.util.ArrayList;
@@ -23,11 +24,17 @@ public class InMemoryItineraryDao extends ItineraryDao {
     }
 
     @Override
-    public void addItinerary(Itinerary itinerary) {
+    public void addItinerary(Itinerary itinerary, User user) {
         //se l'itinerario è già presente sostituiscilo, altrimenti inserisci, verifica se è lo stesso itinerario
-        itineraries.add(itinerary);
-        for (Day day : itinerary.getDays()){
-            InMemoryDayDao.getInstance().addDay(day);
+        User userToAdd = InMemoryUserDao.getInstance().getUser(user.getUsername());
+        if (userToAdd != null) {
+            itineraries.add(itinerary);
+            for (Day day : itinerary.getDays()){
+                InMemoryDayDao.getInstance().addDay(day);
+            }
+            userToAdd.getItineraries().add(itinerary);
+        } else {
+            // errore
         }
     }
 
