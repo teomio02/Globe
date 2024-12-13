@@ -19,6 +19,9 @@ import java.util.*;
 
 public class ManageItineraryController {
 
+    private static final String CITY = "administrative";
+    private static final String ATTRACTION = "";
+
     public void saveItinerary(ItineraryBean itineraryBean, UserBean userBean) {
         Itinerary itinerary = new ModelFactory().createItinerary(itineraryBean);
         calculateItinerary(itinerary);
@@ -62,13 +65,13 @@ public class ManageItineraryController {
 
         List<Day> newDays = new ArrayList<>();
 
-        for ( String cityName : attractionsByCity.keySet()) {
+        for ( Map.Entry<String, List<Attraction>> entry : attractionsByCity.entrySet()) {
 
-            List<Attraction> attractionPath = getShortestPath(attractionsByCity.get(cityName));
+            List<Attraction> attractionPath = getShortestPath(entry.getValue());
 
-            int daysForCity = (int)Math.round(((double)attractionsByCity.get(cityName).size()/(double)attrNum)*itinerary.getDaysNumber());
+            int daysForCity = (int)Math.round(((double)entry.getValue().size()/(double)attrNum)*itinerary.getDaysNumber());
             if (daysForCity !=0) {
-                int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);;
+                int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);
                 int curAttr = 0;
                 for (int i = 0; i<daysForCity ; i++) {
                     List<Attraction> attractionsForDay = new ArrayList<>();
@@ -80,7 +83,7 @@ public class ManageItineraryController {
                     }
                     Day day = itinerary.getDays().get(curDay);
                     for (City city : cities) {
-                        if (city.getName().equals(cityName)) {
+                        if (city.getName().equals(entry.getKey())) {
                             day.getCities().add(city);
                         }
                     }
@@ -175,12 +178,11 @@ public class ManageItineraryController {
 
     public List<AttractionBean> getAttractions(String name) {
 //        //chiama la DAO/API per ottenere i nomi delle attrazioni
-        List<JsonObject> json_attractions = getPlaces(name, "");
+        List<JsonObject> json_attractions = getPlaces(name, ATTRACTION);
         List<Attraction> attractions = new ArrayList<>();
         List<AttractionBean> attractionBeans = new ArrayList<>();
 
         for (JsonObject json_attraction : json_attractions) {
-//            System.out.println("MANAGEITINERARYCONTROLLER -> "+json_attraction.get("name").getAsString());
             Attraction attraction = new PlaceAdapter(json_attraction);
             attractions.add(attraction);
         }
@@ -194,12 +196,11 @@ public class ManageItineraryController {
     }
 
     public List<CityBean> getCities(String name) {
-        List<JsonObject> json_cities = getPlaces(name, "administrative");
+        List<JsonObject> json_cities = getPlaces(name, CITY);
         List<City> cities = new ArrayList<>();
         List<CityBean> citiesBeans = new ArrayList<>();
 
         for (JsonObject json_city : json_cities) {
-//            System.out.println("MANAGEITINERARYCONTROLLER -> "+json_city.get("name").getAsString());
             City city = new PlaceAdapter(json_city);
             cities.add(city);
         }
@@ -237,7 +238,7 @@ public class ManageItineraryController {
     }
 
     public List<ItineraryBean> getUserItineraries(UserBean userBean) {
-        return null;
+        return new ArrayList<>();
     }
 
 }
