@@ -178,11 +178,11 @@ public class ManageItineraryController {
 
     public List<AttractionBean> getAttractions(String name) {
 //        //chiama la DAO/API per ottenere i nomi delle attrazioni
-        List<JsonObject> json_attractions = getPlaces(name, ATTRACTION);
+        List<JsonObject> jsonAttractions = getPlaces(name, ATTRACTION);
         List<Attraction> attractions = new ArrayList<>();
         List<AttractionBean> attractionBeans = new ArrayList<>();
 
-        for (JsonObject json_attraction : json_attractions) {
+        for (JsonObject json_attraction : jsonAttractions) {
             Attraction attraction = new PlaceAdapter(json_attraction);
             attractions.add(attraction);
         }
@@ -196,11 +196,11 @@ public class ManageItineraryController {
     }
 
     public List<CityBean> getCities(String name) {
-        List<JsonObject> json_cities = getPlaces(name, CITY);
+        List<JsonObject> jsonCities = getPlaces(name, CITY);
         List<City> cities = new ArrayList<>();
         List<CityBean> citiesBeans = new ArrayList<>();
 
-        for (JsonObject json_city : json_cities) {
+        for (JsonObject json_city : jsonCities) {
             City city = new PlaceAdapter(json_city);
             cities.add(city);
         }
