@@ -38,10 +38,10 @@ public class ManageItineraryController {
 
         int curDay=1;
 
-        Map<City,List<Attraction>> attractionsByCity = new HashMap<>();
+        Map<String,List<Attraction>> attractionsByCity = new HashMap<>();
 
         for (City city : cities) {
-            attractionsByCity.put(city, new ArrayList<>());
+            attractionsByCity.put(city.getName(), new ArrayList<>());
         }
         for (Attraction attraction : attractions) {
             for (City city : cities) {
@@ -62,11 +62,11 @@ public class ManageItineraryController {
 
         List<Day> newDays = new ArrayList<>();
 
-        for ( City city : attractionsByCity.keySet()) {
+        for ( String cityName : attractionsByCity.keySet()) {
 
-            List<Attraction> attractionPath = getShortestPath(attractionsByCity.get(city));
+            List<Attraction> attractionPath = getShortestPath(attractionsByCity.get(cityName));
 
-            int daysForCity = (int)Math.round(((double)attractionsByCity.get(city).size()/(double)attrNum)*itinerary.getDaysNumber());
+            int daysForCity = (int)Math.round(((double)attractionsByCity.get(cityName).size()/(double)attrNum)*itinerary.getDaysNumber());
             if (daysForCity !=0) {
                 int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);;
                 int curAttr = 0;
@@ -79,9 +79,13 @@ public class ManageItineraryController {
                         curAttrOnDay++;
                     }
                     Day day = itinerary.getDays().get(curDay);
+                    for (City city : cities) {
+                        if (city.getName().equals(cityName)) {
+                            day.getCities().add(city);
+                        }
+                    }
                     day.setDayNum(curDay);
                     day.setAttractions(attractionsForDay);
-                    day.setCities(List.of(city)); // da cambaire!!!!!
                     newDays.add(day);
                     curDay++;
                 }

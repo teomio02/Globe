@@ -34,7 +34,7 @@ public class Itinerary {
         return description;
     }
 
-    public void setDescription(String name) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
