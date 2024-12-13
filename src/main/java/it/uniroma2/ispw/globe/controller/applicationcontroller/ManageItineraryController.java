@@ -46,7 +46,7 @@ public class ManageItineraryController {
         for (Attraction attraction : attractions) {
             for (City city : cities) {
                 if (attraction.getCity().equals(city.getName())) {
-                    attractionsByCity.get(city).add(attraction);
+                    attractionsByCity.get(city.getName()).add(attraction);
                 }
             }
             if (!attractionsByCity.containsKey(attraction.getCity())){
@@ -95,12 +95,6 @@ public class ManageItineraryController {
     }
 
     public List<Attraction> getShortestPath(List<Attraction> attractions) {
-        System.out.println("Calcolo del percorso più corto per "+attractions.get(0).getCity());
-        System.out.printf("path iniziale: ");
-        for (Attraction attraction : attractions) {
-            System.out.print(attraction.getName()+", ");
-        }
-        System.out.println();
 
         Map<Attraction,List<Pair<Attraction,Double>>> distances = new HashMap<>();
 
@@ -122,8 +116,7 @@ public class ManageItineraryController {
         List<Attraction> path = new ArrayList<>();
         List<Attraction> visited = new ArrayList<>();
 
-        Attraction start = attractions.get(0);
-        Attraction current = start;
+        Attraction current = attractions.get(0);
 
         while (visited.size()<attractions.size()) {
             path.add(current);
@@ -144,11 +137,6 @@ public class ManageItineraryController {
             }
             current = next;
         }
-        System.out.printf("path finale: ");
-        for (Attraction attraction : path) {
-            System.out.print(attraction.getName()+", ");
-        }
-        System.out.println();
         return path;
     }
 
@@ -227,22 +215,21 @@ public class ManageItineraryController {
         ItineraryDao itineraryDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getItineraryDao();
         Itinerary itinerary = itineraryDao.getItinerary(itineraryName);
 
-        ItineraryBean itineraryBean = new ItineraryBean(itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
-        return itineraryBean;
+        return new ItineraryBean(itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
     }
 
     public CityBean getCity(String cityID) {
         CityDao cityDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getCityDao();
         City city = cityDao.getCity(cityID);
-        CityBean cityBean = new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
-        return cityBean;
+
+        return new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
     }
 
     public AttractionBean getAttraction(String attractionID) {
         AttractionDao attractionDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getAttractionDao();
         Attraction attraction = attractionDao.getAttraction(attractionID);
-        AttractionBean attractionBean = new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
-        return attractionBean;
+
+        return new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
     }
 
     public AgencyBean getAgency(AgencyBean agencyBean) {
