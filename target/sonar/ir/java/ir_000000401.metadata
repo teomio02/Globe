@@ -1,0 +1,6 @@
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryAttractionDao#getAttraction(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Attraction;
+false
+b627774bd28192a5d64fae2ffbd437da
+java.lang.String#equals(Ljava/lang/Object;)Z
+==
+getPlaceID it.uniroma2.ispw.globe.model.Attraction#getPlaceID()Ljava/lang/String;

@@ -1,0 +1,14 @@
+it.uniroma2.ispw.globe.util.ModelFactory#createDay(ILjava/util/List;Ljava/util/List;)Lit/uniroma2/ispw/globe/model/Day;
+false
+64aa951b2b8d95ea317388adf1fccab2
+it.uniroma2.ispw.globe.model.Day#<init>()V
+it.uniroma2.ispw.globe.model.Day#instance-init#
+java.util.ArrayList#<init>()V
+java.util.ArrayList#instance-init#
+==
+add java.util.List#add(Ljava/lang/Object;)Z
+createAttraction it.uniroma2.ispw.globe.util.ModelFactory#createAttraction(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Attraction;
+createCity it.uniroma2.ispw.globe.util.ModelFactory#createCity(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/City;
+setAttractions it.uniroma2.ispw.globe.model.Day#setAttractions(Ljava/util/List;)V
+setCities it.uniroma2.ispw.globe.model.Day#setCities(Ljava/util/List;)V
+setDayNum it.uniroma2.ispw.globe.model.Day#setDayNum(I)V

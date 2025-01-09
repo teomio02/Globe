@@ -1,0 +1,74 @@
+
+Åit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#getPlaces(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;Ö
+{/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/controller/applicationcontroller/APIClient.java (%"1*ª
+1 (p
+n
+Q (Y
+%0java.lang.String"__id*D
+
+__unknown_file ((&
+$https://nominatim.openstreetmap.org/Ω∫
+[ (r
+%1java.lang.String"\java.lang.String#replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;*7
+
+__unknown_file (
+
+queryjava.lang.String*!
+
+__unknown_file (
+ *!
+
+__unknown_file (
++29replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)·
+ﬁ
+ (s
+%2java.lang.String"Pjava.lang.String#format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;*0
+
+__unknown_file ("
+java.lang.String*J
+
+__unknown_file (.,
+*%ssearch?q=%s&format=json&addressdetails=1*4
+
+__unknown_file (
+
+%0java.lang.String*4
+
+__unknown_file (
+
+%1java.lang.Stringa
+_
+ (t
+urljava.lang.String"__id*4
+
+__unknown_file (
+
+%2java.lang.String®•
+" (5
+%3java.util.List"Äit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#getPlace(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;*a
+
+__unknown_file (EC
+Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient*5
+
+__unknown_file (
+
+urljava.lang.String*6
+
+__unknown_file (
+
+typejava.lang.String2.getPlace(Ljava/lang/String;Ljava/lang/String;)`
+^
+ (6
+placesjava.util.List"__id*2
+
+__unknown_file (
+
+%3java.util.List"&
+ (
+
+placesjava.util.List:%
+& (3
+queryjava.lang.String:$
+4 (?
+typejava.lang.StringBEC
+Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClientH

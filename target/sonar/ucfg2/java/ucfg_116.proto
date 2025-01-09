@@ -1,0 +1,81 @@
+
+…it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao#getItinerary(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Itinerary;€
+v/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/dao/memory/InMemoryItineraryDao.java% %(!"startingBlock*«
+2& &( k
+i
+& &( 3
+	itinerary&it.uniroma2.ispw.globe.model.Itinerary"__id*"
+
+__unknown_file (
+""¦
+£
+& &( 3
+	itinerary&it.uniroma2.ispw.globe.model.Itinerary"
+__arrayGet*2
+
+__unknown_file (
+
+%0java.util.List*"
+
+__unknown_file (
+""*
+4
+1*P
+3( (( "A
+( ((!5
+3
+	itinerary&it.uniroma2.ispw.globe.model.Itinerary*†
+startingBlock%! %(.‹
+ˆ
+$ $(
+%3"
+__annotate*2
+
+__unknown_file (
+java.lang.Override*6
+
+__unknown_file (
+
+namejava.lang.StringX
+V
+%) %(-
+namejava.lang.String"__annotation*"
+
+__unknown_file (
+
+%3*
+5*¶
+4' '(ÇÄ
+' '(#
+%1java.lang.String"Bit.uniroma2.ispw.globe.model.Itinerary#getName()Ljava/lang/String;*Q
+
+__unknown_file (5
+3
+	itinerary&it.uniroma2.ispw.globe.model.Itinerary2	getName()ÔÑ
+' '(0
+%2boolean",java.lang.String#equals(Ljava/lang/Object;)Z*4
+
+__unknown_file (
+
+%1java.lang.String*6
+
+__unknown_file (
+
+namejava.lang.String2equals(Ljava/lang/Object;)*
+2
+3*­
+5&# &(.˜
+•
+&# &(.
+%0java.util.List"__id*m
+
+__unknown_file (Q*O>
+<it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao"
+itineraries*
+2*!
+1+ +("
++ +(
+"":$
+%" %(-
+namejava.lang.StringB@>
+<it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDaoH

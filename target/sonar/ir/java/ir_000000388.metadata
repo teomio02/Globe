@@ -1,0 +1,8 @@
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao#addItinerary(Lit/uniroma2/ispw/globe/model/Itinerary;)V
+false
+7d03553fa291b1419dd549ee05353af3
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryDayDao#getInstance()Lit/uniroma2/ispw/globe/model/dao/memory/InMemoryDayDao;
+==
+add java.util.List#add(Ljava/lang/Object;)Z
+addDay it.uniroma2.ispw.globe.model.dao.memory.InMemoryDayDao#addDay(Lit/uniroma2/ispw/globe/model/Day;)V
+getDays it.uniroma2.ispw.globe.model.Itinerary#getDays()Ljava/util/List;

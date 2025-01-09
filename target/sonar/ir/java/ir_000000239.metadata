@@ -1,0 +1,4 @@
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#getItineraryDao()Lit/uniroma2/ispw/globe/model/dao/ItineraryDao;
+false
+592e0dfe9d69eec63252c0df5e7823af
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao#getInstance()Lit/uniroma2/ispw/globe/model/dao/memory/InMemoryItineraryDao;

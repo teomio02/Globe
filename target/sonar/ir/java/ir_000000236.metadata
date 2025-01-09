@@ -1,0 +1,4 @@
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#getAttractionDao()Lit/uniroma2/ispw/globe/model/dao/AttractionDao;
+false
+5b4d73a636b6b0aee7cb1dd124eb1f69
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryAttractionDao#getInstance()Lit/uniroma2/ispw/globe/model/dao/memory/InMemoryAttractionDao;

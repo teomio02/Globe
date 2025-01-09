@@ -1,0 +1,17 @@
+
+git.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#getDayDao()Lit/uniroma2/ispw/globe/model/dao/DayDao;v
+l/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/dao/db/InDbDaoFactory.java ("1*é
+1 (rp
+ (4
+%0.it.uniroma2.ispw.globe.model.dao.db.InDbDayDao".it.uniroma2.ispw.globe.model.dao.db.InDbDayDao¡
+ž
+ (
+%1"8it.uniroma2.ispw.globe.model.dao.db.InDbDayDao#<init>()V*R
+
+__unknown_file (6
+4
+%0.it.uniroma2.ispw.globe.model.dao.db.InDbDayDao"B
+ ( 6
+4
+%0.it.uniroma2.ispw.globe.model.dao.db.InDbDayDaoB64
+2it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactoryH

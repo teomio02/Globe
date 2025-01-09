@@ -1,0 +1,11 @@
+it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController#saveItinerary(Lit/uniroma2/ispw/globe/model/bean/ItineraryBean;Lit/uniroma2/ispw/globe/model/bean/UserBean;)V
+false
+923fa2395f8e2746be0d8728c2f91b48
+it.uniroma2.ispw.globe.model.dao.DaoFactory#getFactory(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/dao/DaoFactory;
+it.uniroma2.ispw.globe.util.ModelFactory#<init>()V
+it.uniroma2.ispw.globe.util.ModelFactory#instance-init#
+==
+addItinerary it.uniroma2.ispw.globe.model.dao.ItineraryDao#addItinerary(Lit/uniroma2/ispw/globe/model/Itinerary;)V
+calculateItinerary it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController#calculateItinerary(Lit/uniroma2/ispw/globe/model/Itinerary;)V
+createItinerary it.uniroma2.ispw.globe.util.ModelFactory#createItinerary(Lit/uniroma2/ispw/globe/model/bean/ItineraryBean;)Lit/uniroma2/ispw/globe/model/Itinerary;
+getItineraryDao it.uniroma2.ispw.globe.model.dao.DaoFactory#getItineraryDao()Lit/uniroma2/ispw/globe/model/dao/ItineraryDao;

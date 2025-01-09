@@ -1,0 +1,74 @@
+
+ëit.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController#getPlaces(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;ò
+ã/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/controller/applicationcontroller/ManageItineraryController.java¡ ¡(%"6*{
+2
+≈ ≈(0e
+c
+
+≈ ≈(0
+	apiPlacesjava.util.List"__id*2
+
+__unknown_file (
+
+%2java.util.List*
+1*…
+5
+≈ ≈(≤Ø
+
+≈ ≈(0
+%2java.util.List"Åit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#getPlaces(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;*f
+
+__unknown_file (J
+H
+apiAit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient*6
+
+__unknown_file (
+
+namejava.lang.String*6
+
+__unknown_file (
+
+typejava.lang.String2/getPlaces(Ljava/lang/String;Ljava/lang/String;)*
+2*û
+6
+¬ ¬('õò
+
+¬ ¬(%G
+%0Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient"Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient…
+∆
+
+¬ ¬('
+%1"Kit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#<init>()V*e
+
+__unknown_file (I
+G
+%0Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClient∆
+√
+
+¬ ¬((H
+apiAit.uniroma2.ispw.globe.controller.applicationcontroller.APIClient"__id*e
+
+__unknown_file (I
+G
+%0Ait.uniroma2.ispw.globe.controller.applicationcontroller.APIClientU
+S
+
+√ √(*
+	apiPlacesjava.util.List"__id*"
+
+__unknown_file (
+""*
+5*<
+1
+… …("+
+
+… …(
+
+	apiPlacesjava.util.List:&
+
+¡& ¡(2
+namejava.lang.String:&
+
+¡3 ¡(>
+typejava.lang.StringBUS
+Qit.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryControllerH`

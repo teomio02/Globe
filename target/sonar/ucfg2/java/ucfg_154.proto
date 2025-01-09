@@ -1,0 +1,17 @@
+
+uit.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#getAttractionDao()Lit/uniroma2/ispw/globe/model/dao/AttractionDao;v
+l/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/dao/db/InDbDaoFactory.java ()"1*ç
+1 (&Ä~
+ ($;
+%05it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDao"5it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDaoØ
+¨
+ (&
+%1"?it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDao#<init>()V*Y
+
+__unknown_file (=
+;
+%05it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDao"I
+ ('=
+;
+%05it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDaoB64
+2it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactoryH

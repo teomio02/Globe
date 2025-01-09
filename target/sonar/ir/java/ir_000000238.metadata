@@ -1,0 +1,4 @@
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#getDayDao()Lit/uniroma2/ispw/globe/model/dao/DayDao;
+false
+78e6b58738875140f69deb13b334f8e6
+it.uniroma2.ispw.globe.model.dao.memory.InMemoryDayDao#getInstance()Lit/uniroma2/ispw/globe/model/dao/memory/InMemoryDayDao;
