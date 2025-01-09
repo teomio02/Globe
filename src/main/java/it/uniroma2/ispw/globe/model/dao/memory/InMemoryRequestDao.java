@@ -46,10 +46,6 @@ public class InMemoryRequestDao extends RequestDao {
 
     @Override
     public void removeRequest(String requestId) {
-        for (Request request : requests) {
-            if (request.getId().equals(requestId)) {
-                requests.remove(request);
-            }
-        }
+        requests.remove(getRequest(requestId));
     }
 }

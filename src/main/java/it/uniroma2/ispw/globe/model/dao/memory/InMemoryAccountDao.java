@@ -77,17 +77,9 @@ public class InMemoryAccountDao extends AccountDao {
     @Override
     public void removeAccount(CredentialsBean credentials) {
         if (credentials.getType().equals(AGENCY)) {
-            for (Agency a : agencies) {
-                if (a.getUsername().equals(credentials.getUsername())) {
-                    agencies.remove(a);
-                }
-            }
+            agencies.remove(getAccount(credentials));
         } else {
-            for (User u : users) {
-                if (u.getUsername().equals(credentials.getUsername())) {
-                    users.remove(u);
-                }
-            }
+            users.remove(getAccount(credentials));
         }
     }
 }
