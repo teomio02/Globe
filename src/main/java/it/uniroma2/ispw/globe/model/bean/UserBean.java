@@ -1,12 +1,16 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.other.UserType;
+
 public class UserBean {
     private String username;
     private String password;
+    private String type;
 
-    public UserBean(String username, String password) {
+    public UserBean(String username, String password, String type) {
         this.username = username;
         this.password = password;
+        this.type = type;
     }
 
     public String getUsername() {
@@ -21,4 +25,6 @@ public class UserBean {
     public void setPassword(String password) {
         this.password = password;
     }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 }

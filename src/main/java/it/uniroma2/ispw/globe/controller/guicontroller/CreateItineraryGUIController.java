@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
@@ -45,9 +46,18 @@ public class CreateItineraryGUIController {
     private VBox attractionResultVBox;
 
     private String sessionId;
+    private String proposalId;
 
     public CreateItineraryGUIController(String sessionId) {
         this.sessionId = sessionId;
+        this.proposalId = null;
+    }
+    public CreateItineraryGUIController(String sessionId, String proposalId) {
+        this.sessionId = sessionId;
+        this.proposalId = proposalId;
+    }
+
+    public void initialize() {
     }
 
     public void saveItinerary(ActionEvent event) {
@@ -75,7 +85,11 @@ public class CreateItineraryGUIController {
 
         ItineraryBean itineraryBean = new ItineraryBean(itinerary,description,"",day,cities,attractions,0,0,0,0,attractionMap);
 
-        new ManageItineraryController().saveItinerary(itineraryBean,sessionId);
+        String itineraryId = new ManageItineraryController().saveItinerary(itineraryBean,sessionId);
+        //inserisci id itinerario
+        if (proposalId != null) {
+            new ResponseRequestController().addItineraryToProposal(itineraryId, proposalId,sessionId);
+        }
 
         URL url;
         Parent root;
@@ -83,7 +97,12 @@ public class CreateItineraryGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itinerary);
+            DisplayItineraryGUIController controller;
+            if (proposalId != null) {
+                controller = new DisplayItineraryGUIController(sessionId, proposalId, itineraryId);
+            } else {
+                controller = new DisplayItineraryGUIController(sessionId, itineraryId);
+            }
             loader.setController(controller);
             root = loader.load();
         } catch (IOException e) {

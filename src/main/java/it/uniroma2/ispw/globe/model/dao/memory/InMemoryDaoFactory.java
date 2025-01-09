@@ -4,9 +4,10 @@ import it.uniroma2.ispw.globe.model.dao.*;
 
 
 public class InMemoryDaoFactory extends DaoFactory {
+
     @Override
-    public UserDao getUserDao() {
-        return InMemoryUserDao.getInstance();
+    public AccountDao getAccountDao() {
+        return InMemoryAccountDao.getInstance();
     }
 
     @Override
@@ -27,5 +28,13 @@ public class InMemoryDaoFactory extends DaoFactory {
     @Override
     public ItineraryDao getItineraryDao() {
         return InMemoryItineraryDao.getInstance();
+    }
+
+    @Override
+    public ProposalDao getProposalDao() { return InMemoryProposalDao.getInstance(); }
+
+    @Override
+    public RequestDao getRequestDao() {
+        return InMemoryRequestDao.getInstance();
     }
 }

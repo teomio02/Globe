@@ -15,11 +15,12 @@ public abstract class DaoFactory {
         return new InDbDaoFactory();
     }
 
-
-    public abstract UserDao getUserDao();
+    public abstract AccountDao getAccountDao();
     public abstract AttractionDao getAttractionDao();
     public abstract CityDao getCityDao();
     public abstract DayDao getDayDao();
     public abstract ItineraryDao getItineraryDao();
+    public abstract ProposalDao getProposalDao();
+    public abstract RequestDao getRequestDao();
 
 }

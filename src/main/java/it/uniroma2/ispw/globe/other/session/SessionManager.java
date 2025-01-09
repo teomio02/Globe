@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.other.session;
 
+import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.User;
 
 import java.util.HashMap;
@@ -20,12 +21,12 @@ public class SessionManager {
         return instance;
     }
 
-    public String addSession(User user) {
+    public String addSession(Account account) {
         String sessionId = UUID.randomUUID().toString();
         if (sessions.containsKey(sessionId)) {
             return null;
         }
-        sessions.put(sessionId, new Session(sessionId, user));
+        sessions.put(sessionId, new Session(sessionId, account));
         return sessionId;
     }
 

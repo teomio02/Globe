@@ -5,7 +5,7 @@ import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 
 public class InDbAttractionDao extends AttractionDao {
     @Override
-    public void addAttraction(Attraction attraction) {
+    public void addAttraction(String attractionID) {
 
     }
 

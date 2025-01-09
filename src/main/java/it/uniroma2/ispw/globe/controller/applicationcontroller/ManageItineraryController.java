@@ -7,6 +7,8 @@ import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
+import it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao;
+import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.ModelFactory;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
@@ -20,12 +22,18 @@ public class ManageItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
-    public void saveItinerary(ItineraryBean itineraryBean, String sessionID) {
-        Itinerary itinerary = new ModelFactory().createItinerary(itineraryBean);
+    public String saveItinerary(ItineraryBean itineraryBean, String sessionID) {
+        ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+
+        String itineraryId = UUID.randomUUID().toString();
+        itineraryBean.setId(itineraryId);
+
+        User user = (User) SessionManager.getInstance().getSession(sessionID).getAccount();
+        itineraryDao.addItinerary(itineraryBean,user);
+        Itinerary itinerary = itineraryDao.getItinerary(itineraryBean.getName());
         calculateItinerary(itinerary);
-        User user = SessionManager.getInstance().getSession(sessionID).getUser();
-        ItineraryDao itineraryDao = DaoFactory.getFactory(DaoFactory.IN_MEMORY).getItineraryDao();
-        itineraryDao.addItinerary(itinerary, user);
+
+        return itineraryId;
     }
 
     public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {}
@@ -37,6 +45,17 @@ public class ManageItineraryController {
         List<City> cities = days.get(0).getCities();
         List<Attraction> attractions = days.get(0).getAttractions();
         List<Attraction> otherAttractions = new ArrayList<>();
+
+        System.out.println(itinerary.getName()+","+itinerary.getDaysNumber());
+        for (Day day : days) {
+            System.out.println(day.getId()+","+day.getDayNum());
+            for (City city : day.getCities()) {
+                System.out.println(city.getName());
+            }
+            for (Attraction attraction : day.getAttractions()) {
+                System.out.println(attraction.getName());
+            }
+        }
 
         int curDay=1;
 
@@ -65,7 +84,10 @@ public class ManageItineraryController {
         List<Day> newDays = new ArrayList<>();
 
         for ( Map.Entry<String, List<Attraction>> entry : attractionsByCity.entrySet()) {
-
+            System.out.println("attrazioni nella lista:");
+            for (Attraction attraction : entry.getValue()) {
+                System.out.println(attraction.getName());
+            }
             List<Attraction> attractionPath = getShortestPath(entry.getValue());
 
             int daysForCity = (int)Math.round(((double)entry.getValue().size()/(double)attrNum)*itinerary.getDaysNumber());
@@ -238,7 +260,7 @@ public class ManageItineraryController {
 
     public List<ItineraryBean> getUserItineraries(String sessionId) {
 
-        User user = SessionManager.getInstance().getSession(sessionId).getUser();
+        User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
         List<Itinerary> itineraries = user.getItineraries();
         List<ItineraryBean> itineraryBeans = new ArrayList<>();
         for (Itinerary itinerary : itineraries) {
@@ -246,6 +268,11 @@ public class ManageItineraryController {
             itineraryBeans.add(itineraryBean);
         }
         return itineraryBeans;
+    }
+
+    public String getAccountType(String sessionId) {
+        Account account = SessionManager.getInstance().getSession(sessionId).getAccount();
+        return account.getType();
     }
 
 }

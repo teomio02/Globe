@@ -53,15 +53,15 @@
                   </Text>
                </children>
             </HBox>
-            <TabPane prefHeight="554.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane prefHeight="554.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="My Itinerary">
                      <content>
-                        <VBox prefHeight="110.0" prefWidth="640.0">
+                        <VBox prefHeight="110.0" prefWidth="640.0" style="-fx-background-color: #314c1c;">
                            <children>
-                              <ScrollPane prefHeight="446.0" prefWidth="640.0">
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="446.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="itinerariesVBox" prefHeight="446.0" prefWidth="640.0" />
+                                    <VBox fx:id="itinerariesVBox" prefHeight="446.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
                                  </content>
                               </ScrollPane>
                               <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
@@ -138,5 +138,6 @@
             </Button>
          </children>
       </HBox>
+      <Button fx:id="logOutButton" layoutX="1116.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
    </children>
 </AnchorPane>

@@ -36,16 +36,25 @@ public class DisplayItineraryGUIController {
     private Label nameLabel;
 
     private String sessionId;
-    private String itineraryName;
+    private String proposalId;
+    private String itineraryId;
 
-    public DisplayItineraryGUIController(String sessionId, String itineraryName) {
+    public DisplayItineraryGUIController(String sessionId, String itineraryId) {
         this.sessionId = sessionId;
-        this.itineraryName = itineraryName;
+        this.proposalId = null;
+        this.itineraryId = itineraryId;
     }
+
+    public DisplayItineraryGUIController(String sessionId, String proposalId,String itineraryId) {
+        this.sessionId = sessionId;
+        this.proposalId = proposalId;
+        this.itineraryId = itineraryId;
+    }
+
     public void initialize() {
-        if (itineraryName != null) {
-            ItineraryBean itinerary = new ManageItineraryController().getItinerary(itineraryName);
-            List<StepBean> steps = new ManageItineraryController().getSteps(itineraryName);
+        if (itineraryId != null) {
+            ItineraryBean itinerary = new ManageItineraryController().getItinerary(itineraryId);
+            List<StepBean> steps = new ManageItineraryController().getSteps(itineraryId);
             nameLabel.setText(itinerary.getName());
             descriptionLabel.setText(itinerary.getDescription());
             dayLabel.setText(String.valueOf(itinerary.getDuration()));

@@ -1,16 +1,37 @@
 package it.uniroma2.ispw.globe.model.bean;
 
 public class ProposalBean {
+    private String id;
     private String name;
-    private Float price;
+    private double price;
     private String agency;
+    private String user;
+    private String description;
     private Boolean accepted;
 
-    public ProposalBean(String name, Float price, String agency, Boolean accepted) {
+    public ProposalBean(String id, String name, double price, String agency, String user, String description, Boolean accepted) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.agency = agency;
+        this.user = user;
+        this.description = description;
         this.accepted = accepted;
+    }
+
+    public ProposalBean(String name, double price, String user, String description) {
+        this.name = name;
+        this.price = price;
+        this.user = user;
+        this.description = description;
+    }
+
+    public String getID() {
+        return id;
+    }
+
+    public void setID(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -21,11 +42,11 @@ public class ProposalBean {
         this.name = name;
     }
 
-    public Float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -35,6 +56,22 @@ public class ProposalBean {
 
     public void setAgency(String agency) {
         this.agency = agency;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Boolean getAccepted() {

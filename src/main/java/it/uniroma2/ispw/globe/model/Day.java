@@ -3,16 +3,16 @@ package it.uniroma2.ispw.globe.model;
 import java.util.List;
 
 public class Day {
-    private int id;
+    private String id;
     private int dayNum;
     private List<City> cities;
     private List<Attraction> attractions;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

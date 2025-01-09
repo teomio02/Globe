@@ -5,18 +5,18 @@ import it.uniroma2.ispw.globe.other.ItineraryType;
 import java.util.List;
 
 public class Itinerary {
-    private int itineraryID;
+    private String itineraryID;
     private String name;
     private String description;
     private int daysNumber;
     private List<Day> days;
     private ItineraryType type;
 
-    public int getItineraryID() {
+    public String getItineraryID() {
         return itineraryID;
     }
 
-    public void setItineraryID(int itineraryID) {
+    public void setItineraryID(String itineraryID) {
         this.itineraryID = itineraryID;
     }
 

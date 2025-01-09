@@ -7,6 +7,7 @@ import it.uniroma2.ispw.globe.model.dao.DayDao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class InMemoryDayDao extends DayDao {
 
@@ -24,25 +25,34 @@ public class InMemoryDayDao extends DayDao {
     }
 
     @Override
-    public void addDay(Day day) {
+    public void addDay(String dayId, int dayNum, List<String> citiesID, List<String> attractionsID) {
+        Day day = new Day();
+        List<City> cities = new ArrayList<>();
+        List<Attraction> attractions = new ArrayList<>();
+
+        for (String id : citiesID) {
+            InMemoryCityDao.getInstance().addCity(id);
+            City city = InMemoryCityDao.getInstance().getCity(id);
+            cities.add(city);
+        }
+
+        for (String id : attractionsID) {
+            InMemoryAttractionDao.getInstance().addAttraction(id);
+            Attraction attraction = InMemoryAttractionDao.getInstance().getAttraction(id);
+            attractions.add(attraction);
+        }
+
+        day.setId(dayId);
+        day.setDayNum(dayNum);
+        day.setCities(cities);
+        day.setAttractions(attractions);
         days.add(day);
-        int id = 0;
-        if (!days.isEmpty()) {
-            id = days.get(days.size()-1).getId()+1;
-        }
-        day.setId(id);
-        for (City city : day.getCities()) {
-            InMemoryCityDao.getInstance().addCity(city);
-        }
-        for (Attraction attraction : day.getAttractions()) {
-            InMemoryAttractionDao.getInstance().addAttraction(attraction);
-        }
     }
 
     @Override
-    public Day getDay(int dayID) {
+    public Day getDay(String dayID) {
         for (Day day : days) {
-            if (day.getId() == dayID) {
+            if (day.getId().equals(dayID)) {
                 return day;
             }
         }
