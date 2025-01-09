@@ -3,7 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +35,7 @@ public class ManageRequestGUIController {
 
     public void initialize() {
         List<ProposalBean> proposals = new ResponseRequestController().getAgencyProposals(sessionId);
-        List<AgencyRequestBean> requests = new ResponseRequestController().getAgencyRequests(sessionId);
+        List<RequestBean> requests = new ResponseRequestController().getAgencyRequests(sessionId);
         for (ProposalBean proposal : proposals) {
             try {
                 URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
@@ -56,7 +56,7 @@ public class ManageRequestGUIController {
                 throw new RuntimeException(e);
             }
         }
-        for (AgencyRequestBean request : requests) {
+        for (RequestBean request : requests) {
             try {
                 URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
                 FXMLLoader loader = new FXMLLoader(url);

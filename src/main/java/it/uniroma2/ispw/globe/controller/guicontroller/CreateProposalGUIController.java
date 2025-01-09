@@ -44,8 +44,8 @@ public class CreateProposalGUIController {
     }
 
     public void initialize() {
-        List<AgencyRequestBean> requests = new ResponseRequestController().getAgencyRequests(sessionId);
-        for (AgencyRequestBean request : requests) {
+        List<RequestBean> requests = new ResponseRequestController().getAgencyRequests(sessionId);
+        for (RequestBean request : requests) {
             try {
                 URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
                 FXMLLoader loader = new FXMLLoader(url);

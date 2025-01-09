@@ -53,12 +53,12 @@ public class ResponseRequestController {
         return proposalBeans;
     }
 
-    public List<AgencyRequestBean> getAgencyRequests(String sessionId) {
+    public List<RequestBean> getAgencyRequests(String sessionId) {
 
         Agency agency = (Agency) SessionManager.getInstance().getSession(sessionId).getAccount();
         List<Request> requests = agency.getRequests();
         // popola requestBean
-        List<AgencyRequestBean> requestBeans = new ArrayList<>();
+        List<RequestBean> requestBeans = new ArrayList<>();
         
         return requestBeans;
     }
