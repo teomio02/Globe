@@ -54,7 +54,7 @@ public class APIClient {
             JsonArray results = gson.fromJson(responseBody, JsonArray.class);
 
             for (int i = 0; i < results.size() && i < 10; i++) {
-                JsonObject place = results.get(i).getAsJsonObject();;
+                JsonObject place = results.get(i).getAsJsonObject();
                 if (type.equals("id")) {
                     places.add(place);
                 } else if (type.equals("administrative")) {

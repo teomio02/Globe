@@ -25,14 +25,12 @@ public class ResponseRequestController {
         Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
         proposalDao.addProposal(proposalBean,null,getUser(proposalBean.getUser()),agency);
 
-        Proposal proposal = proposalDao.getProposal(proposalBean.getName());
-
         requestDao.removeRequest(requestId);
 
         return proposalID;
     }
 
-    public void addItineraryToProposal(String itineraryId, String proposalId, String sessionId) {
+    public void addItineraryToProposal(String itineraryId, String proposalId) {
         ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
         ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
 
@@ -46,8 +44,6 @@ public class ResponseRequestController {
 
     public List<ProposalBean> getAgencyProposals(String sessionId) {
 
-        Agency agency = (Agency) SessionManager.getInstance().getSession(sessionId).getAccount();
-        List<Proposal> proposals = agency.getProposals();
         List<ProposalBean> proposalBeans = new ArrayList<>();
 
         return proposalBeans;
@@ -55,15 +51,13 @@ public class ResponseRequestController {
 
     public List<RequestBean> getAgencyRequests(String sessionId) {
 
-        Agency agency = (Agency) SessionManager.getInstance().getSession(sessionId).getAccount();
-        List<Request> requests = agency.getRequests();
-        // popola requestBean
         List<RequestBean> requestBeans = new ArrayList<>();
         
         return requestBeans;
     }
 
     public User getUser(String id) {
+        
         return new User();
     }
 }

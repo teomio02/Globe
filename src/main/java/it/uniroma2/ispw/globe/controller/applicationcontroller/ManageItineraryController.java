@@ -36,26 +36,15 @@ public class ManageItineraryController {
         return itineraryId;
     }
 
-    public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {}
+    public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {/*-*/}
 
-    public void editItinerary(ItineraryBean itineraryBean, UserBean userBean) {}
+    public void editItinerary(ItineraryBean itineraryBean, UserBean userBean) {/*-*/}
 
     public void calculateItinerary(Itinerary itinerary) {
         List<Day> days = itinerary.getDays();
         List<City> cities = days.get(0).getCities();
         List<Attraction> attractions = days.get(0).getAttractions();
         List<Attraction> otherAttractions = new ArrayList<>();
-
-        System.out.println(itinerary.getName()+","+itinerary.getDaysNumber());
-        for (Day day : days) {
-            System.out.println(day.getId()+","+day.getDayNum());
-            for (City city : day.getCities()) {
-                System.out.println(city.getName());
-            }
-            for (Attraction attraction : day.getAttractions()) {
-                System.out.println(attraction.getName());
-            }
-        }
 
         int curDay=1;
 
@@ -84,10 +73,7 @@ public class ManageItineraryController {
         List<Day> newDays = new ArrayList<>();
 
         for ( Map.Entry<String, List<Attraction>> entry : attractionsByCity.entrySet()) {
-            System.out.println("attrazioni nella lista:");
-            for (Attraction attraction : entry.getValue()) {
-                System.out.println(attraction.getName());
-            }
+
             List<Attraction> attractionPath = getShortestPath(entry.getValue());
 
             int daysForCity = (int)Math.round(((double)entry.getValue().size()/(double)attrNum)*itinerary.getDaysNumber());
@@ -192,6 +178,7 @@ public class ManageItineraryController {
         try {
             apiPlaces = api.getPlaces(name,type);
         } catch (IOException e) {
+            // crea eccezione
             throw new RuntimeException(e);
         }
         return apiPlaces;

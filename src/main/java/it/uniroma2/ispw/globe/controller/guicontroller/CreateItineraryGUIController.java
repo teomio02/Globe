@@ -88,7 +88,7 @@ public class CreateItineraryGUIController {
         String itineraryId = new ManageItineraryController().saveItinerary(itineraryBean,sessionId);
         //inserisci id itinerario
         if (proposalId != null) {
-            new ResponseRequestController().addItineraryToProposal(itineraryId, proposalId,sessionId);
+            new ResponseRequestController().addItineraryToProposal(itineraryId, proposalId);
         }
 
         URL url;

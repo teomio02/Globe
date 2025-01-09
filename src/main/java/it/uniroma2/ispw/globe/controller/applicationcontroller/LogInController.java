@@ -20,14 +20,11 @@ public class LogInController{
         }
         Account account = accountDao.getAccount(credentials);
 
-        String sessionId = SessionManager.getInstance().addSession(account);
-
-        return sessionId;
+        return SessionManager.getInstance().addSession(account);
     }
 
     public void signIn(CredentialsBean credentials) {
         AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        Account account = accountDao.getAccount(credentials);
         if (accountDao.getAccount(credentials) != null) {
             // eccezione account già esistente
         } else {
