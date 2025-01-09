@@ -1,8 +1,6 @@
 package it.uniroma2.ispw.globe.model;
 
 public class Request {
-<<<<<<< HEAD:Project/globe/src/main/java/it/uniroma2/ispw/globe/model/Request.java
-=======
     private String id;
     private User user;
     private Agency agency;
@@ -39,5 +37,4 @@ public class Request {
     public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
     }
->>>>>>> refs/remotes/origin/main:src/main/java/it/uniroma2/ispw/globe/model/Request.java
 }

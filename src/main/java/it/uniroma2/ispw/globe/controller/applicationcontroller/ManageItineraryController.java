@@ -1,22 +1,16 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-<<<<<<< HEAD:Project/globe/src/main/java/it/uniroma2/ispw/globe/controller/applicationcontroller/ManageItineraryController.java
 import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.Itinerary;
-import it.uniroma2.ispw.globe.model.Bean.*;
-=======
-import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
->>>>>>> refs/remotes/origin/main:src/main/java/it/uniroma2/ispw/globe/controller/applicationcontroller/ManageItineraryController.java
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
-import it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
-import it.uniroma2.ispw.globe.util.ModelFactory;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import javafx.util.Pair;
 
