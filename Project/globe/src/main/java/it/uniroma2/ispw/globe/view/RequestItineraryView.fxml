@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.RequestItineraryViewController">
+   <children>
+      <VBox prefHeight="630.0" prefWidth="640.0" spacing="30.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox prefHeight="63.0" prefWidth="279.0">
+               <children>
+                  <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="GL">
+                     <font>
+                        <Font name="Arial Bold" size="56.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Text>
+                  <Pane prefHeight="60.0" prefWidth="60.0">
+                     <children>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/lEllipse.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="44.0" fitWidth="44.0" layoutX="8.0" layoutY="8.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/iconGlobe.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Pane>
+                  <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="BE">
+                     <font>
+                        <Font name="Arial Bold" size="56.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefWidth="505.0" spacing="30.0">
+               <children>
+                  <VBox prefHeight="432.0" prefWidth="625.0">
+                     <children>
+                        <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Request Itinerary">
+                           <font>
+                              <Font name="Arial" size="24.0" />
+                           </font>
+                        </Text>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="citiesField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="431.0" promptText="Where you want to go?" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="nextButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchCityHandler" prefHeight="10.0" prefWidth="70.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="360.0">
+                                       <image>
+                                          <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="5.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <VBox fx:id="cityResultVBox" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="cityVBox" prefHeight="200.0" prefWidth="100.0" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="attractionsField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="431.0" promptText="What you want to visit?" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button fx:id="nextButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAttractionHandler" prefHeight="10.0" prefWidth="70.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="360.0">
+                                       <image>
+                                          <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="5.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <VBox fx:id="attractionResultVBox" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="attractionVBox" prefHeight="200.0" prefWidth="100.0" />
+                           </children>
+                        </HBox>
+                        <TextField fx:id="otherRequestsField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="456.0" promptText="Other requests" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <VBox>
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="How many days?">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="30.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35.0" prefWidth="130.0" style="-fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3;">
+                                       <children>
+                                          <Button fx:id="minusButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#minusHandler" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dminus.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                          <Label fx:id="dayLabel" alignment="CENTER" prefHeight="18.0" prefWidth="58.0" text="0" textAlignment="CENTER" textFill="#97c093" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="plusButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#plusHandler" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dplus.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets left="15.0" top="25.0" />
+                                       </HBox.margin>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want an optional?">
+                           <font>
+                              <Font name="Arial" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </Text>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="flightButton" mnemonicParsing="false" onAction="#flightHandler" prefHeight="26.0" prefWidth="107.5" text="Flight">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="accommodationButton" mnemonicParsing="false" onAction="#accommodationHandler" text="Accommodation">
+                                 <HBox.margin>
+                                    <Insets left="25.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Select itinerary type">
+                           <font>
+                              <Font name="Arial" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Text>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="onTheRoadButton" mnemonicParsing="false" onAction="#onTheRoadHandler" prefHeight="26.0" prefWidth="107.5" text="On the road">
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="natureButton" mnemonicParsing="false" onAction="#natureHandler" prefHeight="26.0" prefWidth="107.5" text="Nature">
+                                 <HBox.margin>
+                                    <Insets left="25.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="agencyField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="431.0" promptText="Choose agency" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
+                                 <font>
+                                    <Font name="Arial" size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="10.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Button alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="10.0" prefWidth="70.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                                 <font>
+                                    <Font name="Arial Bold" size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="360.0">
+                                       <image>
+                                          <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="5.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <VBox fx:id="agencyResultVBox" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="agencyVBox" prefHeight="200.0" prefWidth="100.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+               <children>
+                  <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#backHandler" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets bottom="10.0" right="85.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="sendRequestButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendRequestHandler" prefHeight="40.0" prefWidth="113.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Send request" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
+         <image>
+            <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #97c093;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="homeButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#userHomeHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Home" textFill="#314c1c">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dhome.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="tripButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#userTripHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #314c1c; -fx-background-radius: 40;" text="Trip" textFill="#97c093">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/ltrip.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="userProfileButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#userProfileHandler" prefHeight="50.0" prefWidth="140.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Profile" textFill="#314c1c">
+               <font>
+                  <Font name="Arial Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/daccount.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

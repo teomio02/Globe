@@ -3,7 +3,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.Itinerary;
-import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.model.Bean.*;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.model.Attraction;
