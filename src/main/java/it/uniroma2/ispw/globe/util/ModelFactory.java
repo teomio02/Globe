@@ -1,18 +1,5 @@
 package it.uniroma2.ispw.globe.util;
 
-import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient;
-import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
-
 public class ModelFactory {
 
 //    public Account createAccount(CredentialsBean credentials) {

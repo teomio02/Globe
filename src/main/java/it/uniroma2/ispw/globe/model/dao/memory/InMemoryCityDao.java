@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
@@ -26,14 +26,14 @@ public class InMemoryCityDao extends CityDao {
     }
 
     @Override
-    public void addCity(String cityID) {
-        JsonObject jsonCity;
-        try {
-            jsonCity= new APIClient().getPlaceByID(cityID);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void addCity(City city) {
+        for (City c : cities) {
+            if (c.getName().equals(city.getName())) {
+                // errore
+                return;
+            }
         }
-        cities.add(new PlaceAdapter(jsonCity));
+        cities.add(city);
     }
 
     @Override

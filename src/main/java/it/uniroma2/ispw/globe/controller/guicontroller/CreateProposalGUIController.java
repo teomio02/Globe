@@ -82,11 +82,12 @@ public class CreateProposalGUIController {
 
         if (!proposalName.isEmpty() && !description.isEmpty() && price != 0) {
             ProposalBean proposalBean = new ProposalBean(proposalName,price,userLabel.getText(),description);
-            String proposalID = new ResponseRequestController().saveProposal(proposalBean,requestId,sessionId);
+            new ResponseRequestController().createProposal(proposalBean,requestId,sessionId);
+
             try {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml").toURI().toURL();
                 FXMLLoader loader = new FXMLLoader(url);
-                CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,proposalID);
+                CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,true);
                 loader.setController(controller);
                 root = loader.load();
             } catch (IOException e) {

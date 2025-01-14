@@ -17,14 +17,16 @@ public class ItineraryBean {
     private double inboundFlightDuration;
     private Map<String, String> accommodations;
 
-    public ItineraryBean(String name, String description, String type, int duration) {
+    public ItineraryBean(String id,String name, String description, String type, int duration) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.duration = duration;
     }
 
-    public ItineraryBean(String name, String description, String type, int duration, List<String> cities, List<String> attractions, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+    public ItineraryBean(String id,String name, String description, String type, int duration, List<String> cities, List<String> attractions, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
@@ -38,7 +40,8 @@ public class ItineraryBean {
         this.accommodations = accommodations;
     }
 
-    public ItineraryBean(String name, String description, String type, int duration, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+    public ItineraryBean(String id,String name, String description, String type, int duration, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;

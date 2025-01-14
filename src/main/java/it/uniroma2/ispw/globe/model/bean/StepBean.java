@@ -3,12 +3,21 @@ package it.uniroma2.ispw.globe.model.bean;
 import java.util.List;
 
 public class StepBean {
+    private int num;
     private List<String> city;
     private List<String> attractions;
 
-    public StepBean(List<String> city, List<String> attractions) {
+    public StepBean(int num, List<String> city, List<String> attractions) {
+        this.num = num;
         this.city = city;
         this.attractions = attractions;
+    }
+
+    public int getNum() {
+        return num;
+    }
+    public void setNum(int num) {
+        this.num = num;
     }
 
     public List<String> getCity() { return city; }

@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
@@ -26,14 +26,14 @@ public class InMemoryAttractionDao extends AttractionDao {
     }
 
     @Override
-    public void addAttraction(String attractionID) {
-        JsonObject jsonAttraction;
-        try {
-            jsonAttraction = new APIClient().getPlaceByID(attractionID);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void addAttraction(Attraction attraction) {
+        for (Attraction attr : attractions) {
+            if (attr.getPlaceID().equals(attraction.getPlaceID())) {
+                // errore
+                return;
+            }
         }
-        attractions.add(new PlaceAdapter(jsonAttraction));
+        attractions.add(attraction);
     }
 
     @Override

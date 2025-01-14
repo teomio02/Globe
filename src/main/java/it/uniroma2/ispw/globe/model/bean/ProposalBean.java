@@ -1,5 +1,7 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.model.Itinerary;
+
 public class ProposalBean {
     private String id;
     private String name;

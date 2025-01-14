@@ -27,26 +27,13 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public void addProposal(ProposalBean proposalBean, Itinerary itinerary, User user, Agency agency) {
-        for (Proposal proposal : proposals) {
-            if (proposal.getId().equals(proposalBean.getID())){
+    public void addProposal(Proposal proposal, User user) {
+        for (Proposal savedProposal : proposals) {
+            if (proposal.getId().equals(proposal.getId())){
                 // proposta già esistente
                 return;
             }
         }
-
-        Proposal proposal = new Proposal();
-
-        proposal.setId(proposalBean.getID());
-        proposal.setName(proposalBean.getName());
-        proposal.setItinerary(itinerary);
-        proposal.setPrice(proposalBean.getPrice());
-        proposal.setDescription(proposalBean.getDescription());
-        proposal.setUser(user);
-        proposal.setAgency(agency);
-        proposal.setAccepted(false);
-
-
         proposals.add(proposal);
         user.getProposals().add(proposal);
     }

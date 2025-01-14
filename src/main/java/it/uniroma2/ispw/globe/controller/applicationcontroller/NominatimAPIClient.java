@@ -13,7 +13,7 @@ import java.util.List;
 
 
 
-public class APIClient {
+public class NominatimAPIClient {
 
     private static final String BASE_URL = "https://nominatim.openstreetmap.org/";
     private static final Gson gson = new Gson();
@@ -21,7 +21,7 @@ public class APIClient {
 
     private static final String TYPE = "addresstype";
 
-    public APIClient() {
+    public NominatimAPIClient() {
         this.httpClient = new OkHttpClient();
     }
 

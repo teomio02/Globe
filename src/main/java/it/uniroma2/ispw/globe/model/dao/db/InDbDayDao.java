@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InDbDayDao extends DayDao {
     @Override
-    public void addDay(String id, int dayNum, List<String> citiesID, List<String> attractionsID) {
+    public void addDay(Day day) {
 
     }
 

@@ -46,21 +46,17 @@ public class CreateItineraryGUIController {
     private VBox attractionResultVBox;
 
     private String sessionId;
-    private String proposalId;
+    private boolean isProposal;
 
-    public CreateItineraryGUIController(String sessionId) {
+    public CreateItineraryGUIController(String sessionId,boolean isProposal) {
         this.sessionId = sessionId;
-        this.proposalId = null;
-    }
-    public CreateItineraryGUIController(String sessionId, String proposalId) {
-        this.sessionId = sessionId;
-        this.proposalId = proposalId;
+        this.isProposal = isProposal;
     }
 
     public void initialize() {
     }
 
-    public void saveItinerary(ActionEvent event) {
+    public void generateItinerary(ActionEvent event) {
         String city;
         String attraction;
 
@@ -83,28 +79,29 @@ public class CreateItineraryGUIController {
 
         Map<String,String> attractionMap = new HashMap<>();
 
-        ItineraryBean itineraryBean = new ItineraryBean(itinerary,description,"",day,cities,attractions,0,0,0,0,attractionMap);
+        ItineraryBean itineraryBean = new ItineraryBean(null,itinerary,description,"",day,cities,attractions,0,0,0,0,attractionMap);
 
-        String itineraryId = new ManageItineraryController().saveItinerary(itineraryBean,sessionId);
+        new ManageItineraryController().createItinerary(itineraryBean,sessionId);
+
         //inserisci id itinerario
-        if (proposalId != null) {
-            new ResponseRequestController().addItineraryToProposal(itineraryId, proposalId);
-        }
 
         URL url;
         Parent root;
 
         try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller;
-            if (proposalId != null) {
-                controller = new DisplayItineraryGUIController(sessionId, proposalId, itineraryId);
+            if (isProposal) {
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
+                DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId,null);
+                FXMLLoader loader = new FXMLLoader(url);
+                loader.setController(controller);
+                root = loader.load();
             } else {
-                controller = new DisplayItineraryGUIController(sessionId, itineraryId);
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
+                DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,null,null);
+                FXMLLoader loader = new FXMLLoader(url);
+                loader.setController(controller);
+                root = loader.load();
             }
-            loader.setController(controller);
-            root = loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

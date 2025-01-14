@@ -3,9 +3,8 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.view.ItineraryBox;
+import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -13,15 +12,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -29,6 +24,8 @@ public class ManageItineraryGUIController {
 
     @FXML
     private VBox itinerariesVBox;
+    @FXML
+    private VBox proposalsVBox;
 
     private String sessionId;
 
@@ -57,6 +54,28 @@ public class ManageItineraryGUIController {
                 throw new RuntimeException(e);
             }
         }
+
+        List<ProposalBean> proposals = new ManageItineraryController().getUserProposals(sessionId);
+        for (ProposalBean proposal : proposals) {
+            try {
+                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
+                FXMLLoader loader = new FXMLLoader(url);
+                Button proposalBox = loader.load();
+                proposalBox.setUserData(proposal.getID());
+                proposalBox.setOnAction(actionEvent -> viewProposal(actionEvent));
+                Label nameLabel = (Label) proposalBox.getGraphic().lookup("#nameLabel");
+                nameLabel.setText(proposal.getName());
+                Label descriptionLabel = (Label) proposalBox.getGraphic().lookup("#descriptionLabel");
+                descriptionLabel.setText(proposal.getDescription());
+                Label daysLabel = (Label) proposalBox.getGraphic().lookup("#daysLabel");
+                daysLabel.setText(String.valueOf(proposal.getAgency()));
+
+                proposalsVBox.getChildren().add(proposalBox);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     public void deleteItinerary() {}
@@ -64,15 +83,35 @@ public class ManageItineraryGUIController {
     public void modifyItinerary() {}
 
     public void viewItinerary(ActionEvent event) {
-        URL url;
         Parent root;
 
         String itineraryId = (String) ((Button)event.getSource()).getUserData();
 
         try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
+            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId);
+            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,null,itineraryId);
+            loader.setController(controller);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void viewProposal(ActionEvent event) {
+        Parent root;
+
+        String proposalId = (String) ((Button)event.getSource()).getUserData();
+
+        try {
+            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, proposalId);
             loader.setController(controller);
             root = loader.load();
         } catch (IOException e) {
@@ -96,7 +135,7 @@ public class ManageItineraryGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId);
+            CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,false);
             loader.setController(controller);
             root = loader.load();
         } catch (IOException e) {

@@ -1,10 +1,14 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
+import it.uniroma2.ispw.globe.model.Account;
+import it.uniroma2.ispw.globe.model.Agency;
+import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.StepBean;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.view.DayTab;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,55 +43,61 @@ public class DisplayItineraryGUIController {
     private String proposalId;
     private String itineraryId;
 
-    public DisplayItineraryGUIController(String sessionId, String itineraryId) {
-        this.sessionId = sessionId;
-        this.proposalId = null;
-        this.itineraryId = itineraryId;
-    }
-
-    public DisplayItineraryGUIController(String sessionId, String proposalId,String itineraryId) {
+    public DisplayItineraryGUIController(String sessionId, String proposalId, String itineraryId) {
         this.sessionId = sessionId;
         this.proposalId = proposalId;
         this.itineraryId = itineraryId;
     }
 
     public void initialize() {
-        if (itineraryId != null) {
-            ItineraryBean itinerary = new ManageItineraryController().getItinerary(itineraryId);
-            List<StepBean> steps = new ManageItineraryController().getSteps(itineraryId);
-            nameLabel.setText(itinerary.getName());
-            descriptionLabel.setText(itinerary.getDescription());
-            dayLabel.setText(String.valueOf(itinerary.getDuration()));
-            DayTab dayTab = new DayTab();
-            int day = 0;
-            for (StepBean step : steps) {
-                dayTab.setViewTab(daysTabPane, step.getAttractions().size());
-                Tab tab = daysTabPane.getTabs().get(day);
+        ItineraryBean itinerary = new ManageItineraryController().getItinerary(itineraryId,sessionId);
+        List<StepBean> steps = new ManageItineraryController().getSteps(itineraryId,sessionId);
+        nameLabel.setText(itinerary.getName());
+        descriptionLabel.setText(itinerary.getDescription());
+        dayLabel.setText(String.valueOf(itinerary.getDuration()));
+        DayTab dayTab = new DayTab();
+        int day = 0;
+        for (StepBean step : steps) {
+            dayTab.setViewTab(daysTabPane, step.getAttractions().size());
+            Tab tab = daysTabPane.getTabs().get(day);
 
-                VBox vbox = (VBox) tab.getContent();
-                HBox cityBox = (HBox) vbox.getChildren().get(0);
-                VBox attractionBox = (VBox) vbox.getChildren().get(1);
+            VBox vbox = (VBox) tab.getContent();
+            HBox cityBox = (HBox) vbox.getChildren().get(0);
+            VBox attractionBox = (VBox) vbox.getChildren().get(1);
 
-                Label cityLabel = (Label) cityBox.getChildren().get(1);
-
-                CityBean city = new ManageItineraryController().getCity(step.getCity().get(0));
-                cityLabel.setText(city.getName()+", "+city.getCountry());
-
-                Label accommodationLabel = (Label) cityBox.getChildren().get(3);
-
-                int i = 0;
-                for (String attractionID : step.getAttractions()) {
-                    AttractionBean attraction = new ManageItineraryController().getAttraction(attractionID);
-                    Label label = (Label) attractionBox.getChildren().get(i);
-                    label.setText(attraction.getName()+" - "+attraction.getCity()+", "+attraction.getAddress());
-                    i++;
-                }
-                day++;
+            Label cityLabel = (Label) cityBox.getChildren().get(1);
+            CityBean city;
+            if (itineraryId == null) {
+                city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),sessionId);
+            } else {
+                city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
             }
+            cityLabel.setText(city.getName()+", "+city.getCountry());
+
+            Label accommodationLabel = (Label) cityBox.getChildren().get(3);
+
+            int i = 0;
+            for (String attractionID : step.getAttractions()) {
+                AttractionBean attraction;
+                if (itineraryId == null) {
+                    attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,sessionId);
+                } else {
+                    attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,null);
+                }
+                Label label = (Label) attractionBox.getChildren().get(i);
+                label.setText(attraction.getName()+" - "+attraction.getCity()+", "+attraction.getAddress());
+                i++;
+            }
+            day++;
         }
     }
 
     public void showItineraries(ActionEvent event) {
+
+        if (itineraryId == null) {
+            new ManageItineraryController().saveItinerary(sessionId);
+        }
+
         URL url;
         Parent root;
 

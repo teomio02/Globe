@@ -38,7 +38,7 @@ public class LogInController{
             CredentialsBean credentials = new CredentialsBean(account.getUsername(),account.getPassword(), account.getType());
             InMemoryAccountDao.getInstance().removeAccount(credentials);
         }
-        SessionManager.getInstance().removeSession(sessionId);
+        // SessionManager.getInstance().removeSession(sessionId);
     }
 
     public String getUserType(String username) {

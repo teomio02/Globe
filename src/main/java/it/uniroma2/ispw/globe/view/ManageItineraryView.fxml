@@ -80,13 +80,13 @@
                         </VBox>
                      </content>
                   </Tab>
-                <Tab text="Agency Proposal">
+                  <Tab text="Agency Proposal">
                      <content>
-                        <VBox prefHeight="110.0" prefWidth="640.0">
+                        <VBox prefHeight="110.0" prefWidth="640.0" style="-fx-background-color: #314c1c;">
                            <children>
-                              <ScrollPane prefHeight="446.0" prefWidth="640.0">
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="446.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="proposalsVBox" prefHeight="446.0" prefWidth="640.0" />
+                                    <VBox fx:id="proposalsVBox" prefHeight="446.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
                                  </content>
                               </ScrollPane>
                            </children>

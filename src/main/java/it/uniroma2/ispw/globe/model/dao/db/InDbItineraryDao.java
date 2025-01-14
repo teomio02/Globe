@@ -7,7 +7,7 @@ import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 
 public class InDbItineraryDao extends ItineraryDao {
     @Override
-    public void addItinerary(ItineraryBean itinerary, User user) {
+    public void addItinerary(Itinerary itinerary, User user) {
     }
 
     @Override

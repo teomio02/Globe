@@ -26,30 +26,18 @@ public class InMemoryItineraryDao extends ItineraryDao {
     }
 
     @Override
-    public void addItinerary(ItineraryBean itineraryBean, User user) {
-        Itinerary itinerary = new Itinerary();
-        List<Day> days = new ArrayList<>();
-
-        String id = UUID.randomUUID().toString();
-        InMemoryDayDao.getInstance().addDay(id,0,itineraryBean.getCities(),itineraryBean.getAttractions());
-        Day day0 = InMemoryDayDao.getInstance().getDay(id);
-        days.add(day0);
-        for (int i=1; i<=itineraryBean.getDuration(); i++) {
-            id = UUID.randomUUID().toString();
-            InMemoryDayDao.getInstance().addDay(id, i,new ArrayList<>(),new ArrayList<>());
-            Day day = InMemoryDayDao.getInstance().getDay(id);
-            days.add(day);
+    public void addItinerary(Itinerary itinerary, User user) {
+        for (Day day : itinerary.getDays()) {
+            InMemoryDayDao.getInstance().addDay(day);
         }
 
-        itinerary.setItineraryID(itineraryBean.getId());
-        itinerary.setName(itineraryBean.getName());
-        itinerary.setDescription(itineraryBean.getDescription());
-        itinerary.setDaysNumber(itineraryBean.getDuration());
-        itinerary.setDays(days);
-        //itinerary.setType(itineraryBean.getType());
-
-        //se l'itinerario è già presente sostituiscilo, altrimenti inserisci, verifica se è lo stesso itinerario
         if (user != null) {
+            for (Itinerary savedItinerary : itineraries) {
+                if (savedItinerary.getItineraryID().equals(itinerary.getItineraryID())) {
+                    // errore
+                    return;
+                }
+            }
             itineraries.add(itinerary);
             user.getItineraries().add(itinerary);
         } else {
@@ -60,7 +48,9 @@ public class InMemoryItineraryDao extends ItineraryDao {
     @Override
     public Itinerary getItinerary(String id) {
         for (Itinerary itinerary : itineraries) {
+            System.out.println("       id: "+itinerary.getItineraryID());
             if (itinerary.getItineraryID().equals(id)) {
+                System.out.println("       itinerary found");
                 return itinerary;
             }
         }
