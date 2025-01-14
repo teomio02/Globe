@@ -148,6 +148,26 @@ public class ManageItineraryGUIController {
         stage.show();
     }
 
+    public void requestItinerary(ActionEvent event) {
+        URL url;
+        Parent root;
+
+        try {
+            url = new File("src/main/java/it/uniroma2/ispw/globe/view/RequestItineraryView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            CreateRequestGUIController controller = new CreateRequestGUIController(sessionId);
+            loader.setController(controller);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void logOut(ActionEvent event) {
         URL url;
         Parent root;

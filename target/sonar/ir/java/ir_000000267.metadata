@@ -1,6 +1,0 @@
-it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDao#getCity(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/City;
-false
-c6c29bc7cf115c45f78ea1e581439cfa
-java.lang.String#equals(Ljava/lang/Object;)Z
-==
-getPlaceID it.uniroma2.ispw.globe.model.City#getPlaceID()Ljava/lang/String;

@@ -1,6 +1,0 @@
-it.uniroma2.ispw.globe.util.adapter.PlaceAdapter#getLatitude()D
-false
-8a7db1b91a3c29c1525ffc8b7ef0e184
-com.google.gson.JsonObject#get(Ljava/lang/String;)Lcom/google/gson/JsonElement;
-==
-getAsDouble com.google.gson.JsonElement#getAsDouble()D

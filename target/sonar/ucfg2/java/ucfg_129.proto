@@ -1,15 +1,0 @@
-
-Ait.uniroma2.ispw.globe.model.Day#getAttractions()Ljava/util/List;d
-Z/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/model/Day.java% %(*"1*®
-1& &({
-y
-& &(
-%0java.util.List"__id*Q
-
-__unknown_file (5*3"
- it.uniroma2.ispw.globe.model.Day"
-attractions""
-& &(
-
-%0java.util.ListB$"
- it.uniroma2.ispw.globe.model.DayH

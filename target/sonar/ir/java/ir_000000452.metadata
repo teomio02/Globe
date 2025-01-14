@@ -1,5 +1,0 @@
-it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#getItineraryDao()Lit/uniroma2/ispw/globe/model/dao/ItineraryDao;
-false
-6c7c9ada40ac23538454041b1360b7d3
-it.uniroma2.ispw.globe.model.dao.db.InDbItineraryDao#<init>()V
-it.uniroma2.ispw.globe.model.dao.db.InDbItineraryDao#instance-init#

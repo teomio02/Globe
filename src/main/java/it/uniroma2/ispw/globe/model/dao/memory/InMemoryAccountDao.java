@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class InMemoryAccountDao extends AccountDao {
 
     private static InMemoryAccountDao instance = null;
 
-        private List<User> users = new ArrayList<>();
-        private List<Agency> agencies = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
+    private List<Agency> agencies = new ArrayList<>();
 
     private InMemoryAccountDao() {}
 
@@ -81,5 +82,23 @@ public class InMemoryAccountDao extends AccountDao {
         } else {
             users.remove(getAccount(credentials));
         }
+    }
+
+    @Override
+    public List<Agency> getAgenciesByType(List<String> types) {
+        List<Agency> resultAgency = new ArrayList<>();
+        for ( Agency agency : agencies){
+            int count = 0;
+            for ( String type : types){
+                if (agency.getPreferences().contains(type)) {
+                    count ++;
+
+                }
+            }
+            if(count == types.size()){
+                resultAgency.add(agency);
+            }
+        }
+        return resultAgency;
     }
 }

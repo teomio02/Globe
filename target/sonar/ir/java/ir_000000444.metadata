@@ -1,7 +1,0 @@
-it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#getPlaces(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;
-false
-43eab5c61ec9edce7d4c3a8226cd0b9d
-java.lang.String#format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-java.lang.String#replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-==
-getPlace it.uniroma2.ispw.globe.controller.applicationcontroller.APIClient#getPlace(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;

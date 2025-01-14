@@ -1,5 +1,0 @@
-it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#getAttractionDao()Lit/uniroma2/ispw/globe/model/dao/AttractionDao;
-false
-03049064f5739f8e039a665a489b1f9d
-it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDao#<init>()V
-it.uniroma2.ispw.globe.model.dao.db.InDbAttractionDao#instance-init#

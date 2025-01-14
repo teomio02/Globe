@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.RequestItineraryViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="630.0" prefWidth="640.0" spacing="30.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="530.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -88,8 +88,8 @@
                                     <Insets left="5.0" top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <VBox fx:id="cityResultVBox" prefHeight="200.0" prefWidth="100.0" />
-                              <VBox fx:id="cityVBox" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="cityResultVBox" prefHeight="30.0" prefWidth="300.0" />
+                              <VBox fx:id="cityVBox" prefHeight="30.0" prefWidth="300.0" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
@@ -117,8 +117,8 @@
                                     <Insets left="5.0" top="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <VBox fx:id="attractionResultVBox" prefHeight="200.0" prefWidth="100.0" />
-                              <VBox fx:id="attractionVBox" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="attractionResultVBox" prefHeight="30.0" prefWidth="300.0" />
+                              <VBox fx:id="attractionVBox" prefHeight="30.0" prefWidth="300.0" />
                            </children>
                         </HBox>
                         <TextField fx:id="otherRequestsField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="456.0" promptText="Other requests" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
@@ -126,7 +126,7 @@
                               <Font name="Arial" size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="20.0" />
                            </VBox.margin>
                         </TextField>
                         <VBox>
@@ -221,15 +221,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <TextField fx:id="agencyField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="431.0" promptText="Choose agency" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
-                                 <font>
-                                    <Font name="Arial" size="14.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets top="10.0" />
-                                 </HBox.margin>
-                              </TextField>
-                              <Button alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="10.0" prefWidth="70.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                              <Button alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAgencyHandler" prefHeight="10.0" prefWidth="70.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
@@ -241,11 +233,17 @@
                                     </ImageView>
                                  </graphic>
                                  <HBox.margin>
-                                    <Insets left="5.0" top="10.0" />
+                                    <Insets left="5.0" top="20.0" />
                                  </HBox.margin>
                               </Button>
-                              <VBox fx:id="agencyResultVBox" prefHeight="200.0" prefWidth="100.0" />
-                              <VBox fx:id="agencyVBox" prefHeight="200.0" prefWidth="100.0" />
+                              <VBox fx:id="agencyResultVBox" prefHeight="30.0" prefWidth="300.0">
+                                 <HBox.margin>
+                                    <Insets top="20.0" />
+                                 </HBox.margin></VBox>
+                              <VBox fx:id="agencyVBox" prefHeight="30.0" prefWidth="300.0">
+                                 <HBox.margin>
+                                    <Insets top="20.0" />
+                                 </HBox.margin></VBox>
                            </children>
                         </HBox>
                      </children>

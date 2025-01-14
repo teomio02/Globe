@@ -1,6 +1,0 @@
-it.uniroma2.ispw.globe.util.adapter.PlaceAdapter#getLongitude()D
-false
-5ffcfd499ea397421ac4416a5fb8e7a5
-com.google.gson.JsonObject#get(Ljava/lang/String;)Lcom/google/gson/JsonElement;
-==
-getAsDouble com.google.gson.JsonElement#getAsDouble()D

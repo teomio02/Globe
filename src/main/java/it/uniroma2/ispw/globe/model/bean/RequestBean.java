@@ -1,62 +1,49 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.model.Agency;
+import it.uniroma2.ispw.globe.model.User;
+
 import java.util.List;
 
 public class RequestBean {
-    private String id;
-    private String user;
-    private String agency;
-    private String description;
-    private int days;
+    private String Id;
+    private String name;
     private List<String> cities;
     private List<String> attractions;
-    private Boolean accepted;
+    private String otherRequests;
+    private int dayNum;
+    private boolean flight;
+    private boolean accommodation;
+    private List<String> itineraryType;
+    private List<String> agencies;
 
-    public RequestBean(String id, List<String> cities, List<String> attractions, String user, String agency, String description, int days , Boolean accepted) {
-        this.id = id;
+
+    public RequestBean(List<String> cities, List<String> attractions, String otherRequests, int dayNum, List<String> agencies, boolean flight, boolean accommodation, List<String> itineraryType ) {
         this.cities = cities;
         this.attractions = attractions;
-        this.user = user;
-        this.agency = agency;
-        this.description = description;
-        this.days = days;
-        this.accepted = accepted;
+        this.otherRequests = otherRequests;
+        this.dayNum = dayNum;
+        this.agencies = agencies;
+        this.flight = flight;
+        this.accommodation = accommodation;
+        this.itineraryType = itineraryType;
     }
 
-    public String getID() {
-        return id;
+
+    public String getId() {
+        return Id;
     }
 
-    public void setID(String id) {
-        this.id = id;
+    public void setId(String id) {
+        Id = id;
     }
 
-    public String getUser() {
-        return user;
+    public String getName() {
+        return name;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getAgency() { return agency; }
-
-    public void setAgency(String agency) { this.agency = agency; }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getDays() {
-        return days;
-    }
-
-    public void setDays(int days) {
-        this.days = days;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<String> getCities() {
@@ -75,11 +62,52 @@ public class RequestBean {
         this.attractions = attractions;
     }
 
-    public Boolean getAccepted() {
-        return accepted;
+    public String getOtherRequests() {
+        return otherRequests;
     }
 
-    public void setAccepted(Boolean accepted) {
-        this.accepted = accepted;
+    public void setOtherRequests(String otherRequests) {
+        this.otherRequests = otherRequests;
+    }
+
+    public int getDayNum() {
+        return dayNum;
+    }
+
+    public void setDayNum(int dayNum) {
+        this.dayNum = dayNum;
+    }
+
+    public boolean isFlight() {
+        return flight;
+    }
+
+    public void setFlight(boolean flight) {
+        this.flight = flight;
+    }
+
+    public boolean isAccommodation() {
+        return accommodation;
+    }
+
+    public void setAccommodation(boolean accommodation) {
+        this.accommodation = accommodation;
+    }
+
+    public List<String> getItineraryType() {
+        return itineraryType;
+    }
+
+    public void setItineraryType(List<String> itineraryType) {
+        this.itineraryType = itineraryType;
+    }
+
+    public List<String> getAgencies() {
+        return agencies;
+    }
+
+    public void setAgencies(List<String> agencies) {
+        this.agencies = agencies;
     }
 }
+

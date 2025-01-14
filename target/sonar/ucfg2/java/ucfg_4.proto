@@ -1,52 +1,0 @@
-
-Lit.uniroma2.ispw.globe.util.adapter.PlaceAdapter#getCity()Ljava/lang/String;t
-j/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/util/adapter/PlaceAdapter.java   ("5*3
-2# #(5"$
-# #(5
-
-%3java.lang.String*Ç
-3# #(4²¯
-# #(4
-%3java.lang.String";com.google.gson.JsonElement#getAsString()Ljava/lang/String;*?
-
-__unknown_file (#
-!
-%2com.google.gson.JsonElement2getAsString()*
-2*•
-4" "(By
-w
-" "(B%
-addresscom.google.gson.JsonObject"__id*>
-
-__unknown_file ("
- 
-%1com.google.gson.JsonObject…‚
-# #(&!
-%2com.google.gson.JsonElement"Ocom.google.gson.JsonObject#get(Ljava/lang/String;)Lcom/google/gson/JsonElement;*C
-
-__unknown_file ('
-%
-addresscom.google.gson.JsonObject*$
-
-__unknown_file (
-city2get(Ljava/lang/String;)*
-3*Ã
-5"! "(&’
-
-"! "(& 
-%0com.google.gson.JsonObject"__id*[
-
-__unknown_file (?*=2
-0it.uniroma2.ispw.globe.util.adapter.PlaceAdapter"
-place™–
-"! "(A 
-%1com.google.gson.JsonObject"Zcom.google.gson.JsonObject#getAsJsonObject(Ljava/lang/String;)Lcom/google/gson/JsonObject;*>
-
-__unknown_file ("
- 
-%0com.google.gson.JsonObject*'
-
-__unknown_file (	
-address2#getAsJsonObject(Ljava/lang/String;)*
-4B42
-0it.uniroma2.ispw.globe.util.adapter.PlaceAdapterH

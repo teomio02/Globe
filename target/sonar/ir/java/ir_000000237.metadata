@@ -1,4 +1,0 @@
-it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#getCityDao()Lit/uniroma2/ispw/globe/model/dao/CityDao;
-false
-c6702e00d62ca7f4a83eb2b9954e3307
-it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDao#getInstance()Lit/uniroma2/ispw/globe/model/dao/memory/InMemoryCityDao;

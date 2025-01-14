@@ -1,6 +1,0 @@
-it.uniroma2.ispw.globe.model.dao.memory.InMemoryItineraryDao#getItinerary(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/Itinerary;
-false
-f0908f9f0d3638ea242ddbef95fded21
-java.lang.String#equals(Ljava/lang/Object;)Z
-==
-getName it.uniroma2.ispw.globe.model.Itinerary#getName()Ljava/lang/String;

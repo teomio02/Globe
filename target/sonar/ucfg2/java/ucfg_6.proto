@@ -1,29 +1,0 @@
-
-?it.uniroma2.ispw.globe.util.adapter.PlaceAdapter#getLatitude()Dt
-j/Users/teo.mio/Git/Globe/Project/globe/src/main/java/it/uniroma2/ispw/globe/util/adapter/PlaceAdapter.java2 2("1*Ò
-13 3(’
-
-3 3( 
-%0com.google.gson.JsonObject"__id*[
-
-__unknown_file (?*=2
-0it.uniroma2.ispw.globe.util.adapter.PlaceAdapter"
-placeÿü
-3 3(!
-%1com.google.gson.JsonElement"Ocom.google.gson.JsonObject#get(Ljava/lang/String;)Lcom/google/gson/JsonElement;*>
-
-__unknown_file ("
- 
-%0com.google.gson.JsonObject*#
-
-__unknown_file (
-lat2get(Ljava/lang/String;)—”
-3 3(-
-%2double"*com.google.gson.JsonElement#getAsDouble()D*?
-
-__unknown_file (#
-!
-%1com.google.gson.JsonElement2getAsDouble()"
-3 3(.
-""B42
-0it.uniroma2.ispw.globe.util.adapter.PlaceAdapterHX

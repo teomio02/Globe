@@ -1,8 +1,0 @@
-it.uniroma2.ispw.globe.model.dao.DaoFactory#getFactory(Ljava/lang/String;)Lit/uniroma2/ispw/globe/model/dao/DaoFactory;
-false
-165ea1483ac36973294c183accf18d24
-it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#<init>()V
-it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory#instance-init#
-it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#<init>()V
-it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory#instance-init#
-java.lang.String#equals(Ljava/lang/Object;)Z
