@@ -66,9 +66,9 @@ public class ResponseRequestController {
         return proposalBeans;
     }
 
-    public List<RequestBean> getAgencyRequests(String sessionId) {
+    public List<AgencyRequestBean> getAgencyRequests(String sessionId) {
 
-        List<RequestBean> requestBeans = new ArrayList<>();
+        List<AgencyRequestBean> requestBeans = new ArrayList<>();
         
         return requestBeans;
     }

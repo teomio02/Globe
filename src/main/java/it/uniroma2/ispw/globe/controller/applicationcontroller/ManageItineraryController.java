@@ -10,6 +10,7 @@ import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import javafx.util.Pair;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -291,12 +292,6 @@ public class ManageItineraryController {
 
     public AgencyBean getAgency(AgencyBean agencyBean) {
         return agencyBean;
-    }
-
-    public List<AgencyBean> getAgenciesByType(List<String> types) {
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        List<Agency> agencies = accountDao.getAgenciesByType(types);
-        return new ArrayList<>();
     }
 
     public List<ItineraryBean> getUserItineraries(String sessionId) {
