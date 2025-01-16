@@ -50,7 +50,7 @@
                   </Text>
                </children>
             </HBox>
-            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
+            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
@@ -132,7 +132,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox fx:id="responseHBox" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Button alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#acceptProposal" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Accept" textFill="#314c1c">
                      <font>

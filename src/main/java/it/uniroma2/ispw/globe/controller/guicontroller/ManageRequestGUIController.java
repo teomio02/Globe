@@ -57,6 +57,7 @@ public class ManageRequestGUIController {
                 throw new RuntimeException(e);
             }
         }
+
         for (AgencyRequestBean request : requests) {
             try {
                 URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();

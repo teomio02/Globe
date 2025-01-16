@@ -50,7 +50,7 @@
                   </Text>
                </children>
             </HBox>
-            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
+            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
@@ -116,7 +116,7 @@
                </children>
             </HBox>
             <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#97c093" height="5.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="641.0" />
-            <TabPane fx:id="daysTabPane" prefHeight="324.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" tabClosingPolicy="UNAVAILABLE" />
+            <TabPane fx:id="daysTabPane" prefHeight="273.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" tabClosingPolicy="UNAVAILABLE" />
             <Button fx:id="nextButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#showItineraries" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
                <font>
                   <Font name="Arial Bold" size="14.0" />

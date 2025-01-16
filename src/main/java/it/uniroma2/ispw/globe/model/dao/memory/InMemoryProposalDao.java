@@ -27,7 +27,7 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public void addProposal(Proposal proposal, User user) {
+    public void addProposal(Proposal proposal) {
         for (Proposal savedProposal : proposals) {
             if (proposal.getId().equals(proposal.getId())){
                 // proposta già esistente
@@ -35,13 +35,16 @@ public class InMemoryProposalDao extends ProposalDao {
             }
         }
         proposals.add(proposal);
-        user.getProposals().add(proposal);
+        proposal.getUser().getProposals().add(proposal);
+        proposal.getAgency().getProposals().add(proposal);
     }
 
     @Override
     public Proposal getProposal(String proposalID) {
         for (Proposal proposal : proposals) {
-            
+            if (proposal.getId().equals(proposalID)){
+                return proposal;
+            }
         }
         return null;
     }

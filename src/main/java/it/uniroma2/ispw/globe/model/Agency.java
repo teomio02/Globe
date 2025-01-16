@@ -1,5 +1,8 @@
 package it.uniroma2.ispw.globe.model;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+
 import java.util.List;
 
 public class Agency extends Account{
@@ -8,7 +11,10 @@ public class Agency extends Account{
     private List<Proposal> proposals;
     private List<Request> requests;
     private List<String> preferences;
-    private String iban;
+
+    @FXML
+    private CheckBox ratingCheckBox;
+
 
     public double getRating() {
         return rating;
@@ -48,13 +54,5 @@ public class Agency extends Account{
 
     public void setPreferences(List<String> preferences) {
         this.preferences = preferences;
-    }
-
-    public String getIban() {
-        return iban;
-    }
-
-    public void setIban(String iban) {
-        this.iban = iban;
     }
 }

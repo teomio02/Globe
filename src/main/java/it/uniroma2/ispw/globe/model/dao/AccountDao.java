@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class AccountDao {
     public abstract void addAccount(CredentialsBean credentials);
-    public abstract Account getAccount(CredentialsBean credentials);
+    public abstract Account getAccount(String username);
     public abstract void removeAccount(CredentialsBean credentials);
     public abstract List<Agency> getAgenciesByType(List<String> types);
 }

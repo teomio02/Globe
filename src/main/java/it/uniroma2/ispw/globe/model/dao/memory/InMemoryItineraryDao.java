@@ -1,8 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.model.Day;
-import it.uniroma2.ispw.globe.model.Itinerary;
-import it.uniroma2.ispw.globe.model.User;
+import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 
@@ -26,12 +24,12 @@ public class InMemoryItineraryDao extends ItineraryDao {
     }
 
     @Override
-    public void addItinerary(Itinerary itinerary, User user) {
+    public void addItinerary(Itinerary itinerary, Account account) {
         for (Day day : itinerary.getDays()) {
             InMemoryDayDao.getInstance().addDay(day);
         }
 
-        if (user != null) {
+        if (account != null) {
             for (Itinerary savedItinerary : itineraries) {
                 if (savedItinerary.getItineraryID().equals(itinerary.getItineraryID())) {
                     // errore
@@ -39,7 +37,7 @@ public class InMemoryItineraryDao extends ItineraryDao {
                 }
             }
             itineraries.add(itinerary);
-            user.getItineraries().add(itinerary);
+            account.getItineraries().add(itinerary);
         } else {
             // errore
         }

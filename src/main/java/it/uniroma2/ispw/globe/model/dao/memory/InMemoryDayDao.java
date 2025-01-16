@@ -48,12 +48,7 @@ public class InMemoryDayDao extends DayDao {
     }
 
     @Override
-    public Day getDay(String dayID) {
-        for (Day day : days) {
-            if (day.getId().equals(dayID)) {
-                return day;
-            }
-        }
+    public Day getDay() {
         return null;
     }
 }

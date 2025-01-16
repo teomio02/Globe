@@ -5,6 +5,17 @@ import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 
 public abstract class RequestDao {
+    public Request createAgencyRequest(String requestID,User user,Agency agency,boolean isAccepted) {
+        //da cambiare
+
+        Request request = new Request();
+        request.setId(requestID);
+        request.setUser(user);
+        request.setAgency(agency);
+        request.setAccepted(isAccepted);
+
+        return request;
+    }
     public abstract void addAgencyRequest(AgencyRequestBean requestBean, User user, Agency agency);
     public abstract void addUserRequest(RequestBean requestBean, User user, Agency agency);
     public abstract Request getRequest(String requestId);

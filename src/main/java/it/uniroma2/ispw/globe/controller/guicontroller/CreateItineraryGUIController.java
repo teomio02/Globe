@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
+import static it.uniroma2.ispw.globe.other.UserType.USER;
+
 public class CreateItineraryGUIController {
     @FXML
     private TextField cityField;
@@ -54,6 +57,63 @@ public class CreateItineraryGUIController {
     }
 
     public void initialize() {
+        ItineraryBean itineraryBean = new ManageItineraryController().getItinerary(null,sessionId);
+        if (itineraryBean != null) {
+            itineraryField.setText(itineraryBean.getName());
+            dayField.setText(String.valueOf(itineraryBean.getDuration()));
+            descriptionField.setText(itineraryBean.getDescription());
+            for (String cityID : itineraryBean.getCities()) {
+                CityBean city = new ManageItineraryController().getCity(0,cityID,null);
+                Button cityButton = new Button(city.getName() + " - " + city.getCountry());
+                cityButton.setOnAction(event -> {
+                    int count = 0;
+                    if (cityVBox.getChildren().isEmpty()) {
+                        Label cityLabel = new Label(city.getName());
+                        cityLabel.setUserData(city.getId());
+                        cityVBox.getChildren().add(cityLabel);
+                    } else {
+                        for (int i = 0; i < cityVBox.getChildren().size(); i++) {
+                            Label otherCity = (Label) cityVBox.getChildren().get(i);
+                            if (city.getName().equals(otherCity.getText())) {
+                                count++;
+                            }
+                        }
+                        if (count == 0) {
+                            Label cityLabel = new Label(city.getName());
+                            cityLabel.setUserData(city.getId());
+                            cityVBox.getChildren().add(cityLabel);
+                        }
+                    }
+                });
+                cityResultVBox.getChildren().add(cityButton);
+            }
+            for (String attractionID : itineraryBean.getAttractions()) {
+                AttractionBean attraction = new ManageItineraryController().getAttraction(0,attractionID,null);
+                Button attractionButton = new Button(attraction.getName()+" - "+attraction.getCity());
+                attractionButton.setOnAction(event -> {
+                    int count=0;
+                    if(attractionVBox.getChildren().isEmpty()){
+                        Label attractionLabel = new Label(attraction.getName());
+                        attractionLabel.setUserData(attraction.getId());
+                        attractionVBox.getChildren().add(attractionLabel);
+                    } else {
+                        for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
+                            Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
+                            if(attraction.getName().equals(otherAttraction.getText())){
+                                count++;
+
+                            }
+                        }
+                        if (count==0){
+                            Label attractionLabel = new Label(attraction.getName());
+                            attractionLabel.setUserData(attractionLabel.getId());
+                            attractionVBox.getChildren().add(attractionLabel);
+                        }
+                    }
+                });
+                attractionResultVBox.getChildren().add(attractionButton);
+            }
+        }
     }
 
     public void generateItinerary(ActionEvent event) {
@@ -91,6 +151,7 @@ public class CreateItineraryGUIController {
         try {
             if (isProposal) {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
+
                 DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId,null);
                 FXMLLoader loader = new FXMLLoader(url);
                 loader.setController(controller);
@@ -194,4 +255,33 @@ public class CreateItineraryGUIController {
     public void addFlight() {}
 
     public void addAccommodation() {}
+
+    public void goBack(ActionEvent event) {
+        URL url;
+        Parent root;
+        FXMLLoader loader;
+
+        try {
+            if (isProposal) {
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
+                loader = new FXMLLoader(url);
+                CreateProposalGUIController controller = new CreateProposalGUIController(sessionId);loader.setController(controller);
+                root = loader.load();
+            } else {
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
+                loader = new FXMLLoader(url);
+                ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
+                loader.setController(controller);
+                root = loader.load();
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
 }

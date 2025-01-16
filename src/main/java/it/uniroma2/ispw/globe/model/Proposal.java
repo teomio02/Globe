@@ -8,7 +8,7 @@ public class Proposal {
     private String description;
     private User user;
     private Agency agency;
-    private Boolean accepted;
+    private String accepted;
 
     public String getId() {
         return id;
@@ -66,11 +66,11 @@ public class Proposal {
         this.agency = agency;
     }
 
-    public Boolean getAccepted() {
+    public String getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(Boolean accepted) {
+    public void setAccepted(String accepted) {
         this.accepted = accepted;
     }
 }

@@ -7,22 +7,24 @@ import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 
+import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
+
 public abstract class ProposalDao {
-    public Proposal createProposal(ProposalBean proposalBean, Itinerary itinerary, User user, Agency agency) {
+    public Proposal createProposal(String id, String name, double price, String description, Itinerary itinerary, User user, Agency agency) {
         Proposal proposal = new Proposal();
 
-        proposal.setId(proposalBean.getID());
-        proposal.setName(proposalBean.getName());
+        proposal.setId(id);
+        proposal.setName(name);
         proposal.setItinerary(itinerary);
-        proposal.setPrice(proposalBean.getPrice());
-        proposal.setDescription(proposalBean.getDescription());
+        proposal.setPrice(price);
+        proposal.setDescription(description);
         proposal.setUser(user);
         proposal.setAgency(agency);
-        proposal.setAccepted(false);
+        proposal.setAccepted(PENDING);
 
         return proposal;
     }
-    public abstract void addProposal(Proposal proposal, User user);
+    public abstract void addProposal(Proposal proposal);
     public abstract Proposal getProposal(String proposalName);
     public abstract void removeProposal(String itineraryID);
 }

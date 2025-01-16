@@ -48,25 +48,23 @@ public class LogInGUIController {
     private void initialize() {}
 
     public void signIn(ActionEvent event) {
-        errorLabel.setVisible(false);
-        CredentialsBean credentials;
-        if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-            errorLabel.setVisible(true);
-            return;
-        } else {
-            credentials = new CredentialsBean(usernameField.getText(), passwordField.getText());
-            signInVBox.setVisible(true);
-            yesLabel.setOnMouseClicked(MouseEvent -> {
-                credentials.setType(AGENCY);
-                new LogInController().signIn(credentials);
-                signInVBox.setVisible(false);
-            });
-            noLabel.setOnMouseClicked(MouseEvent -> {
-                credentials.setType(USER);
-                new LogInController().signIn(credentials);
-                signInVBox.setVisible(false);
-            });
+        URL url;
+        Parent root;
+
+        try {
+            url = new File("src/main/java/it/uniroma2/ispw/globe/view/SigninView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            SignInGUIController controller = new SignInGUIController();
+            loader.setController(controller);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void logIn(ActionEvent event) {
