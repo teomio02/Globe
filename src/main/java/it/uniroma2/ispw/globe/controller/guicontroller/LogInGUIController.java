@@ -2,8 +2,6 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.model.bean.UserBean;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -90,11 +90,16 @@ public class LogInGUIController {
 
         if (sessionId != null) {
             URL url;
-            Parent root;
             String type = new LogInController().getUserType(sessionId);
+            BorderPane root = new BorderPane();
+            AnchorPane contentPane;
 
             try {
                 FXMLLoader loader = null;
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ToolBar.fxml").toURI().toURL();
+                FXMLLoader toolBarLoader = new FXMLLoader(url);
+                ToolBarGUIController controllerToolBar = new ToolBarGUIController(sessionId,type,root);
+                toolBarLoader.setController(controllerToolBar);
                 if (type.equals(USER) || type.equals(GUEST)) {
                     url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
                     loader = new FXMLLoader(url);
@@ -106,7 +111,9 @@ public class LogInGUIController {
                     ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
                     loader.setController(controller);
                 }
-                root = loader.load();
+                contentPane = loader.load();
+                root.setCenter(contentPane);
+                root.setBottom(toolBarLoader.load());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

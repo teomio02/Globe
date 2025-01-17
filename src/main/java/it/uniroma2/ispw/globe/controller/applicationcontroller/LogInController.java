@@ -32,7 +32,7 @@ public class LogInController{
 
         //test
         if (account.getType() != AGENCY) {
-            new ClasseTest().creaProposta(account);
+            //new ClasseTest().creaProposta(account);
         }
         //----
 
