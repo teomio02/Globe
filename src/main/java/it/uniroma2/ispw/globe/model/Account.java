@@ -1,11 +1,13 @@
 package it.uniroma2.ispw.globe.model;
 
+import java.util.List;
+
 public abstract class Account {
     private String username;
     private String password;
+    private String paymentCredential;
     private String type;
-    private Itinerary newItinerary;
-    private Proposal newProposal;
+    private List<Itinerary> itineraries;
 
     public String getUsername() {
         return username;
@@ -23,6 +25,14 @@ public abstract class Account {
         this.password = password;
     }
 
+    public String getPaymentCredential() {
+        return paymentCredential;
+    }
+
+    public void setPaymentCredential(String paymentCredential) {
+        this.paymentCredential = paymentCredential;
+    }
+
     public String getType() {
         return type;
     }
@@ -31,19 +41,11 @@ public abstract class Account {
         this.type = type;
     }
 
-    public Itinerary getNewItinerary() {
-        return newItinerary;
+    public List<Itinerary> getItineraries() {
+        return itineraries;
+    }
+    public void setItineraries(List<Itinerary> itineraries) {
+        this.itineraries = itineraries;
     }
 
-    public void setNewItinerary(Itinerary newItinerary) {
-        this.newItinerary = newItinerary;
-    }
-
-    public Proposal getNewProposal() {
-        return newProposal;
-    }
-
-    public void setNewProposal(Proposal newProposal) {
-        this.newProposal = newProposal;
-    }
 }

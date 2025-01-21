@@ -12,7 +12,7 @@ import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 public class InDbProposalDao extends ProposalDao {
 
     @Override
-    public void addProposal(Proposal proposal, User user) {
+    public void addProposal(Proposal proposal) {
 
     }
 

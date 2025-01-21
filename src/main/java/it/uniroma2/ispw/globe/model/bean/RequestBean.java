@@ -1,12 +1,9 @@
 package it.uniroma2.ispw.globe.model.bean;
 
-import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.User;
-
 import java.util.List;
 
 public class RequestBean {
-    private String Id;
+    private String id;
     private String name;
     private List<String> cities;
     private List<String> attractions;
@@ -31,11 +28,11 @@ public class RequestBean {
 
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        Id = id;
+        id = id;
     }
 
     public String getName() {

@@ -7,40 +7,46 @@ import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
+import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import javafx.util.Pair;
+
 import java.io.IOException;
 import java.util.*;
+
+import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
 public class ManageItineraryController {
 
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
+
+    //metti come calculateItinerary
     public void createItinerary(ItineraryBean itineraryBean, String sessionID) {
         ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
 
         String itineraryId = UUID.randomUUID().toString();
         itineraryBean.setId(itineraryId);
 
-        Itinerary itinerary = itineraryDao.createItinerary(itineraryBean);
-
-        User user = (User) SessionManager.getInstance().getSession(sessionID).getAccount();
+        Itinerary itinerary = itineraryDao.createItinerary(itineraryBean.getId(),itineraryBean.getName(),itineraryBean.getDescription(),itineraryBean.getCities(),itineraryBean.getAttractions(),itineraryBean.getDuration());
 
         calculateItinerary(itinerary);
-        user.setNewItinerary(itinerary);
+        SessionManager.getInstance().getSession(sessionID).setPendingItinerary(itinerary);
     }
 
     public void saveItinerary(String sessionID) {
         ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
 
-        Account account = SessionManager.getInstance().getSession(sessionID).getAccount();
+        Session session = SessionManager.getInstance().getSession(sessionID);
+        Account account = session.getAccount();
 
-        Itinerary itinerary = account.getNewItinerary();
-        itineraryDao.addItinerary(itinerary, (User) account);
+        Itinerary itinerary = session.getPendingItinerary();
+        itineraryDao.addItinerary(itinerary, account);
 
-        account.setNewItinerary(null);
+        session.setPendingItinerary(null);
+        session.setTryItinerary(itinerary);
     }
 
     public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {/*-*/}
@@ -162,7 +168,7 @@ public class ManageItineraryController {
         Itinerary itinerary;
 
         if (itineraryId == null) {
-            itinerary = SessionManager.getInstance().getSession(sessionID).getAccount().getNewItinerary();
+            itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
         } else {
             ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
             itinerary = itineraryDao.getItinerary(itineraryId);
@@ -236,7 +242,10 @@ public class ManageItineraryController {
         Itinerary itinerary;
 
         if (itineraryId == null) {
-            itinerary = SessionManager.getInstance().getSession(sessionID).getAccount().getNewItinerary();
+            itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
+            if (itinerary == null) {
+                return null;
+            }
         } else {
             ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
             itinerary = itineraryDao.getItinerary(itineraryId);
@@ -245,12 +254,31 @@ public class ManageItineraryController {
         return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
     }
 
-    public ItineraryBean getProposalItinerary(String proposalId) {
-        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-        Proposal proposal = proposalDao.getProposal(proposalId);
-        Itinerary itinerary = proposal.getItinerary();
+    public ProposalBean getProposal(String proposalID, String sessionID) {
+        Proposal proposal;
 
-        return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
+        if (proposalID == null) {
+            proposal = SessionManager.getInstance().getSession(sessionID).getPendingProposal();
+        } else {
+            ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
+            proposal = proposalDao.getProposal(proposalID);
+        }
+
+        System.out.println("Proposta: "+proposal.getId()+"-"+proposal.getName()+"-"+proposal.getDescription());
+        Itinerary itinerary = proposal.getItinerary();
+        System.out.println("Itinerario"+itinerary.getItineraryID()+"-"+itinerary.getName()+"-"+itinerary.getDescription());
+        for (Day day : itinerary.getDays()) {
+            System.out.println("   >"+day.getDayNum());
+            for (Attraction attraction : day.getAttractions()) {
+                System.out.println("      >"+attraction.getPlaceID());
+            }
+            System.out.println("      >-------");
+            for (City city : day.getCities()) {
+                System.out.println("      >"+city.getPlaceID());
+            }
+        }
+
+        return new ProposalBean(proposalID,proposal.getName(),proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
     }
 
     public CityBean getCity(int stepNum,String cityID,String sessionID) {
@@ -258,7 +286,7 @@ public class ManageItineraryController {
         City city = null;
         
         if (sessionID != null) {
-            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getAccount().getNewItinerary();
+            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
             for (City savedCity : itinerary.getDays().get(stepNum).getCities()) {
                 if (cityID.equals(savedCity.getPlaceID())) {
                     city = savedCity;
@@ -276,7 +304,7 @@ public class ManageItineraryController {
         Attraction attraction = null;
         
         if (sessionID != null) {
-            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getAccount().getNewItinerary();
+            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
             for (Attraction savedeAttraction : itinerary.getDays().get(stepNum).getAttractions()) {
                 if (attractionID.equals(savedeAttraction.getPlaceID())) {
                     attraction = savedeAttraction;
@@ -291,12 +319,6 @@ public class ManageItineraryController {
 
     public AgencyBean getAgency(AgencyBean agencyBean) {
         return agencyBean;
-    }
-
-    public List<AgencyBean> getAgenciesByType(List<String> types) {
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        List<Agency> agencies = accountDao.getAgenciesByType(types);
-        return new ArrayList<>();
     }
 
     public List<ItineraryBean> getUserItineraries(String sessionId) {

@@ -2,8 +2,6 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.model.bean.UserBean;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -48,25 +48,23 @@ public class LogInGUIController {
     private void initialize() {}
 
     public void signIn(ActionEvent event) {
-        errorLabel.setVisible(false);
-        CredentialsBean credentials;
-        if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-            errorLabel.setVisible(true);
-            return;
-        } else {
-            credentials = new CredentialsBean(usernameField.getText(), passwordField.getText());
-            signInVBox.setVisible(true);
-            yesLabel.setOnMouseClicked(MouseEvent -> {
-                credentials.setType(AGENCY);
-                new LogInController().signIn(credentials);
-                signInVBox.setVisible(false);
-            });
-            noLabel.setOnMouseClicked(MouseEvent -> {
-                credentials.setType(USER);
-                new LogInController().signIn(credentials);
-                signInVBox.setVisible(false);
-            });
+        URL url;
+        Parent root;
+
+        try {
+            url = new File("src/main/java/it/uniroma2/ispw/globe/view/SigninView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            SignInGUIController controller = new SignInGUIController();
+            loader.setController(controller);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void logIn(ActionEvent event) {
@@ -92,11 +90,16 @@ public class LogInGUIController {
 
         if (sessionId != null) {
             URL url;
-            Parent root;
             String type = new LogInController().getUserType(sessionId);
+            BorderPane root = new BorderPane();
+            AnchorPane contentPane;
 
             try {
                 FXMLLoader loader = null;
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ToolBar.fxml").toURI().toURL();
+                FXMLLoader toolBarLoader = new FXMLLoader(url);
+                ToolBarGUIController controllerToolBar = new ToolBarGUIController(sessionId,type,root);
+                toolBarLoader.setController(controllerToolBar);
                 if (type.equals(USER) || type.equals(GUEST)) {
                     url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
                     loader = new FXMLLoader(url);
@@ -108,7 +111,9 @@ public class LogInGUIController {
                     ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
                     loader.setController(controller);
                 }
-                root = loader.load();
+                contentPane = loader.load();
+                root.setCenter(contentPane);
+                root.setBottom(toolBarLoader.load());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

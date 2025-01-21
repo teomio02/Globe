@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -19,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
+import static it.uniroma2.ispw.globe.other.ProposalState.REJECTED;
 
 public class ManageItineraryGUIController {
 
@@ -35,9 +39,10 @@ public class ManageItineraryGUIController {
 
     public void initialize() {
         List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
+        List<ProposalBean> proposals = new ManageItineraryController().getUserProposals(sessionId);
         for (ItineraryBean itinerary : itineraries) {
             try {
-                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
+                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/ItineraryElement.fxml").toURI().toURL();
                 FXMLLoader loader = new FXMLLoader(url);
                 Button itineraryBox = loader.load();
                 itineraryBox.setUserData(itinerary.getId());
@@ -54,28 +59,33 @@ public class ManageItineraryGUIController {
                 throw new RuntimeException(e);
             }
         }
-
-        List<ProposalBean> proposals = new ManageItineraryController().getUserProposals(sessionId);
         for (ProposalBean proposal : proposals) {
             try {
-                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
+                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/proposalElement.fxml").toURI().toURL();
                 FXMLLoader loader = new FXMLLoader(url);
                 Button proposalBox = loader.load();
                 proposalBox.setUserData(proposal.getID());
                 proposalBox.setOnAction(actionEvent -> viewProposal(actionEvent));
                 Label nameLabel = (Label) proposalBox.getGraphic().lookup("#nameLabel");
-                nameLabel.setText(proposal.getName());
+                nameLabel.setText(proposal.getAgency());
                 Label descriptionLabel = (Label) proposalBox.getGraphic().lookup("#descriptionLabel");
                 descriptionLabel.setText(proposal.getDescription());
-                Label daysLabel = (Label) proposalBox.getGraphic().lookup("#daysLabel");
-                daysLabel.setText(String.valueOf(proposal.getAgency()));
+                Label priceLabel = (Label) proposalBox.getGraphic().lookup("#priceLabel");
+                priceLabel.setText(String.valueOf(proposal.getPrice()));
+
+                if (proposal.getAccepted().equals(ACCEPTED)) {
+                    ImageView acceptedImage = (ImageView) proposalBox.getGraphic().lookup("#acceptedImage");
+                    acceptedImage.setVisible(true);
+                } else if (proposal.getAccepted().equals(REJECTED)){
+                    ImageView acceptedImage = (ImageView) proposalBox.getGraphic().lookup("#rejectedImage");
+                    acceptedImage.setVisible(true);
+                }
 
                 proposalsVBox.getChildren().add(proposalBox);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     public void deleteItinerary() {}

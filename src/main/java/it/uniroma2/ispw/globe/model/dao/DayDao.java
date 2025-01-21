@@ -36,5 +36,5 @@ public abstract class DayDao {
         return day;
     }
     public abstract void addDay(Day day);
-    public abstract Day getDay(String dayID);
+    public abstract Day getDay();
 }

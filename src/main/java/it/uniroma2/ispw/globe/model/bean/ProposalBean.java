@@ -9,9 +9,9 @@ public class ProposalBean {
     private String agency;
     private String user;
     private String description;
-    private Boolean accepted;
+    private String accepted;
 
-    public ProposalBean(String id, String name, double price, String agency, String user, String description, Boolean accepted) {
+    public ProposalBean(String id, String name, double price, String agency, String user, String description, String accepted) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -76,11 +76,11 @@ public class ProposalBean {
         this.description = description;
     }
 
-    public Boolean getAccepted() {
+    public String getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(Boolean accepted) {
+    public void setAccepted(String accepted) {
         this.accepted = accepted;
     }
 }

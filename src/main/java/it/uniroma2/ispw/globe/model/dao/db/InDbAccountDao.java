@@ -17,7 +17,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public Account getAccount(CredentialsBean credentials) {
+    public Account getAccount(String username) {
         return null;
     }
 

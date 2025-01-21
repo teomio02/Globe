@@ -7,6 +7,7 @@ import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 import it.uniroma2.ispw.globe.model.dao.RequestDao;
 import it.uniroma2.ispw.globe.other.Persistence;
+import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 
 import java.util.ArrayList;
@@ -22,10 +23,11 @@ public class ResponseRequestController {
         String proposalID = UUID.randomUUID().toString();
         proposalBean.setID(proposalID);
 
-        Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
-        Proposal proposal = proposalDao.createProposal(proposalBean,null,getUser(proposalBean.getUser()),agency);
+        Session session = SessionManager.getInstance().getSession(sessionID);
+        Agency agency = (Agency) session.getAccount();
+        //Proposal proposal = proposalDao.createProposal(proposalBean,null,getUser(proposalBean.getUser()),agency);
 
-        agency.setNewProposal(proposal);
+        //session.setPendingProposal(proposal);
     }
 
     public String saveProposal(ProposalBean proposalBean, String requestId, String sessionID) {
@@ -36,10 +38,10 @@ public class ResponseRequestController {
         proposalBean.setID(proposalID);
 
         Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
-        Proposal proposal = proposalDao.createProposal(proposalBean,null,getUser(proposalBean.getUser()),agency);
+        //Proposal proposal = proposalDao.createProposal(proposalBean,null,getUser(proposalBean.getUser()),agency);
 
         // da aggiungere in altra funzione
-        proposalDao.addProposal(proposal,getUser(proposalBean.getUser()));
+       // proposalDao.addProposal(proposal,getUser(proposalBean.getUser()));
 
         requestDao.removeRequest(requestId);
 
@@ -66,9 +68,9 @@ public class ResponseRequestController {
         return proposalBeans;
     }
 
-    public List<RequestBean> getAgencyRequests(String sessionId) {
+    public List<AgencyRequestBean> getAgencyRequests(String sessionId) {
 
-        List<RequestBean> requestBeans = new ArrayList<>();
+        List<AgencyRequestBean> requestBeans = new ArrayList<>();
         
         return requestBeans;
     }

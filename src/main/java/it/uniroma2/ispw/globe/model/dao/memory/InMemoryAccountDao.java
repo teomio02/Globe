@@ -40,6 +40,10 @@ public class InMemoryAccountDao extends AccountDao {
             agency.setPassword(credentials.getPassword());
             agency.setType(credentials.getType());
             agency.setProposals(new ArrayList<>());
+            agency.setItineraries(new ArrayList<>());
+            agency.setDescription(credentials.getDescription());
+            agency.setPreferences(credentials.getPreferences());
+            agency.setRating(0);
             agencies.add(agency);
         } else {
             if (credentials.getType().equals(USER)) {
@@ -61,14 +65,14 @@ public class InMemoryAccountDao extends AccountDao {
     }
 
     @Override
-    public Account getAccount(CredentialsBean credentials) {
+    public Account getAccount(String username) {
         for (Agency a : agencies) {
-            if (a.getUsername().equals(credentials.getUsername())) {
+            if (a.getUsername().equals(username)) {
                 return a;
             }
         }
         for (User u : users) {
-            if (u.getUsername().equals(credentials.getUsername())) {
+            if (u.getUsername().equals(username)) {
                 return u;
             }
         }
@@ -78,9 +82,9 @@ public class InMemoryAccountDao extends AccountDao {
     @Override
     public void removeAccount(CredentialsBean credentials) {
         if (credentials.getType().equals(AGENCY)) {
-            agencies.remove(getAccount(credentials));
+            agencies.remove(getAccount(credentials.getUsername()));
         } else {
-            users.remove(getAccount(credentials));
+            users.remove(getAccount(credentials.getUsername()));
         }
     }
 

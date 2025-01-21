@@ -1,27 +1,27 @@
 package it.uniroma2.ispw.globe.model.bean;
 
 public class PaymentBean {
-    private String payerID;
-    private String payeeID;
+    private String payerUsername;
+    private String payeeUsername;
     private double amount;
 
-    public PaymentBean(String payerID, String payeeID, double amount) {
-        this.payerID = payerID;
-        this.payeeID = payeeID;
+    public PaymentBean(String payerUsername, String payeeUsername, double amount) {
+        this.payerUsername = payerUsername;
+        this.payeeUsername = payeeUsername;
         this.amount = amount;
     }
 
-    public String getPayerID() {
-        return payerID;
+    public String getPayerUsername() {
+        return payerUsername;
     }
-    public void setPayerID(String payerID) {
-        this.payerID = payerID;
+    public void setPayerUsername(String payerUsername) {
+        this.payerUsername = payerUsername;
     }
-    public String getPayeeID() {
-        return payeeID;
+    public String getPayeeUsername() {
+        return payeeUsername;
     }
-    public void setPayeeID(String payeeID) {
-        this.payeeID = payeeID;
+    public void setPayeeUsername(String payeeUsername) {
+        this.payeeUsername = payeeUsername;
     }
     public double getAmount() {
         return amount;

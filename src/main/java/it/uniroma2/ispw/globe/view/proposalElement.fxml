@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<Button fx:id="itineraryButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" style="-fx-background-color: #97c093;" text="Button" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <graphic>
+      <HBox fx:id="itineraryHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="620.0" style="-fx-background-color: #97c093;">
+         <children>
+            <AnchorPane prefHeight="82.0" prefWidth="102.0">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="82.0" fitWidth="100.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/photo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <VBox prefHeight="80.0" prefWidth="440.0">
+               <children>
+                  <Label fx:id="nameLabel" prefHeight="21.0" prefWidth="167.0" text="Nome Agenzia" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="descriptionLabel" prefHeight="64.0" prefWidth="435.0" text="Descrizione Itinerario aa asd fafas fa f ns h asfh sfh h ash fhs saf jhas fh fjha hsf ajhf shja fhjs ahjf ashf ash fsh asjh sfahjf ajsfh ajhsfasfh asfh ajfh asjhf afhjs fah fsaha fsjha sfj asfh ashfbhfsahjf hsaf fhhfas jhafs hf asjhfa sjhsf hsahfas fsha fjhafs hf ajhf fajhsf ahf fjshaf ahjsf hjf ajhfs" textFill="#314c1c" wrapText="true">
+                     <font>
+                        <Font name="Arial" size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="20.0" prefWidth="93.0" spacing="5.0">
+                     <children>
+                        <Label fx:id="priceLabel" prefHeight="12.0" prefWidth="56.0" text="199.99" textFill="#314c1c">
+                           <font>
+                              <Font name="Arial" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="\$" textFill="#314c1c">
+                           <font>
+                              <Font name="Arial Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <StackPane prefHeight="50.0" prefWidth="93.0">
+                     <children>
+                        <ImageView fx:id="rejectedImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/rejected.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="acceptedImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/accepted.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </graphic>
+</Button>

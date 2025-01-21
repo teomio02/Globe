@@ -12,7 +12,7 @@ public class InDbDayDao extends DayDao {
     }
 
     @Override
-    public Day getDay(String dayID) {
+    public Day getDay() {
         return null;
     }
 }
