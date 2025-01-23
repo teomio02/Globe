@@ -67,7 +67,7 @@ public class DisplayProposalGUIController {
         priceLabel.setText(String.valueOf(proposal.getPrice()));
         System.out.println(proposal.getID()+" - "+proposal.getAccepted()+" - "+type);
         saveButton.setVisible(false);
-        if (!proposal.getAccepted().equals(PENDING) || type == (AGENCY)){
+        if (!proposal.getAccepted().equals(PENDING) || type.equals(AGENCY)){
             responseHBox.getChildren().clear();
         }
         if (requestID != null) {
@@ -159,7 +159,7 @@ public class DisplayProposalGUIController {
                 CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestID);
                 loader.setController(controller);
             } else {
-                if (type == AGENCY) {
+                if (type.equals(AGENCY)) {
                     url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
                     loader = new FXMLLoader(url);
                     ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);

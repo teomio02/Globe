@@ -281,7 +281,11 @@ public class ManageItineraryController {
             city = cityDao.getCity(cityID);
         }
 
-        return new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+        if (city != null) {
+            return new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+        } else {
+            return null;
+        }
     }
 
     public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) {
@@ -299,7 +303,11 @@ public class ManageItineraryController {
             attraction = attractionDao.getAttraction(attractionID);
         }
 
-        return new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+        if (attraction != null) {
+            return new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+        } else {
+            return null;
+        }
     }
 
     public AgencyBean getAgency(AgencyBean agencyBean) {
