@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.User;
@@ -20,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -40,16 +42,22 @@ public class DisplayItineraryGUIController {
     @FXML
     private Label nameLabel;
     @FXML
-    private Button nextButton;
+    private Button nextUserButton;
+    @FXML
+    private Button nextAgencyButton;
 
     private String sessionId;
-    private String proposalId;
     private String itineraryId;
+    private String requestId;
+    private String proposalId;
 
-    public DisplayItineraryGUIController(String sessionId, String proposalId, String itineraryId) {
+    public DisplayItineraryGUIController(String sessionId,String itineraryId, String requestId, String proposalId) {
         this.sessionId = sessionId;
-        this.proposalId = proposalId;
         this.itineraryId = itineraryId;
+        this.requestId = requestId;
+        this.proposalId = proposalId;
+
+        System.out.println("\nDisplayItineraryGUIController\n"+"itineraryID: "+itineraryId+"\nrequestID: "+requestId+"\nproposalID: "+proposalId);
     }
 
     public void initialize() {
@@ -94,8 +102,22 @@ public class DisplayItineraryGUIController {
             }
             day++;
         }
+        nextAgencyButton.setVisible(false);
         if (proposalId != null) {
-            nextButton.setVisible(false);
+            nextUserButton.setVisible(false);
+            nextAgencyButton.setVisible(false);
+        }
+        if (requestId != null) {
+            nextUserButton.setVisible(false);
+            nextAgencyButton.setVisible(true);
+            if (new ResponseRequestController().getProposal(null,sessionId) != null) {
+                nextAgencyButton.setVisible(false);
+            } else {
+                nextAgencyButton.setVisible(true);
+            }
+        }
+        if (itineraryId != null) {
+            nextUserButton.setVisible(false);
         }
     }
 
@@ -106,59 +128,59 @@ public class DisplayItineraryGUIController {
         }
 
         URL url;
-        Parent root;
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
 
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
             loader.setController(controller);
-            root = loader.load();
+            root.setCenter(loader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+    public void createProposal(ActionEvent event) {
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+
+        try {
+            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestId);
+            loader.setController(controller);
+            root.setCenter(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void goBack(ActionEvent event) {
-        URL url;
-        Parent root;
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         FXMLLoader loader;
 
         try {
-            if (proposalId != null) {
+            URL url;
+            if (new ResponseRequestController().getProposal(null,sessionId) != null || (itineraryId != null && proposalId != null)) {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
+                DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId,requestId,proposalId);
                 loader = new FXMLLoader(url);
-                DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, proposalId);
                 loader.setController(controller);
-                root = loader.load();
             } else if (itineraryId != null) {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-                loader = new FXMLLoader(url);
                 ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
+                loader = new FXMLLoader(url);
                 loader.setController(controller);
-                root = loader.load();
-
             } else {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml").toURI().toURL();
+                CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,requestId);
                 loader = new FXMLLoader(url);
-                CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,false);
                 loader.setController(controller);
-                root = loader.load();
             }
-
+            root.setCenter(loader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
     }
 
 }

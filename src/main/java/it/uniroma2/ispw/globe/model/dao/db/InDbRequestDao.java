@@ -10,7 +10,7 @@ import it.uniroma2.ispw.globe.model.dao.RequestDao;
 public class InDbRequestDao extends RequestDao {
 
     @Override
-    public void addAgencyRequest(AgencyRequestBean requestBean, User user, Agency agency) {
+    public void addAgencyRequest(Request request, User user, Agency agency) {
 
     }
 

@@ -60,7 +60,7 @@
                   </Text>
                </children>
             </HBox>
-            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
+            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>
@@ -72,16 +72,6 @@
                   </ImageView>
                </graphic>
             </Button>
-            <VBox fx:id="selectVBox" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="userLabel1" text="Select request" textFill="#97c093">
-                     <font>
-                        <Font name="Arial Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <VBox fx:id="requestsVBox" prefHeight="200.0" prefWidth="100.0" />
-               </children>
-            </VBox>
             <VBox fx:id="createVBox" prefHeight="451.0" prefWidth="640.0" spacing="10.0">
                <children>
                   <Label fx:id="userLabel" text="User" textFill="#97c093">
@@ -89,18 +79,28 @@
                         <Font name="Arial Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="requestLabel" text="Itinerary Request" textFill="#97c093">
+                  <Label fx:id="requestLabel" prefHeight="68.0" prefWidth="640.0" text="Itinerary Request" textFill="#97c093">
                      <font>
                         <Font name="Arial" size="14.0" />
                      </font>
                   </Label>
-                  <HBox alignment="CENTER" spacing="10.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="640.0">
                      <children>
-                        <TextField fx:id="proposalField" alignment="CENTER" prefHeight="32.0" prefWidth="254.0" promptText="Proposal Name" style="-fx-text-fill: #FFFFFF; -fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3;">
+                        <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="days:">
+                           <font>
+                              <Font name="Arial" size="16.0" />
+                           </font>
+                        </Text>
+                        <Label fx:id="daysLabel" alignment="CENTER" prefHeight="33.0" prefWidth="34.0" text="8" textFill="#97c093">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
-                        </TextField>
+                        </Label>
+                        <HBox fx:id="typesHBox" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="569.0" spacing="10.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" spacing="10.0">
+                     <children>
                         <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:">
                            <font>
                               <Font size="18.0" />
@@ -120,7 +120,7 @@
                   </TextField>
                </children>
             </VBox>
-            <Button fx:id="nextButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
+            <Button fx:id="nextButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createProposal" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
                <font>
                   <Font name="Arial Bold" size="14.0" />
                </font>

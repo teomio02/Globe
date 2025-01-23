@@ -43,6 +43,6 @@ public class AcceptItineraryController {
         Proposal proposal = proposalDao.getProposal(proposalId);
         Itinerary itinerary = proposal.getItinerary();
 
-        return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
+        return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(), itinerary.getDescription(), itinerary.getTypes(), itinerary.getDaysNumber(), 0,0,0,0, null);
     }
 }

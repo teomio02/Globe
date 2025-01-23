@@ -29,7 +29,7 @@ public class InMemoryProposalDao extends ProposalDao {
     @Override
     public void addProposal(Proposal proposal) {
         for (Proposal savedProposal : proposals) {
-            if (proposal.getId().equals(proposal.getId())){
+            if (proposal.getId().equals(savedProposal.getId())){
                 // proposta già esistente
                 return;
             }

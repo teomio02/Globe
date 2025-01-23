@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.model;
 
 public class Proposal {
     private String id;
-    private String name;
     private Itinerary itinerary;
     private double price;
     private String description;
@@ -16,14 +15,6 @@ public class Proposal {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Itinerary getItinerary() {

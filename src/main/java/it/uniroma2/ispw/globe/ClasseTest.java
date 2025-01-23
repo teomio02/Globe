@@ -10,13 +10,37 @@ import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import static it.uniroma2.ispw.globe.other.ItineraryType.NATURE;
+import static it.uniroma2.ispw.globe.other.ItineraryType.ON_THE_ROAD;
+import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
+import static it.uniroma2.ispw.globe.other.UserType.USER;
 
 public class ClasseTest {
     public void creaRichiesta(Account account) {
         RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
+        List<String> cities = new ArrayList<>();
+        cities.add(((City) new PlaceAdapter(new ManageItineraryController().getPlaces("roma","administrative").get(0))).getPlaceID());
+        List<String> attractions = new ArrayList<>();
+        attractions.add(((Attraction) new PlaceAdapter(new ManageItineraryController().getPlaces("colosseo","").get(0))).getPlaceID());
+        attractions.add(((Attraction) new PlaceAdapter(new ManageItineraryController().getPlaces("altare della patria","").get(0))).getPlaceID());
+
+        List<String> types = new ArrayList<>();
+        types.add(NATURE);
+        types.add(ON_THE_ROAD);
+
+        new LogInController().signIn(new CredentialsBean("t","t",USER));
+        User user = (User) accountDao.getAccount("t");
+
+        System.out.println("Agenzia: "+account.getUsername()+" "+account.getRequests());
+        System.out.println("User: "+user.getUsername()+" "+user.getRequests());
+
+        Request request = requestDao.createAgencyRequest(UUID.randomUUID().toString(),user.getUsername(),account.getUsername(),PENDING,"description",3,cities,attractions, types);
+        requestDao.addAgencyRequest(request,user,(Agency) account);
     }
 
     public void creaProposta(Account account) {
@@ -35,7 +59,7 @@ public class ClasseTest {
         Agency agency = (Agency) accountDao.getAccount("agenzia");
         itineraryDao.addItinerary(itinerary,agency);
 
-        Proposal proposal = proposalDao.createProposal("1", "proposta di prova", 99.99, "descrizione proposta di prova", itinerary, (User) account, agency);
+        Proposal proposal = proposalDao.createProposal("1", 99.99, "descrizione proposta di prova", itinerary, (User) account, agency);
         proposalDao.addProposal(proposal);
     }
 }

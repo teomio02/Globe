@@ -8,8 +8,6 @@ import java.util.List;
 public class Agency extends Account{
     private double rating;
     private String description;
-    private List<Proposal> proposals;
-    private List<Request> requests;
     private List<String> preferences;
 
     @FXML
@@ -30,22 +28,6 @@ public class Agency extends Account{
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Proposal> getProposals() {
-        return proposals;
-    }
-
-    public void setProposals(List<Proposal> proposals) {
-        this.proposals = proposals;
-    }
-
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
     }
 
     public List<String> getPreferences() {

@@ -6,6 +6,7 @@ import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
+import it.uniroma2.ispw.globe.other.ItineraryType;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
@@ -22,8 +23,6 @@ public class ManageItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
-
-    //metti come calculateItinerary
     public void createItinerary(ItineraryBean itineraryBean, String sessionID) {
         ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
 
@@ -46,7 +45,6 @@ public class ManageItineraryController {
         itineraryDao.addItinerary(itinerary, account);
 
         session.setPendingItinerary(null);
-        session.setTryItinerary(itinerary);
     }
 
     public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {/*-*/}
@@ -251,7 +249,8 @@ public class ManageItineraryController {
             itinerary = itineraryDao.getItinerary(itineraryId);
         }
 
-        return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(), itinerary.getDescription(), "", itinerary.getDaysNumber(), 0,0,0,0, null);
+        List<String> types = new ArrayList<>();
+        return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), itinerary.getTypes(), itinerary.getDaysNumber());
     }
 
     public ProposalBean getProposal(String proposalID, String sessionID) {
@@ -264,21 +263,7 @@ public class ManageItineraryController {
             proposal = proposalDao.getProposal(proposalID);
         }
 
-        System.out.println("Proposta: "+proposal.getId()+"-"+proposal.getName()+"-"+proposal.getDescription());
-        Itinerary itinerary = proposal.getItinerary();
-        System.out.println("Itinerario"+itinerary.getItineraryID()+"-"+itinerary.getName()+"-"+itinerary.getDescription());
-        for (Day day : itinerary.getDays()) {
-            System.out.println("   >"+day.getDayNum());
-            for (Attraction attraction : day.getAttractions()) {
-                System.out.println("      >"+attraction.getPlaceID());
-            }
-            System.out.println("      >-------");
-            for (City city : day.getCities()) {
-                System.out.println("      >"+city.getPlaceID());
-            }
-        }
-
-        return new ProposalBean(proposalID,proposal.getName(),proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
+        return new ProposalBean(proposalID,proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
     }
 
     public CityBean getCity(int stepNum,String cityID,String sessionID) {
@@ -326,7 +311,7 @@ public class ManageItineraryController {
         List<Itinerary> itineraries = user.getItineraries();
         List<ItineraryBean> itineraryBeans = new ArrayList<>();
         for (Itinerary itinerary : itineraries) {
-            ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(),"",itinerary.getDaysNumber());
+            ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(),itinerary.getTypes(),itinerary.getDaysNumber());
             itineraryBeans.add(itineraryBean);
         }
         return itineraryBeans;
@@ -337,7 +322,7 @@ public class ManageItineraryController {
         List<Proposal> proposals = user.getProposals();
         List<ProposalBean> proposalBeans = new ArrayList<>();
         for (Proposal proposal : proposals) {
-            ProposalBean proposalBean = new ProposalBean(proposal.getId(),proposal.getName(),proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
+            ProposalBean proposalBean = new ProposalBean(proposal.getId(),proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
             proposalBeans.add(proposalBean);
         }
         return proposalBeans;

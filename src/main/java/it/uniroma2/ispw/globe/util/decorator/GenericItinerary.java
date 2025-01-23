@@ -1,4 +1,8 @@
 package it.uniroma2.ispw.globe.util.decorator;
 
-public interface GenericItinerary {
+import it.uniroma2.ispw.globe.model.Day;
+
+import java.util.List;
+
+public abstract class GenericItinerary {
 }

@@ -30,12 +30,6 @@ public class LogInController{
         }
         Account account = accountDao.getAccount(credentials.getUsername());
 
-        //test
-        if (account.getType() != AGENCY) {
-            //new ClasseTest().creaProposta(account);
-        }
-        //----
-
         return SessionManager.getInstance().addSession(account);
     }
 
@@ -44,7 +38,15 @@ public class LogInController{
         if (accountDao.getAccount(credentials.getUsername()) != null) {
             return false;
         } else {
-            InMemoryAccountDao.getInstance().addAccount(credentials);
+            accountDao.addAccount(credentials);
+            //test
+            Account account = accountDao.getAccount(credentials.getUsername());
+            if (account.getType() == AGENCY) {
+                new ClasseTest().creaRichiesta(account);
+            } else {
+                //new ClasseTest().creaProposta(account);
+            }
+            //----
 
             return true;
         }

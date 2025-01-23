@@ -33,6 +33,7 @@ public abstract class ItineraryDao {
         itinerary.setDays(days);
         //itinerary.setType(itineraryBean.getType());
 
+
         return itinerary;
     }
     public abstract void addItinerary(Itinerary itinerary, Account account);

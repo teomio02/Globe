@@ -4,16 +4,14 @@ import it.uniroma2.ispw.globe.model.Itinerary;
 
 public class ProposalBean {
     private String id;
-    private String name;
     private double price;
     private String agency;
     private String user;
     private String description;
     private String accepted;
 
-    public ProposalBean(String id, String name, double price, String agency, String user, String description, String accepted) {
+    public ProposalBean(String id, double price, String agency, String user, String description, String accepted) {
         this.id = id;
-        this.name = name;
         this.price = price;
         this.agency = agency;
         this.user = user;
@@ -21,10 +19,8 @@ public class ProposalBean {
         this.accepted = accepted;
     }
 
-    public ProposalBean(String name, double price, String user, String description) {
-        this.name = name;
+    public ProposalBean(double price, String description) {
         this.price = price;
-        this.user = user;
         this.description = description;
     }
 
@@ -34,14 +30,6 @@ public class ProposalBean {
 
     public void setID(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getPrice() {

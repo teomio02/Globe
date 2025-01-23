@@ -1,16 +1,17 @@
 package it.uniroma2.ispw.globe.model;
 
 import it.uniroma2.ispw.globe.other.ItineraryType;
+import it.uniroma2.ispw.globe.util.decorator.GenericItinerary;
 
 import java.util.List;
 
-public class Itinerary {
+public class Itinerary extends GenericItinerary {
     private String itineraryID;
     private String name;
     private String description;
     private int daysNumber;
     private List<Day> days;
-    private ItineraryType type;
+    private List<String> types;
 
     public String getItineraryID() {
         return itineraryID;
@@ -52,11 +53,11 @@ public class Itinerary {
         this.days = days;
     }
 
-    public ItineraryType getType() {
-        return type;
+    public List<String> getTypes() {
+        return types;
     }
 
-    public void setType(ItineraryType type) {
-        this.type = type;
+    public void setTypes(List<String> types) {
+        this.types = types;
     }
 }
