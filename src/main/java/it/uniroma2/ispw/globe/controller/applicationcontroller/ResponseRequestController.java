@@ -9,6 +9,7 @@ import it.uniroma2.ispw.globe.model.dao.RequestDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
 import java.util.ArrayList;
 import java.util.List;

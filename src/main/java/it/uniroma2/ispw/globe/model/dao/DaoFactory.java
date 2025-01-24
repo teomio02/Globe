@@ -22,5 +22,7 @@ public abstract class DaoFactory {
     public abstract ItineraryDao getItineraryDao();
     public abstract ProposalDao getProposalDao();
     public abstract RequestDao getRequestDao();
+    public abstract FlightDao getFlightDao();
+    public abstract AccommodationDao getAccommodationDao();
 
 }

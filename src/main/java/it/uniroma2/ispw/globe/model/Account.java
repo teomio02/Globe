@@ -1,5 +1,7 @@
 package it.uniroma2.ispw.globe.model;
 
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+
 import java.util.List;
 
 public abstract class Account {

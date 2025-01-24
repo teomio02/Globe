@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;

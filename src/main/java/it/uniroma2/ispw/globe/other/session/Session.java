@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.other.session;
 
 import it.uniroma2.ispw.globe.model.*;
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
 public class Session {
     private String id;

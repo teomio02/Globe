@@ -1,22 +1,16 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.model.Account;
-import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.StepBean;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.view.DayTab;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -24,7 +18,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +39,10 @@ public class DisplayItineraryGUIController {
     private Button nextUserButton;
     @FXML
     private Button nextAgencyButton;
+    @FXML
+    private VBox accommodationVBox;
+    @FXML
+    private VBox flightVBox;
 
     private String sessionId;
     private String itineraryId;
@@ -61,8 +59,11 @@ public class DisplayItineraryGUIController {
     }
 
     public void initialize() {
-        ItineraryBean itinerary = new ManageItineraryController().getItinerary(itineraryId,sessionId);
-        List<StepBean> steps = new ManageItineraryController().getSteps(itineraryId,sessionId);
+        accommodationVBox.setVisible(false);
+        flightVBox.setVisible(false);
+
+        ItineraryBean itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
+        List<StepBean> steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
         nameLabel.setText(itinerary.getName());
         descriptionLabel.setText(itinerary.getDescription());
         dayLabel.setText(String.valueOf(itinerary.getDuration()));
@@ -80,9 +81,9 @@ public class DisplayItineraryGUIController {
             CityBean city;
             if (itineraryId == null) {
                 //pending itinerary
-                city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),sessionId);
+                city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),sessionId);
             } else {
-                city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
+                city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
             }
             cityLabel.setText(city.getName()+", "+city.getCountry());
 
@@ -92,9 +93,9 @@ public class DisplayItineraryGUIController {
             for (String attractionID : step.getAttractions()) {
                 AttractionBean attraction;
                 if (itineraryId == null) {
-                    attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,sessionId);
+                    attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,sessionId);
                 } else {
-                    attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,null);
+                    attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,null);
                 }
                 Label label = (Label) attractionBox.getChildren().get(i);
                 label.setText(attraction.getName()+" - "+attraction.getCity()+", "+attraction.getAddress());
@@ -102,6 +103,19 @@ public class DisplayItineraryGUIController {
             }
             day++;
         }
+        if (!itinerary.getAccommodations().isEmpty()) {
+            accommodationVBox.setVisible(true);
+            for (int i = 0; i < itinerary.getAccommodations().size(); i++) {
+                Pair<String,String> accommodation = itinerary.getAccommodations().get(i);
+                accommodationVBox.getChildren().add(new Label((i+1)+": "+accommodation.getKey()+", "+accommodation.getValue()));
+            }
+        }
+        if (itinerary.getInboundFlightDepartureTime() != -1) {
+            flightVBox.setVisible(true);
+            flightVBox.getChildren().add(new Label("Inbound: "+itinerary.getInboundFlightDepartureTime()+" - "+itinerary.getInboundFlightArrivalTime()));
+            flightVBox.getChildren().add(new Label("Outbound"+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime()));
+        }
+
         nextAgencyButton.setVisible(false);
         if (proposalId != null) {
             nextUserButton.setVisible(false);
@@ -124,7 +138,7 @@ public class DisplayItineraryGUIController {
     public void showItineraries(ActionEvent event) {
 
         if (itineraryId == null) {
-            new ManageItineraryController().saveItinerary(sessionId);
+            new CreateItineraryController().saveItinerary(sessionId);
         }
 
         URL url;

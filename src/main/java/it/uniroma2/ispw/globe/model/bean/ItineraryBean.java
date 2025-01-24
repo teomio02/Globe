@@ -1,7 +1,8 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import javafx.util.Pair;
+
 import java.util.List;
-import java.util.Map;
 
 public class ItineraryBean {
     private String id;
@@ -12,10 +13,10 @@ public class ItineraryBean {
     private List<String> cities;
     private List<String> attractions;
     private double outboundFlightDepartureTime;
-    private double outboundFlightDuration;
+    private double outboundFlightArrivalTime;
     private double inboundFlightDepartureTime;
-    private double inboundFlightDuration;
-    private Map<String, String> accommodations;
+    private double inboundFlightArrivalTime;
+    private List<Pair<String, String>> accommodations;
 
     public ItineraryBean(String id,String name, String description, List<String> types, int duration) {
         this.id = id;
@@ -25,7 +26,7 @@ public class ItineraryBean {
         this.duration = duration;
     }
 
-    public ItineraryBean(String id,String name, String description, List<String> types, int duration, List<String> cities, List<String> attractions, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+    public ItineraryBean(String id,String name, String description, List<String> types, int duration, List<String> cities, List<String> attractions) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -33,23 +34,18 @@ public class ItineraryBean {
         this.duration = duration;
         this.cities = cities;
         this.attractions = attractions;
-        this.outboundFlightDepartureTime = outboundFlightDepartureTime;
-        this.outboundFlightDuration = outboundFlightDuration;
-        this.inboundFlightDepartureTime = inboundFlightDepartureTime;
-        this.inboundFlightDuration = inboundFlightDuration;
-        this.accommodations = accommodations;
     }
 
-    public ItineraryBean(String id,String name, String description, List<String> types, int duration, double outboundFlightDepartureTime, double outboundFlightDuration, double inboundFlightDepartureTime, double inboundFlightDuration, Map<String, String> accommodations) {
+    public ItineraryBean(String id,String name, String description, List<String> types, int duration, double outboundFlightDepartureTime, double outboundFlightArrivalTime, double inboundFlightDepartureTime, double inboundFlightArrivalTime, List<Pair<String, String>> accommodations) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.types = types;
         this.duration = duration;
         this.outboundFlightDepartureTime = outboundFlightDepartureTime;
-        this.outboundFlightDuration = outboundFlightDuration;
+        this.outboundFlightArrivalTime = outboundFlightArrivalTime;
         this.inboundFlightDepartureTime = inboundFlightDepartureTime;
-        this.inboundFlightDuration = inboundFlightDuration;
+        this.inboundFlightArrivalTime = inboundFlightArrivalTime;
         this.accommodations = accommodations;
     }
 
@@ -113,12 +109,12 @@ public class ItineraryBean {
         this.outboundFlightDepartureTime = outboundFlightDepartureTime;
     }
 
-    public double getOutboundFlightDuration() {
-        return outboundFlightDuration;
+    public double getOutboundFlightArrivalTime() {
+        return outboundFlightArrivalTime;
     }
 
-    public void setOutboundFlightDuration(double outboundFlightDuration) {
-        this.outboundFlightDuration = outboundFlightDuration;
+    public void setOutboundFlightArrivalTime(double outboundFlightArrivalTime) {
+        this.outboundFlightArrivalTime = outboundFlightArrivalTime;
     }
 
     public double getInboundFlightDepartureTime() {
@@ -129,19 +125,19 @@ public class ItineraryBean {
         this.inboundFlightDepartureTime = inboundFlightDepartureTime;
     }
 
-    public double getInboundFlightDuration() {
-        return inboundFlightDuration;
+    public double getInboundFlightArrivalTime() {
+        return inboundFlightArrivalTime;
     }
 
-    public void setInboundFlightDuration(double inboundFlightDuration) {
-        this.inboundFlightDuration = inboundFlightDuration;
+    public void setInboundFlightArrivalTime(double inboundFlightArrivalTime) {
+        this.inboundFlightArrivalTime = inboundFlightArrivalTime;
     }
 
-    public Map<String, String> getAccommodations() {
+    public  List<Pair<String, String>> getAccommodations() {
         return accommodations;
     }
 
-    public void setAccommodations(Map<String, String> accommodations) {
+    public void setAccommodations( List<Pair<String, String>> accommodations) {
         this.accommodations = accommodations;
     }
 }

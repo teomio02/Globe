@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.ClasseTest;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;

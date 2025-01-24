@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
@@ -8,15 +7,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;

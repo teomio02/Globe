@@ -1,11 +1,17 @@
 package it.uniroma2.ispw.globe.model;
 
 public class Accommodation {
+    private String id;
     private String name;
     private String address;
-    private int firstDay;
-    private int lastDay;
 
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
@@ -17,17 +23,5 @@ public class Accommodation {
     }
     public void setAddress(String address) {
         this.address = address;
-    }
-    public int getFirstDay() {
-        return firstDay;
-    }
-    public void setFirstDay(int firstDay) {
-        this.firstDay = firstDay;
-    }
-    public int getLastDay() {
-        return lastDay;
-    }
-    public void setLastDay(int lastDay) {
-        this.lastDay = lastDay;
     }
 }
