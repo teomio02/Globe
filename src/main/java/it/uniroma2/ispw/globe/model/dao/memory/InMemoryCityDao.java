@@ -28,7 +28,7 @@ public class InMemoryCityDao extends CityDao {
     @Override
     public void addCity(City city) {
         for (City c : cities) {
-            if (c.getName().equals(city.getName())) {
+            if (c.getPlaceID().equals(city.getPlaceID())) {
                 // errore
                 return;
             }
@@ -38,11 +38,18 @@ public class InMemoryCityDao extends CityDao {
 
     @Override
     public City getCity(String cityID) {
+        City cityResult = null;
         for (City city : cities) {
             if (city.getPlaceID().equals(cityID)) {
-                return city;
+                cityResult = city;
             }
         }
-        return null;
+        if (cityResult == null) {
+            cityResult = createCity(cityID);
+            if (cityResult != null) {
+                addCity(cityResult);
+            }
+        }
+        return cityResult;
     }
 }

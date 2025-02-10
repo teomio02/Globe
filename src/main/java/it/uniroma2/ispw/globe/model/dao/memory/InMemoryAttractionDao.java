@@ -38,11 +38,18 @@ public class InMemoryAttractionDao extends AttractionDao {
 
     @Override
     public Attraction getAttraction(String attractionID) {
+        Attraction attractionResult = null;
         for (Attraction attraction : attractions) {
             if (attraction.getPlaceID().equals(attractionID)) {
-                return attraction;
+                attractionResult = attraction;
             }
         }
-        return null;
+        if (attractionResult == null) {
+            attractionResult = createAttraction(attractionID);
+            if (attractionResult != null) {
+                addAttraction(attractionResult);
+            }
+        }
+        return attractionResult;
     }
 }

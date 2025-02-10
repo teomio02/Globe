@@ -41,6 +41,7 @@ public class InMemoryAccountDao extends AccountDao {
             agency.setType(credentials.getType());
             agency.setProposals(new ArrayList<>());
             agency.setItineraries(new ArrayList<>());
+            agency.setRequests(new ArrayList<>());
             agency.setDescription(credentials.getDescription());
             agency.setPreferences(credentials.getPreferences());
             agency.setRating(0);
@@ -60,6 +61,7 @@ public class InMemoryAccountDao extends AccountDao {
             user.setType(credentials.getType());
             user.setItineraries(new ArrayList<>());
             user.setProposals(new ArrayList<>());
+            user.setRequests(new ArrayList<>());
             users.add(user);
         }
     }

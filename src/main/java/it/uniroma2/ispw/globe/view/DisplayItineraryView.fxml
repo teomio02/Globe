@@ -117,18 +117,34 @@
             </HBox>
             <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#97c093" height="5.0" stroke="BLACK" strokeMiterLimit="0.0" strokeType="INSIDE" strokeWidth="0.0" width="641.0" />
             <TabPane fx:id="daysTabPane" prefHeight="273.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" tabClosingPolicy="UNAVAILABLE" />
-            <Button fx:id="nextButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#showItineraries" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <StackPane alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="121.0">
+               <children>
+                  <Button fx:id="nextUserButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#showItineraries" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="nextAgencyButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createProposal" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </StackPane>
          </children>
       </VBox>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
@@ -136,5 +152,27 @@
             <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
          </image>
       </ImageView>
+      <VBox layoutX="724.0" layoutY="42.0" prefHeight="587.0" prefWidth="423.0">
+         <children>
+            <VBox fx:id="accommodationVBox" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Accommodations">
+                     <font>
+                        <Font name="Apple SD Gothic Neo Regular" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox fx:id="flightVBox" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Flight">
+                     <font>
+                        <Font name="Apple SD Gothic Neo Regular" size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

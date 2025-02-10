@@ -1,20 +1,17 @@
 package it.uniroma2.ispw.globe.model.dao;
 
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
 import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
 
 public abstract class ProposalDao {
-    public Proposal createProposal(String id, String name, double price, String description, Itinerary itinerary, User user, Agency agency) {
+    public Proposal createProposal(String id, double price, String description, Itinerary itinerary, User user, Agency agency) {
         Proposal proposal = new Proposal();
 
         proposal.setId(id);
-        proposal.setName(name);
         proposal.setItinerary(itinerary);
         proposal.setPrice(price);
         proposal.setDescription(description);

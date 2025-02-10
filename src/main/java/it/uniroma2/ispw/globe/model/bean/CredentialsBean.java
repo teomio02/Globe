@@ -7,6 +7,7 @@ public class CredentialsBean {
     private String password;
     private String type;
     private String description;
+    private String paymentCredentials;
     private List<String> preferences;
 
     public CredentialsBean(String username, String password, String type, String description, List<String> preferences) {
@@ -45,6 +46,10 @@ public class CredentialsBean {
     public String getDescription() { return description;}
 
     public void setDescription(String description) { this.description = description; }
+
+    public String getPaymentCredentials() { return paymentCredentials; }
+
+    public void setPaymentCredentials(String paymentCredentials) { this.paymentCredentials = paymentCredentials; }
 
     public List<String> getPreferences() { return preferences; }
 

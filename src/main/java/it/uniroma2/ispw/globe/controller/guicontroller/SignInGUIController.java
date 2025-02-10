@@ -31,6 +31,8 @@ public class SignInGUIController {
     @FXML
     private PasswordField passwordField;
     @FXML
+    private TextField paymentCredentialsField;
+    @FXML
     private Label errorLabel;
     @FXML
     private VBox agencyForm;
@@ -87,6 +89,7 @@ public class SignInGUIController {
                 credentials.setType(AGENCY);
                 credentials.setDescription(descriptionField.getText());
                 credentials.setPreferences(preferences);
+                credentials.setPaymentCredentials(paymentCredentialsField.getText());
 
             } else {
                 credentials.setType(USER);

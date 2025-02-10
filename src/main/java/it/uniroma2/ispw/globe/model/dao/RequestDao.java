@@ -8,16 +8,46 @@ import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.ArrayList;
 import java.util.List;
+import it.uniroma2.ispw.globe.other.Persistence;
+import org.w3c.dom.Attr;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class RequestDao {
-    public Request createAgencyRequest(String requestID,User user,Agency agency,boolean isAccepted) {
+        public Request createAgencyRequest(String requestID,String userUsername,String agencyUsername,String isAccepted,String description,int days,List<String> citiesID,List<String> attractionsID,List<String> types) {
         //da cambiare
+        Request request = new Request();
+
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+
+        User user = (User) accountDao.getAccount(userUsername);
+        Agency agency = (Agency) accountDao.getAccount(agencyUsername);
+
 
         BaseRequest request = new BaseRequest();
         request.setId(requestID);
         request.setUser(user);
         request.setAgency(agency);
         request.setAccepted(isAccepted);
+        request.setDescription(description);
+        request.setDays(days);
+        request.setAttractions(new ArrayList<>());
+        request.setCities(new ArrayList<>());
+        request.setTypes(types);
+
+        for (String cityID : citiesID) {
+            City city = cityDao.getCity(cityID);
+            System.out.println(city.getPlaceID()+" - "+city.getName());
+            request.getCities().add(city);
+        }
+        for (String attractionID : attractionsID) {
+            Attraction attraction = attractionDao.getAttraction(attractionID);
+            System.out.println(attraction.getPlaceID()+" - "+attraction.getName());
+            request.getAttractions().add(attraction);
+        }
 
         return request;
     }

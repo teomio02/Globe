@@ -32,7 +32,7 @@ public class RequestBean {
     }
 
     public void setId(String id) {
-        id = id;
+        this.id = id;
     }
 
     public String getName() {

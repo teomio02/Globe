@@ -37,4 +37,14 @@ public class InMemoryDaoFactory extends DaoFactory {
     public RequestDao getRequestDao() {
         return InMemoryRequestDao.getInstance();
     }
+
+    @Override
+    public FlightDao getFlightDao() {
+        return InMemoryFlightDao.getInstance();
+    }
+
+    @Override
+    public AccommodationDao getAccommodationDao() {
+        return InMemoryAccommodationDao.getInstance();
+    }
 }

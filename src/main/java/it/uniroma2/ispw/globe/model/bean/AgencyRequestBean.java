@@ -8,11 +8,12 @@ public class AgencyRequestBean {
     private String agency;
     private String description;
     private int days;
+    private List<String> types;
     private List<String> cities;
     private List<String> attractions;
-    private Boolean accepted;
+    private String accepted;
 
-    public AgencyRequestBean(String id, List<String> cities, List<String> attractions, String user, String agency, String description, int days , Boolean accepted) {
+    public AgencyRequestBean(String id, List<String> cities, List<String> attractions, String user, String agency, String description, int days, List<String> types, String accepted) {
         this.id = id;
         this.cities = cities;
         this.attractions = attractions;
@@ -20,6 +21,17 @@ public class AgencyRequestBean {
         this.agency = agency;
         this.description = description;
         this.days = days;
+        this.types = types;
+        this.accepted = accepted;
+    }
+
+    public AgencyRequestBean(String id, String user, String agency, String description, int days, List<String> types, String accepted) {
+        this.id = id;
+        this.user = user;
+        this.agency = agency;
+        this.description = description;
+        this.days = days;
+        this.types = types;
         this.accepted = accepted;
     }
 
@@ -75,11 +87,19 @@ public class AgencyRequestBean {
         this.attractions = attractions;
     }
 
-    public Boolean getAccepted() {
+    public String getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(Boolean accepted) {
+    public void setAccepted(String accepted) {
         this.accepted = accepted;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
     }
 }

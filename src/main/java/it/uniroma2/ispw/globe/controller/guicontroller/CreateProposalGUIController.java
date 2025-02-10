@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -25,7 +27,7 @@ public class CreateProposalGUIController {
     @FXML
     private Label requestLabel;
     @FXML
-    private TextField proposalField;
+    private Label daysLabel;
     @FXML
     private TextField priceField;
     @FXML
@@ -36,68 +38,78 @@ public class CreateProposalGUIController {
     private VBox createVBox;
     @FXML
     private VBox requestsVBox;
+    @FXML
+    private HBox typesHBox;
 
     private String sessionId;
+    private String requestId;
 
-    public CreateProposalGUIController(String sessionId) {
+    public CreateProposalGUIController(String sessionId,String requestId) {
+        this.requestId = requestId;
         this.sessionId = sessionId;
+        System.out.println("\nCreateProposalGUIController\n"+"itineraryID: /"+"\nrequestID: "+requestId+"\nproposalID: /");
     }
 
     public void initialize() {
-        List<AgencyRequestBean> requests = new ResponseRequestController().getAgencyRequests(sessionId);
-        for (AgencyRequestBean request : requests) {
-            try {
-                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/tabElement.fxml").toURI().toURL();
-                FXMLLoader loader = new FXMLLoader(url);
-                Button requestsBox = loader.load();
-                requestsBox.setOnAction(actionEvent -> {
-                    userLabel.setText(request.getUser());
-                    requestLabel.setText(request.getID());
-                    selectVBox.getChildren().clear();
-                    createVBox.setVisible(true);
-                });
-                Label nameLabel = (Label) requestsBox.getGraphic().lookup("#nameLabel");
-                nameLabel.setText(request.getUser());
-                Label descriptionLabel = (Label) requestsBox.getGraphic().lookup("#descriptionLabel");
-                descriptionLabel.setText(request.getDescription());
-                Label daysLabel = (Label) requestsBox.getGraphic().lookup("#daysLabel");
-                daysLabel.setText(String.valueOf(request.getDays()));
+        AgencyRequestBean request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
+        ProposalBean proposal = new ResponseRequestController().getProposal(null,sessionId);
 
-                requestsVBox.getChildren().add(requestsBox);
+        userLabel.setText(request.getUser());
+        requestLabel.setText(request.getDescription());
+        daysLabel.setText(String.valueOf(request.getDays()));
+        for (String type : request.getTypes()){
+            typesHBox.getChildren().add(new Label(type));
+        }
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if (proposal != null){
+            priceField.setText(String.valueOf(proposal.getPrice()));
+            descriptionField.setText(proposal.getDescription());
         }
     }
 
-    public void createItinerary(ActionEvent event) {
-        URL url;
-        Parent root;
+    public void createProposal(ActionEvent event) {
 
-        String proposalName = proposalField.getText();
-        double price = Double.parseDouble(priceField.getText());
-        String description = descriptionField.getText();
-        String requestId = requestLabel.getText();
+        int count = 0;
 
-        if (!proposalName.isEmpty() && !description.isEmpty() && price != 0) {
-            ProposalBean proposalBean = new ProposalBean(proposalName,price,userLabel.getText(),description);
-            new ResponseRequestController().createProposal(proposalBean,requestId,sessionId);
+        if (priceField.getText().isEmpty()) {
+            count ++;
+        }
+        if (descriptionField.getText().isEmpty()) {
+            count ++;
+        }
+        if (count>0) {
+            // errore
+            return;
+        }
 
-            try {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml").toURI().toURL();
-                FXMLLoader loader = new FXMLLoader(url);
-                CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,true);
-                loader.setController(controller);
-                root = loader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        ProposalBean proposalBean = new ProposalBean(Double.parseDouble(priceField.getText()),descriptionField.getText());
 
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+        new ResponseRequestController().createProposal(proposalBean,requestId,sessionId);
+
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+
+        try {
+            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId,requestId,null);
+            loader.setController(controller);
+            root.setCenter(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void goBack(ActionEvent event) {
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+
+        try {
+            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,null,requestId,null);
+            loader.setController(controller);
+            root.setCenter(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

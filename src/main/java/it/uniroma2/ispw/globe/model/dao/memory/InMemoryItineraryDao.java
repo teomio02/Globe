@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.model.dao.memory;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
 import java.util.ArrayList;
 import java.util.List;

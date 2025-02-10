@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.ClasseTest;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
@@ -30,12 +29,6 @@ public class LogInController{
         }
         Account account = accountDao.getAccount(credentials.getUsername());
 
-        //test
-        if (account.getType() != AGENCY) {
-            //new ClasseTest().creaProposta(account);
-        }
-        //----
-
         return SessionManager.getInstance().addSession(account);
     }
 
@@ -44,7 +37,16 @@ public class LogInController{
         if (accountDao.getAccount(credentials.getUsername()) != null) {
             return false;
         } else {
-            InMemoryAccountDao.getInstance().addAccount(credentials);
+            accountDao.addAccount(credentials);
+            //test
+            Account account = accountDao.getAccount(credentials.getUsername());
+            if (account.getType().equals(AGENCY)) {
+                System.out.println("creating request");
+                new ClasseTest().creaRichiesta(account);
+            } else {
+                //new ClasseTest().creaProposta(account);
+            }
+            //----
 
             return true;
         }

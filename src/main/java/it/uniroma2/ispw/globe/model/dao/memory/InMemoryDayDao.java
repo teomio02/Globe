@@ -48,7 +48,7 @@ public class InMemoryDayDao extends DayDao {
     }
 
     @Override
-    public Day getDay() {
+    public Day getDay(String itineraryID, int dayNum) {
         return null;
     }
 }

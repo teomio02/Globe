@@ -18,8 +18,18 @@ public class InDbDaoFactory extends DaoFactory {
     }
 
     @Override
+    public FlightDao getFlightDao() {
+        return new InDbFlightDao();
+    }
+
+    @Override
+    public AccommodationDao getAccommodationDao() {
+        return new InDbAccommodationDao();
+    }
+
+    @Override
     public AccountDao getAccountDao() {
-        return null;
+        return new InDbAccountDao();
     }
 
     @Override

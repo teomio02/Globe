@@ -1,8 +1,7 @@
 package it.uniroma2.ispw.globe.model;
 
-import it.uniroma2.ispw.globe.util.decorator.Request;
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Account {
@@ -11,6 +10,7 @@ public abstract class Account {
     private String paymentCredential;
     private String type;
     private List<Itinerary> itineraries;
+    private List<Proposal> proposals;
     private List<Request> requests;
 
     public String getUsername() {
@@ -52,9 +52,18 @@ public abstract class Account {
         this.itineraries = itineraries;
     }
 
+    public List<Proposal> getProposals() {
+        return proposals;
+    }
+
+    public void setProposals(List<Proposal> proposals) {
+        this.proposals = proposals;
+    }
+
     public List<Request> getRequests() {
         return requests;
     }
+
     public void setRequests(List<Request> requests) {
         this.requests = requests;
     }
