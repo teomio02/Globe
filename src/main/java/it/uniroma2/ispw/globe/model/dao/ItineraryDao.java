@@ -7,6 +7,7 @@ import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +22,7 @@ public abstract class ItineraryDao {
         Day day0 = dayDao.createDay(id,0,citiesID,attractionsID);
         days.add(day0);
         for (int i=1; i<=duration; i++) {
-            String newId = UUID.randomUUID().toString();
-
-            Day day = dayDao.createDay(newId, i,new ArrayList<>(),new ArrayList<>());
+            Day day = dayDao.createDay(id, i,new ArrayList<>(),new ArrayList<>());
             days.add(day);
         }
 

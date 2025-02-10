@@ -29,7 +29,7 @@ public class InDbDaoFactory extends DaoFactory {
 
     @Override
     public AccountDao getAccountDao() {
-        return null;
+        return new InDbAccountDao();
     }
 
     @Override

@@ -14,7 +14,7 @@ public abstract class GenericRequest {
     private String accepted;
     private String description;
     private int days;
-    private List<City> cities;
+    private List<City> cities; //  private List<A> lista;
     private List<Attraction> attractions;
     private List<String> types;
 

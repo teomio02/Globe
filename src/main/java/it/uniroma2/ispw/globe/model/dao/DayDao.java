@@ -20,12 +20,12 @@ public abstract class DayDao {
         AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
         for (String cityId : citiesID) {
-            City city = cityDao.getCity(cityId);
+            City city = cityDao.createCity(cityId);
             cities.add(city);
         }
 
         for (String attractionId : attractionsID) {
-            Attraction attraction = attractionDao.getAttraction(attractionId);
+            Attraction attraction = attractionDao.createAttraction(attractionId);
             attractions.add(attraction);
         }
 
@@ -36,5 +36,5 @@ public abstract class DayDao {
         return day;
     }
     public abstract void addDay(Day day);
-    public abstract Day getDay();
+    public abstract Day getDay(String itineraryID, int dayNum);
 }

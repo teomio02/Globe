@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public abstract class AccountDao {

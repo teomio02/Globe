@@ -30,11 +30,20 @@ public class ClasseTest {
         attractions.add(((Attraction) new PlaceAdapter(new CreateItineraryController().getPlaces("colosseo","").get(0))).getPlaceID());
         attractions.add(((Attraction) new PlaceAdapter(new CreateItineraryController().getPlaces("altare della patria","").get(0))).getPlaceID());
 
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+        cityDao.addCity((new PlaceAdapter(new CreateItineraryController().getPlaces("roma","administrative").get(0))));
+        attractionDao.addAttraction(new PlaceAdapter(new CreateItineraryController().getPlaces("colosseo","").get(0)));
+        attractionDao.addAttraction((new PlaceAdapter(new CreateItineraryController().getPlaces("altare della patria","").get(0))));
+
+        System.out.println("cities: " + cities);
+        System.out.println("attractions: " + attractions);
+
         List<String> types = new ArrayList<>();
         types.add(NATURE);
         types.add(ON_THE_ROAD);
+        System.out.println("types: " + types);
 
-        new LogInController().signIn(new CredentialsBean("t","t",USER));
         User user = (User) accountDao.getAccount("t");
 
         System.out.println("Agenzia: "+account.getUsername()+" "+account.getRequests());
