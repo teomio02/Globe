@@ -1,7 +1,8 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Request;
+import it.uniroma2.ispw.globe.model.BaseRequest;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
@@ -27,7 +28,7 @@ public class InMemoryRequestDao extends RequestDao {
 
     @Override
     public void addAgencyRequest(AgencyRequestBean requestBean, User user, Agency agency) {
-        Request request = new Request();
+        BaseRequest request = new BaseRequest();
         request.setId(requestBean.getID());
         request.setUser(user);
         request.setAgency(agency);

@@ -1,21 +1,20 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Attraction;
-import it.uniroma2.ispw.globe.model.City;
-import it.uniroma2.ispw.globe.model.bean.AgencyBean;
-import it.uniroma2.ispw.globe.model.bean.AttractionBean;
-import it.uniroma2.ispw.globe.model.bean.CityBean;
-import it.uniroma2.ispw.globe.model.bean.RequestBean;
+import it.uniroma2.ispw.globe.model.*;
+import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
+import it.uniroma2.ispw.globe.model.dao.RequestDao;
 import it.uniroma2.ispw.globe.other.Persistence;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class RequestItineraryController {
     private static final String CITY = "administrative";
@@ -75,13 +74,19 @@ public class RequestItineraryController {
 
         for (Agency agency: agencies){
             AgencyBean agencyBean = new AgencyBean(agency.getUsername(), agency.getRating(), agency.getPreferences());
-            agencies.add(agency);
+            agencyBeans.add(agencyBean);
         }
-        return new ArrayList<>();
+        return agencyBeans;
     }
 
-    public void sendRequest(RequestBean requestBean) {
-        System.out.println(requestBean.getAgencies()+" - "+requestBean.getItineraryType()+" - "+requestBean.getDayNum());
+    public void sendRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) {
+        System.out.println(requestBean.getAgencies()+" - "+requestBean.getItineraryType()+" - "+requestBean.getDayNum()+" - "+requestBean.getOtherRequests()+" - "+requestBean.isAccommodation()+" - "+requestBean.isFlight());
+        if (onTheRoadBean != null) {
+            System.out.println(onTheRoadBean.getDayDrivingHours()+" - "+onTheRoadBean.getMode());
+        }
+        if (natureBean != null) {
+            System.out.println(natureBean.getDifficulty()+" - "+natureBean.getTrekkingDistance());
+        }
         for (String city: requestBean.getCities()){
             System.out.print(city);
         }
@@ -89,6 +94,21 @@ public class RequestItineraryController {
         for (String attraction: requestBean.getAttractions()){
             System.out.print(attraction);
         }
+
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+
+
+        Request request = requestDao.createUserRequest(UUID.randomUUID().toString(),null,null,false,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.getCities(),requestBean.getAttractions(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+        SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
+
+        List<Agency> agencies = new ArrayList<>();
+        for (String agencyName : requestBean.getAgencies()){
+            Agency agency = (Agency) accountDao.getAccount(agencyName);
+            agencies.add(agency);
+        }
+        SessionManager.getInstance().getSession(sessionID).setPendingAgencies(agencies);
+
 
 
     }

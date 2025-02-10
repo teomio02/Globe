@@ -3,12 +3,17 @@ package it.uniroma2.ispw.globe.model.dao;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
+import it.uniroma2.ispw.globe.other.Persistence;
+import it.uniroma2.ispw.globe.util.decorator.Request;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class RequestDao {
     public Request createAgencyRequest(String requestID,User user,Agency agency,boolean isAccepted) {
         //da cambiare
 
-        Request request = new Request();
+        BaseRequest request = new BaseRequest();
         request.setId(requestID);
         request.setUser(user);
         request.setAgency(agency);
@@ -16,6 +21,42 @@ public abstract class RequestDao {
 
         return request;
     }
+
+    public Request createUserRequest(String id, User user, Agency agency, boolean accepted, String otherRequest, int dayNum, List<String> citiesID, List<String> attractionsID, boolean flight, boolean accommodation, List<String> itineraryType) {
+
+        BaseRequest request = new BaseRequest();
+
+        List<City> cities = new ArrayList<>();
+        List<Attraction> attractions = new ArrayList<>();
+
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+
+        for (String cityId : citiesID) {
+            City city = cityDao.createCity(cityId);
+            cities.add(city);
+        }
+
+        for (String attractionId : attractionsID) {
+            Attraction attraction = attractionDao.createAttraction(attractionId);
+            attractions.add(attraction);
+        }
+
+        request.setId(id);
+        request.setUser(user);
+        request.setAgency(agency);
+        request.setAccepted(accepted);
+        request.setOtherRequest(otherRequest);
+        request.setDayNum(dayNum);
+        request.setFlightRequest(flight);
+        request.setAccommodationRequest(accommodation);
+        request.setItineraryType(itineraryType);
+        request.setCities(cities);
+        request.setAttractions(attractions);
+
+        return request;
+    }
+
     public abstract void addAgencyRequest(AgencyRequestBean requestBean, User user, Agency agency);
     public abstract void addUserRequest(RequestBean requestBean, User user, Agency agency);
     public abstract Request getRequest(String requestId);

@@ -1,18 +1,27 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
-import it.uniroma2.ispw.globe.model.bean.AgencyBean;
-import it.uniroma2.ispw.globe.model.bean.AttractionBean;
-import it.uniroma2.ispw.globe.model.bean.CityBean;
-import it.uniroma2.ispw.globe.model.bean.RequestBean;
+import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.other.ItineraryType.NATURE;
+import static it.uniroma2.ispw.globe.other.ItineraryType.ON_THE_ROAD;
 
 public class CreateRequestGUIController {
     @FXML
@@ -21,6 +30,10 @@ public class CreateRequestGUIController {
     private TextField attractionsField;
     @FXML
     private TextField otherRequestsField;
+    @FXML
+    private TextField trekkingDistanceField;
+    @FXML
+    private TextField dayDrivingHoursField;
     @FXML
     private Label dayLabel;
     @FXML
@@ -38,6 +51,10 @@ public class CreateRequestGUIController {
     @FXML
     private VBox agencyVBox;
     @FXML
+    private VBox natureVBox;
+    @FXML
+    private VBox onTheRoadVBox;
+    @FXML
     private Button flightButton;
     @FXML
     private Button accommodationButton;
@@ -45,11 +62,34 @@ public class CreateRequestGUIController {
     private Button onTheRoadButton;
     @FXML
     private Button natureButton;
+    @FXML
+    private Button normalDifficulty;
+    @FXML
+    private Button mediumDifficulty;
+    @FXML
+    private Button hardDifficulty;
+    @FXML
+    private Button morningMode;
+    @FXML
+    private Button lateAfternoonMode;
+    @FXML
+    private Button nightMode;
+
 
     private String sessionId;
 
     public CreateRequestGUIController(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public void initialize() {
+        onTheRoadButton.setUserData(false);
+        flightButton.setUserData(false);
+        accommodationButton.setUserData(false);
+        natureButton.setUserData(false);
+        natureVBox.setVisible(false);
+        onTheRoadVBox.setVisible(false);
+
     }
 
 
@@ -156,22 +196,41 @@ public class CreateRequestGUIController {
     }
     public void onTheRoadHandler (ActionEvent event) {
         onTheRoadButton.setUserData(true);
+        onTheRoadVBox.setVisible(true);
+    }
+    public void chooseMode (ActionEvent event) {
+        morningMode.setUserData(false);
+        lateAfternoonMode.setUserData(false);
+        nightMode.setUserData(false);
+        Button mode = (Button) event.getSource();
+        mode.setUserData(true);
+
     }
     public void natureHandler (ActionEvent event) {
         natureButton.setUserData(true);
-
+        natureVBox.setVisible(true);
     }
+    public void chooseDifficulty (ActionEvent event) {
+        normalDifficulty.setUserData(false);
+        mediumDifficulty.setUserData(false);
+        hardDifficulty.setUserData(false);
+        Button difficulty = (Button) event.getSource();
+        difficulty.setUserData(true);
+    }
+
+
     public void searchAgencyHandler () {
         List<AgencyBean> agencies;
         List<String> types = new ArrayList<>();
         if ((boolean) onTheRoadButton.getUserData()) {
-            types.add("onTheRoad");
+            types.add(ON_THE_ROAD);
         }
         if ((boolean) natureButton.getUserData()) {
-            types.add("nature");
+            types.add(NATURE);
         }
 
         agencies = new RequestItineraryController().getAgenciesByType(types);
+
         if (!agencies.isEmpty()) {
             for (AgencyBean agencyResult : agencies) {
                 Button agencyButton = new Button(agencyResult.getName()+"-"+agencyResult.getRating());
@@ -218,6 +277,34 @@ public class CreateRequestGUIController {
         int dayNum =  Integer.parseInt(dayLabel.getText());
         boolean flight = (boolean) flightButton.getUserData();
         boolean accommodation = (boolean) accommodationButton.getUserData();
+        OnTheRoadBean onTheRoadBean = null;
+        NatureBean natureBean = null;
+        String mode = null;
+        String difficulty = null;
+
+        if ((boolean) onTheRoadButton.getUserData()) {
+            itineraryType.add("onTheRoad");
+            if((boolean) morningMode.getUserData()) {
+                mode = "morningMode";
+            } else if ((boolean) lateAfternoonMode.getUserData()) {
+                mode = "lateAfternoonMode";
+            } else if ((boolean) natureButton.getUserData()) {
+                mode = "nightMode";
+            }
+            onTheRoadBean = new OnTheRoadBean( mode, dayDrivingHoursField.getText());
+        }
+
+        if ((boolean) natureButton.getUserData()) {
+            itineraryType.add("nature");
+            if((boolean) normalDifficulty.getUserData()) {
+                difficulty = "normalDifficulty";
+            } else if ((boolean) mediumDifficulty.getUserData()) {
+                difficulty = "mediumDifficulty";
+            } else if ((boolean) hardDifficulty.getUserData()) {
+                difficulty = "hardDifficulty";
+            }
+            natureBean = new NatureBean( difficulty, trekkingDistanceField.getText());
+        }
 
         for (int i = 0; i < cityVBox.getChildren().size(); i++) {
             city = (String) cityVBox.getChildren().get(i).getUserData();
@@ -248,15 +335,27 @@ public class CreateRequestGUIController {
             if (count == 0 ){
                 RequestBean requestBean = new RequestBean(cities, attractions, otherRequests, dayNum, agencies, flight, accommodation, itineraryType);
                 RequestItineraryController controller = new RequestItineraryController();
-                controller.sendRequest(requestBean);
+                controller.sendRequest(requestBean, onTheRoadBean, natureBean, sessionId);
             }
         }
 
+        URL url;
+        Parent root;
+
+        try {
+            url = new File("src/main/java/it/uniroma2/ispw/globe/view/.fxml").toURI().toURL();
+
+            DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,null);
+            FXMLLoader loader = new FXMLLoader(url);
+            loader.setController(controller);
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
-
-
-
-
-
-
 }

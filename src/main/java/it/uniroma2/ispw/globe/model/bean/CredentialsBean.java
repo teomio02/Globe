@@ -9,6 +9,14 @@ public class CredentialsBean {
     private String description;
     private List<String> preferences;
 
+    public CredentialsBean(String username, String password, String type, String description, List<String> preferences) {
+        this.username = username;
+        this.password = password;
+        this.type = type;
+        this.description = description;
+        this.preferences = preferences;
+    }
+
     public CredentialsBean(String username, String password, String type) {
         this.username = username;
         this.password = password;
