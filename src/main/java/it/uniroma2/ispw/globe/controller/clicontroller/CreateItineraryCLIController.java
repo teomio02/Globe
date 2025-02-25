@@ -74,20 +74,9 @@ public class CreateItineraryCLIController {
         while (true){
             System.out.println("-> Do you want to add city?\n");
 
-            String response;
-            while (true) {
-                response = input.nextLine();
-                if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
-                    break;
-                }
-                System.out.println("Invalid option");
-            }
+            boolean response = getResposne();
 
-            if (response.equalsIgnoreCase(YES)) {
-                new CreateItineraryController().saveItinerary(sessionId);
-            }
-
-            if (response.equalsIgnoreCase(YES)) {
+            if (response) {
                 String cityID = getCity();
                 if (cityID != null) {
                     cities.add(cityID);
@@ -99,16 +88,9 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.println("-> Do you want to add attraction?\n");
-            String response;
-            while (true) {
-                response = input.nextLine();
-                if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
-                    break;
-                }
-                System.out.println("Invalid option");
-            }
+            boolean response = getResposne();
 
-            if (response.equalsIgnoreCase(YES)) {
+            if (response) {
                 String attractionID = getAttraction();
                 if (attractionID != null) {
                     attractions.add(attractionID);
@@ -124,16 +106,9 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.println("-> Do you want to add some accommodations?\n");
-            String response;
-            while (true) {
-                response = input.nextLine();
-                if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
-                    break;
-                }
-                System.out.println("Invalid option");
-            }
+            boolean response = getResposne();
 
-            if (response.equalsIgnoreCase(YES)) {
+            if (response) {
                 accommodations.add(getAccommodation());
             } else {
                 break;
@@ -144,16 +119,9 @@ public class CreateItineraryCLIController {
 
         System.out.println("-> Do you want to add in and out bound flights?\n");
 
-        String response;
-        while (true) {
-            response = input.nextLine();
-            if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
-                break;
-            }
-            System.out.println("Invalid option");
-        }
+        boolean response = getResposne();
 
-        if (response.equalsIgnoreCase(YES)) {
+        if (response) {
 
             List flights = getFlightsInfo();
 
@@ -399,6 +367,26 @@ public class CreateItineraryCLIController {
 
         if (response.equalsIgnoreCase(YES)) {
             new CreateItineraryController().saveItinerary(sessionId);
+        }
+    }
+
+    public boolean getResposne(){
+        String response;
+
+        Scanner input = new Scanner(System.in);
+
+        while (true) {
+            response = input.nextLine();
+            if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
+                break;
+            }
+            System.out.println("Invalid option");
+        }
+
+        if (response.equalsIgnoreCase(YES)) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
