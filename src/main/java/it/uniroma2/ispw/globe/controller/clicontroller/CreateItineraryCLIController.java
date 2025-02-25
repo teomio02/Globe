@@ -1,16 +1,10 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.StepBean;
-import it.uniroma2.ispw.globe.view.DayTab;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -79,62 +73,50 @@ public class CreateItineraryCLIController {
 
         while (true){
             System.out.println("-> Do you want to add city?\n");
-            System.out.println("1> Yes");
-            System.out.println("2> No");
 
-            String str_choice;
-            int choice = 0;
+            String response;
             while (true) {
-                System.out.print("Please enter your choice: ");
-                str_choice = input.nextLine();
-                if (!str_choice.isEmpty() && str_choice.matches("[1-2]")) {
-                    choice = Integer.parseInt(str_choice);
+                response = input.nextLine();
+                if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
                     break;
                 }
                 System.out.println("Invalid option");
             }
 
-            if (choice == 1) {
+            if (response.equalsIgnoreCase(YES)) {
+                new CreateItineraryController().saveItinerary(sessionId);
+            }
+
+            if (response.equalsIgnoreCase(YES)) {
                 String cityID = getCity();
                 if (cityID != null) {
                     cities.add(cityID);
                 }
-            } else if (choice == 2){
-                break;
             } else {
-                throw new RuntimeException("Invalid choice");
+                break;
             }
         }
 
         while (true) {
             System.out.println("-> Do you want to add attraction?\n");
-            System.out.println("1> Yes");
-            System.out.println("2> No");
-
-            String str_choice;
-            int choice = 0;
+            String response;
             while (true) {
-                System.out.print("Please enter your choice: ");
-                str_choice = input.nextLine();
-                if (!str_choice.isEmpty() && str_choice.matches("[1-2]")) {
-                    choice = Integer.parseInt(str_choice);
+                response = input.nextLine();
+                if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
                     break;
                 }
                 System.out.println("Invalid option");
             }
 
-            if (choice == 1) {
+            if (response.equalsIgnoreCase(YES)) {
                 String attractionID = getAttraction();
                 if (attractionID != null) {
                     attractions.add(attractionID);
                 }
-            } else if (choice == 2){
-                break;
             } else {
-                throw new RuntimeException("Invalid choice");
+                break;
             }
         }
-
 
         //popola types
 
@@ -142,49 +124,36 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.println("-> Do you want to add some accommodations?\n");
-            System.out.println("1> Yes");
-            System.out.println("2> No");
-
-            String str_choice;
-            int choice = 0;
+            String response;
             while (true) {
-                System.out.print("Please enter your choice: ");
-                str_choice = input.nextLine();
-                if (!str_choice.isEmpty() && str_choice.matches("[1-2]")) {
-                    choice = Integer.parseInt(str_choice);
+                response = input.nextLine();
+                if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
                     break;
                 }
                 System.out.println("Invalid option");
             }
 
-            if (choice == 1) {
+            if (response.equalsIgnoreCase(YES)) {
                 accommodations.add(getAccommodation());
-            } else if (choice == 2){
-                break;
             } else {
-                throw new RuntimeException("Invalid choice");
+                break;
             }
         }
 
         itineraryBean.setAccommodations(accommodations);
 
         System.out.println("-> Do you want to add in and out bound flights?\n");
-        System.out.println("1> Yes");
-        System.out.println("2> No");
 
-        String str_choice;
-        int choice = 0;
+        String response;
         while (true) {
-            System.out.print("Please enter your choice: ");
-            str_choice = input.nextLine();
-            if (!str_choice.isEmpty() && str_choice.matches("[1-2]")) {
-                choice = Integer.parseInt(str_choice);
+            response = input.nextLine();
+            if (response.equalsIgnoreCase(YES) || response.equalsIgnoreCase(NO)) {
                 break;
             }
             System.out.println("Invalid option");
         }
 
-        if (choice == 1) {
+        if (response.equalsIgnoreCase(YES)) {
 
             List flights = getFlightsInfo();
 
@@ -193,13 +162,13 @@ public class CreateItineraryCLIController {
             itineraryBean.setOutboundFlightDepartureTime((double) flights.get(2));
             itineraryBean.setOutboundFlightArrivalTime((double) flights.get(3));
 
-        } else if (choice != 2){
-            throw new RuntimeException("Invalid choice");
+        } else {
+            System.out.println("Invalid option");
         }
 
         new CreateItineraryController().createItinerary(itineraryBean,sessionId);
     }
-    
+
     private List<Double> getFlightsInfo() {
         double inDepartureTime,inArrivalTime,outDepartureTime,outArrivalTime;
         String str_inDepartureTime,str_inArrivalTime,str_outDepartureTime,str_outArrivalTime;
