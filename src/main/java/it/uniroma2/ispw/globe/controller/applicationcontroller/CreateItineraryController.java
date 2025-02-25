@@ -281,19 +281,19 @@ public class CreateItineraryController {
         double outArrivalTime = -1;
 
         Itinerary current = itinerary;
-        while (current instanceof ItineraryDecorator) {
-            if (current instanceof AccommodationDecorator) {
-                for (Accommodation accommodation : ((AccommodationDecorator) current).getAccommodations()) {
+        while (current instanceof ItineraryDecorator itineraryDecorator) {
+            if (current instanceof AccommodationDecorator accommodationDecorator) {
+                for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
                     accommodations.add(new Pair<>(accommodation.getName(), accommodation.getAddress()));
                 }
             }
-            if (current instanceof FlightDecorator) {
-                inDepartureTime = ((FlightDecorator) current).getInFlight().getDepartureTime();
-                inArrivalTime = ((FlightDecorator) current).getInFlight().getArrivalTime();
-                outDepartureTime = ((FlightDecorator) current).getOutFlight().getDepartureTime();
-                outArrivalTime = ((FlightDecorator) current).getOutFlight().getArrivalTime();
+            if (current instanceof FlightDecorator flightDecorator) {
+                inDepartureTime = flightDecorator.getInFlight().getDepartureTime();
+                inArrivalTime = flightDecorator.getInFlight().getArrivalTime();
+                outDepartureTime = flightDecorator.getOutFlight().getDepartureTime();
+                outArrivalTime = flightDecorator.getOutFlight().getArrivalTime();
             }
-            current = ((ItineraryDecorator) current).getItinerary();
+            current = itineraryDecorator.getItinerary();
         }
 
         return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), types, itinerary.getDaysNumber(),outDepartureTime,outArrivalTime,inDepartureTime,inArrivalTime,accommodations);

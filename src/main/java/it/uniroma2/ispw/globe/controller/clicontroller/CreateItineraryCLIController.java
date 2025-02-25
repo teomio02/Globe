@@ -21,8 +21,8 @@ public class CreateItineraryCLIController {
     private String sessionId;
     private String requestId;
 
-    private static String YES = "yes";
-    private static String NO = "no";
+    private static final String YES = "yes";
+    private static final String NO = "no";
 
     public CreateItineraryCLIController(String sessionId,String requestId) {
         this.sessionId = sessionId;
@@ -140,7 +140,6 @@ public class CreateItineraryCLIController {
 
         ItineraryBean itineraryBean = new ItineraryBean(null,name,description,types,day,cities,attractions);
 
-
         while (true) {
             System.out.println("-> Do you want to add some accommodations?\n");
             System.out.println("1> Yes");
@@ -166,6 +165,7 @@ public class CreateItineraryCLIController {
                 throw new RuntimeException("Invalid choice");
             }
         }
+
         itineraryBean.setAccommodations(accommodations);
 
         System.out.println("-> Do you want to add in and out bound flights?\n");
@@ -185,63 +185,71 @@ public class CreateItineraryCLIController {
         }
 
         if (choice == 1) {
-            double inDepartureTime,inArrivalTime,outDepartureTime,outArrivalTime;
-            String str_inDepartureTime,str_inArrivalTime,str_outDepartureTime,str_outArrivalTime;
 
-            while (true){
-                System.out.print("Please enter inbound departure time: ");
-                str_inDepartureTime = input.nextLine();
-                if (!str_inDepartureTime.isEmpty() && str_inDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                    inDepartureTime = Double.parseDouble(str_inDepartureTime);
-                    break;
-                } else {
-                    System.out.println("Invalid option");
-                }
-            }
+            List flights = getFlightsInfo();
 
-            while (true) {
-                System.out.print("Please enter inbound arrival time: ");
-                str_inArrivalTime = input.nextLine();
-                if (!str_inArrivalTime.isEmpty() && str_inArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                    inArrivalTime = Double.parseDouble(str_inArrivalTime);
-                    break;
-                } else {
-                    System.out.println("Invalid option");
-                }
-            }
-
-            while (true){
-                System.out.print("Please enter outbound departure time: ");
-                str_outDepartureTime = input.nextLine();
-                if (!str_outDepartureTime.isEmpty() && str_outDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                    outDepartureTime = Double.parseDouble(str_outDepartureTime);
-                    break;
-                } else {
-                    System.out.println("Invalid option");
-                }
-            }
-
-            while (true){
-                System.out.print("Please enter outbound arrival time: ");
-                str_outArrivalTime = input.nextLine();
-                if (!str_outArrivalTime.isEmpty() && str_outArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                   outArrivalTime = Double.parseDouble(str_outArrivalTime);
-                   break;
-                } else {
-                    System.out.println("Invalid option");
-                }
-            }
-
-            itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
-            itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
-            itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
-            itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
+            itineraryBean.setInboundFlightDepartureTime((double) flights.get(0));
+            itineraryBean.setInboundFlightArrivalTime((double) flights.get(1));
+            itineraryBean.setOutboundFlightDepartureTime((double) flights.get(2));
+            itineraryBean.setOutboundFlightArrivalTime((double) flights.get(3));
 
         } else if (choice != 2){
             throw new RuntimeException("Invalid choice");
         }
 
         new CreateItineraryController().createItinerary(itineraryBean,sessionId);
+    }
+    
+    private List<Double> getFlightsInfo() {
+        double inDepartureTime,inArrivalTime,outDepartureTime,outArrivalTime;
+        String str_inDepartureTime,str_inArrivalTime,str_outDepartureTime,str_outArrivalTime;
+
+        Scanner input = new Scanner(System.in);
+        while (true){
+            System.out.print("Please enter inbound departure time: ");
+            str_inDepartureTime = input.nextLine();
+            if (!str_inDepartureTime.isEmpty() && str_inDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                inDepartureTime = Double.parseDouble(str_inDepartureTime);
+                break;
+            } else {
+                System.out.println("Invalid option");
+            }
+        }
+
+        while (true) {
+            System.out.print("Please enter inbound arrival time: ");
+            str_inArrivalTime = input.nextLine();
+            if (!str_inArrivalTime.isEmpty() && str_inArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                inArrivalTime = Double.parseDouble(str_inArrivalTime);
+                break;
+            } else {
+                System.out.println("Invalid option");
+            }
+        }
+
+        while (true){
+            System.out.print("Please enter outbound departure time: ");
+            str_outDepartureTime = input.nextLine();
+            if (!str_outDepartureTime.isEmpty() && str_outDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                outDepartureTime = Double.parseDouble(str_outDepartureTime);
+                break;
+            } else {
+                System.out.println("Invalid option");
+            }
+        }
+
+        while (true){
+            System.out.print("Please enter outbound arrival time: ");
+            str_outArrivalTime = input.nextLine();
+            if (!str_outArrivalTime.isEmpty() && str_outArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                outArrivalTime = Double.parseDouble(str_outArrivalTime);
+                break;
+            } else {
+                System.out.println("Invalid option");
+            }
+        }
+
+        return List.of(inDepartureTime,inArrivalTime,outDepartureTime,outArrivalTime);
     }
 
     public String getCity() {
@@ -423,7 +431,5 @@ public class CreateItineraryCLIController {
         if (response.equalsIgnoreCase(YES)) {
             new CreateItineraryController().saveItinerary(sessionId);
         }
-        ManageItineraryCLIController controller = new ManageItineraryCLIController(sessionId);
-        controller.start();
     }
 }

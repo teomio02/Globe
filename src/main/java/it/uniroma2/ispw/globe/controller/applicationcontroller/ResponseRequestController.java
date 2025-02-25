@@ -50,10 +50,9 @@ public class ResponseRequestController {
 
         Proposal proposal = session.getPendingProposal();
         Itinerary itinerary = session.getPendingItinerary();
-        itineraryDao.addItinerary(itinerary,agency);
+        itineraryDao.addItinerary(itinerary, agency);
 
         proposal.setItinerary(session.getPendingItinerary());
-        System.out.println(proposal.getId()+" - "+proposal.getAgency().getUsername()+" - "+proposal.getUser().getUsername());
         proposalDao.addProposal(proposal);
 
         Request request = session.getPendingRequest();
@@ -63,19 +62,6 @@ public class ResponseRequestController {
         session.setPendingItinerary(null);
         session.setPendingProposal(null);
         session.setPendingRequest(null);
-    }
-
-    public void addItineraryToProposal(String sessionID) {
-//        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-//        ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-//
-//
-//        Proposal proposal = proposalDao.getProposal(proposalId);
-//        Itinerary itinerary = itineraryDao.getItinerary(itineraryId);
-//
-//        proposal.setItinerary(itinerary);
-
-
     }
 
     public ProposalBean getProposal(String proposalID, String sessionID) {
@@ -140,11 +126,6 @@ public class ResponseRequestController {
             requestBeans.add(requestBean);
         }
         return requestBeans;
-    }
-
-    public User getUser(String id) {
-
-        return new User();
     }
 
     public void setPendingRequest(String sessionID,String requestID) {
