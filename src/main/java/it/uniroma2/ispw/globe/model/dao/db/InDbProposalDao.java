@@ -41,7 +41,7 @@ public class InDbProposalDao extends ProposalDao {
                 stmt.setString(4, proposal.getDescription());
                 stmt.setString(5, proposal.getUser().getUsername());
                 stmt.setString(6, proposal.getAgency().getUsername());
-                stmt.setInt(7, Integer.parseInt(proposal.getAccepted()));
+                stmt.setString(7, proposal.getAccepted());
                 stmt.execute();
 
                 stmt = connection.prepareStatement(accountQuery);
@@ -96,9 +96,16 @@ public class InDbProposalDao extends ProposalDao {
 
                 proposal.setItinerary(itinerary);
 
+                User user;
+                Agency agency;
                 AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-                User user = (User) accountDao.getAccount(resultSet.getString("user"));
-                Agency agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
+                if (accountDao instanceof InDbAccountDao) {
+                    user = (User) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("user"));
+                    agency = (Agency) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("agency"));
+                } else {
+                    user = (User) accountDao.getAccount(resultSet.getString("user"));
+                    agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
+                }
 
                 proposal.setUser(user);
                 proposal.setAgency(agency);
@@ -113,7 +120,25 @@ public class InDbProposalDao extends ProposalDao {
     }
 
     @Override
-    public void removeProposal(String itineraryID) {
+    public void updateProposal(Proposal proposal) {
+        DBConnection connect = DBConnection.getInstance();
 
+        String query = "update Proposal set accepted = ? where id = ?";
+
+        PreparedStatement stmt = null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, proposal.getAccepted());
+            stmt.setString(2,proposal.getId());
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+        }
     }
 }

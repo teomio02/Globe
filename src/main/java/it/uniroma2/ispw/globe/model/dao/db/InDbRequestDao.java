@@ -86,6 +86,7 @@ public class InDbRequestDao extends RequestDao {
         String query = "select * from Request where id = ?";
         String cityQuery = "select * from requestCity where requestID = ?";
         String attractionQuery = "select * from requestAttraction where requestID = ?";
+        String typeQuery = "select * from requestType where requestID = ?";
 
 
         PreparedStatement stmt = null;
@@ -111,12 +112,28 @@ public class InDbRequestDao extends RequestDao {
                 request.setDescription(resultSet.getString("description"));
                 request.setDays(resultSet.getInt("days"));
 
+                User user;
+                Agency agency;
                 AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-                User user = (User) accountDao.getAccount(resultSet.getString("user"));
-                Agency agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
+                if (accountDao instanceof InDbAccountDao) {
+                    user = (User) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("user"));
+                    agency = (Agency) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("agency"));
+                } else {
+                    user = (User) accountDao.getAccount(resultSet.getString("user"));
+                    agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
+                }
 
                 request.setUser(user);
                 request.setAgency(agency);
+
+                List<String> types = new ArrayList<>();
+                stmt = connection.prepareStatement(typeQuery);
+                stmt.setString(1, requestId);
+                resultSet = stmt.executeQuery();
+                while (resultSet.next()) {
+                    types.add(resultSet.getString("type"));
+                }
+                request.setTypes(types);
 
                 List<City> cities = new ArrayList<>();
                 stmt = connection.prepareStatement(cityQuery);
@@ -150,7 +167,24 @@ public class InDbRequestDao extends RequestDao {
     }
 
     @Override
-    public void removeRequest(String requestId) {
+    public void updateRequest(Request request) {
+        DBConnection connect = DBConnection.getInstance();
 
+        String query = "update Proposal set accepted = ? where id = ?";
+
+        PreparedStatement stmt = null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, request.getAccepted());
+            stmt.setString(2, request.getId());
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+        }
     }
 }

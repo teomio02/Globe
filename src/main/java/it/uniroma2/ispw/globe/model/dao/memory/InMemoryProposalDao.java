@@ -44,7 +44,7 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public void removeProposal(String proposalID) {
+    public void updateProposal(Proposal proposal) {
 
     }
 }

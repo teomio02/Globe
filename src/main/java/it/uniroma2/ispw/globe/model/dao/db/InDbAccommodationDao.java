@@ -67,7 +67,7 @@ public class InDbAccommodationDao extends AccommodationDao {
             if (!resultSet.next()) {
                 System.out.println("No such accommodation");
             } else {
-
+                accommodation = new Accommodation();
                 accommodation.setId(resultSet.getString("id"));
                 accommodation.setName(resultSet.getString("name"));
                 accommodation.setAddress(resultSet.getString("address"));

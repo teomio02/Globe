@@ -189,4 +189,77 @@ public class InDbAccountDao extends AccountDao {
 
         return null;
     }
+
+    public Account getAccountPrimaryData(String username) {
+        DBConnection connect = DBConnection.getInstance();
+
+        String query = "select * from Account where username = ?";
+        String agencyTypeQuery = "select * from agencyType where agency = ?";
+
+
+        PreparedStatement stmt = null;
+        ResultSet resultSet= null;
+        ResultSet otherResultSet= null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, username);
+            resultSet = stmt.executeQuery();
+
+            if (!resultSet.next()) {
+                System.out.println("No such account");
+            } else {
+                List<String> types = new ArrayList<>();
+                stmt = connection.prepareStatement(agencyTypeQuery);
+
+                stmt.setString(1, username);
+                otherResultSet = stmt.executeQuery();
+
+                while (otherResultSet.next()) {
+                    types.add(otherResultSet.getString("type"));
+                }
+
+
+                if ((resultSet.getString("type")).equals(AGENCY)) {
+
+                    Agency agency = new Agency();
+                    agency.setUsername(resultSet.getString("username"));
+                    agency.setPassword(resultSet.getString("password"));
+                    agency.setType(resultSet.getString("type"));
+                    agency.setDescription(resultSet.getString("description"));
+                    agency.setPreferences(types);
+                    agency.setRating(resultSet.getDouble("rating"));
+
+                    System.out.println(agency.getType());
+
+                    return agency;
+
+                } else {
+
+                    User user = new User();
+                    user.setUsername(resultSet.getString("username"));
+                    user.setPassword(resultSet.getString("password"));
+                    user.setType(resultSet.getString("type"));
+
+                    System.out.println(user.getType());
+
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        return null;
+    }
 }

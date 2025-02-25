@@ -23,6 +23,7 @@ public class AcceptItineraryController {
         }
 
         proposal.setAccepted(response);
+        proposalDao.updateProposal(proposal);
 
         return paymentResult;
 

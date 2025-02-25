@@ -55,7 +55,7 @@ public class InMemoryRequestDao extends RequestDao {
     }
 
     @Override
-    public void removeRequest(String requestId) {
-        requests.remove(getRequest(requestId));
+    public void updateRequest(Request request) {
+
     }
 }
