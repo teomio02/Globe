@@ -1,17 +1,10 @@
 package it.uniroma2.ispw.globe.model.dao;
 
 import it.uniroma2.ispw.globe.model.*;
+import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.other.Persistence;
-<<<<<<< HEAD
-=======
 import it.uniroma2.ispw.globe.util.decorator.Request;
-
-import java.util.ArrayList;
-import java.util.List;
-import it.uniroma2.ispw.globe.other.Persistence;
-import org.w3c.dom.Attr;
->>>>>>> refs/remotes/origin/main
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +12,6 @@ import java.util.List;
 public abstract class RequestDao {
         public Request createAgencyRequest(String requestID,String userUsername,String agencyUsername,String isAccepted,String description,int days,List<String> citiesID,List<String> attractionsID,List<String> types) {
         //da cambiare
-        Request request = new Request();
-
         AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
         CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
         AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
@@ -34,11 +25,11 @@ public abstract class RequestDao {
         request.setUser(user);
         request.setAgency(agency);
         request.setAccepted(isAccepted);
-        request.setDescription(description);
-        request.setDays(days);
+        request.setOtherRequest(description);
+        request.setDayNum(days);
         request.setAttractions(new ArrayList<>());
         request.setCities(new ArrayList<>());
-        request.setTypes(types);
+        request.setItineraryType(types);
 
         for (String cityID : citiesID) {
             City city = cityDao.getCity(cityID);
@@ -54,7 +45,7 @@ public abstract class RequestDao {
         return request;
     }
 
-    public Request createUserRequest(String id, User user, Agency agency, boolean accepted, String otherRequest, int dayNum, List<String> citiesID, List<String> attractionsID, boolean flight, boolean accommodation, List<String> itineraryType) {
+    public Request createUserRequest(String id, User user, Agency agency, String accepted, String otherRequest, int dayNum, List<String> citiesID, List<String> attractionsID, boolean flight, boolean accommodation, List<String> itineraryType) {
 
         BaseRequest request = new BaseRequest();
 
@@ -89,7 +80,7 @@ public abstract class RequestDao {
         return request;
     }
 
-    public abstract void addAgencyRequest(AgencyRequestBean requestBean, User user, Agency agency);
+    public abstract void addAgencyRequest(Request request, User user, Agency agency);
     public abstract void addUserRequest(RequestBean requestBean, User user, Agency agency);
     public abstract Request getRequest(String requestId);
     public abstract void updateRequest(Request request);

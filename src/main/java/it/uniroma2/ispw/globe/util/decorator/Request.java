@@ -18,8 +18,8 @@ public abstract class Request {
     public abstract Agency getAgency();
     public abstract void setAgency(Agency agency);
 
-    public abstract Boolean getAccepted();
-    public abstract void setAccepted(Boolean accepted);
+    public abstract String getAccepted();
+    public abstract void setAccepted(String accepted);
 
     public abstract String getOtherRequest();
     public abstract void setOtherRequest(String otherRequest);

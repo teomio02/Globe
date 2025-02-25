@@ -6,6 +6,7 @@ import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

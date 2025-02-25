@@ -49,12 +49,12 @@ public class NatureRequestDecorator extends RequestDecorator {
     }
 
     @Override
-    public Boolean getAccepted() {
+    public String getAccepted() {
         return super.getAccepted();
     }
 
     @Override
-    public void setAccepted(Boolean accepted) {
+    public void setAccepted(String accepted) {
         super.setAccepted(accepted);
     }
 

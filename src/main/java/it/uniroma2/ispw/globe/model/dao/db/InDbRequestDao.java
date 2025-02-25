@@ -7,6 +7,7 @@ import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,8 +40,8 @@ public class InDbRequestDao extends RequestDao {
                 stmt.setString(2, request.getUser().getUsername());
                 stmt.setString(3, request.getAgency().getUsername());
                 stmt.setString(4, request.getAccepted());
-                stmt.setString(5, request.getDescription());
-                stmt.setInt(6, request.getDays());
+                stmt.setString(5, request.getOtherRequest());
+                stmt.setInt(6, request.getDayNum());
                 stmt.execute();
 
                 stmt = connection.prepareStatement(accountQuery);
@@ -105,12 +106,12 @@ public class InDbRequestDao extends RequestDao {
             if (!resultSet.next()) {
                 System.out.println("No such request");
             } else {
-                request = new Request();
+                request = new BaseRequest();
 
                 request.setId(resultSet.getString("id"));
                 request.setAccepted(resultSet.getString("accepted"));
-                request.setDescription(resultSet.getString("description"));
-                request.setDays(resultSet.getInt("days"));
+                request.setOtherRequest(resultSet.getString("description"));
+                request.setDayNum(resultSet.getInt("days"));
 
                 User user;
                 Agency agency;
@@ -133,7 +134,7 @@ public class InDbRequestDao extends RequestDao {
                 while (resultSet.next()) {
                     types.add(resultSet.getString("type"));
                 }
-                request.setTypes(types);
+                request.setItineraryType(types);
 
                 List<City> cities = new ArrayList<>();
                 stmt = connection.prepareStatement(cityQuery);
