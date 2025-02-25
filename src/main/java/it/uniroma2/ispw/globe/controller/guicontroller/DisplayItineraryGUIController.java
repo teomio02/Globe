@@ -154,19 +154,27 @@ public class DisplayItineraryGUIController {
             throw new RuntimeException(e);
         }
     }
-
     public void createProposal(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-        try {
-            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            loader.setControllerFactory(param -> new CreateProposalGUIController(sessionId,requestId));
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml",
+                new CreateProposalGUIController(sessionId, requestId));
     }
+
+
+//    public void createProposal(ActionEvent event) {
+//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+//
+//        try {
+//            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
+//            FXMLLoader loader = new FXMLLoader(url);
+//            CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestId);
+//            loader.setController(controller);
+//            root.setCenter(loader.load());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public void goBack(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
