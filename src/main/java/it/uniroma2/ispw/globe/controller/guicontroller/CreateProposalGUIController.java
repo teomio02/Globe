@@ -105,8 +105,7 @@ public class CreateProposalGUIController {
         try {
             URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,null,requestId,null);
-            loader.setController(controller);
+            loader.setControllerFactory(param -> new DisplayItineraryGUIController(sessionId, null, requestId, null));
             root.setCenter(loader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);

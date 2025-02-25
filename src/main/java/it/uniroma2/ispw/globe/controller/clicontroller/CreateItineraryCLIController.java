@@ -29,7 +29,7 @@ public class CreateItineraryCLIController {
     }
 
     private void getItineraryInfo() {
-        String name,str_day,description;
+        String name, strDay,description;
 
         int day;
 
@@ -54,9 +54,9 @@ public class CreateItineraryCLIController {
         while (true){
             System.out.print("Please enter Itinerary Duration: ");
 
-            str_day = input.nextLine();
-            if (!str_day.isEmpty() && str_day.matches("[1-99]")) {
-                day = Integer.parseInt(str_day);
+            strDay = input.nextLine();
+            if (!strDay.isEmpty() && strDay.matches("[1-99]")) {
+                day = Integer.parseInt(strDay);
                 break;
             }
             System.out.println("Invalid option");
@@ -74,7 +74,7 @@ public class CreateItineraryCLIController {
         while (true){
             System.out.println("-> Do you want to add city?\n");
 
-            boolean response = getResposne();
+            boolean response = getResponse();
 
             if (response) {
                 String cityID = getCity();
@@ -88,7 +88,7 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.println("-> Do you want to add attraction?\n");
-            boolean response = getResposne();
+            boolean response = getResponse();
 
             if (response) {
                 String attractionID = getAttraction();
@@ -106,7 +106,7 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.println("-> Do you want to add some accommodations?\n");
-            boolean response = getResposne();
+            boolean response = getResponse();
 
             if (response) {
                 accommodations.add(getAccommodation());
@@ -119,16 +119,16 @@ public class CreateItineraryCLIController {
 
         System.out.println("-> Do you want to add in and out bound flights?\n");
 
-        boolean response = getResposne();
+        boolean response = getResponse();
 
         if (response) {
 
-            List flights = getFlightsInfo();
+            List<Double> flights = getFlightsInfo();
 
-            itineraryBean.setInboundFlightDepartureTime((double) flights.get(0));
-            itineraryBean.setInboundFlightArrivalTime((double) flights.get(1));
-            itineraryBean.setOutboundFlightDepartureTime((double) flights.get(2));
-            itineraryBean.setOutboundFlightArrivalTime((double) flights.get(3));
+            itineraryBean.setInboundFlightDepartureTime(flights.get(0));
+            itineraryBean.setInboundFlightArrivalTime(flights.get(1));
+            itineraryBean.setOutboundFlightDepartureTime(flights.get(2));
+            itineraryBean.setOutboundFlightArrivalTime(flights.get(3));
 
         } else {
             System.out.println("Invalid option");
@@ -139,14 +139,14 @@ public class CreateItineraryCLIController {
 
     private List<Double> getFlightsInfo() {
         double inDepartureTime,inArrivalTime,outDepartureTime,outArrivalTime;
-        String str_inDepartureTime,str_inArrivalTime,str_outDepartureTime,str_outArrivalTime;
+        String strInDepartureTime, strInArrivalTime, strOutDepartureTime, strOutArrivalTime;
 
         Scanner input = new Scanner(System.in);
         while (true){
             System.out.print("Please enter inbound departure time: ");
-            str_inDepartureTime = input.nextLine();
-            if (!str_inDepartureTime.isEmpty() && str_inDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                inDepartureTime = Double.parseDouble(str_inDepartureTime);
+            strInDepartureTime = input.nextLine();
+            if (!strInDepartureTime.isEmpty() && strInDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                inDepartureTime = Double.parseDouble(strInDepartureTime);
                 break;
             } else {
                 System.out.println("Invalid option");
@@ -155,9 +155,9 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.print("Please enter inbound arrival time: ");
-            str_inArrivalTime = input.nextLine();
-            if (!str_inArrivalTime.isEmpty() && str_inArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                inArrivalTime = Double.parseDouble(str_inArrivalTime);
+            strInArrivalTime = input.nextLine();
+            if (!strInArrivalTime.isEmpty() && strInArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                inArrivalTime = Double.parseDouble(strInArrivalTime);
                 break;
             } else {
                 System.out.println("Invalid option");
@@ -166,9 +166,9 @@ public class CreateItineraryCLIController {
 
         while (true){
             System.out.print("Please enter outbound departure time: ");
-            str_outDepartureTime = input.nextLine();
-            if (!str_outDepartureTime.isEmpty() && str_outDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                outDepartureTime = Double.parseDouble(str_outDepartureTime);
+            strOutDepartureTime = input.nextLine();
+            if (!strOutDepartureTime.isEmpty() && strOutDepartureTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                outDepartureTime = Double.parseDouble(strOutDepartureTime);
                 break;
             } else {
                 System.out.println("Invalid option");
@@ -177,9 +177,9 @@ public class CreateItineraryCLIController {
 
         while (true){
             System.out.print("Please enter outbound arrival time: ");
-            str_outArrivalTime = input.nextLine();
-            if (!str_outArrivalTime.isEmpty() && str_outArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
-                outArrivalTime = Double.parseDouble(str_outArrivalTime);
+            strOutArrivalTime = input.nextLine();
+            if (!strOutArrivalTime.isEmpty() && strOutArrivalTime.matches("([01]\\d|2[0-3])[.][0-5]\\d")) {
+                outArrivalTime = Double.parseDouble(strOutArrivalTime);
                 break;
             } else {
                 System.out.println("Invalid option");
@@ -370,7 +370,7 @@ public class CreateItineraryCLIController {
         }
     }
 
-    public boolean getResposne(){
+    public boolean getResponse(){
         String response;
 
         Scanner input = new Scanner(System.in);
@@ -383,10 +383,6 @@ public class CreateItineraryCLIController {
             System.out.println("Invalid option");
         }
 
-        if (response.equalsIgnoreCase(YES)) {
-            return true;
-        } else {
-            return false;
-        }
+        return response.equalsIgnoreCase(YES);
     }
 }
