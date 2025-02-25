@@ -72,4 +72,29 @@ public class ClasseTest {
         Proposal proposal = proposalDao.createProposal("1", 99.99, "descrizione proposta di prova", itinerary, (User) account, agency);
         proposalDao.addProposal(proposal);
     }
+
+    public void creaAgenzie() {
+        LogInController controller = new LogInController();
+        CredentialsBean credentialsBean;
+        List<String> types;
+
+        types = new ArrayList<>();
+        types.add("nature");
+        types.add("onTheRoad");
+        credentialsBean = new CredentialsBean("a1", "a1", AGENCY, "description1",types);
+
+        controller.signIn(credentialsBean);
+
+        types = new ArrayList<>();
+        types.add("nature");
+        credentialsBean = new CredentialsBean("a2", "a2", AGENCY, "description2",types);
+
+        controller.signIn(credentialsBean);
+
+        types = new ArrayList<>();
+        types.add("onTheRoad");
+        credentialsBean = new CredentialsBean("a3", "a3", AGENCY, "description3",types);
+
+        controller.signIn(credentialsBean);
+    }
 }

@@ -1,131 +1,129 @@
-package it.uniroma2.ispw.globe.util.decorator;
+package it.uniroma2.ispw.globe.model;
 
-import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Attraction;
-import it.uniroma2.ispw.globe.model.City;
-import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.List;
 
-public class NatureRequestDecorator extends RequestDecorator {
-
-    //attributi
-
-    public NatureRequestDecorator(Request request) {
-        super(request);
-    }
-
-    //get set attributi
+public class BaseRequest extends Request {
+    private String id;
+    private User user;
+    private Agency agency;
+    private Boolean accepted;
+    private String otherRequest;
+    private Boolean flightRequest;
+    private Boolean accommodationRequest;
+    private int dayNum;
+    private List<City> cities;
+    private List<Attraction> attractions;
+    private List<String> itineraryType;
 
     @Override
     public String getId() {
-        return super.getId();
+        return id;
     }
 
     @Override
     public void setId(String id) {
-        super.setId(id);
+        this.id = id;
     }
 
     @Override
     public User getUser() {
-        return super.getUser();
+        return user;
     }
 
     @Override
     public void setUser(User user) {
-        super.setUser(user);
+        this.user = user;
     }
 
     @Override
     public Agency getAgency() {
-        return super.getAgency();
+        return agency;
     }
 
     @Override
     public void setAgency(Agency agency) {
-        super.setAgency(agency);
+        this.agency = agency;
     }
 
     @Override
     public Boolean getAccepted() {
-        return super.getAccepted();
+        return accepted;
     }
 
     @Override
     public void setAccepted(Boolean accepted) {
-        super.setAccepted(accepted);
+        this.accepted = accepted;
     }
 
     @Override
     public String getOtherRequest() {
-        return super.getOtherRequest();
+        return otherRequest;
     }
 
     @Override
     public void setOtherRequest(String otherRequest) {
-        super.setOtherRequest(otherRequest);
+        this.otherRequest = otherRequest;
     }
 
     @Override
     public Boolean getFlightRequest() {
-        return super.getFlightRequest();
+        return flightRequest;
     }
 
     @Override
     public void setFlightRequest(Boolean flightRequest) {
-        super.setFlightRequest(flightRequest);
+        this.flightRequest = flightRequest;
     }
 
     @Override
     public Boolean getAccommodationRequest() {
-        return super.getAccommodationRequest();
+        return accommodationRequest;
     }
 
     @Override
     public void setAccommodationRequest(Boolean accommodationRequest) {
-        super.setAccommodationRequest(accommodationRequest);
+        this.accommodationRequest = accommodationRequest;
     }
 
     @Override
     public int getDayNum() {
-        return super.getDayNum();
+        return dayNum;
     }
 
     @Override
     public void setDayNum(int dayNum) {
-        super.setDayNum(dayNum);
+        this.dayNum = dayNum;
     }
 
     @Override
     public List<City> getCities() {
-        return super.getCities();
+        return cities;
     }
 
     @Override
     public void setCities(List<City> cities) {
-        super.setCities(cities);
+        this.cities = cities;
     }
 
     @Override
     public List<Attraction> getAttractions() {
-        return super.getAttractions();
+        return attractions;
     }
 
     @Override
     public void setAttractions(List<Attraction> attractions) {
-        super.setAttractions(attractions);
+        this.attractions = attractions;
     }
 
     @Override
     public List<String> getItineraryType() {
-        return super.getItineraryType();
+        return itineraryType;
     }
 
     @Override
     public void setItineraryType(List<String> itineraryType) {
-        super.setItineraryType(itineraryType);
+        this.itineraryType = itineraryType;
     }
-
 }

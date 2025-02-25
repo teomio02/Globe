@@ -2,6 +2,9 @@ package it.uniroma2.ispw.globe.other.session;
 
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.util.decorator.Request;
+
+import java.util.List;
 
 public class Session {
     private String id;
@@ -9,7 +12,7 @@ public class Session {
     private Itinerary pendingItinerary;
     private Proposal pendingProposal;
     private Request pendingRequest;
-
+    private List<Agency> pendingAgencies;
     //prova
     private Itinerary tryItinerary;
 
@@ -55,6 +58,14 @@ public class Session {
 
     public void setPendingRequest(Request pendingRequest) {
         this.pendingRequest = pendingRequest;
+    }
+
+    public List<Agency> getPendingAgencies() {
+        return pendingAgencies;
+    }
+
+    public void setPendingAgencies(List<Agency> pendingAgencies) {
+        this.pendingAgencies = pendingAgencies;
     }
 
     //prova

@@ -24,6 +24,7 @@ public class GlobeApplicationGUI extends Application {
             stage.getIcons().add(icon);
         }
 
+        new ClasseTest().creaAgenzie();
         LogInGUIController controller = new LogInGUIController();
         fxmlLoader.setController(controller);
 
