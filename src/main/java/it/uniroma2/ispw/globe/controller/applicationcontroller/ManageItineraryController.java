@@ -10,10 +10,6 @@ import java.util.*;
 
 public class ManageItineraryController {
 
-    public void removeItinerary(ItineraryBean itineraryBean, UserBean userBean) {/*-*/}
-
-    public void editItinerary(ItineraryBean itineraryBean, UserBean userBean) {/*-*/}
-
     public ProposalBean getProposal(String proposalID, String sessionID) {
         Proposal proposal;
 

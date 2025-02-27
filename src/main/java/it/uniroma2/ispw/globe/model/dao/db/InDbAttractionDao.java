@@ -1,20 +1,13 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.model.Attraction;
-import it.uniroma2.ispw.globe.model.City;
-import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
-import it.uniroma2.ispw.globe.model.dao.CityDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class InDbAttractionDao extends AttractionDao {
 

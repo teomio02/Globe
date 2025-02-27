@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
-import static it.uniroma2.ispw.globe.other.UserType.USER;
 
 public class InDbAccountDao extends AccountDao {
 

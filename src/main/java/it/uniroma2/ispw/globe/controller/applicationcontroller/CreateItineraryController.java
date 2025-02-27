@@ -213,7 +213,7 @@ public class CreateItineraryController {
 
     public List<JsonObject> getPlaces(String name, String type) {
         NominatimAPIClient api = new NominatimAPIClient();
-        List<JsonObject> apiPlaces = null;
+        List<JsonObject> apiPlaces;
         try {
             apiPlaces = api.getPlaces(name,type);
         } catch (IOException e) {

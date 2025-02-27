@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.decorator.Request;

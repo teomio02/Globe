@@ -4,7 +4,6 @@ import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.User;
-import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.List;
 

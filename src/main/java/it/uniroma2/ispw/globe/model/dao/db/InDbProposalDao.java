@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Flight;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;

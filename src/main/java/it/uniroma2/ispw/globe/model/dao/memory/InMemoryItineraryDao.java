@@ -7,7 +7,6 @@ import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class InMemoryItineraryDao extends ItineraryDao {
 

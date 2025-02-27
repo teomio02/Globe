@@ -1,9 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
 import it.uniroma2.ispw.globe.model.Accommodation;
-import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.dao.AccommodationDao;
-import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 
 import java.util.ArrayList;
 import java.util.List;

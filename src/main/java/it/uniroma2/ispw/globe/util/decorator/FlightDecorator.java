@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.util.decorator;
 
-import it.uniroma2.ispw.globe.model.Accommodation;
 import it.uniroma2.ispw.globe.model.Day;
 import it.uniroma2.ispw.globe.model.Flight;
 

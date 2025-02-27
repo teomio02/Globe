@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.util.DBConnection;

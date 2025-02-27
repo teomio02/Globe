@@ -1,19 +1,13 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.model.Accommodation;
-import it.uniroma2.ispw.globe.model.Account;
-import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.Flight;
-import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccommodationDao;
-import it.uniroma2.ispw.globe.model.dao.AccountDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public class InDbAccommodationDao extends AccommodationDao {
 

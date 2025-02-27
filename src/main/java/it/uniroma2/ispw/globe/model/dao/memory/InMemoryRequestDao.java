@@ -1,10 +1,8 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.BaseRequest;
 import it.uniroma2.ispw.globe.util.decorator.Request;
 import it.uniroma2.ispw.globe.model.User;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.RequestDao;
 

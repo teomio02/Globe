@@ -1,12 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao;
 
-import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
-import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.Flight;
-import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public abstract class FlightDao {

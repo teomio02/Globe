@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.other.session;
 
 import it.uniroma2.ispw.globe.model.Account;
-import it.uniroma2.ispw.globe.model.User;
 
 import java.util.HashMap;
 import java.util.Map;

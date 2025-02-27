@@ -4,29 +4,22 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryCo
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.view.DayTab;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import okhttp3.Response;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;

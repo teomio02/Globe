@@ -3,8 +3,6 @@ package it.uniroma2.ispw.globe.model.dao;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.Day;
-import it.uniroma2.ispw.globe.model.dao.memory.InMemoryAttractionDao;
-import it.uniroma2.ispw.globe.model.dao.memory.InMemoryCityDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 
 import java.util.ArrayList;

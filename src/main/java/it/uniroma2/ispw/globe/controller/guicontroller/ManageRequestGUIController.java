@@ -1,27 +1,17 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
-import it.uniroma2.ispw.globe.model.bean.RequestBean;
-import it.uniroma2.ispw.globe.model.dao.AccountDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.other.Persistence;
-import it.uniroma2.ispw.globe.other.session.Session;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;

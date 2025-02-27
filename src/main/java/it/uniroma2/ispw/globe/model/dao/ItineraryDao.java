@@ -3,14 +3,11 @@ package it.uniroma2.ispw.globe.model.dao;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.BaseItinerary;
 import it.uniroma2.ispw.globe.model.Day;
-import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class ItineraryDao {
     public BaseItinerary createItinerary(String id, String name, String description, List<String> citiesID, List<String> attractionsID, int duration) {
