@@ -142,7 +142,7 @@ public class InDbAccountDao extends AccountDao {
                     agency.setPreferences(types);
                     agency.setRating(resultSet.getDouble("rating"));
 
-                    System.out.println(agency.getType());
+                    System.out.println(agency.getType()+" - "+agency.getUsername());
 
                     return agency;
 
@@ -156,7 +156,7 @@ public class InDbAccountDao extends AccountDao {
                     user.setItineraries(itineraries);
                     user.setRequests(requests);
 
-                    System.out.println(user.getType());
+                    System.out.println(user.getType()+" - "+user.getUsername());
 
                     return user;
                 }

@@ -99,7 +99,7 @@ public class ManageRequestGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, null, proposalID);
+            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, null, proposalID, root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
@@ -117,7 +117,7 @@ public class ManageRequestGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,requestID);
+            DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,requestID,root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {

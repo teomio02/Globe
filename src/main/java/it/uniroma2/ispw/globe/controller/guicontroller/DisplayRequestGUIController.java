@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -26,12 +28,12 @@ public class DisplayRequestGUIController {
 
     private String sessionId;
     private String requestId;
+    private Node prev;
 
-    public DisplayRequestGUIController(String sessionId, String requestId) {
+    public DisplayRequestGUIController(String sessionId, String requestId, Node prev) {
         this.sessionId = sessionId;
         this.requestId = requestId;
-
-        System.out.println("\nDisplayRequestGUIController\n"+"itineraryID: /"+"\nrequestID: "+requestId+"\nproposalID: /");
+        this.prev = prev;
     }
 
     public void initialize() {
@@ -59,7 +61,7 @@ public class DisplayRequestGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,requestId);
+            CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,requestId,root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
@@ -68,17 +70,24 @@ public class DisplayRequestGUIController {
     }
 
     public void goBack(ActionEvent event) {
-        URL url;
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (prev != null) {
+            root.setCenter(prev);
         }
     }
+
+//    public void goBack(ActionEvent event) {
+//        URL url;
+//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+//
+//        try {
+//            url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
+//            FXMLLoader loader = new FXMLLoader(url);
+//            ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
+//            loader.setController(controller);
+//            root.setCenter(loader.load());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

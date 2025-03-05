@@ -42,12 +42,13 @@ public class DisplayProposalGUIController {
     private String sessionId;
     private String requestID;
     private String proposalID;
+    private Node prev;
 
-    public DisplayProposalGUIController(String sessionId, String requestID, String proposalID) {
+    public DisplayProposalGUIController(String sessionId, String requestID, String proposalID, Node prev) {
         this.sessionId = sessionId;
         this.requestID = requestID;
         this.proposalID = proposalID; //differenzia tra utente e agenzia
-        System.out.println("\nDisplayProposalGUIController\n"+"itineraryID: /"+"\nrequestID: "+requestID+"\nproposalID: "+proposalID);
+        this.prev = prev;
     }
 
     public void initialize() {
@@ -82,7 +83,7 @@ public class DisplayProposalGUIController {
         try {
             URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId,requestID,proposalID);
+            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId,requestID,proposalID,root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
@@ -139,36 +140,43 @@ public class DisplayProposalGUIController {
         }
     }
 
-    public void goBack (ActionEvent event) {
-        URL url;
+    public void goBack(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        FXMLLoader loader;
-        String type = new ManageItineraryController().getAccountType(sessionId);
-
-        try {
-            if (requestID != null) {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
-                loader = new FXMLLoader(url);
-                CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestID);
-                loader.setController(controller);
-            } else {
-                if (type.equals(AGENCY)) {
-                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
-                    loader = new FXMLLoader(url);
-                    ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
-                    loader.setController(controller);
-                } else {
-                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-                    loader = new FXMLLoader(url);
-                    ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-                    loader.setController(controller);
-                }
-            }
-
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (prev != null) {
+            root.setCenter(prev);
         }
     }
+
+//    public void goBack (ActionEvent event) {
+//        URL url;
+//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+//        FXMLLoader loader;
+//        String type = new ManageItineraryController().getAccountType(sessionId);
+//
+//        try {
+//            if (requestID != null) {
+//                url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
+//                loader = new FXMLLoader(url);
+//                CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestID);
+//                loader.setController(controller);
+//            } else {
+//                if (type.equals(AGENCY)) {
+//                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
+//                    loader = new FXMLLoader(url);
+//                    ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
+//                    loader.setController(controller);
+//                } else {
+//                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
+//                    loader = new FXMLLoader(url);
+//                    ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
+//                    loader.setController(controller);
+//                }
+//            }
+//
+//            root.setCenter(loader.load());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 }

@@ -39,10 +39,12 @@ public class CreateProposalGUIController {
     private String sessionId;
     private String requestId;
 
-    public CreateProposalGUIController(String sessionId,String requestId) {
+    private Node prev;
+
+    public CreateProposalGUIController(String sessionId,String requestId,Node prev) {
         this.requestId = requestId;
         this.sessionId = sessionId;
-        System.out.println("\nCreateProposalGUIController\n"+"itineraryID: /"+"\nrequestID: "+requestId+"\nproposalID: /");
+        this.prev = prev;
     }
 
     public void initialize() {
@@ -86,7 +88,7 @@ public class CreateProposalGUIController {
         try {
             URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId,requestId,null);
+            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId,requestId,null, root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
@@ -96,10 +98,17 @@ public class CreateProposalGUIController {
 
     public void goBack(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml",
-                new DisplayItineraryGUIController(sessionId, null, requestId, null));
+        if (prev != null) {
+            root.setCenter(prev);
+        }
     }
+
+//    public void goBack(ActionEvent event) {
+//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+//        NavigationGUIController nav = new NavigationGUIController(root);
+//        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml",
+//                new DisplayItineraryGUIController(sessionId, null, requestId, null));
+//    }
 
 
 //    public void goBack(ActionEvent event) {

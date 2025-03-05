@@ -9,8 +9,6 @@ import it.uniroma2.ispw.globe.model.dao.memory.InMemoryAccountDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 
-import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
-
 public class LogInController{
 
     private static final String GUEST = "guest";
@@ -33,15 +31,15 @@ public class LogInController{
         } else {
             accountDao.addAccount(credentials);
 
-            //test
-            Account account = accountDao.getAccount(credentials.getUsername());
-            if (account.getType().equals(AGENCY)) {
-                System.out.println("creating request");
-                new ClasseTest().creaRichiesta(account);
-            } else {
-                //new ClasseTest().creaProposta(account);
-            }
-            //----
+//            //test
+//            Account account = accountDao.getAccount(credentials.getUsername());
+//            if (account.getType().equals(AGENCY)) {
+//                System.out.println("creating request");
+//                new ClasseTest().creaRichiesta(account);
+//            } else {
+//                //new ClasseTest().creaProposta(account);
+//            }
+//            //----
 
             return true;
         }

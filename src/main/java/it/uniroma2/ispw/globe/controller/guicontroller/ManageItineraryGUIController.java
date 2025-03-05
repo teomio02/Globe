@@ -96,7 +96,7 @@ public class ManageItineraryGUIController {
         try {
             URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId,null,null);
+            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId,null,null,root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
@@ -112,7 +112,7 @@ public class ManageItineraryGUIController {
         try {
             URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, null, proposalId);
+            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, null, proposalId,root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
@@ -131,7 +131,7 @@ public class ManageItineraryGUIController {
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
-            CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,null);
+            CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionId,null, root.getCenter());
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
