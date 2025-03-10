@@ -87,8 +87,6 @@ public class DisplayItineraryGUIController {
             }
             cityLabel.setText(city.getName()+", "+city.getCountry());
 
-            Label accommodationLabel = (Label) cityBox.getChildren().get(3);
-
             int i = 0;
             for (String attractionID : step.getAttractions()) {
                 AttractionBean attraction;

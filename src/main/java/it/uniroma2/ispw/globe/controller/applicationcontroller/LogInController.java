@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
-import it.uniroma2.ispw.globe.ClasseTest;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
@@ -30,16 +29,6 @@ public class LogInController{
             return false;
         } else {
             accountDao.addAccount(credentials);
-
-//            //test
-//            Account account = accountDao.getAccount(credentials.getUsername());
-//            if (account.getType().equals(AGENCY)) {
-//                System.out.println("creating request");
-//                new ClasseTest().creaRichiesta(account);
-//            } else {
-//                //new ClasseTest().creaProposta(account);
-//            }
-//            //----
 
             return true;
         }

@@ -17,7 +17,6 @@ public class InDbAttractionDao extends AttractionDao {
 
         if (getAttraction(attraction.getPlaceID()) != null) {
             System.out.println("Attraction already exists");
-            return;
         } else {
             String query = "insert into Attraction (placeID,name,city,address,latitude,longitude) values (?,?,?,?,?,?)";
 

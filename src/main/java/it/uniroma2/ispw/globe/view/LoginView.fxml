@@ -98,5 +98,6 @@
             <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
          </image>
       </ImageView>
+      <ProgressBar fx:id="progressBar" layoutX="225.0" layoutY="571.0" prefWidth="200.0" progress="0.35" stylesheets="@../css/itinerary.css" visible="false" />
    </children>
 </AnchorPane>

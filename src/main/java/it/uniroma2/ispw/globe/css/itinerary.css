@@ -69,3 +69,13 @@
 .itinerary-button {
     -fx-background-color:  transparent;
 }
+
+/* Progress Bar */
+.progress-bar .bar{
+    -fx-background-color: #314c1c;
+    -fx-background-radius: 40px;
+}
+.progress-bar .track{
+    -fx-background-color: #97c093;
+    -fx-background-radius: 40px;
+}

@@ -85,7 +85,6 @@ public class CreateItineraryGUIController {
         this.sessionId = sessionId;
         this.requestId = requestId;
         this.prev = prev;
-        System.out.println("\nCreateItineraryGUIController\n"+"itineraryID: /"+"\nrequestID: "+requestId+"\nproposalID: /");
     }
 
     public void initialize() {
