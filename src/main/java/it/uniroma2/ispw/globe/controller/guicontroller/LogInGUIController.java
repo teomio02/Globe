@@ -73,6 +73,8 @@ public class LogInGUIController {
         progressBar.setVisible(true);
         progressBar.setProgress(0);
 
+        //aggiungi meccanismo progress bar
+
         Button clickedButton = (Button) event.getSource();
         CredentialsBean credentials;
 
