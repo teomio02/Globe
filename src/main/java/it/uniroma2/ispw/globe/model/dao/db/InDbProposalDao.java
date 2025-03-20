@@ -99,6 +99,7 @@ public class InDbProposalDao extends ProposalDao {
                 Agency agency;
                 AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
                 if (accountDao instanceof InDbAccountDao) {
+                    System.out.println("Using In-Db account, proposal: "+ id);
                     user = (User) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("user"));
                     agency = (Agency) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("agency"));
                 } else {

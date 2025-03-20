@@ -20,14 +20,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/itinerary.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
          <image>
             <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
          </image>
       </ImageView>
-      <VBox layoutX="10.0" layoutY="10.0" prefHeight="630.0" prefWidth="640.0" spacing="30.0">
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="630.0" prefWidth="662.0" spacing="30.0">
          <children>
             <HBox prefHeight="63.0" prefWidth="279.0">
                <children>
@@ -66,18 +66,13 @@
                   </Text>
                </children>
             </HBox>
-            <TabPane prefHeight="554.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" tabClosingPolicy="UNAVAILABLE">
+            <TabPane focusTraversable="false" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/ManageTabPane.css" tabClosingPolicy="UNAVAILABLE">
               <tabs>
-                <Tab text="My Itinerary">
+                <Tab closable="false" text="My Itinerary">
                      <content>
-                        <VBox prefHeight="110.0" prefWidth="640.0" style="-fx-background-color: #314c1c;">
+                        <VBox maxHeight="1000.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
                            <children>
-                              <ScrollPane hbarPolicy="NEVER" prefHeight="446.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
-                                 <content>
-                                    <VBox fx:id="itinerariesVBox" prefHeight="446.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
-                                 </content>
-                              </ScrollPane>
-                              <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                              <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 30;" textFill="#314c1c">
                                  <font>
                                     <Font name="Arial Bold" size="1.0" />
                                  </font>
@@ -88,26 +83,48 @@
                                        </image>
                                     </ImageView>
                                  </graphic>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
                               </Button>
-                           </children>
-                        </VBox>
-                     </content>
-                  </Tab>
-                  <Tab text="Agency Proposal">
-                     <content>
-                        <VBox prefHeight="110.0" prefWidth="640.0" style="-fx-background-color: #314c1c;">
-                           <children>
-                              <ScrollPane hbarPolicy="NEVER" prefHeight="446.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1000.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="proposalsVBox" prefHeight="446.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
+                                    <VBox fx:id="itinerariesVBox" alignment="TOP_RIGHT" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;">
+                                       <padding>
+                                          <Insets bottom="20.0" />
+                                       </padding>
+                                    </VBox>
                                  </content>
                               </ScrollPane>
                            </children>
+                           <padding>
+                              <Insets bottom="25.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </Tab>
+                  <Tab closable="false" text="Agency Proposal">
+                     <content>
+                        <VBox maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
+                           <children>
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
+                                 <content>
+                                    <VBox fx:id="proposalsVBox" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
                         </VBox>
                      </content>
                   </Tab>
               </tabs>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
             </TabPane>
+            <VBox alignment="CENTER" prefWidth="100.0" style="-fx-background-color: #97c093; -fx-background-radius: 30;" />
             <HBox alignment="CENTER_RIGHT" spacing="30.0" />
          </children>
       </VBox>

@@ -1,8 +1,10 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
+import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
+import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,10 +47,10 @@ public class InDbAttractionDao extends AttractionDao {
     public Attraction getAttraction(String attractionID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select placeID from Attraction where placeID = ?";
+        String query = "select * from Attraction where placeID = ?";
 
         PreparedStatement stmt = null;
-        ResultSet resultSet = null;
+        ResultSet rs = null;
 
         Attraction attraction = null;
 
@@ -58,17 +60,32 @@ public class InDbAttractionDao extends AttractionDao {
 
             stmt.setString(1, attractionID);
 
-            resultSet = stmt.executeQuery();
+            rs = stmt.executeQuery();
 
-            if (!resultSet.next()) {
+            if (!rs.next()) {
                 System.out.println("No such attraction");
             } else {
-                attraction = createAttraction(attractionID);
+                JsonObject json = new JsonObject();
+
+                json.addProperty("osm_type", rs.getString("placeID").substring(0,1));
+                json.addProperty("osm_id", rs.getString("placeID").substring(1));
+
+                json.addProperty("name", rs.getString("name"));
+                json.addProperty("lat", String.valueOf(rs.getDouble("latitude")));
+                json.addProperty("lon", String.valueOf(rs.getDouble("longitude")));
+
+                JsonObject address = new JsonObject();
+                address.addProperty("city", rs.getString("city"));
+                address.addProperty("road", rs.getString("address"));
+
+                json.add("address", address);
+
+                attraction = new PlaceAdapter(json);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            DBConnection.getInstance().closeConnection(stmt,resultSet);
+            DBConnection.getInstance().closeConnection(stmt, rs);
         }
 
         return attraction;

@@ -41,8 +41,6 @@ public class LogInGUIController {
     private Label yesLabel;
     @FXML
     private Label noLabel;
-    @FXML
-    private ProgressBar progressBar;
 
     private void initialize() {}
 
@@ -70,10 +68,6 @@ public class LogInGUIController {
         // da mettere limite massimo di caratteri per password e username (nella guest è a 12)
 
         errorLabel.setVisible(false);
-        progressBar.setVisible(true);
-        progressBar.setProgress(0);
-
-        //aggiungi meccanismo progress bar
 
         Button clickedButton = (Button) event.getSource();
         CredentialsBean credentials;
@@ -81,7 +75,6 @@ public class LogInGUIController {
         if (clickedButton == loginButton) {
             if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                 errorLabel.setVisible(true);
-                progressBar.setVisible(false); 
                 return;
             } else {
                 credentials = new CredentialsBean(usernameField.getText(), passwordField.getText());
@@ -121,11 +114,6 @@ public class LogInGUIController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-            // ---------------------------------------------------------------
-            System.out.println("SessionId: " + sessionId);
-            System.out.println("User: " +credentials.getUsername()+" - "+type);
-            // ---------------------------------------------------------------
 
             Scene scene = new Scene(root);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

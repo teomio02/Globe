@@ -6,15 +6,11 @@ import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.StepBean;
-import it.uniroma2.ispw.globe.view.DayTab;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -67,45 +63,53 @@ public class DisplayItineraryGUIController {
         nameLabel.setText(itinerary.getName());
         descriptionLabel.setText(itinerary.getDescription());
         dayLabel.setText(String.valueOf(itinerary.getDuration()));
-        DayTab dayTab = new DayTab();
-        int day = 0;
+
+        int day = 1;
         for (StepBean step : steps) {
-            dayTab.setViewTab(daysTabPane, step.getAttractions().size());
-            Tab tab = daysTabPane.getTabs().get(day);
-
-            VBox vbox = (VBox) tab.getContent();
-            HBox cityBox = (HBox) vbox.getChildren().get(0);
-            VBox attractionBox = (VBox) vbox.getChildren().get(1);
-
-            Label cityLabel = (Label) cityBox.getChildren().get(1);
-            CityBean city;
-            if (itineraryId == null) {
-                //pending itinerary
-                city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),sessionId);
-            } else {
-                city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
+            Tab tab = new Tab(String.valueOf(day));
+            URL url;
+            VBox dayVBox;
+            try {
+                url = new File("src/main/java/it/uniroma2/ispw/globe/view/DayTab.fxml").toURI().toURL();
+                FXMLLoader loader = new FXMLLoader(url);
+                dayVBox = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
+            ScrollPane scrollPane = (ScrollPane) dayVBox.lookup("#scrollPane");
+            VBox attractionVBox = (VBox) scrollPane.getContent();
+            Label cityLabel = (Label) dayVBox.lookup("#cityLabel");
+            CityBean city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
             cityLabel.setText(city.getName()+", "+city.getCountry());
-
-            int i = 0;
             for (String attractionID : step.getAttractions()) {
-                AttractionBean attraction;
-                if (itineraryId == null) {
-                    attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,sessionId);
-                } else {
-                    attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,null);
+                HBox attractionHBox;
+                try {
+                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/AttractionHBox.fxml").toURI().toURL();
+                    FXMLLoader loader = new FXMLLoader(url);
+                    attractionHBox = loader.load();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-                Label label = (Label) attractionBox.getChildren().get(i);
-                label.setText(attraction.getName()+" - "+attraction.getCity()+", "+attraction.getAddress());
-                i++;
+                AttractionBean attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,null);
+                Label attractionLabel = (Label) attractionHBox.lookup("#attractionLabel");
+                Label addressLabel = (Label) attractionHBox.lookup("#addressLabel");
+                attractionLabel.setText(attraction.getName());
+                addressLabel.setText(attraction.getCity()+", "+attraction.getAddress());
+                attractionVBox.getChildren().add(attractionHBox);
             }
+            tab.setContent(dayVBox);
+            daysTabPane.getTabs().add(tab);
             day++;
         }
+
+
         if (!itinerary.getAccommodations().isEmpty()) {
             accommodationVBox.setVisible(true);
             for (int i = 0; i < itinerary.getAccommodations().size(); i++) {
                 Pair<String,String> accommodation = itinerary.getAccommodations().get(i);
-                accommodationVBox.getChildren().add(new Label((i+1)+": "+accommodation.getKey()+", "+accommodation.getValue()));
+                Label accommmodationLabel = new Label((i+1)+": "+accommodation.getKey()+", "+accommodation.getValue());
+                accommmodationLabel.getStyleClass().add("label-light");
+                accommodationVBox.getChildren().add(accommmodationLabel);
             }
         }
         if (itinerary.getInboundFlightDepartureTime() != -1) {

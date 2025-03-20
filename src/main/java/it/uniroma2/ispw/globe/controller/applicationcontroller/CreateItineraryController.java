@@ -308,6 +308,9 @@ public class CreateItineraryController {
             }
         } else {
             city = cityDao.getCity(cityID);
+            if (city == null) {
+                city = cityDao.createCity(cityID);
+            }
         }
 
         if (city != null) {
@@ -330,6 +333,9 @@ public class CreateItineraryController {
             }
         } else {
             attraction = attractionDao.getAttraction(attractionID);
+            if (attraction == null) {
+                attraction = attractionDao.createAttraction(attractionID);
+            }
         }
 
         if (attraction != null) {

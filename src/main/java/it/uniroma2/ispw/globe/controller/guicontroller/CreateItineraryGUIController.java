@@ -76,6 +76,7 @@ public class CreateItineraryGUIController {
     private VBox accommodationResultVBox;
 
 
+
     private String sessionId;
     private String requestId;
 
@@ -90,33 +91,33 @@ public class CreateItineraryGUIController {
     public void initialize() {
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
-
-
-        //aggiungi popola accommodatio e flight se presente
-
-        ItineraryBean itineraryBean = new CreateItineraryController().getItinerary(null,sessionId);
-        if (itineraryBean != null) {
-            List<StepBean> steps = new CreateItineraryController().getSteps(null,sessionId);
-            itineraryField.setText(itineraryBean.getName());
-            dayField.setText(String.valueOf(itineraryBean.getDuration()));
-            descriptionField.setText(itineraryBean.getDescription());
-            for (StepBean step : steps) {
-                for (String cityID : step.getCity()) {
-                    CityBean city = new CreateItineraryController().getCity(0,cityID,null);
-
-                    Label cityLabel = new Label(city.getName());
-                    cityLabel.setUserData(city.getId());
-                    cityVBox.getChildren().add(cityLabel);
-                }
-                for (String attractionID : step.getAttractions()) {
-                    AttractionBean attraction = new CreateItineraryController().getAttraction(0,attractionID,null);
-
-                    Label attractionLabel = new Label(attraction.getName());
-                    attractionLabel.setUserData(attraction.getId());
-                    attractionVBox.getChildren().add(attractionLabel);
-                }
-            }
-        }
+//
+//
+//        //aggiungi popola accommodatio e flight se presente
+//
+//        ItineraryBean itineraryBean = new CreateItineraryController().getItinerary(null,sessionId);
+//        if (itineraryBean != null) {
+//            List<StepBean> steps = new CreateItineraryController().getSteps(null,sessionId);
+//            itineraryField.setText(itineraryBean.getName());
+//            dayField.setText(String.valueOf(itineraryBean.getDuration()));
+//            descriptionField.setText(itineraryBean.getDescription());
+//            for (StepBean step : steps) {
+//                for (String cityID : step.getCity()) {
+//                    CityBean city = new CreateItineraryController().getCity(0,cityID,null);
+//
+//                    Label cityLabel = new Label(city.getName());
+//                    cityLabel.setUserData(city.getId());
+//                    cityVBox.getChildren().add(cityLabel);
+//                }
+//                for (String attractionID : step.getAttractions()) {
+//                    AttractionBean attraction = new CreateItineraryController().getAttraction(0,attractionID,null);
+//
+//                    Label attractionLabel = new Label(attraction.getName());
+//                    attractionLabel.setUserData(attraction.getId());
+//                    attractionVBox.getChildren().add(attractionLabel);
+//                }
+//            }
+//        }
 
         if (requestId != null) {
 
