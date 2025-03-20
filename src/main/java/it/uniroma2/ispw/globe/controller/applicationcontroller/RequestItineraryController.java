@@ -9,7 +9,8 @@ import it.uniroma2.ispw.globe.model.dao.RequestDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
-import it.uniroma2.ispw.globe.util.decorator.Request;
+import it.uniroma2.ispw.globe.util.decorator.*;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +82,60 @@ public class RequestItineraryController {
         return agencyBeans;
     }
 
-    public void sendRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) {
+    public RequestBean getRequest(String requestID, String sessionID) {
+        Request request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+        if (requestID == null) {
+            return null;
+        }
+
+        String travelMode = null;
+        String drivingHours = null;
+        String trekkingDifficulty = null;
+        String trekkingDistance = null;
+
+        Request current = request;
+        while (current instanceof RequestDecorator) {
+            if (current instanceof OnTheRoadRequestDecorator) {
+                travelMode = ((OnTheRoadRequestDecorator) current).getTravelMode();
+                drivingHours = ((OnTheRoadRequestDecorator) current).getDayDrivingHours();
+            }
+            if (current instanceof NatureRequestDecorator) {
+                trekkingDifficulty = ((NatureRequestDecorator) current).getTrekkingDifficulty();
+                trekkingDistance = ((NatureRequestDecorator) current).getTrekkingDistance();
+            }
+            current = ((RequestDecorator) current).getRequest();
+        }
+
+        List<String> citiesID = new ArrayList<>();
+        for (City city : request.getCities()) {
+            citiesID.add(city.getPlaceID());
+        }
+
+        List<String> attractionsID = new ArrayList<>();
+        for (Attraction attraction : request.getAttractions()) {
+            attractionsID.add(attraction.getPlaceID());
+        }
+
+        List<String> agencies = new ArrayList<>();
+        for (Agency agency: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
+            agencies.add(agency.getUsername());
+        }
+
+
+        return new RequestBean(request.getId(),citiesID, attractionsID, request.getOtherRequest(), request.getDayNum(), agencies, request.getFlightRequest(), request.getAccommodationRequest(), request.getItineraryType(), trekkingDifficulty, trekkingDistance, travelMode, drivingHours);
+    }
+
+    public AgencyBean getAgency(String username, String sessionID) {
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        Account account = accountDao.getAccount(username);
+
+
+        return null;
+    }
+
+
+
+    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) {
         System.out.println(requestBean.getAgencies()+" - "+requestBean.getItineraryType()+" - "+requestBean.getDayNum()+" - "+requestBean.getOtherRequests()+" - "+requestBean.isAccommodation()+" - "+requestBean.isFlight());
         if (onTheRoadBean != null) {
             System.out.println(onTheRoadBean.getDayDrivingHours()+" - "+onTheRoadBean.getMode());

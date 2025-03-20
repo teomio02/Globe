@@ -92,6 +92,16 @@ public abstract class RequestDecorator extends Request{
     }
 
     @Override
+    public String getDescription() {
+        return this.request.getDescription();
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.request.setDescription(description);
+    }
+
+    @Override
     public int getDayNum() {
         return this.request.getDayNum();
     }

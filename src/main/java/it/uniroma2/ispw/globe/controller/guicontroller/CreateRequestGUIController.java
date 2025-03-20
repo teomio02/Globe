@@ -326,7 +326,7 @@ public class CreateRequestGUIController {
             if (count == 0 ){
                 RequestBean requestBean = new RequestBean(cities, attractions, otherRequests, dayNum, agencies, flight, accommodation, itineraryType);
                 RequestItineraryController controller = new RequestItineraryController();
-                controller.sendRequest(requestBean, onTheRoadBean, natureBean, sessionId);
+                controller.createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
             }
         }
 

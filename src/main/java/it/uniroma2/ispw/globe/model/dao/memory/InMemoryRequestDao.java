@@ -1,9 +1,9 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
 import it.uniroma2.ispw.globe.model.Agency;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.util.decorator.Request;
 import it.uniroma2.ispw.globe.model.User;
-import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.RequestDao;
 
 import java.util.ArrayList;

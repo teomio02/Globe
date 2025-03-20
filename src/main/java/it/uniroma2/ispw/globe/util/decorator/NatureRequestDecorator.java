@@ -8,13 +8,13 @@ import it.uniroma2.ispw.globe.model.User;
 import java.util.List;
 
 public class NatureRequestDecorator extends RequestDecorator {
-
+    private String trekkingDistance;
+    private String trekkingDifficulty;
     //attributi
 
     public NatureRequestDecorator(Request request) {
         super(request);
     }
-
     //get set attributi
 
     @Override
@@ -88,6 +88,16 @@ public class NatureRequestDecorator extends RequestDecorator {
     }
 
     @Override
+    public String getDescription() {
+        return super.getDescription();
+    }
+
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
+
+    @Override
     public int getDayNum() {
         return super.getDayNum();
     }
@@ -127,4 +137,17 @@ public class NatureRequestDecorator extends RequestDecorator {
         super.setItineraryType(itineraryType);
     }
 
+    public String getTrekkingDistance() {
+        return this.trekkingDistance;
+    }
+    public void setTrekkingDistance(String trekkingDistance) {
+        this.trekkingDistance = trekkingDistance;
+    }
+
+    public String getTrekkingDifficulty() {
+        return this.trekkingDifficulty;
+    }
+    public void setTrekkingDifficulty(String trekkingDifficulty) {
+        this.trekkingDifficulty = trekkingDifficulty;
+    }
 }

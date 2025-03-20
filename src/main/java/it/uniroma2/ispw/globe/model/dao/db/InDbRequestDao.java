@@ -6,6 +6,8 @@ import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.Request;
+import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,7 +76,7 @@ public class InDbRequestDao extends RequestDao {
     }
 
     @Override
-    public void addUserRequest(RequestBean requestBean, User user, Agency agency) {
+    public void addUserRequest(Request request, User user, Agency agency) {
 
     }
 
@@ -109,6 +111,8 @@ public class InDbRequestDao extends RequestDao {
                 request.setId(resultSet.getString("id"));
                 request.setAccepted(resultSet.getString("accepted"));
                 request.setOtherRequest(resultSet.getString("description"));
+                request.setDayNum(resultSet.getInt("days"));
+                request.setDescription(resultSet.getString("description"));
                 request.setDayNum(resultSet.getInt("days"));
 
                 User user;

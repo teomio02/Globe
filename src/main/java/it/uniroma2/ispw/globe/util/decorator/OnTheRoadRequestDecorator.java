@@ -8,7 +8,8 @@ import it.uniroma2.ispw.globe.model.User;
 import java.util.List;
 
 public class OnTheRoadRequestDecorator extends RequestDecorator {
-
+    private String travelMode;
+    private String dayDrivingHours;
     // attributi
 
     public OnTheRoadRequestDecorator(Request request) {
@@ -88,6 +89,16 @@ public class OnTheRoadRequestDecorator extends RequestDecorator {
     }
 
     @Override
+    public String getDescription() {
+        return super.getDescription();
+    }
+
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+    }
+
+    @Override
     public int getDayNum() {
         return super.getDayNum();
     }
@@ -125,5 +136,19 @@ public class OnTheRoadRequestDecorator extends RequestDecorator {
     @Override
     public void setItineraryType(List<String> itineraryType) {
         super.setItineraryType(itineraryType);
+    }
+
+    public String getTravelMode() {
+        return travelMode;
+    }
+    public void setTravelMode(String travelMode) {
+        this.travelMode = travelMode;
+    }
+
+    public String getDayDrivingHours() {
+        return dayDrivingHours;
+    }
+    public void setDayDrivingHours(String dayDrivingHours) {
+        this.dayDrivingHours = dayDrivingHours;
     }
 }
