@@ -91,33 +91,6 @@ public class CreateItineraryGUIController {
     public void initialize() {
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
-//
-//
-//        //aggiungi popola accommodatio e flight se presente
-//
-//        ItineraryBean itineraryBean = new CreateItineraryController().getItinerary(null,sessionId);
-//        if (itineraryBean != null) {
-//            List<StepBean> steps = new CreateItineraryController().getSteps(null,sessionId);
-//            itineraryField.setText(itineraryBean.getName());
-//            dayField.setText(String.valueOf(itineraryBean.getDuration()));
-//            descriptionField.setText(itineraryBean.getDescription());
-//            for (StepBean step : steps) {
-//                for (String cityID : step.getCity()) {
-//                    CityBean city = new CreateItineraryController().getCity(0,cityID,null);
-//
-//                    Label cityLabel = new Label(city.getName());
-//                    cityLabel.setUserData(city.getId());
-//                    cityVBox.getChildren().add(cityLabel);
-//                }
-//                for (String attractionID : step.getAttractions()) {
-//                    AttractionBean attraction = new CreateItineraryController().getAttraction(0,attractionID,null);
-//
-//                    Label attractionLabel = new Label(attraction.getName());
-//                    attractionLabel.setUserData(attraction.getId());
-//                    attractionVBox.getChildren().add(attractionLabel);
-//                }
-//            }
-//        }
 
         if (requestId != null) {
 
@@ -219,27 +192,7 @@ public class CreateItineraryGUIController {
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
-                cityButton.setOnAction(event -> {
-                    int count=0;
-                    if(cityVBox.getChildren().isEmpty()){
-                        Label cityLabel = new Label(cityResult.getName());
-                        cityLabel.setUserData(cityResult.getId());
-                        cityVBox.getChildren().add(cityLabel);
-                    } else {
-                        for (int i = 0; i < cityVBox.getChildren().size(); i++) {
-                            Label otherCity = (Label) cityVBox.getChildren().get(i);
-                            if(cityResult.getName().equals(otherCity.getText())){
-                                count++;
-                            }
-                        }
-                        if (count==0){
-                            Label cityLabel = new Label(cityResult.getName());
-                            cityLabel.setUserData(cityResult.getId());
-                            cityVBox.getChildren().add(cityLabel);
-                        }
-                    }
-                    cityResultVBox.getChildren().clear();
-                });
+                cityButton.setOnAction(event -> addCity(cityResult));
                 cityResultVBox.getChildren().add(cityButton);
             }
         } else {
@@ -247,6 +200,28 @@ public class CreateItineraryGUIController {
             cityResultVBox.getChildren().add(errorLabel);
         }
 
+    }
+
+    public void addCity(CityBean city) {
+        int count=0;
+        if(cityVBox.getChildren().isEmpty()){
+            Label cityLabel = new Label(city.getName());
+            cityLabel.setUserData(city.getId());
+            cityVBox.getChildren().add(cityLabel);
+        } else {
+            for (int i = 0; i < cityVBox.getChildren().size(); i++) {
+                Label otherCity = (Label) cityVBox.getChildren().get(i);
+                if(city.getName().equals(otherCity.getText())){
+                    count++;
+                }
+            }
+            if (count==0){
+                Label cityLabel = new Label(city.getName());
+                cityLabel.setUserData(city.getId());
+                cityVBox.getChildren().add(cityLabel);
+            }
+        }
+        cityResultVBox.getChildren().clear();
     }
 
     public void searchAttraction() {
@@ -260,34 +235,36 @@ public class CreateItineraryGUIController {
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
                 Button attractionButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
-                attractionButton.setOnAction(event -> {
-                    int count=0;
-                    if(attractionVBox.getChildren().isEmpty()){
-                        Label attractionLabel = new Label(attractionResult.getName());
-                        attractionLabel.setUserData(attractionResult.getId());
-                        attractionVBox.getChildren().add(attractionLabel);
-                    } else {
-                        for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
-                            Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
-                            if(attractionResult.getName().equals(otherAttraction.getText())){
-                                count++;
-
-                            }
-                        }
-                        if (count==0){
-                            Label attractionLabel = new Label(attractionResult.getName());
-                            attractionLabel.setUserData(attractionResult.getId());
-                            attractionVBox.getChildren().add(attractionLabel);
-                        }
-                    }
-                    attractionResultVBox.getChildren().clear();
-                });
+                attractionButton.setOnAction(event -> addAttraction(attractionResult));
                 attractionResultVBox.getChildren().add(attractionButton);
             }
         } else {
             Label errorLabel = new Label("Error: no place");
             cityResultVBox.getChildren().add(errorLabel);
         }
+    }
+
+    public void addAttraction(AttractionBean attraction) {
+        int count=0;
+        if(attractionVBox.getChildren().isEmpty()){
+            Label attractionLabel = new Label(attraction.getName());
+            attractionLabel.setUserData(attraction.getId());
+            attractionVBox.getChildren().add(attractionLabel);
+        } else {
+            for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
+                Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
+                if(attraction.getName().equals(otherAttraction.getText())){
+                    count++;
+
+                }
+            }
+            if (count==0){
+                Label attractionLabel = new Label(attraction.getName());
+                attractionLabel.setUserData(attraction.getId());
+                attractionVBox.getChildren().add(attractionLabel);
+            }
+        }
+        attractionResultVBox.getChildren().clear();
     }
 
     public void addFlight() {
@@ -317,30 +294,4 @@ public class CreateItineraryGUIController {
             root.setCenter(prev);
         }
     }
-
-//    public void goBack(ActionEvent event) {
-//        URL url;
-//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-//        FXMLLoader loader;
-//
-//
-//        try {
-//            if (requestId!=null) {
-//                url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml").toURI().toURL();
-//                loader = new FXMLLoader(url);
-//                DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,requestId);
-//                loader.setController(controller);
-//                root.setCenter(loader.load());
-//            } else {
-//                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-//                loader = new FXMLLoader(url);
-//                ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-//                loader.setController(controller);
-//                root.setCenter(loader.load());
-//            }
-//
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }
