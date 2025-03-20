@@ -6,7 +6,7 @@ public class Persistence {
     private static final String IN_MEMORY = "MEMORY";
     private static final String IN_DATABASE = "DB";
 
-    private String type = IN_DATABASE;
+    private String type = IN_MEMORY;
 
     private Persistence() {}
 

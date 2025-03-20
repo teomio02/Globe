@@ -8,11 +8,12 @@ public class BaseRequest extends Request {
     private String id;
     private User user;
     private Agency agency;
-    private Boolean accepted;
+    private String accepted;
     private String otherRequest;
     private Boolean flightRequest;
     private Boolean accommodationRequest;
     private int dayNum;
+    private String description;
     private List<City> cities;
     private List<Attraction> attractions;
     private List<String> itineraryType;
@@ -48,12 +49,12 @@ public class BaseRequest extends Request {
     }
 
     @Override
-    public Boolean getAccepted() {
+    public String getAccepted() {
         return accepted;
     }
 
     @Override
-    public void setAccepted(Boolean accepted) {
+    public void setAccepted(String accepted) {
         this.accepted = accepted;
     }
 
@@ -85,6 +86,16 @@ public class BaseRequest extends Request {
     @Override
     public void setAccommodationRequest(Boolean accommodationRequest) {
         this.accommodationRequest = accommodationRequest;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

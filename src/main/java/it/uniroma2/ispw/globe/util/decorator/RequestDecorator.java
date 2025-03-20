@@ -52,12 +52,12 @@ public abstract class RequestDecorator extends Request{
     }
 
     @Override
-    public Boolean getAccepted() {
+    public String getAccepted() {
         return this.request.getAccepted();
     }
 
     @Override
-    public void setAccepted(Boolean accepted) {
+    public void setAccepted(String accepted) {
         this.request.setAccepted(accepted);
     }
 
@@ -89,6 +89,16 @@ public abstract class RequestDecorator extends Request{
     @Override
     public void setAccommodationRequest(Boolean accommodationRequest) {
         this.request.setAccommodationRequest(accommodationRequest);
+    }
+
+    @Override
+    public String getDescription() {
+        return this.request.getDescription();
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.request.setDescription(description);
     }
 
     @Override

@@ -13,6 +13,10 @@ public class RequestBean {
     private boolean accommodation;
     private List<String> itineraryType;
     private List<String> agencies;
+    private String trekkingDistance;
+    private String trekkingDifficulty;
+    private String travelMode;
+    private String drivingHours;
 
 
     public RequestBean(List<String> cities, List<String> attractions, String otherRequests, int dayNum, List<String> agencies, boolean flight, boolean accommodation, List<String> itineraryType ) {
@@ -24,6 +28,22 @@ public class RequestBean {
         this.flight = flight;
         this.accommodation = accommodation;
         this.itineraryType = itineraryType;
+    }
+
+    public RequestBean(String id,List<String> cities, List<String> attractions, String otherRequests, int dayNum, List<String> agencies, boolean flight, boolean accommodation, List<String> itineraryType, String trekkingDifficulty, String trekkingDistance, String travelMode, String drivingHours ) {
+        this.id = id;
+        this.cities = cities;
+        this.attractions = attractions;
+        this.otherRequests = otherRequests;
+        this.dayNum = dayNum;
+        this.agencies = agencies;
+        this.flight = flight;
+        this.accommodation = accommodation;
+        this.itineraryType = itineraryType;
+        this.trekkingDifficulty = trekkingDifficulty;
+        this.trekkingDistance = trekkingDistance;
+        this.travelMode = travelMode;
+        this.drivingHours = drivingHours;
     }
 
 
@@ -106,5 +126,21 @@ public class RequestBean {
     public void setAgencies(List<String> agencies) {
         this.agencies = agencies;
     }
+
+    public String getTrekkingDifficulty() { return this.trekkingDifficulty; }
+
+    public void setTrekkingDifficulty(String trekkingDifficulty) { this.trekkingDifficulty = trekkingDifficulty; }
+
+    public String getTrekkingDistance() { return this.trekkingDistance; }
+
+    public void setTrekkingDistance(String trekkingDistance) { this.trekkingDistance = trekkingDistance; }
+
+    public String getTravelMode() { return this.travelMode; }
+
+    public void setTravelMode(String travelMode) { this.travelMode = travelMode; }
+
+    public String getDrivingHours() { return this.drivingHours; }
+
+    public void setDrivingHours(String drivingHours) { this.drivingHours = drivingHours; }
 }
 

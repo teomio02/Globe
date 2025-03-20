@@ -335,7 +335,7 @@ public class CreateRequestGUIController {
             if (count == 0 ){
                 RequestBean requestBean = new RequestBean(cities, attractions, otherRequests, dayNum, agencies, flight, accommodation, itineraryType);
                 RequestItineraryController controller = new RequestItineraryController();
-                controller.sendRequest(requestBean, onTheRoadBean, natureBean, sessionId);
+                controller.createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
             }
         }
 
@@ -343,7 +343,7 @@ public class CreateRequestGUIController {
         Parent root;
 
         try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/.fxml").toURI().toURL();
+            url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml").toURI().toURL();
 
             DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,null);
             FXMLLoader loader = new FXMLLoader(url);

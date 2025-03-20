@@ -42,7 +42,7 @@ public class LogInController{
             Account account = accountDao.getAccount(credentials.getUsername());
             if (account.getType().equals(AGENCY)) {
                 System.out.println("creating request");
-                new ClasseTest().creaRichiesta(account);
+//                new ClasseTest().creaRichiesta(account);
             } else {
                 //new ClasseTest().creaProposta(account);
             }

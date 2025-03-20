@@ -1,9 +1,10 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
-import it.uniroma2.ispw.globe.model.bean.ProposalBean;
-import it.uniroma2.ispw.globe.model.bean.RequestBean;
+import it.uniroma2.ispw.globe.model.Agency;
+import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,6 +61,17 @@ public class DisplayRequestGUIController {
             for (String type: request.getTypes()) {
                 typesHBox.getChildren().add(new Label(type));
             }
+        } else {
+            RequestBean request = new RequestItineraryController().getRequest(requestId, sessionId);
+            AgencyBean agency = new RequestItineraryController().getAgency(null,sessionId);
+            userLabel.setText(agency.getName());
+            descriptionLabel.setText(request.getOtherRequests());
+            daysLabel.setText(String.valueOf(request.getDayNum()));
+            for (String type: request.getItineraryType()) {
+                typesHBox.getChildren().add(new Label(type));
+            }
+
+
         }
     }
 

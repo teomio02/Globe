@@ -18,8 +18,8 @@ public abstract class Request {
     public abstract Agency getAgency();
     public abstract void setAgency(Agency agency);
 
-    public abstract Boolean getAccepted();
-    public abstract void setAccepted(Boolean accepted);
+    public abstract String getAccepted();
+    public abstract void setAccepted(String accepted);
 
     public abstract String getOtherRequest();
     public abstract void setOtherRequest(String otherRequest);
@@ -29,6 +29,9 @@ public abstract class Request {
 
     public abstract Boolean getAccommodationRequest();
     public abstract void setAccommodationRequest(Boolean accommodationRequest);
+
+    public abstract String getDescription();
+    public abstract void setDescription(String description);
 
     public abstract int getDayNum();
     public abstract void setDayNum(int dayNum);

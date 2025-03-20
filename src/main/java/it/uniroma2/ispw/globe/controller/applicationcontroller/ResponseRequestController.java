@@ -10,6 +10,7 @@ import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ public class ResponseRequestController {
             attractions.add(attraction.getPlaceID());
         }
 
-        return new AgencyRequestBean(requestID,cities,attractions,request.getUser().getUsername(),request.getAgency().getUsername(),request.getDescription(),request.getDays(),request.getTypes(),request.getAccepted());
+        return new AgencyRequestBean(requestID,cities,attractions,request.getUser().getUsername(),request.getAgency().getUsername(),request.getDescription(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
 
     }
 
@@ -134,7 +135,7 @@ public class ResponseRequestController {
         List<Request> requests = agency.getRequests();
         List<AgencyRequestBean> requestBeans = new ArrayList<>();
         for (Request request : requests) {
-            AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),request.getUser().getUsername(), request.getAgency().getUsername(), request.getDescription(), request.getDays(), request.getTypes(), request.getAccepted());
+            AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),request.getUser().getUsername(), request.getAgency().getUsername(), request.getDescription(), request.getDayNum(), request.getItineraryType(), request.getAccepted());
             requestBeans.add(requestBean);
         }
         return requestBeans;
