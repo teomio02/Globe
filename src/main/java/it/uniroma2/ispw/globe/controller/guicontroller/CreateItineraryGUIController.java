@@ -5,7 +5,6 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,13 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CreateItineraryGUIController {
     @FXML
@@ -78,45 +72,21 @@ public class CreateItineraryGUIController {
     private VBox accommodationResultVBox;
 
 
+
     private String sessionId;
     private String requestId;
 
-    public CreateItineraryGUIController(String sessionId,String requestId) {
+    private Node prev;
+
+    public CreateItineraryGUIController(String sessionId,String requestId, Node prev) {
         this.sessionId = sessionId;
         this.requestId = requestId;
-        System.out.println("\nCreateItineraryGUIController\n"+"itineraryID: /"+"\nrequestID: "+requestId+"\nproposalID: /");
+        this.prev = prev;
     }
 
     public void initialize() {
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
-
-
-        //aggiungi popola accommodatio e flight se presente
-
-        ItineraryBean itineraryBean = new CreateItineraryController().getItinerary(null,sessionId);
-        if (itineraryBean != null) {
-            List<StepBean> steps = new CreateItineraryController().getSteps(null,sessionId);
-            itineraryField.setText(itineraryBean.getName());
-            dayField.setText(String.valueOf(itineraryBean.getDuration()));
-            descriptionField.setText(itineraryBean.getDescription());
-            for (StepBean step : steps) {
-                for (String cityID : step.getCity()) {
-                    CityBean city = new CreateItineraryController().getCity(0,cityID,null);
-
-                    Label cityLabel = new Label(city.getName());
-                    cityLabel.setUserData(city.getId());
-                    cityVBox.getChildren().add(cityLabel);
-                }
-                for (String attractionID : step.getAttractions()) {
-                    AttractionBean attraction = new CreateItineraryController().getAttraction(0,attractionID,null);
-
-                    Label attractionLabel = new Label(attraction.getName());
-                    attractionLabel.setUserData(attraction.getId());
-                    attractionVBox.getChildren().add(attractionLabel);
-                }
-            }
-        }
 
         if (requestId != null) {
 
@@ -191,20 +161,13 @@ public class CreateItineraryGUIController {
 
         new CreateItineraryController().createItinerary(itineraryBean,sessionId);
 
-        try {
-            BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
-            DisplayItineraryGUIController controller;
-            if (requestId != null) {
-                controller = new DisplayItineraryGUIController(sessionId,null,requestId,null);
-            } else {
-                controller = new DisplayItineraryGUIController(sessionId,null,null,null);
-            }
-            FXMLLoader loader = new FXMLLoader(url);
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        NavigationGUIController nav = new NavigationGUIController(root);
+        DisplayItineraryGUIController controller;
+        if (requestId != null) {
+            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null);
+        } else {
+            nav.goToDisplayItineraryGUI(sessionId,null,null,null);
         }
     }
 
@@ -218,27 +181,7 @@ public class CreateItineraryGUIController {
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
-                cityButton.setOnAction(event -> {
-                    int count=0;
-                    if(cityVBox.getChildren().isEmpty()){
-                        Label cityLabel = new Label(cityResult.getName());
-                        cityLabel.setUserData(cityResult.getId());
-                        cityVBox.getChildren().add(cityLabel);
-                    } else {
-                        for (int i = 0; i < cityVBox.getChildren().size(); i++) {
-                            Label otherCity = (Label) cityVBox.getChildren().get(i);
-                            if(cityResult.getName().equals(otherCity.getText())){
-                                count++;
-                            }
-                        }
-                        if (count==0){
-                            Label cityLabel = new Label(cityResult.getName());
-                            cityLabel.setUserData(cityResult.getId());
-                            cityVBox.getChildren().add(cityLabel);
-                        }
-                    }
-                    cityResultVBox.getChildren().clear();
-                });
+                cityButton.setOnAction(event -> addCity(cityResult));
                 cityResultVBox.getChildren().add(cityButton);
             }
         } else {
@@ -246,6 +189,28 @@ public class CreateItineraryGUIController {
             cityResultVBox.getChildren().add(errorLabel);
         }
 
+    }
+
+    public void addCity(CityBean city) {
+        int count=0;
+        if(cityVBox.getChildren().isEmpty()){
+            Label cityLabel = new Label(city.getName());
+            cityLabel.setUserData(city.getId());
+            cityVBox.getChildren().add(cityLabel);
+        } else {
+            for (int i = 0; i < cityVBox.getChildren().size(); i++) {
+                Label otherCity = (Label) cityVBox.getChildren().get(i);
+                if(city.getName().equals(otherCity.getText())){
+                    count++;
+                }
+            }
+            if (count==0){
+                Label cityLabel = new Label(city.getName());
+                cityLabel.setUserData(city.getId());
+                cityVBox.getChildren().add(cityLabel);
+            }
+        }
+        cityResultVBox.getChildren().clear();
     }
 
     public void searchAttraction() {
@@ -259,34 +224,36 @@ public class CreateItineraryGUIController {
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
                 Button attractionButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
-                attractionButton.setOnAction(event -> {
-                    int count=0;
-                    if(attractionVBox.getChildren().isEmpty()){
-                        Label attractionLabel = new Label(attractionResult.getName());
-                        attractionLabel.setUserData(attractionResult.getId());
-                        attractionVBox.getChildren().add(attractionLabel);
-                    } else {
-                        for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
-                            Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
-                            if(attractionResult.getName().equals(otherAttraction.getText())){
-                                count++;
-
-                            }
-                        }
-                        if (count==0){
-                            Label attractionLabel = new Label(attractionResult.getName());
-                            attractionLabel.setUserData(attractionResult.getId());
-                            attractionVBox.getChildren().add(attractionLabel);
-                        }
-                    }
-                    attractionResultVBox.getChildren().clear();
-                });
+                attractionButton.setOnAction(event -> addAttraction(attractionResult));
                 attractionResultVBox.getChildren().add(attractionButton);
             }
         } else {
             Label errorLabel = new Label("Error: no place");
             cityResultVBox.getChildren().add(errorLabel);
         }
+    }
+
+    public void addAttraction(AttractionBean attraction) {
+        int count=0;
+        if(attractionVBox.getChildren().isEmpty()){
+            Label attractionLabel = new Label(attraction.getName());
+            attractionLabel.setUserData(attraction.getId());
+            attractionVBox.getChildren().add(attractionLabel);
+        } else {
+            for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
+                Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
+                if(attraction.getName().equals(otherAttraction.getText())){
+                    count++;
+
+                }
+            }
+            if (count==0){
+                Label attractionLabel = new Label(attraction.getName());
+                attractionLabel.setUserData(attraction.getId());
+                attractionVBox.getChildren().add(attractionLabel);
+            }
+        }
+        attractionResultVBox.getChildren().clear();
     }
 
     public void addFlight() {
@@ -311,27 +278,9 @@ public class CreateItineraryGUIController {
     }
 
     public void goBack(ActionEvent event) {
-        URL url;
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        FXMLLoader loader;
-
-        try {
-            if (requestId!=null) {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml").toURI().toURL();
-                loader = new FXMLLoader(url);
-                DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,requestId);
-                loader.setController(controller);
-                root.setCenter(loader.load());
-            } else {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-                loader = new FXMLLoader(url);
-                ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-                loader.setController(controller);
-                root.setCenter(loader.load());
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (prev != null) {
+            root.setCenter(prev);
         }
     }
 }

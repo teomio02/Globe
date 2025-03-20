@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class GlobeApplication extends Application {
+public class GlobeApplicationGUI extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -24,7 +24,6 @@ public class GlobeApplication extends Application {
             stage.getIcons().add(icon);
         }
 
-        new ClasseTest().creaAgenzie();
         LogInGUIController controller = new LogInGUIController();
         fxmlLoader.setController(controller);
 

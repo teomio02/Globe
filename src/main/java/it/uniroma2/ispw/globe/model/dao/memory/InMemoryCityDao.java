@@ -1,12 +1,8 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.City;
-import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

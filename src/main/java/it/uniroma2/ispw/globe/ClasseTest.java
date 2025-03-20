@@ -8,6 +8,7 @@ import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.ArrayList;
 import java.util.List;

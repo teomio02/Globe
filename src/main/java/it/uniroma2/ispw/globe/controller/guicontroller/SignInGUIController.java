@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static it.uniroma2.ispw.globe.other.ItineraryType.*;
 import static it.uniroma2.ispw.globe.other.UserType.*;

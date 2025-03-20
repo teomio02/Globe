@@ -13,8 +13,6 @@ public class Session {
     private Proposal pendingProposal;
     private Request pendingRequest;
     private List<Agency> pendingAgencies;
-    //prova
-    private Itinerary tryItinerary;
 
     public Session(String id, Account account) {
         this.id = id;
@@ -68,12 +66,5 @@ public class Session {
         this.pendingAgencies = pendingAgencies;
     }
 
-    //prova
-    public Itinerary getTryItinerary() {
-        return tryItinerary;
-    }
-    public void setTryItinerary(Itinerary tryItinerary) {
-        this.tryItinerary = tryItinerary;
-    }
 
 }

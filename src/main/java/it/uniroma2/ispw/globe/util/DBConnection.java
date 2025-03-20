@@ -1,9 +1,6 @@
 package it.uniroma2.ispw.globe.util;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
-import java.util.Properties;
 
 public class DBConnection {
     private static DBConnection instance = null;

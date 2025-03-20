@@ -1,0 +1,43 @@
+/* TextField */
+.text-field {
+    -fx-text-fill: #000000;
+    -fx-background-color:  #314c1c;
+    -fx-border-color: #97c093;
+    -fx-border-width: 1px;
+    -fx-border-radius: 40px;
+    -fx-background-radius: 40px;
+}
+
+/* Label */
+.label-light {
+    -fx-alignment: center-left;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-font-style: normal;
+    -fx-text-fill: #97c093;
+}
+.label-dark {
+    -fx-alignment: center-left;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-font-style: normal;
+    -fx-text-fill: #314c1c;
+}
+.label-title-dark {
+    -fx-alignment: center-left;
+    -fx-font-family: "Arial";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #314c1c;
+}
+.label-title-light {
+    -fx-alignment: center-left;
+    -fx-font-family: "Arial";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-style: normal;
+    -fx-text-fill: #97c093;
+}

@@ -49,7 +49,10 @@ public class NominatimAPIClient {
                 throw new IOException("Unexpected code " + response);
             }
 
-            String responseBody = response.body().string();
+            String responseBody = null;
+            if (response.body() != null) {
+                responseBody = response.body().string();
+            }
 
             JsonArray results = gson.fromJson(responseBody, JsonArray.class);
 

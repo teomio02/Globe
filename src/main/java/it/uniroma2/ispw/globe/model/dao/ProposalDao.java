@@ -23,5 +23,5 @@ public abstract class ProposalDao {
     }
     public abstract void addProposal(Proposal proposal);
     public abstract Proposal getProposal(String proposalName);
-    public abstract void removeProposal(String itineraryID);
+    public abstract void updateProposal(Proposal proposal);
 }

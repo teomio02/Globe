@@ -82,7 +82,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>it.uniroma2.ispw.globe.GlobeApplication</mainClass>
+                    <mainClass>it.uniroma2.ispw.globe.GlobeApplicationGUI</mainClass>
                 </configuration>
                 <executions>
                     <execution>

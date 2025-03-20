@@ -4,11 +4,6 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
-import it.uniroma2.ispw.globe.util.decorator.AccommodationDecorator;
-import it.uniroma2.ispw.globe.util.decorator.FlightDecorator;
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
-import it.uniroma2.ispw.globe.util.decorator.ItineraryDecorator;
-import org.w3c.dom.Attr;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

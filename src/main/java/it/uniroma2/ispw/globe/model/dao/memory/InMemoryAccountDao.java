@@ -4,7 +4,6 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 

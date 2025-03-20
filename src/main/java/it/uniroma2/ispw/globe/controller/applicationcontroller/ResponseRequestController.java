@@ -50,31 +50,18 @@ public class ResponseRequestController {
 
         Proposal proposal = session.getPendingProposal();
         Itinerary itinerary = session.getPendingItinerary();
-        itineraryDao.addItinerary(itinerary,agency);
+        itineraryDao.addItinerary(itinerary, agency);
 
         proposal.setItinerary(session.getPendingItinerary());
-        System.out.println(proposal.getId()+" - "+proposal.getAgency().getUsername()+" - "+proposal.getUser().getUsername());
         proposalDao.addProposal(proposal);
 
         Request request = session.getPendingRequest();
         request.setAccepted(ACCEPTED);
+        requestDao.updateRequest(request);
 
         session.setPendingItinerary(null);
         session.setPendingProposal(null);
         session.setPendingRequest(null);
-    }
-
-    public void addItineraryToProposal(String sessionID) {
-//        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-//        ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-//
-//
-//        Proposal proposal = proposalDao.getProposal(proposalId);
-//        Itinerary itinerary = itineraryDao.getItinerary(itineraryId);
-//
-//        proposal.setItinerary(itinerary);
-
-
     }
 
     public ProposalBean getProposal(String proposalID, String sessionID) {
@@ -112,7 +99,7 @@ public class ResponseRequestController {
             attractions.add(attraction.getPlaceID());
         }
 
-        return new AgencyRequestBean(requestID,cities,attractions,request.getUser().getUsername(),request.getAgency().getUsername(),request.getDescription(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
+        return new AgencyRequestBean(requestID,cities,attractions,request.getUser().getUsername(),request.getAgency().getUsername(),request.getOtherRequest(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
 
     }
 
@@ -135,15 +122,10 @@ public class ResponseRequestController {
         List<Request> requests = agency.getRequests();
         List<AgencyRequestBean> requestBeans = new ArrayList<>();
         for (Request request : requests) {
-            AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),request.getUser().getUsername(), request.getAgency().getUsername(), request.getDescription(), request.getDayNum(), request.getItineraryType(), request.getAccepted());
+            AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),request.getUser().getUsername(), request.getAgency().getUsername(), request.getOtherRequest(), request.getDayNum(), request.getItineraryType(), request.getAccepted());
             requestBeans.add(requestBean);
         }
         return requestBeans;
-    }
-
-    public User getUser(String id) {
-
-        return new User();
     }
 
     public void setPendingRequest(String sessionID,String requestID) {

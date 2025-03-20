@@ -11,7 +11,6 @@ import it.uniroma2.ispw.globe.other.Persistence;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class InMemoryDayDao extends DayDao {
 

@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -91,9 +92,6 @@ public class CreateRequestGUIController {
         onTheRoadVBox.setVisible(false);
 
     }
-
-
-
 
     //HANDLER
     public void userTripHandler (ActionEvent event) {}
@@ -339,23 +337,8 @@ public class CreateRequestGUIController {
             }
         }
 
-        URL url;
-        Parent root;
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml").toURI().toURL();
-
-            DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,null);
-            FXMLLoader loader = new FXMLLoader(url);
-            loader.setController(controller);
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml", new DisplayRequestGUIController(sessionId,null,root.getCenter()));
     }
 }

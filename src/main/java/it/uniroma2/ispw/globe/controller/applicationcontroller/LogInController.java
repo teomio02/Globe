@@ -1,21 +1,12 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
-import it.uniroma2.ispw.globe.ClasseTest;
 import it.uniroma2.ispw.globe.model.Account;
-import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
-import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 import it.uniroma2.ispw.globe.model.dao.memory.InMemoryAccountDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
-
-import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
 public class LogInController{
 
@@ -38,15 +29,6 @@ public class LogInController{
             return false;
         } else {
             accountDao.addAccount(credentials);
-            //test
-            Account account = accountDao.getAccount(credentials.getUsername());
-            if (account.getType().equals(AGENCY)) {
-                System.out.println("creating request");
-//                new ClasseTest().creaRichiesta(account);
-            } else {
-                //new ClasseTest().creaProposta(account);
-            }
-            //----
 
             return true;
         }
@@ -58,7 +40,6 @@ public class LogInController{
             CredentialsBean credentials = new CredentialsBean(account.getUsername(),account.getPassword(), account.getType());
             InMemoryAccountDao.getInstance().removeAccount(credentials);
         }
-        // SessionManager.getInstance().removeSession(sessionId);
     }
 
     public String getUserType(String username) {
