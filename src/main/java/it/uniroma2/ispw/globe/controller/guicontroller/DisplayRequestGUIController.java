@@ -63,7 +63,7 @@ public class DisplayRequestGUIController {
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml", new CreateItineraryGUIController(sessionId,requestId,root.getCenter()));
+        nav.goToCreateItineraryGUI(sessionId,requestId);
     }
 
     public void goBack(ActionEvent event) {

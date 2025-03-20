@@ -42,8 +42,8 @@ public class LogInController{
         }
     }
 
-    public String getUserType(String username) {
-        Account account = SessionManager.getInstance().getSession(username).getAccount();
+    public String getUserType(String sessionID) {
+        Account account = SessionManager.getInstance().getSession(sessionID).getAccount();
         return account.getType();
     }
 }

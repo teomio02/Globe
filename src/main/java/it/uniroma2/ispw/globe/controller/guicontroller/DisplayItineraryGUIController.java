@@ -150,7 +150,7 @@ public class DisplayItineraryGUIController {
     public void createProposal(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml", new CreateProposalGUIController(sessionId, requestId,root.getCenter()));
+        nav.goToCreateProposalGUI(sessionId, requestId);
     }
 
     public void goBack(ActionEvent event) {
