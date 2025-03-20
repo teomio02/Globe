@@ -76,7 +76,7 @@ public class InDbRequestDao extends RequestDao {
     }
 
     @Override
-    public void addUserRequest(Request request, User user, Agency agency) {
+    public void addUserRequest(RequestBean requestBean, User user, Agency agency) {
 
     }
 

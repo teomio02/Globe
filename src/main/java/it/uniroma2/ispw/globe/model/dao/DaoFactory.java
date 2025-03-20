@@ -9,7 +9,7 @@ public abstract class DaoFactory {
     public static final String IN_DATABASE = "DB";
 
     public static DaoFactory getFactory(String s) {
-        if (s.equals(IN_MEMORY)) {
+        if (s.equals(IN_DATABASE)) {
             return new InMemoryDaoFactory();
         }
         return new InDbDaoFactory();
