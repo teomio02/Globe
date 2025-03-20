@@ -102,26 +102,4 @@ public class CreateProposalGUIController {
             root.setCenter(prev);
         }
     }
-
-//    public void goBack(ActionEvent event) {
-//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-//        NavigationGUIController nav = new NavigationGUIController(root);
-//        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml",
-//                new DisplayItineraryGUIController(sessionId, null, requestId, null));
-//    }
-
-
-//    public void goBack(ActionEvent event) {
-//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-//
-//        try {
-//            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
-//            FXMLLoader loader = new FXMLLoader(url);
-//            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,null,requestId,null);
-//            loader.setController(controller);
-//            root.setCenter(loader.load());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }
