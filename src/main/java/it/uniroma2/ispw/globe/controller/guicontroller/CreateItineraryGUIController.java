@@ -5,7 +5,6 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,9 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,8 +164,9 @@ public class CreateItineraryGUIController {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
         DisplayItineraryGUIController controller;
+        GUIControllerFactory factory = new GUIControllerFactory();
         if (requestId != null) {
-            controller = new DisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
+            controller = factory.getDisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
         } else {
             controller = new DisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
         }
