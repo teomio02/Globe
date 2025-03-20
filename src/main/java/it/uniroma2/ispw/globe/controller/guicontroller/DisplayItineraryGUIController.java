@@ -144,7 +144,7 @@ public class DisplayItineraryGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml", new ManageItineraryGUIController(sessionId));
+        nav.goToManageItineraryGUI(sessionId);
     }
 
     public void createProposal(ActionEvent event) {

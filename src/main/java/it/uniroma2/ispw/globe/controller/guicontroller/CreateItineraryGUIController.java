@@ -165,11 +165,10 @@ public class CreateItineraryGUIController {
         NavigationGUIController nav = new NavigationGUIController(root);
         DisplayItineraryGUIController controller;
         if (requestId != null) {
-            controller = new DisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
+            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null);
         } else {
-            controller = new DisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
+            nav.goToDisplayItineraryGUI(sessionId,null,null,null);
         }
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml", controller);
     }
 
     public void searchCity() {
