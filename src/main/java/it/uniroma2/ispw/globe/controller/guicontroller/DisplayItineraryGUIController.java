@@ -138,19 +138,21 @@ public class DisplayItineraryGUIController {
     }
 
     public void showItineraries(ActionEvent event) {
+        GUIControllerFactory factory = new GUIControllerFactory();
         if (itineraryId == null) {
             new CreateItineraryController().saveItinerary(sessionId);
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml", new ManageItineraryGUIController(sessionId));
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml", factory.getManageItineraryGUIController(sessionId));
     }
 
     public void createProposal(ActionEvent event) {
+        GUIControllerFactory factory = new GUIControllerFactory();
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml", new CreateProposalGUIController(sessionId, requestId,root.getCenter()));
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml", factory.getCreateProposalGUIController(sessionId, requestId,root.getCenter()));
     }
 
     public void goBack(ActionEvent event) {
