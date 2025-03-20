@@ -71,7 +71,6 @@ public class DisplayProposalGUIController {
     }
 
     public void showItinerary(ActionEvent event) {
-        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         String itineraryId;
 
         if (proposalID != null) {
@@ -80,15 +79,9 @@ public class DisplayProposalGUIController {
             itineraryId = null;
         }
 
-        try {
-            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId,requestID,proposalID,root.getCenter());
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml", new DisplayItineraryGUIController(sessionId,itineraryId,requestID,proposalID,root.getCenter()));
     }
 
     public void acceptProposal(ActionEvent event) {
@@ -128,16 +121,8 @@ public class DisplayProposalGUIController {
         new ResponseRequestController().saveProposal(sessionId);
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-        try {
-            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml", new ManageRequestGUIController(sessionId));
     }
 
     public void goBack(ActionEvent event) {
@@ -146,37 +131,4 @@ public class DisplayProposalGUIController {
             root.setCenter(prev);
         }
     }
-
-//    public void goBack (ActionEvent event) {
-//        URL url;
-//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-//        FXMLLoader loader;
-//        String type = new ManageItineraryController().getAccountType(sessionId);
-//
-//        try {
-//            if (requestID != null) {
-//                url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
-//                loader = new FXMLLoader(url);
-//                CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestID);
-//                loader.setController(controller);
-//            } else {
-//                if (type.equals(AGENCY)) {
-//                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
-//                    loader = new FXMLLoader(url);
-//                    ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
-//                    loader.setController(controller);
-//                } else {
-//                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-//                    loader = new FXMLLoader(url);
-//                    ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-//                    loader.setController(controller);
-//                }
-//            }
-//
-//            root.setCenter(loader.load());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 }

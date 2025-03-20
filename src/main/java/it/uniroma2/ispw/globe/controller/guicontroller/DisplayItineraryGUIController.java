@@ -137,26 +137,6 @@ public class DisplayItineraryGUIController {
         }
     }
 
-//    public void showItineraries(ActionEvent event) {
-//
-//        if (itineraryId == null) {
-//            new CreateItineraryController().saveItinerary(sessionId);
-//        }
-//
-//        URL url;
-//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-//
-//        try {
-//            url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-//            FXMLLoader loader = new FXMLLoader(url);
-//            ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-//            loader.setController(controller);
-//            root.setCenter(loader.load());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-    
     public void showItineraries(ActionEvent event) {
         if (itineraryId == null) {
             new CreateItineraryController().saveItinerary(sessionId);
@@ -172,21 +152,6 @@ public class DisplayItineraryGUIController {
         NavigationGUIController nav = new NavigationGUIController(root);
         nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml", new CreateProposalGUIController(sessionId, requestId,root.getCenter()));
     }
-
-
-//    public void createProposal(ActionEvent event) {
-//        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-//
-//        try {
-//            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml").toURI().toURL();
-//            FXMLLoader loader = new FXMLLoader(url);
-//            CreateProposalGUIController controller = new CreateProposalGUIController(sessionId,requestId,root.getCenter());
-//            loader.setController(controller);
-//            root.setCenter(loader.load());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     public void goBack(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();

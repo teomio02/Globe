@@ -337,23 +337,8 @@ public class CreateRequestGUIController {
             }
         }
 
-        URL url;
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/.fxml").toURI().toURL();
-
-            DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,null,root.getCenter());
-            FXMLLoader loader = new FXMLLoader(url);
-            loader.setController(controller);
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml", new DisplayRequestGUIController(sessionId,null,root.getCenter()));
     }
 }

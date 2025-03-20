@@ -165,21 +165,15 @@ public class CreateItineraryGUIController {
 
         new CreateItineraryController().createItinerary(itineraryBean,sessionId);
 
-        try {
-            BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-            URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml").toURI().toURL();
-            DisplayItineraryGUIController controller;
-            if (requestId != null) {
-                controller = new DisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
-            } else {
-                controller = new DisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
-            }
-            FXMLLoader loader = new FXMLLoader(url);
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        NavigationGUIController nav = new NavigationGUIController(root);
+        DisplayItineraryGUIController controller;
+        if (requestId != null) {
+            controller = new DisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
+        } else {
+            controller = new DisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
         }
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml", controller);
     }
 
     public void searchCity() {

@@ -93,35 +93,17 @@ public class ManageRequestGUIController {
     public void viewProposal(ActionEvent event) {
         String proposalID = (String) ((Button)event.getSource()).getUserData();
 
-        URL url;
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionId, null, proposalID, root.getCenter());
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml", new DisplayProposalGUIController(sessionId, null, proposalID, root.getCenter()));
     }
 
     public void viewRequest(ActionEvent event) {
         String requestID = (String) ((Button)event.getSource()).getUserData();
         new ResponseRequestController().setPendingRequest(sessionId,requestID);
 
-        URL url;
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            DisplayRequestGUIController controller = new DisplayRequestGUIController(sessionId,requestID,root.getCenter());
-            loader.setController(controller);
-            root.setCenter(loader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml", new DisplayRequestGUIController(sessionId,requestID,root.getCenter()));
     }
 }
