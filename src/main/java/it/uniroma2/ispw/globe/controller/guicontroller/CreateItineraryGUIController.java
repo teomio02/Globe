@@ -164,11 +164,10 @@ public class CreateItineraryGUIController {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
         DisplayItineraryGUIController controller;
-        GUIControllerFactory factory = new GUIControllerFactory();
         if (requestId != null) {
-            controller = factory.getDisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
+            controller = new DisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
         } else {
-            controller =factory.getDisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
+            controller = new DisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
         }
         nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml", controller);
     }
