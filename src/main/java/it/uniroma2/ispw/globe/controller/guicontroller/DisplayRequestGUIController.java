@@ -4,16 +4,10 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 public class DisplayRequestGUIController {
     @FXML
@@ -56,7 +50,7 @@ public class DisplayRequestGUIController {
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml", new CreateItineraryGUIController(sessionId,requestId,root.getCenter()));
+        nav.goToCreateItineraryGUI(sessionId,requestId);
     }
 
     public void goBack(ActionEvent event) {

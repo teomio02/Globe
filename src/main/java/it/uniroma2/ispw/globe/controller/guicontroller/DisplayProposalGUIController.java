@@ -6,7 +6,6 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,10 +15,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
@@ -81,7 +76,7 @@ public class DisplayProposalGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml", new DisplayItineraryGUIController(sessionId,itineraryId,requestID,proposalID,root.getCenter()));
+        nav.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID);
     }
 
     public void acceptProposal(ActionEvent event) {
@@ -122,7 +117,7 @@ public class DisplayProposalGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml", new ManageRequestGUIController(sessionId));
+        nav.goToManageRequestGUI(sessionId);
     }
 
     public void goBack(ActionEvent event) {

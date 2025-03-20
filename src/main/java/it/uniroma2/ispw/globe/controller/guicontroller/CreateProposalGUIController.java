@@ -80,7 +80,7 @@ public class CreateProposalGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml", new DisplayProposalGUIController(sessionId,requestId,null, root.getCenter()));
+        nav.goToDisplayProposalGUI(sessionId,requestId,null);
     }
 
     public void goBack(ActionEvent event) {

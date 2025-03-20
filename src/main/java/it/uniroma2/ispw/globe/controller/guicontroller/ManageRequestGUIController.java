@@ -95,7 +95,7 @@ public class ManageRequestGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml", new DisplayProposalGUIController(sessionId, null, proposalID, root.getCenter()));
+        nav.goToDisplayProposalGUI(sessionId, null, proposalID);
     }
 
     public void viewRequest(ActionEvent event) {
@@ -104,6 +104,6 @@ public class ManageRequestGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.loadView("src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml", new DisplayRequestGUIController(sessionId,requestID,root.getCenter()));
+        nav.goToDisplayRequestGUI(sessionId,requestID);
     }
 }
