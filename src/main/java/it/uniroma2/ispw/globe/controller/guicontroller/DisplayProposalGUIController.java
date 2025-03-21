@@ -42,7 +42,7 @@ public class DisplayProposalGUIController {
     public DisplayProposalGUIController(String sessionId, String requestID, String proposalID, Node prev) {
         this.sessionId = sessionId;
         this.requestID = requestID;
-        this.proposalID = proposalID; //differenzia tra utente e agenzia
+        this.proposalID = proposalID;
         this.prev = prev;
     }
 
@@ -54,7 +54,6 @@ public class DisplayProposalGUIController {
         descriptionLabel.setText(proposal.getDescription());
         agencyLabel.setText(proposal.getAgency());
         priceLabel.setText(String.valueOf(proposal.getPrice()));
-        System.out.println(proposal.getID()+" - "+proposal.getAccepted()+" - "+type);
         saveButton.setVisible(false);
         if (!proposal.getAccepted().equals(PENDING) || type.equals(AGENCY)){
             responseHBox.getChildren().clear();
@@ -79,18 +78,15 @@ public class DisplayProposalGUIController {
         nav.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID);
     }
 
-    public void acceptProposal(ActionEvent event) {
+    public void acceptProposal() {
         String paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
 
-        if (paymentResult == null) {
-            //error
-            return;
-        } else {
+        if (paymentResult != null) {
             responseHBox.getChildren().clear();
 
             //popup da sistemare grafica
             Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL); // Blocca l'interazione con la finestra principale
+            popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.setTitle("Payment Result");
 
             Button closeButton = new Button("Chiudi");
@@ -104,14 +100,12 @@ public class DisplayProposalGUIController {
         }
     }
 
-    public void rejectProposal(ActionEvent event) {
+    public void rejectProposal() {
         new AcceptItineraryController().sendResponse(proposalID,REJECTED);
         responseHBox.getChildren().clear();
     }
 
     public void saveProposal(ActionEvent event) {
-
-        System.out.println("saving proposal");
 
         new ResponseRequestController().saveProposal(sessionId);
 

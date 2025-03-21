@@ -43,7 +43,7 @@ public class ToolBarGUIController {
         }
     }
 
-    public void requestItinerary(ActionEvent event)  {
+    public void requestItinerary()  {
         URL url;
         AnchorPane newContentPane;
 
@@ -84,7 +84,6 @@ public class ToolBarGUIController {
     }
     public void manageProfile(){}
     public void logOut(ActionEvent event) {
-        boolean confirm = true;
         Button yesButton = new Button("Yes");
         Button noButton = new Button("no");
         if (userType.equals(GUEST)) {
@@ -108,7 +107,7 @@ public class ToolBarGUIController {
         }
         if (!userType.equals(GUEST) || (boolean) yesButton.getUserData()) {
             URL url;
-            Parent root;
+            Parent newRoot;
 
             new LogInController().logOut(sessionId);
 
@@ -117,12 +116,12 @@ public class ToolBarGUIController {
                 FXMLLoader loader = new FXMLLoader(url);
                 LogInGUIController controller = new LogInGUIController();
                 loader.setController(controller);
-                root = loader.load();
+                newRoot = loader.load();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(newRoot);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
             stage.show();

@@ -44,7 +44,7 @@ public class ManageRequestGUIController {
                 FXMLLoader loader = new FXMLLoader(url);
                 Button proposalBox = loader.load();
                 proposalBox.setUserData(proposal.getID());
-                proposalBox.setOnAction(actionEvent -> viewProposal(actionEvent));
+                proposalBox.setOnAction(this::viewProposal);
                 Label nameLabel = (Label) proposalBox.getGraphic().lookup("#nameLabel");
                 nameLabel.setText(proposal.getUser());
                 Label descriptionLabel = (Label) proposalBox.getGraphic().lookup("#descriptionLabel");
@@ -73,7 +73,7 @@ public class ManageRequestGUIController {
                     FXMLLoader loader = new FXMLLoader(url);
                     Button requestsBox = loader.load();
                     requestsBox.setUserData(request.getID());
-                    requestsBox.setOnAction(actionEvent -> viewRequest(actionEvent));
+                    requestsBox.setOnAction(this::viewRequest);
                     Label nameLabel = (Label) requestsBox.getGraphic().lookup("#nameLabel");
                     nameLabel.setText(request.getUser());
                     Label descriptionLabel = (Label) requestsBox.getGraphic().lookup("#descriptionLabel");

@@ -163,7 +163,6 @@ public class CreateItineraryGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        DisplayItineraryGUIController controller;
         if (requestId != null) {
             nav.goToDisplayItineraryGUI(sessionId,null,requestId,null);
         } else {

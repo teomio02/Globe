@@ -50,12 +50,8 @@ public class SignInGUIController {
         agencyForm.setVisible(false);
     }
 
-    public void getAgencyForm(ActionEvent event) {
-        if (agencyForm.isVisible()) {
-            agencyForm.setVisible(false);
-        } else {
-            agencyForm.setVisible(true);
-        }
+    public void getAgencyForm() {
+        agencyForm.setVisible(!agencyForm.isVisible());
     }
 
     public void signIn(ActionEvent event) {
@@ -63,43 +59,46 @@ public class SignInGUIController {
         CredentialsBean credentials;
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
             errorLabel.setVisible(true);
-            return;
         } else {
             credentials = new CredentialsBean(usernameField.getText(), passwordField.getText());
             if (agencyForm.isVisible()) {
-                List<String> preferences = new ArrayList<>();
-
-                if (onTheRoadCheckBox.isSelected()) {
-                    preferences.add(ON_THE_ROAD);
-                }
-                if (natureCheckBox.isSelected()) {
-                    preferences.add(NATURE);
-                }
-                if (cultureCheckBox.isSelected()) {
-                    preferences.add(CULTURE);
-                }
-                if (relaxCheckBox.isSelected()) {
-                    preferences.add(RELAX);
-                }
-                if (cityCheckBox.isSelected()) {
-                    preferences.add(CITY);
-                }
-
-                credentials.setType(AGENCY);
-                credentials.setDescription(descriptionField.getText());
-                credentials.setPreferences(preferences);
-                credentials.setPaymentCredentials(paymentCredentialsField.getText());
-
+                credentials = getAgencyDetails(credentials);
             } else {
                 credentials.setType(USER);
             }
-
             if (new LogInController().signIn(credentials)) {
                 goBack(event);
             } else {
                 // errore
             }
         }
+    }
+
+    public CredentialsBean getAgencyDetails(CredentialsBean credentials) {
+        List<String> preferences = new ArrayList<>();
+
+        if (onTheRoadCheckBox.isSelected()) {
+            preferences.add(ON_THE_ROAD);
+        }
+        if (natureCheckBox.isSelected()) {
+            preferences.add(NATURE);
+        }
+        if (cultureCheckBox.isSelected()) {
+            preferences.add(CULTURE);
+        }
+        if (relaxCheckBox.isSelected()) {
+            preferences.add(RELAX);
+        }
+        if (cityCheckBox.isSelected()) {
+            preferences.add(CITY);
+        }
+
+        credentials.setType(AGENCY);
+        credentials.setDescription(descriptionField.getText());
+        credentials.setPreferences(preferences);
+        credentials.setPaymentCredentials(paymentCredentialsField.getText());
+
+        return credentials;
     }
 
     public void goBack(ActionEvent event) {

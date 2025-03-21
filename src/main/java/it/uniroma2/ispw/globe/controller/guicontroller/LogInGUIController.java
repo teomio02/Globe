@@ -42,8 +42,6 @@ public class LogInGUIController {
     @FXML
     private Label noLabel;
 
-    private void initialize() {}
-
     public void signIn(ActionEvent event) {
         URL url;
         Parent root;

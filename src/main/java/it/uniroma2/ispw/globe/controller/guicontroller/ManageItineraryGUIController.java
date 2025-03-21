@@ -42,7 +42,7 @@ public class ManageItineraryGUIController {
                 FXMLLoader loader = new FXMLLoader(url);
                 Button itineraryBox = loader.load();
                 itineraryBox.setUserData(itinerary.getId());
-                itineraryBox.setOnAction(actionEvent -> viewItinerary(actionEvent));
+                itineraryBox.setOnAction(this::viewItinerary);
                 Label nameLabel = (Label) itineraryBox.getGraphic().lookup("#nameLabel");
                 nameLabel.setText(itinerary.getName());
                 Label descriptionLabel = (Label) itineraryBox.getGraphic().lookup("#descriptionLabel");
@@ -61,7 +61,7 @@ public class ManageItineraryGUIController {
                 FXMLLoader loader = new FXMLLoader(url);
                 Button proposalBox = loader.load();
                 proposalBox.setUserData(proposal.getID());
-                proposalBox.setOnAction(actionEvent -> viewProposal(actionEvent));
+                proposalBox.setOnAction(this::viewProposal);
                 Label nameLabel = (Label) proposalBox.getGraphic().lookup("#nameLabel");
                 nameLabel.setText(proposal.getAgency());
                 Label descriptionLabel = (Label) proposalBox.getGraphic().lookup("#descriptionLabel");
@@ -84,10 +84,6 @@ public class ManageItineraryGUIController {
         }
     }
 
-    public void deleteItinerary() {}
-
-    public void modifyItinerary() {}
-
     public void viewItinerary(ActionEvent event) {
         String itineraryId = (String) ((Button)event.getSource()).getUserData();
 
@@ -103,10 +99,6 @@ public class ManageItineraryGUIController {
         NavigationGUIController nav = new NavigationGUIController(root);
         nav.goToDisplayProposalGUI(sessionId, null, proposalId);
     }
-
-    public void displayItineraryList() {}
-
-    public void displayProposalList() {}
 
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
