@@ -6,8 +6,6 @@ import java.util.List;
 
 public class BaseRequest extends Request {
     private String id;
-    private User user;
-    private Agency agency;
     private String accepted;
     private String otherRequest;
     private Boolean flightRequest;
@@ -26,26 +24,6 @@ public class BaseRequest extends Request {
     @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Override
-    public User getUser() {
-        return user;
-    }
-
-    @Override
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public Agency getAgency() {
-        return agency;
-    }
-
-    @Override
-    public void setAgency(Agency agency) {
-        this.agency = agency;
     }
 
     @Override

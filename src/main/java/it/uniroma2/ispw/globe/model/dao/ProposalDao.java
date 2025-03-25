@@ -8,7 +8,7 @@ import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
 
 public abstract class ProposalDao {
-    public Proposal createProposal(String id, double price, String description, Itinerary itinerary, User user, Agency agency) {
+    public Proposal createProposal(String id, double price, String description, Itinerary itinerary) {
         Proposal proposal = new Proposal();
 
         proposal.setId(id);

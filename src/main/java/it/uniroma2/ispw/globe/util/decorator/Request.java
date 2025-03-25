@@ -12,12 +12,6 @@ public abstract class Request {
     public abstract String getId();
     public abstract void setId(String id);
 
-    public abstract User getUser();
-    public abstract void setUser(User user);
-
-    public abstract Agency getAgency();
-    public abstract void setAgency(Agency agency);
-
     public abstract String getAccepted();
     public abstract void setAccepted(String accepted);
 

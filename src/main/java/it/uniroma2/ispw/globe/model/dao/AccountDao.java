@@ -14,6 +14,6 @@ public abstract class AccountDao {
     public abstract List<Agency> getAgenciesByType(List<String> types);
     public abstract Agency getAgencyByProposal(String proposalID);
     public abstract User getUserByProposal(String proposalID);
-
-
+    public abstract Agency getAgencyByRequest(String requestID);
+    public abstract User getUserByRequest(String requestID);
 }

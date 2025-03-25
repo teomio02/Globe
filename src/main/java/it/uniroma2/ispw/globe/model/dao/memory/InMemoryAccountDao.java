@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.model.dao.memory;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
+import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +125,30 @@ public class InMemoryAccountDao extends AccountDao {
         for (User u : users) {
             for (Proposal p : u.getProposals()){
                 if (p.getId().equals(proposalID)){
+                    return u;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Agency getAgencyByRequest(String requestID) {
+        for (Agency a : agencies) {
+            for (Request r : a.getRequests()){
+                if (r.getId().equals(requestID)){
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public User getUserByRequest(String requestID) {
+        for (User u : users) {
+            for (Request r : u.getRequests()){
+                if (r.getId().equals(requestID)){
                     return u;
                 }
             }

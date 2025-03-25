@@ -70,7 +70,7 @@ public class ClasseTest {
         Agency agency = (Agency) accountDao.getAccount("agenzia");
         itineraryDao.addItinerary(itinerary,agency);
 
-        Proposal proposal = proposalDao.createProposal("1", 99.99, "descrizione proposta di prova", itinerary, (User) account, agency);
+        Proposal proposal = proposalDao.createProposal("1", 99.99, "descrizione proposta di prova", itinerary);
         proposalDao.addProposal(proposal,(User)account,agency);
     }
 

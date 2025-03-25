@@ -19,8 +19,8 @@ public class ManageItineraryController {
         if (proposalID == null) {
             Session session = SessionManager.getInstance().getSession(sessionID);
             proposal = session.getPendingProposal();
-            if (session.getPendingAccount() instanceof User) {
-                user = (User) session.getPendingAccount();
+            if (session.getPendingAccount() instanceof User pendingAccount) {
+                user = pendingAccount;
                 agency = (Agency) session.getAccount();
             } else {
                 user = (User) session.getAccount();

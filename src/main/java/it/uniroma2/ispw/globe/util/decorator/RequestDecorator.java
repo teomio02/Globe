@@ -32,26 +32,6 @@ public abstract class RequestDecorator extends Request{
     }
 
     @Override
-    public User getUser() {
-        return this.request.getUser();
-    }
-
-    @Override
-    public void setUser(User user) {
-        this.request.setUser(user);
-    }
-
-    @Override
-    public Agency getAgency() {
-        return this.request.getAgency();
-    }
-
-    @Override
-    public void setAgency(Agency agency) {
-        this.request.setAgency(agency);
-    }
-
-    @Override
     public String getAccepted() {
         return this.request.getAccepted();
     }

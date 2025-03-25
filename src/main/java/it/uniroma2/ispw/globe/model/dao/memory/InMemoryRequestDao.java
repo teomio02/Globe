@@ -32,12 +32,9 @@ public class InMemoryRequestDao extends RequestDao {
                 return;
             }
         }
-
-        request.setUser(user);
-        request.setAgency(agency);
         requests.add(request);
-        request.getAgency().getRequests().add(request);
-        request.getUser().getRequests().add(request);
+        user.getRequests().add(request);
+        agency.getRequests().add(request);
     }
 
     @Override

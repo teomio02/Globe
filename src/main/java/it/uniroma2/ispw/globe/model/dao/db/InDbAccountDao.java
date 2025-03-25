@@ -267,6 +267,82 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
+    @Override
+    public Agency getAgencyByRequest(String requestID) {
+        DBConnection connect = DBConnection.getInstance();
+
+        String query = "select account from accountRequest where requestID = ?";
+
+
+        PreparedStatement stmt = null;
+        ResultSet resultSet;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, requestID);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                Account account = getAccountPrimaryData(resultSet.getString("account"));
+                if (account instanceof Agency) {
+                    return (Agency) account;
+                }
+            }
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public User getUserByRequest(String requestID) {
+        DBConnection connect = DBConnection.getInstance();
+
+        String query = "select account from accountRequest where requestID = ?";
+
+
+        PreparedStatement stmt = null;
+        ResultSet resultSet;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, requestID);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                Account account = getAccountPrimaryData(resultSet.getString("account"));
+                if (account instanceof User) {
+                    return (User) account;
+                }
+            }
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
     public Account getAccountPrimaryData(String username) {
         DBConnection connect = DBConnection.getInstance();
 

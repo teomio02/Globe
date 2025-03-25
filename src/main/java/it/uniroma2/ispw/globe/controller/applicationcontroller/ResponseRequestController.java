@@ -17,19 +17,19 @@ import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 
 public class ResponseRequestController {
 
-    public void createProposal(ProposalBean proposalBean, String user_username, String requestId, String sessionID) {
+    public void createProposal(ProposalBean proposalBean, String userUsername, String requestId, String sessionID) {
         ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
         RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
         AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
-        User user = (User) accountDao.getAccount(user_username);
+        User user = (User) accountDao.getAccount(userUsername);
         String proposalID = UUID.randomUUID().toString();
         proposalBean.setID(proposalID);
 
         Session session = SessionManager.getInstance().getSession(sessionID);
         Agency agency = (Agency) session.getAccount();
 
-        Proposal proposal = proposalDao.createProposal(proposalID,proposalBean.getPrice(),proposalBean.getDescription(),session.getPendingItinerary(),session.getPendingRequest().getUser(),agency);
+        Proposal proposal = proposalDao.createProposal(proposalID,proposalBean.getPrice(),proposalBean.getDescription(),session.getPendingItinerary());
 
         Request request = requestDao.getRequest(requestId);
         request.setAccepted(ACCEPTED);
@@ -73,8 +73,8 @@ public class ResponseRequestController {
         if (proposalID == null) {
             Session session = SessionManager.getInstance().getSession(sessionID);
             proposal = session.getPendingProposal();
-            if (session.getAccount() instanceof Agency) {
-                agency = (Agency) session.getAccount();
+            if (session.getAccount() instanceof Agency account) {
+                agency = account;
                 user = (User) session.getPendingAccount();
             } else {
                 user = (User) session.getAccount();
@@ -97,12 +97,27 @@ public class ResponseRequestController {
 
     public AgencyRequestBean getAgencyRequest(String requestID, String sessionID) {
         Request request;
+        Agency agency;
+        User user;
 
         if (requestID == null) {
-            request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            request =session.getPendingRequest();
+
+            if (session.getAccount() instanceof Agency account) {
+                agency = account;
+                user = (User) session.getPendingAccount();
+            } else {
+                user = (User) session.getAccount();
+                agency = (Agency) session.getPendingAccount();
+            }
         } else {
             RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+
             request = requestDao.getRequest(requestID);
+            agency = accountDao.getAgencyByRequest(requestID);
+            user = accountDao.getUserByRequest(requestID);
         }
 
         List<String> cities = new ArrayList<>();
@@ -114,7 +129,7 @@ public class ResponseRequestController {
             attractions.add(attraction.getPlaceID());
         }
 
-        return new AgencyRequestBean(requestID,cities,attractions,request.getUser().getUsername(),request.getAgency().getUsername(),request.getOtherRequest(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
+        return new AgencyRequestBean(requestID,cities,attractions,user.getUsername(),agency.getUsername(),request.getOtherRequest(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
 
     }
 
@@ -136,11 +151,14 @@ public class ResponseRequestController {
 
     public List<AgencyRequestBean> getAgencyRequests(String sessionID) {
 
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+
         Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
         List<Request> requests = agency.getRequests();
         List<AgencyRequestBean> requestBeans = new ArrayList<>();
         for (Request request : requests) {
-            AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),request.getUser().getUsername(), request.getAgency().getUsername(), request.getOtherRequest(), request.getDayNum(), request.getItineraryType(), request.getAccepted());
+            User user = accountDao.getUserByRequest(request.getId());
+            AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),user.getUsername(), agency.getUsername(), request.getOtherRequest(), request.getDayNum(), request.getItineraryType(), request.getAccepted());
             requestBeans.add(requestBean);
         }
         return requestBeans;

@@ -9,20 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class RequestDao {
-        public Request createAgencyRequest(String requestID,String userUsername,String agencyUsername,String isAccepted,String description,int days,List<String> citiesID,List<String> attractionsID,List<String> types) {
-        //da cambiare
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        public Request createAgencyRequest(String requestID, String isAccepted,String description,int days,List<String> citiesID,List<String> attractionsID,List<String> types) {
+
         CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
         AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
-
-        User user = (User) accountDao.getAccount(userUsername);
-        Agency agency = (Agency) accountDao.getAccount(agencyUsername);
 
 
         BaseRequest request = new BaseRequest();
         request.setId(requestID);
-        request.setUser(user);
-        request.setAgency(agency);
         request.setAccepted(isAccepted);
         request.setOtherRequest(description);
         request.setDayNum(days);
@@ -44,7 +38,7 @@ public abstract class RequestDao {
         return request;
     }
 
-    public Request createUserRequest(String id, User user, Agency agency, String accepted, String otherRequest, int dayNum, List<String> citiesID, List<String> attractionsID, boolean flight, boolean accommodation, List<String> itineraryType) {
+    public Request createUserRequest(String id, String accepted, String otherRequest, int dayNum, List<String> citiesID, List<String> attractionsID, boolean flight, boolean accommodation, List<String> itineraryType) {
 
         BaseRequest request = new BaseRequest();
 
@@ -65,8 +59,6 @@ public abstract class RequestDao {
         }
 
         request.setId(id);
-        request.setUser(user);
-        request.setAgency(agency);
         request.setAccepted(accepted);
         request.setOtherRequest(otherRequest);
         request.setDayNum(dayNum);

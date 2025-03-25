@@ -155,7 +155,7 @@ public class RequestItineraryController {
         RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
 
 
-        Request request = requestDao.createUserRequest(UUID.randomUUID().toString(),null,null,PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.getCities(),requestBean.getAttractions(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+        Request request = requestDao.createUserRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.getCities(),requestBean.getAttractions(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
         SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
 
         List<Agency> agencies = new ArrayList<>();

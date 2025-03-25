@@ -37,20 +37,20 @@ public class InDbRequestDao extends RequestDao {
                 stmt = connection.prepareStatement(query);
 
                 stmt.setString(1, request.getId());
-                stmt.setString(2, request.getUser().getUsername());
-                stmt.setString(3, request.getAgency().getUsername());
+                stmt.setString(2, user.getUsername());
+                stmt.setString(3, agency.getUsername());
                 stmt.setString(4, request.getAccepted());
                 stmt.setString(5, request.getOtherRequest());
                 stmt.setInt(6, request.getDayNum());
                 stmt.execute();
 
                 stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, request.getAgency().getUsername());
+                stmt.setString(1, agency.getUsername());
                 stmt.setString(2, request.getId());
                 stmt.execute();
 
                 stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, request.getUser().getUsername());
+                stmt.setString(1, user.getUsername());
                 stmt.setString(2, request.getId());
                 stmt.execute();
 
@@ -126,9 +126,6 @@ public class InDbRequestDao extends RequestDao {
                     user = (User) accountDao.getAccount(resultSet.getString("user"));
                     agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
                 }
-
-                request.setUser(user);
-                request.setAgency(agency);
 
                 List<String> types = new ArrayList<>();
                 stmt = connection.prepareStatement(typeQuery);

@@ -29,26 +29,6 @@ public class OnTheRoadRequestDecorator extends RequestDecorator {
     }
 
     @Override
-    public User getUser() {
-        return super.getUser();
-    }
-
-    @Override
-    public void setUser(User user) {
-        super.setUser(user);
-    }
-
-    @Override
-    public Agency getAgency() {
-        return super.getAgency();
-    }
-
-    @Override
-    public void setAgency(Agency agency) {
-        super.setAgency(agency);
-    }
-
-    @Override
     public String getAccepted() {
         return super.getAccepted();
     }
