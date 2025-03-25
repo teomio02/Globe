@@ -13,6 +13,7 @@ public class Session {
     private Proposal pendingProposal;
     private Request pendingRequest;
     private List<Agency> pendingAgencies;
+    private Account pendingAccount;
 
     public Session(String id, Account account) {
         this.id = id;
@@ -64,6 +65,12 @@ public class Session {
 
     public void setPendingAgencies(List<Agency> pendingAgencies) {
         this.pendingAgencies = pendingAgencies;
+    }
+
+    public Account getPendingAccount() { return this.pendingAccount; }
+
+    public void setPendingAccount(Account pendingAccount) {
+        this.pendingAccount = pendingAccount;
     }
 
 

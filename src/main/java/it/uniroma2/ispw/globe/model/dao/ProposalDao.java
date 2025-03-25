@@ -15,13 +15,11 @@ public abstract class ProposalDao {
         proposal.setItinerary(itinerary);
         proposal.setPrice(price);
         proposal.setDescription(description);
-        proposal.setUser(user);
-        proposal.setAgency(agency);
         proposal.setAccepted(PENDING);
 
         return proposal;
     }
-    public abstract void addProposal(Proposal proposal);
+    public abstract void addProposal(Proposal proposal, User user, Agency agency);
     public abstract Proposal getProposal(String proposalName);
     public abstract void updateProposal(Proposal proposal);
 }

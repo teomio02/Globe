@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.model.dao;
 
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
+import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 
 import java.util.List;
@@ -11,4 +12,8 @@ public abstract class AccountDao {
     public abstract Account getAccount(String username);
     public abstract void removeAccount(CredentialsBean credentials);
     public abstract List<Agency> getAgenciesByType(List<String> types);
+    public abstract Agency getAgencyByProposal(String proposalID);
+    public abstract User getUserByProposal(String proposalID);
+
+
 }

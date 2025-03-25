@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
+import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import java.util.*;
@@ -12,15 +13,29 @@ public class ManageItineraryController {
 
     public ProposalBean getProposal(String proposalID, String sessionID) {
         Proposal proposal;
+        User user;
+        Agency agency;
 
         if (proposalID == null) {
-            proposal = SessionManager.getInstance().getSession(sessionID).getPendingProposal();
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            proposal = session.getPendingProposal();
+            if (session.getPendingAccount() instanceof User) {
+                user = (User) session.getPendingAccount();
+                agency = (Agency) session.getAccount();
+            } else {
+                user = (User) session.getAccount();
+                agency = (Agency) session.getPendingAccount();
+            }
+
         } else {
             ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
+            AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
             proposal = proposalDao.getProposal(proposalID);
+            user = accountDao.getUserByProposal(proposalID);
+            agency = accountDao.getAgencyByProposal(proposalID);
         }
 
-        return new ProposalBean(proposalID,proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
+        return new ProposalBean(proposalID,proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
     }
 
     public List<ItineraryBean> getUserItineraries(String sessionId) {
@@ -35,11 +50,13 @@ public class ManageItineraryController {
     }
 
     public List<ProposalBean> getUserProposals(String sessionId) {
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
         User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
         List<Proposal> proposals = user.getProposals();
         List<ProposalBean> proposalBeans = new ArrayList<>();
         for (Proposal proposal : proposals) {
-            ProposalBean proposalBean = new ProposalBean(proposal.getId(),proposal.getPrice(),proposal.getAgency().getUsername(),proposal.getUser().getUsername(),proposal.getDescription(),proposal.getAccepted());
+            Agency agency = accountDao.getAgencyByProposal(proposal.getId());
+            ProposalBean proposalBean = new ProposalBean(proposal.getId(),proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
             proposalBeans.add(proposalBean);
         }
         return proposalBeans;

@@ -57,6 +57,7 @@ public class DisplayProposalGUIController {
         saveButton.setVisible(false);
         if (!proposal.getAccepted().equals(PENDING) || type.equals(AGENCY)){
             responseHBox.getChildren().clear();
+            agencyLabel.setText(proposal.getUser());
         }
         if (requestID != null) {
             responseHBox.getChildren().clear();

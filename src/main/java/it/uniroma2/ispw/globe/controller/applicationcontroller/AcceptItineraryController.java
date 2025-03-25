@@ -1,12 +1,17 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import it.uniroma2.ispw.globe.model.Account;
+import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
+import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.model.dao.AccountDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+
+import java.util.List;
 
 import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 
@@ -15,11 +20,15 @@ public class AcceptItineraryController {
 
     public String sendResponse(String proposalId, String response) {
         ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        Agency agency = accountDao.getAgencyByProposal(proposalId);
+        User user = accountDao.getUserByProposal(proposalId);
+
         Proposal proposal = proposalDao.getProposal(proposalId);
         String paymentResult = null;
 
         if (response.equals(ACCEPTED)) {
-            paymentResult = executePayment(proposal.getUser().getUsername(),proposal.getAgency().getUsername(),proposal.getPrice());
+            paymentResult = executePayment(user.getUsername(),agency.getUsername(),proposal.getPrice());
         }
 
         proposal.setAccepted(response);

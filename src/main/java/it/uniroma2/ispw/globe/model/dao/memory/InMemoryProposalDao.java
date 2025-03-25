@@ -1,6 +1,8 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
+import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public void addProposal(Proposal proposal) {
+    public void addProposal(Proposal proposal, User user, Agency agency) {
         for (Proposal savedProposal : proposals) {
             if (proposal.getId().equals(savedProposal.getId())){
                 // proposta già esistente
@@ -29,8 +31,8 @@ public class InMemoryProposalDao extends ProposalDao {
             }
         }
         proposals.add(proposal);
-        proposal.getUser().getProposals().add(proposal);
-        proposal.getAgency().getProposals().add(proposal);
+        user.getProposals().add(proposal);
+        agency.getProposals().add(proposal);
     }
 
     @Override

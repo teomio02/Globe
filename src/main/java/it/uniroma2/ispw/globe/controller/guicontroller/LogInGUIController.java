@@ -41,7 +41,7 @@ public class LogInGUIController {
     private Label yesLabel;
     @FXML
     private Label noLabel;
-    
+
     public void signIn(ActionEvent event) {
         URL url;
         Parent root;

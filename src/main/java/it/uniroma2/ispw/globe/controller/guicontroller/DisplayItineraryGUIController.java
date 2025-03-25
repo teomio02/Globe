@@ -9,7 +9,6 @@ import it.uniroma2.ispw.globe.model.bean.StepBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -48,6 +47,8 @@ public class DisplayItineraryGUIController {
     private final String proposalId;
     private final Node prev;
 
+    private static final String LIGHT = "label-light";
+
     public DisplayItineraryGUIController(String sessionId,String itineraryId, String requestId, String proposalId,Node prev) {
         this.sessionId = sessionId;
         this.itineraryId = itineraryId;
@@ -78,7 +79,7 @@ public class DisplayItineraryGUIController {
             for (int i = 0; i < itinerary.getAccommodations().size(); i++) {
                 Pair<String,String> accommodation = itinerary.getAccommodations().get(i);
                 Label accommmodationLabel = new Label((i+1)+": "+accommodation.getKey()+", "+accommodation.getValue());
-                accommmodationLabel.getStyleClass().add("label-light");
+                accommmodationLabel.getStyleClass().add(LIGHT);
                 accommodationVBox.getChildren().add(accommmodationLabel);
             }
         }
@@ -125,8 +126,8 @@ public class DisplayItineraryGUIController {
             Label addressLabel = new Label(attraction.getCity()+", "+attraction.getAddress());
             attractionLabel.setMaxWidth(Double.MAX_VALUE);
             addressLabel.setMaxWidth(Double.MAX_VALUE);
-            attractionLabel.getStyleClass().add("label-light");
-            addressLabel.getStyleClass().add("label-light");
+            attractionLabel.getStyleClass().add(LIGHT);
+            addressLabel.getStyleClass().add(LIGHT);
             HBox attractionHBox = new HBox(attractionLabel,addressLabel);
             HBox.setHgrow(attractionLabel, Priority.ALWAYS);
             HBox.setHgrow(addressLabel, Priority.ALWAYS);

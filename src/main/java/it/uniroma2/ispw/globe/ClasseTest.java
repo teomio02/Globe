@@ -71,7 +71,7 @@ public class ClasseTest {
         itineraryDao.addItinerary(itinerary,agency);
 
         Proposal proposal = proposalDao.createProposal("1", 99.99, "descrizione proposta di prova", itinerary, (User) account, agency);
-        proposalDao.addProposal(proposal);
+        proposalDao.addProposal(proposal,(User)account,agency);
     }
 
     public void creaAgenzie() {

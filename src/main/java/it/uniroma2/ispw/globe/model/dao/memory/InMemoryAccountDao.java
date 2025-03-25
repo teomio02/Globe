@@ -106,4 +106,28 @@ public class InMemoryAccountDao extends AccountDao {
         }
         return resultAgency;
     }
+
+    @Override
+    public Agency getAgencyByProposal(String proposalID) {
+        for (Agency a : agencies) {
+            for (Proposal p : a.getProposals()){
+                if (p.getId().equals(proposalID)){
+                    return a;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public User getUserByProposal(String proposalID) {
+        for (User u : users) {
+            for (Proposal p : u.getProposals()){
+                if (p.getId().equals(proposalID)){
+                    return u;
+                }
+            }
+        }
+        return null;
+    }
 }

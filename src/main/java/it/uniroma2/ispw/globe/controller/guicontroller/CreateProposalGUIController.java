@@ -76,7 +76,7 @@ public class CreateProposalGUIController {
 
         ProposalBean proposalBean = new ProposalBean(Double.parseDouble(priceField.getText()),descriptionField.getText());
 
-        new ResponseRequestController().createProposal(proposalBean,requestId,sessionId);
+        new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);

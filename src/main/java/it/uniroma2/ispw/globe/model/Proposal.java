@@ -7,8 +7,6 @@ public class Proposal {
     private Itinerary itinerary;
     private double price;
     private String description;
-    private User user;
-    private Agency agency;
     private String accepted;
 
     public String getId() {
@@ -41,22 +39,6 @@ public class Proposal {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Agency getAgency() {
-        return agency;
-    }
-
-    public void setAgency(Agency agency) {
-        this.agency = agency;
     }
 
     public String getAccepted() {

@@ -19,7 +19,7 @@ import java.sql.SQLException;
 public class InDbProposalDao extends ProposalDao {
 
     @Override
-    public void addProposal(Proposal proposal) {
+    public void addProposal(Proposal proposal,User user, Agency agency) {
         DBConnection connect = DBConnection.getInstance();
 
         if (getProposal(proposal.getId()) != null) {
@@ -38,18 +38,18 @@ public class InDbProposalDao extends ProposalDao {
                 stmt.setString(2,proposal.getItinerary().getItineraryID());
                 stmt.setDouble(3, proposal.getPrice());
                 stmt.setString(4, proposal.getDescription());
-                stmt.setString(5, proposal.getUser().getUsername());
-                stmt.setString(6, proposal.getAgency().getUsername());
+                stmt.setString(5, user.getUsername());
+                stmt.setString(6, agency.getUsername());
                 stmt.setString(7, proposal.getAccepted());
                 stmt.execute();
 
                 stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, proposal.getAgency().getUsername());
+                stmt.setString(1, agency.getUsername());
                 stmt.setString(2, proposal.getId());
                 stmt.execute();
 
                 stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, proposal.getUser().getUsername());
+                stmt.setString(1, user.getUsername());
                 stmt.setString(2, proposal.getId());
                 stmt.execute();
 
@@ -94,21 +94,6 @@ public class InDbProposalDao extends ProposalDao {
                 Itinerary itinerary = itineraryDao.getItinerary(resultSet.getString("itineraryID"));
 
                 proposal.setItinerary(itinerary);
-
-                User user;
-                Agency agency;
-                AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-                if (accountDao instanceof InDbAccountDao) {
-                    System.out.println("Using In-Db account, proposal: "+ id);
-                    user = (User) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("user"));
-                    agency = (Agency) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("agency"));
-                } else {
-                    user = (User) accountDao.getAccount(resultSet.getString("user"));
-                    agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
-                }
-
-                proposal.setUser(user);
-                proposal.setAgency(agency);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
