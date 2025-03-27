@@ -3,11 +3,9 @@ package it.uniroma2.ispw.globe.model.dao.db;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.Request;
-import javafx.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -93,7 +91,7 @@ public class InDbAccountDao extends AccountDao {
                 otherResultSet = stmt.executeQuery();
 
                 while (otherResultSet.next()) {
-                    ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
+                    InDbProposalDao proposalDao = new InDbProposalDao();
                     Proposal proposal = proposalDao.getProposal(otherResultSet.getString("proposalID"));
                     proposals.add(proposal);
                 }
@@ -104,7 +102,7 @@ public class InDbAccountDao extends AccountDao {
                 otherResultSet = stmt.executeQuery();
 
                 while (otherResultSet.next()) {
-                    ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+                    InDbItineraryDao itineraryDao = new InDbItineraryDao();
                     Itinerary itinerary = itineraryDao.getItinerary(otherResultSet.getString("itineraryID"));
                     itineraries.add(itinerary);
                 }
@@ -115,7 +113,7 @@ public class InDbAccountDao extends AccountDao {
                 otherResultSet = stmt.executeQuery();
 
                 while (otherResultSet.next()) {
-                    RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+                    InDbRequestDao requestDao = new InDbRequestDao();
                     Request request = requestDao.getRequest(otherResultSet.getString("requestID"));
                     requests.add(request);
                 }

@@ -3,14 +3,11 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.model.dao.AccountDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.model.dao.RequestDao;
+import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import it.uniroma2.ispw.globe.util.decorator.*;
-import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,26 +133,31 @@ public class RequestItineraryController {
 
 
     public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) {
-        System.out.println(requestBean.getAgencies()+" - "+requestBean.getItineraryType()+" - "+requestBean.getDayNum()+" - "+requestBean.getOtherRequests()+" - "+requestBean.isAccommodation()+" - "+requestBean.isFlight());
-        if (onTheRoadBean != null) {
-            System.out.println(onTheRoadBean.getDayDrivingHours()+" - "+onTheRoadBean.getMode());
-        }
-        if (natureBean != null) {
-            System.out.println(natureBean.getDifficulty()+" - "+natureBean.getTrekkingDistance());
-        }
-        for (String city: requestBean.getCities()){
-            System.out.print(city);
-        }
-        System.out.println();
-        for (String attraction: requestBean.getAttractions()){
-            System.out.print(attraction);
-        }
 
         AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
         RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
 
-        Request request = requestDao.createUserRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.getCities(),requestBean.getAttractions(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+        Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+
+        List<City> cities = new ArrayList<>();
+        List<Attraction> attractions = new ArrayList<>();
+
+        for (String cityId : requestBean.getCities()) {
+            City city = cityDao.createCity(cityId);
+            cities.add(city);
+        }
+
+        for (String attractionId : requestBean.getAttractions()) {
+            Attraction attraction = attractionDao.createAttraction(attractionId);
+            attractions.add(attraction);
+        }
+
+        request.setAttractions(attractions);
+        request.setCities(cities);
+
         SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
 
         List<Agency> agencies = new ArrayList<>();

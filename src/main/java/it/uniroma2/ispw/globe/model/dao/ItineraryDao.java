@@ -4,8 +4,6 @@ import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.BaseItinerary;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
-import java.util.List;
-
 public abstract class ItineraryDao {
     public BaseItinerary createItinerary(String id, String name, String description, int duration) {
         BaseItinerary itinerary = new BaseItinerary();

@@ -3,10 +3,7 @@ package it.uniroma2.ispw.globe.model.dao.db;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
-import it.uniroma2.ispw.globe.util.decorator.Request;
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.sql.Connection;
@@ -115,18 +112,6 @@ public class InDbRequestDao extends RequestDao {
                 request.setDescription(resultSet.getString("description"));
                 request.setDayNum(resultSet.getInt("days"));
 
-                User user;
-                Agency agency;
-                AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-                if (accountDao instanceof InDbAccountDao) {
-                    System.out.println("Using In-Db account, request: "+ requestId);
-                    user = (User) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("user"));
-                    agency = (Agency) ((InDbAccountDao) accountDao).getAccountPrimaryData(resultSet.getString("agency"));
-                } else {
-                    user = (User) accountDao.getAccount(resultSet.getString("user"));
-                    agency = (Agency) accountDao.getAccount(resultSet.getString("agency"));
-                }
-
                 List<String> types = new ArrayList<>();
                 stmt = connection.prepareStatement(typeQuery);
                 stmt.setString(1, requestId);
@@ -140,7 +125,7 @@ public class InDbRequestDao extends RequestDao {
                 stmt = connection.prepareStatement(cityQuery);
                 stmt.setString(1, requestId);
                 resultSet = stmt.executeQuery();
-                CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+                InDbCityDao cityDao = new InDbCityDao();
                 while (resultSet.next()) {
                     City city = cityDao.getCity(resultSet.getString("cityID"));
                     cities.add(city);
@@ -151,7 +136,7 @@ public class InDbRequestDao extends RequestDao {
                 stmt = connection.prepareStatement(attractionQuery);
                 stmt.setString(1, requestId);
                 resultSet = stmt.executeQuery();
-                AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+                InDbAttractionDao attractionDao = new InDbAttractionDao();
                 while (resultSet.next()) {
                     Attraction attraction = attractionDao.getAttraction(resultSet.getString("attractionID"));
                     attractions.add(attraction);

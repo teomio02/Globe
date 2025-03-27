@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.AccommodationDecorator;
 import it.uniroma2.ispw.globe.util.decorator.FlightDecorator;
@@ -46,7 +45,7 @@ public class InDbItineraryDao extends ItineraryDao {
                     while (current instanceof ItineraryDecorator) {
                         if (current instanceof AccommodationDecorator) {
                             for (Accommodation accommodation : ((AccommodationDecorator) current).getAccommodations()) {
-                                AccommodationDao accommodationDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
+                                InDbAccommodationDao accommodationDao = new InDbAccommodationDao();
                                 accommodationDao.addAccommodation(accommodation);
 
                                 String accommodationQuery = "insert into itineraryAccommodation (itineraryID,accommodationID) values (?,?)";
@@ -69,7 +68,8 @@ public class InDbItineraryDao extends ItineraryDao {
                             try {
                                 stmt = connection.prepareStatement(flightQuery);
 
-                                FlightDao flightDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getFlightDao();
+                                InDbFlightDao flightDao = new InDbFlightDao();
+
                                 flightDao.addFlight(((FlightDecorator) current).getInFlight());
                                 flightDao.addFlight(((FlightDecorator) current).getOutFlight());
 
@@ -85,7 +85,7 @@ public class InDbItineraryDao extends ItineraryDao {
                     }
 
                     for (Day day : itinerary.getDays()) {
-                        DayDao dayDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getDayDao();
+                        InDbDayDao dayDao = new InDbDayDao();
                         dayDao.addDay(day);
                     }
 
@@ -149,7 +149,7 @@ public class InDbItineraryDao extends ItineraryDao {
                 otherResultSet = stmt.executeQuery();
 
                 while (otherResultSet.next()) {
-                    DayDao dayDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getDayDao();
+                    InDbDayDao dayDao = new InDbDayDao();
                     Day day = dayDao.getDay(otherResultSet.getString("itineraryID"),otherResultSet.getInt("dayNum"));
                     days.add(day);
                 }
@@ -160,7 +160,7 @@ public class InDbItineraryDao extends ItineraryDao {
                 otherResultSet = stmt.executeQuery();
 
                 while (otherResultSet.next()) {
-                    AccommodationDao accommodationDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
+                    InDbAccommodationDao accommodationDao = new InDbAccommodationDao();
                     Accommodation accommodation = accommodationDao.getAccommodation(otherResultSet.getString("accommodationID"));
                     accommodations.add(accommodation);
                 }
@@ -190,8 +190,7 @@ public class InDbItineraryDao extends ItineraryDao {
                 }
 
                 if (resultSet.getString("inFlight")!=null) {
-                    FlightDao flightDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getFlightDao();
-
+                    InDbFlightDao flightDao = new InDbFlightDao();
                     Flight inFlight = flightDao.getFlight(resultSet.getString("inFlight"));
                     Flight outFlight = flightDao.getFlight(resultSet.getString("outFlight"));
 

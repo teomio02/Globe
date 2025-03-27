@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 
 import java.sql.Connection;
@@ -38,7 +37,7 @@ public class InDbDayDao extends DayDao {
                 stmt = connection.prepareStatement(attractionQuery);
 
                 for (Attraction attraction : day.getAttractions()) {
-                    AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+                    InDbAttractionDao attractionDao = new InDbAttractionDao();
                     attractionDao.addAttraction(attraction);
 
                     stmt.setString(2, day.getId());
@@ -50,7 +49,7 @@ public class InDbDayDao extends DayDao {
                 stmt = connection.prepareStatement(cityQuery);
 
                 for (City city : day.getCities()) {
-                    CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+                    InDbCityDao cityDao = new InDbCityDao();
                     cityDao.addCity(city);
 
                     stmt.setString(2, day.getId());
@@ -106,7 +105,7 @@ public class InDbDayDao extends DayDao {
                 resultSet = stmt.executeQuery();
 
                 while (resultSet.next()) {
-                    AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+                    InDbAttractionDao attractionDao = new InDbAttractionDao();
                     Attraction attraction = attractionDao.getAttraction(resultSet.getString("attractionID"));
                     attractions.add(attraction);
                 }
@@ -119,7 +118,7 @@ public class InDbDayDao extends DayDao {
                 resultSet = stmt.executeQuery();
 
                 while (resultSet.next()) {
-                    CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+                    InDbCityDao cityDao = new InDbCityDao();
                     City city = cityDao.getCity(resultSet.getString("cityID"));
                     cities.add(city);
                 }

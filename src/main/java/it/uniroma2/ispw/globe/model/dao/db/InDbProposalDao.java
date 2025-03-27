@@ -3,11 +3,7 @@ package it.uniroma2.ispw.globe.model.dao.db;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
-import it.uniroma2.ispw.globe.model.dao.AccountDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
-import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.model.dao.ProposalDao;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
@@ -90,7 +86,7 @@ public class InDbProposalDao extends ProposalDao {
                 proposal.setDescription(resultSet.getString("description"));
                 proposal.setAccepted(resultSet.getString("accepted"));
 
-                ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+                InDbItineraryDao itineraryDao = new InDbItineraryDao();
                 Itinerary itinerary = itineraryDao.getItinerary(resultSet.getString("itineraryID"));
 
                 proposal.setItinerary(itinerary);
