@@ -27,7 +27,6 @@ public class ResponseRequestController {
         proposalBean.setID(proposalID);
 
         Session session = SessionManager.getInstance().getSession(sessionID);
-        Agency agency = (Agency) session.getAccount();
 
         Proposal proposal = proposalDao.createProposal(proposalID,proposalBean.getPrice(),proposalBean.getDescription(),session.getPendingItinerary());
 
@@ -102,7 +101,7 @@ public class ResponseRequestController {
 
         if (requestID == null) {
             Session session = SessionManager.getInstance().getSession(sessionID);
-            request =session.getPendingRequest();
+            request = session.getPendingRequest();
 
             if (session.getAccount() instanceof Agency account) {
                 agency = account;
@@ -129,8 +128,11 @@ public class ResponseRequestController {
             attractions.add(attraction.getPlaceID());
         }
 
-        return new AgencyRequestBean(requestID,cities,attractions,user.getUsername(),agency.getUsername(),request.getOtherRequest(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
+        AgencyRequestBean requestBean = new AgencyRequestBean(requestID,user.getUsername(),agency.getUsername(),request.getOtherRequest(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
+        requestBean.setCities(cities);
+        requestBean.setAttractions(attractions);
 
+        return requestBean;
     }
 
     public List<ProposalBean> getAgencyProposals(String sessionID) {

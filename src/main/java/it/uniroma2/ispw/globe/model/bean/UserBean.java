@@ -1,7 +1,5 @@
 package it.uniroma2.ispw.globe.model.bean;
 
-import it.uniroma2.ispw.globe.other.UserType;
-
 public class UserBean {
     private String username;
     private String password;

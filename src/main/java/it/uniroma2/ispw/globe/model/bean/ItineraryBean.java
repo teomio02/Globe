@@ -36,19 +36,6 @@ public class ItineraryBean {
         this.attractions = attractions;
     }
 
-    public ItineraryBean(String id,String name, String description, List<String> types, int duration, double outboundFlightDepartureTime, double outboundFlightArrivalTime, double inboundFlightDepartureTime, double inboundFlightArrivalTime, List<Pair<String, String>> accommodations) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.types = types;
-        this.duration = duration;
-        this.outboundFlightDepartureTime = outboundFlightDepartureTime;
-        this.outboundFlightArrivalTime = outboundFlightArrivalTime;
-        this.inboundFlightDepartureTime = inboundFlightDepartureTime;
-        this.inboundFlightArrivalTime = inboundFlightArrivalTime;
-        this.accommodations = accommodations;
-    }
-
     public String getId() { return id; }
 
     public void setId(String id) { this.id = id; }

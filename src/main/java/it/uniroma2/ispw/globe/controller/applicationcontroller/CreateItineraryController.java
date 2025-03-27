@@ -23,11 +23,23 @@ public class CreateItineraryController {
 
     public void createItinerary(ItineraryBean itineraryBean, String sessionID) {
         ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+        DayDao dayDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getDayDao();
 
         String itineraryId = UUID.randomUUID().toString();
         itineraryBean.setId(itineraryId);
 
-        Itinerary itinerary = itineraryDao.createItinerary(itineraryBean.getId(),itineraryBean.getName(),itineraryBean.getDescription(),itineraryBean.getCities(),itineraryBean.getAttractions(),itineraryBean.getDuration());
+        Itinerary itinerary = itineraryDao.createItinerary(itineraryId,itineraryBean.getName(),itineraryBean.getDescription(), itineraryBean.getDuration());
+
+        List<Day> days = new ArrayList<>();
+
+        Day day0 = dayDao.createDay(itineraryId,0,itineraryBean.getCities(),itineraryBean.getAttractions());
+        days.add(day0);
+        for (int i=1; i<=itineraryBean.getDuration(); i++) {
+            Day day = dayDao.createDay(itineraryId, i,new ArrayList<>(),new ArrayList<>());
+            days.add(day);
+        }
+
+        itinerary.setDays(days);
 
         calculateItinerary(itinerary);
 
@@ -292,7 +304,14 @@ public class CreateItineraryController {
             current = itineraryDecorator.getItinerary();
         }
 
-        return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), types, itinerary.getDaysNumber(),outDepartureTime,outArrivalTime,inDepartureTime,inArrivalTime,accommodations);
+        ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), types, itinerary.getDaysNumber());
+        itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
+        itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
+        itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
+        itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
+        itineraryBean.setAccommodations(accommodations);
+
+        return itineraryBean;
     }
 
     public CityBean getCity(int stepNum,String cityID,String sessionID) {

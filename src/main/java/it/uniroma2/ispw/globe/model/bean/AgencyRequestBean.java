@@ -13,18 +13,6 @@ public class AgencyRequestBean {
     private List<String> attractions;
     private String accepted;
 
-    public AgencyRequestBean(String id, List<String> cities, List<String> attractions, String user, String agency, String description, int days, List<String> types, String accepted) {
-        this.id = id;
-        this.cities = cities;
-        this.attractions = attractions;
-        this.user = user;
-        this.agency = agency;
-        this.description = description;
-        this.days = days;
-        this.types = types;
-        this.accepted = accepted;
-    }
-
     public AgencyRequestBean(String id, String user, String agency, String description, int days, List<String> types, String accepted) {
         this.id = id;
         this.user = user;

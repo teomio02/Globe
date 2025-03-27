@@ -11,8 +11,6 @@ import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
-import java.util.List;
-
 import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 
 
