@@ -15,9 +15,8 @@ public class InDbAccommodationDao extends AccommodationDao {
     public void addAccommodation(Accommodation accommodation) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getAccommodation(accommodation.getId()) != null) {
-            System.out.println("Accommodation already exists");
-        } else {
+        if (getAccommodation(accommodation.getId()) == null) {
+
             String query = "insert into Accommodation (id,name,address) values (?,?,?)";
 
             PreparedStatement stmt = null;
@@ -43,7 +42,7 @@ public class InDbAccommodationDao extends AccommodationDao {
     public Accommodation getAccommodation(String id) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Accommodation where id = ?";
+        String query = "select Accommodation.id , Accommodation.name , Accommodation.address from Accommodation where id = ?";
 
         PreparedStatement stmt = null;
         ResultSet resultSet= null;
@@ -58,9 +57,7 @@ public class InDbAccommodationDao extends AccommodationDao {
 
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such accommodation");
-            } else {
+            if (resultSet.next()) {
                 accommodation = new Accommodation();
                 accommodation.setId(resultSet.getString("id"));
                 accommodation.setName(resultSet.getString("name"));

@@ -17,17 +17,17 @@ import java.util.List;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
 public class InDbAccountDao extends AccountDao {
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String ACCOUNT = "account";
 
     @Override
     public void addAccount(CredentialsBean credentials){
         DBConnection connect = DBConnection.getInstance();
 
-        if (getAccount(credentials.getUsername()) != null) {
-            System.out.println("Account already exists");
-        } else {
+        if (getAccount(credentials.getUsername()) == null) {
             String query = "insert into Account (username, password, paymentCredential, rating, description, type) values (?,?,?,?,?,?)";
             PreparedStatement stmt = null;
-            ResultSet resultSet= null;
 
             try {
                 Connection connection = connect.getConnection();
@@ -58,16 +58,13 @@ public class InDbAccountDao extends AccountDao {
     public Account getAccount(String username) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Account where username = ?";
-        String proposalQuery = "select * from accountProposal where account = ?";
-        String itineraryQuery = "select * from accountItinerary where account = ?";
-        String requestQuery = "select * from accountRequest where account = ?";
+        String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
         String agencyTypeQuery = "select * from agencyType where agency = ?";
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet= null;
-        ResultSet otherResultSet= null;
+        ResultSet resultSet;
+        ResultSet otherResultSet;
 
         try {
             Connection connection = connect.getConnection();
@@ -80,59 +77,16 @@ public class InDbAccountDao extends AccountDao {
                 System.out.println("No such account");
             } else {
 
-                List<Proposal> proposals = new ArrayList<>();
-                List<Itinerary> itineraries = new ArrayList<>();
-                List<Request> requests = new ArrayList<>();
-                List<String> types = new ArrayList<>();
-
-                stmt = connection.prepareStatement(proposalQuery);
-
-                stmt.setString(1, username);
-                otherResultSet = stmt.executeQuery();
-
-                while (otherResultSet.next()) {
-                    InDbProposalDao proposalDao = new InDbProposalDao();
-                    Proposal proposal = proposalDao.getProposal(otherResultSet.getString("proposalID"));
-                    proposals.add(proposal);
-                }
-
-                stmt = connection.prepareStatement(itineraryQuery);
-
-                stmt.setString(1, username);
-                otherResultSet = stmt.executeQuery();
-
-                while (otherResultSet.next()) {
-                    InDbItineraryDao itineraryDao = new InDbItineraryDao();
-                    Itinerary itinerary = itineraryDao.getItinerary(otherResultSet.getString("itineraryID"));
-                    itineraries.add(itinerary);
-                }
-
-                stmt = connection.prepareStatement(requestQuery);
-
-                stmt.setString(1, username);
-                otherResultSet = stmt.executeQuery();
-
-                while (otherResultSet.next()) {
-                    InDbRequestDao requestDao = new InDbRequestDao();
-                    Request request = requestDao.getRequest(otherResultSet.getString("requestID"));
-                    requests.add(request);
-                }
-
-                stmt = connection.prepareStatement(agencyTypeQuery);
-
-                stmt.setString(1, username);
-                otherResultSet = stmt.executeQuery();
-
-                while (otherResultSet.next()) {
-                    types.add(otherResultSet.getString("type"));
-                }
-
+                List<Proposal> proposals = getAccountProposals(username, connection);
+                List<Itinerary> itineraries = getAccountItineraries(username, connection);
+                List<Request> requests = getAccountRequests(username, connection);
 
                 if ((resultSet.getString("type")).equals(AGENCY)) {
+                    List<String> types = getAgencyTypes(username, connection);
 
                     Agency agency = new Agency();
-                    agency.setUsername(resultSet.getString("username"));
-                    agency.setPassword(resultSet.getString("password"));
+                    agency.setUsername(resultSet.getString(USERNAME));
+                    agency.setPassword(resultSet.getString(PASSWORD));
                     agency.setType(resultSet.getString("type"));
                     agency.setProposals(proposals);
                     agency.setItineraries(itineraries);
@@ -141,21 +95,17 @@ public class InDbAccountDao extends AccountDao {
                     agency.setPreferences(types);
                     agency.setRating(resultSet.getDouble("rating"));
 
-                    System.out.println(agency.getType()+" - "+agency.getUsername());
-
                     return agency;
 
                 } else {
 
                     User user = new User();
-                    user.setUsername(resultSet.getString("username"));
-                    user.setPassword(resultSet.getString("password"));
+                    user.setUsername(resultSet.getString(USERNAME));
+                    user.setPassword(resultSet.getString(PASSWORD));
                     user.setType(resultSet.getString("type"));
                     user.setProposals(proposals);
                     user.setItineraries(itineraries);
                     user.setRequests(requests);
-
-                    System.out.println(user.getType()+" - "+user.getUsername());
 
                     return user;
                 }
@@ -193,7 +143,7 @@ public class InDbAccountDao extends AccountDao {
     public Agency getAgencyByProposal(String proposalID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select account from accountProposal where proposalID = ?";
+        String query = "select accountProposal.account from accountProposal where proposalID = ?";
 
 
         PreparedStatement stmt = null;
@@ -207,9 +157,9 @@ public class InDbAccountDao extends AccountDao {
             resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
-                Account account = getAccountPrimaryData(resultSet.getString("account"));
-                if (account instanceof Agency) {
-                    return (Agency) account;
+                Account account = getAccountPrimaryData(resultSet.getString(ACCOUNT));
+                if (account instanceof Agency agency) {
+                    return agency;
                 }
             }
             return null;
@@ -231,7 +181,7 @@ public class InDbAccountDao extends AccountDao {
     public User getUserByProposal(String proposalID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select account from accountProposal where proposalID = ?";
+        String query = "select accountProposal.account from accountProposal where proposalID = ?";
 
 
         PreparedStatement stmt = null;
@@ -245,9 +195,9 @@ public class InDbAccountDao extends AccountDao {
             resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
-                Account account = getAccountPrimaryData(resultSet.getString("account"));
-                if (account instanceof User) {
-                    return (User) account;
+                Account account = getAccountPrimaryData(resultSet.getString(ACCOUNT));
+                if (account instanceof User user) {
+                    return user;
                 }
             }
             return null;
@@ -269,7 +219,7 @@ public class InDbAccountDao extends AccountDao {
     public Agency getAgencyByRequest(String requestID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select account from accountRequest where requestID = ?";
+        String query = "select accountRequest.account from accountRequest where requestID = ?";
 
 
         PreparedStatement stmt = null;
@@ -283,9 +233,9 @@ public class InDbAccountDao extends AccountDao {
             resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
-                Account account = getAccountPrimaryData(resultSet.getString("account"));
-                if (account instanceof Agency) {
-                    return (Agency) account;
+                Account account = getAccountPrimaryData(resultSet.getString(ACCOUNT));
+                if (account instanceof Agency agency) {
+                    return agency;
                 }
             }
             return null;
@@ -307,7 +257,7 @@ public class InDbAccountDao extends AccountDao {
     public User getUserByRequest(String requestID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select account from accountRequest where requestID = ?";
+        String query = "select accountRequest.account from accountRequest where requestID = ?";
 
 
         PreparedStatement stmt = null;
@@ -321,9 +271,9 @@ public class InDbAccountDao extends AccountDao {
             resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
-                Account account = getAccountPrimaryData(resultSet.getString("account"));
-                if (account instanceof User) {
-                    return (User) account;
+                Account account = getAccountPrimaryData(resultSet.getString(ACCOUNT));
+                if (account instanceof User user) {
+                    return user;
                 }
             }
             return null;
@@ -349,8 +299,8 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet= null;
-        ResultSet otherResultSet= null;
+        ResultSet resultSet;
+        ResultSet otherResultSet;
 
         try {
             Connection connection = connect.getConnection();
@@ -376,8 +326,8 @@ public class InDbAccountDao extends AccountDao {
                 if ((resultSet.getString("type")).equals(AGENCY)) {
 
                     Agency agency = new Agency();
-                    agency.setUsername(resultSet.getString("username"));
-                    agency.setPassword(resultSet.getString("password"));
+                    agency.setUsername(resultSet.getString(USERNAME));
+                    agency.setPassword(resultSet.getString(PASSWORD));
                     agency.setType(resultSet.getString("type"));
                     agency.setDescription(resultSet.getString("description"));
                     agency.setPreferences(types);
@@ -390,8 +340,8 @@ public class InDbAccountDao extends AccountDao {
                 } else {
 
                     User user = new User();
-                    user.setUsername(resultSet.getString("username"));
-                    user.setPassword(resultSet.getString("password"));
+                    user.setUsername(resultSet.getString(USERNAME));
+                    user.setPassword(resultSet.getString(PASSWORD));
                     user.setType(resultSet.getString("type"));
 
                     System.out.println(user.getType());
@@ -412,5 +362,101 @@ public class InDbAccountDao extends AccountDao {
         }
 
         return null;
+    }
+
+    public List<Proposal> getAccountProposals(String username, Connection connection) {
+        String proposalQuery = "select accountProposal.proposalID from accountProposal where account = ?";
+        PreparedStatement stmt;
+        ResultSet resultSet;
+
+        List<Proposal> proposals = new ArrayList<>();
+
+
+        try {
+            stmt = connection.prepareStatement(proposalQuery);
+            stmt.setString(1, username);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                InDbProposalDao proposalDao = new InDbProposalDao();
+                Proposal proposal = proposalDao.getProposal(resultSet.getString("proposalID"));
+                proposals.add(proposal);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return proposals;
+    }
+
+    public List<Itinerary> getAccountItineraries(String username, Connection connection) {
+        String itineraryQuery = "select accountItinerary.itineraryID from accountItinerary where account = ?";
+        PreparedStatement stmt;
+        ResultSet resultSet;
+
+        List<Itinerary> itineraries = new ArrayList<>();
+        try {
+            stmt = connection.prepareStatement(itineraryQuery);
+
+            stmt.setString(1, username);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                InDbItineraryDao itineraryDao = new InDbItineraryDao();
+                Itinerary itinerary = itineraryDao.getItinerary(resultSet.getString("itineraryID"));
+                itineraries.add(itinerary);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return itineraries;
+    }
+
+    public List<Request> getAccountRequests(String username, Connection connection) {
+        String requestQuery = "select accountRequest.requestID from accountRequest where account = ?";
+        PreparedStatement stmt;
+        ResultSet resultSet;
+
+        List<Request> requests = new ArrayList<>();
+        try {
+            stmt = connection.prepareStatement(requestQuery);
+
+            stmt.setString(1, username);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                InDbRequestDao requestDao = new InDbRequestDao();
+                Request request = requestDao.getRequest(resultSet.getString("requestID"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return requests;
+    }
+
+    public List<String> getAgencyTypes(String username, Connection connection) {
+        String agencyTypeQuery = "select agencyType.type from agencyType where agency = ?";
+        PreparedStatement stmt;
+        ResultSet resultSet;
+
+        List<String> types = new ArrayList<>();
+        try {
+            stmt = connection.prepareStatement(agencyTypeQuery);
+
+            stmt.setString(1, username);
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                types.add(resultSet.getString("type"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return types;
     }
 }
