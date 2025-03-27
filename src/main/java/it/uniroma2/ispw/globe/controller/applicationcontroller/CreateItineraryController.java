@@ -24,6 +24,8 @@ public class CreateItineraryController {
     public void createItinerary(ItineraryBean itineraryBean, String sessionID) {
         ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
         DayDao dayDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getDayDao();
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
         String itineraryId = UUID.randomUUID().toString();
         itineraryBean.setId(itineraryId);
@@ -32,10 +34,25 @@ public class CreateItineraryController {
 
         List<Day> days = new ArrayList<>();
 
-        Day day0 = dayDao.createDay(itineraryId,0,itineraryBean.getCities(),itineraryBean.getAttractions());
+        Day day0 = dayDao.createDay(itineraryId,0);
+        List<City> cities = new ArrayList<>();
+        List<Attraction> attractions = new ArrayList<>();
+
+        for (String cityId : itineraryBean.getCities()) {
+            City city = cityDao.createCity(cityId);
+            cities.add(city);
+        }
+
+        for (String attractionId : itineraryBean.getAttractions()) {
+            Attraction attraction = attractionDao.createAttraction(attractionId);
+            attractions.add(attraction);
+        }
+        day0.setCities(cities);
+        day0.setAttractions(attractions);
+
         days.add(day0);
         for (int i=1; i<=itineraryBean.getDuration(); i++) {
-            Day day = dayDao.createDay(itineraryId, i,new ArrayList<>(),new ArrayList<>());
+            Day day = dayDao.createDay(itineraryId, i);
             days.add(day);
         }
 
