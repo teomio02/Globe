@@ -10,9 +10,9 @@ public abstract class DaoFactory {
 
     public static DaoFactory getFactory(String s) {
         if (s.equals(IN_DATABASE)) {
-            return new InMemoryDaoFactory();
+            return InMemoryDaoFactory.getInstance();
         }
-        return new InDbDaoFactory();
+        return InDbDaoFactory.getInstance();
     }
 
     public abstract AccommodationDao getAccommodationDao();

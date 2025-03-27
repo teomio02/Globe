@@ -3,7 +3,16 @@ package it.uniroma2.ispw.globe.model.dao.db;
 import it.uniroma2.ispw.globe.model.dao.*;
 
 public class InDbDaoFactory extends DaoFactory {
+    private static InDbDaoFactory instance = null;
 
+    private InDbDaoFactory() {}
+
+    public static InDbDaoFactory getInstance() {
+        if (instance == null) {
+            instance = new InDbDaoFactory();
+        }
+        return instance;
+    }
     @Override
     public ItineraryDao getItineraryDao() {
         return new InDbItineraryDao();
