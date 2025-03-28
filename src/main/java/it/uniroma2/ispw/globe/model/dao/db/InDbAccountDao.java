@@ -59,12 +59,9 @@ public class InDbAccountDao extends AccountDao {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
-        String agencyTypeQuery = "select * from agencyType where agency = ?";
-
 
         PreparedStatement stmt = null;
         ResultSet resultSet;
-        ResultSet otherResultSet;
 
         try {
             Connection connection = connect.getConnection();
@@ -73,10 +70,7 @@ public class InDbAccountDao extends AccountDao {
             stmt.setString(1, username);
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such account");
-            } else {
-
+            if (resultSet.next()) {
                 List<Proposal> proposals = getAccountProposals(username, connection);
                 List<Itinerary> itineraries = getAccountItineraries(username, connection);
                 List<Request> requests = getAccountRequests(username, connection);
@@ -127,15 +121,12 @@ public class InDbAccountDao extends AccountDao {
 
     @Override
     public void removeAccount(CredentialsBean credentials) {
-        DBConnection connect = DBConnection.getInstance();
+        // da implementare
     }
 
     @Override
     public List<Agency> getAgenciesByType(List<String> types) {
-        DBConnection connect = DBConnection.getInstance();
-
         // da implementare
-
         return null;
     }
 
@@ -309,9 +300,7 @@ public class InDbAccountDao extends AccountDao {
             stmt.setString(1, username);
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such account");
-            } else {
+            if (resultSet.next()) {
                 List<String> types = new ArrayList<>();
                 stmt = connection.prepareStatement(agencyTypeQuery);
 

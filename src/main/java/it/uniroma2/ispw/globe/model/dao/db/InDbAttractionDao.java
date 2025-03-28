@@ -17,9 +17,7 @@ public class InDbAttractionDao extends AttractionDao {
     public void addAttraction(Attraction attraction) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getAttraction(attraction.getPlaceID()) != null) {
-            System.out.println("Attraction already exists");
-        } else {
+        if (getAttraction(attraction.getPlaceID()) == null) {
             String query = "insert into Attraction (placeID,name,city,address,latitude,longitude) values (?,?,?,?,?,?)";
 
             PreparedStatement stmt = null;
@@ -47,7 +45,7 @@ public class InDbAttractionDao extends AttractionDao {
     public Attraction getAttraction(String attractionID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Attraction where placeID = ?";
+        String query = "select Attraction.osm_type, Attraction.osm_id, Attraction.name, Attraction.lat, Attraction.lon, Attraction.city, Attraction.road from Attraction where placeID = ?";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -62,9 +60,7 @@ public class InDbAttractionDao extends AttractionDao {
 
             rs = stmt.executeQuery();
 
-            if (!rs.next()) {
-                System.out.println("No such attraction");
-            } else {
+            if (rs.next()) {
                 JsonObject json = new JsonObject();
 
                 json.addProperty("osm_type", rs.getString("placeID").substring(0,1));

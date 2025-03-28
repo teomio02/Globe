@@ -1,9 +1,5 @@
 package it.uniroma2.ispw.globe.model.dao;
 
-
-import it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory;
-import it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory;
-
 public abstract class DaoFactory {
 
     public abstract AccommodationDao getAccommodationDao();
