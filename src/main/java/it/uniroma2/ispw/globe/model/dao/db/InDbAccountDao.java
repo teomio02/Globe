@@ -294,8 +294,8 @@ public class InDbAccountDao extends AccountDao {
     public Account getAccountPrimaryData(String username) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Account where username = ?";
-        String agencyTypeQuery = "select * from agencyType where agency = ?";
+        String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
+        String agencyTypeQuery = "select agencyType.type from agencyType where agency = ?";
 
 
         PreparedStatement stmt = null;
@@ -333,8 +333,6 @@ public class InDbAccountDao extends AccountDao {
                     agency.setPreferences(types);
                     agency.setRating(resultSet.getDouble("rating"));
 
-                    System.out.println(agency.getType());
-
                     return agency;
 
                 } else {
@@ -343,8 +341,6 @@ public class InDbAccountDao extends AccountDao {
                     user.setUsername(resultSet.getString(USERNAME));
                     user.setPassword(resultSet.getString(PASSWORD));
                     user.setType(resultSet.getString("type"));
-
-                    System.out.println(user.getType());
 
                     return user;
                 }
