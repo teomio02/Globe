@@ -17,8 +17,8 @@ import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 public class AcceptItineraryController {
 
     public String sendResponse(String proposalId, String response) {
-        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         Agency agency = accountDao.getAgencyByProposal(proposalId);
         User user = accountDao.getUserByProposal(proposalId);
 
@@ -37,8 +37,8 @@ public class AcceptItineraryController {
     }
 
     public String executePayment(String userUsername, String agencyUsername, double amount) {
-        Account payer = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(userUsername);
-        Account payee = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(agencyUsername);
+        Account payer = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(userUsername);
+        Account payee = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(agencyUsername);
 
         PaymentApi api = new PaymentApi();
 
@@ -46,7 +46,7 @@ public class AcceptItineraryController {
     }
 
     public ItineraryBean getProposalItinerary(String proposalId) {
-        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
+        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
         Proposal proposal = proposalDao.getProposal(proposalId);
         Itinerary itinerary = proposal.getItinerary();
 

@@ -68,7 +68,7 @@ public class RequestItineraryController {
     }
 
     public List<AgencyBean> getAgenciesByType(List<String> types) {
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         List<Agency> agencies = accountDao.getAgenciesByType(types);
         List<AgencyBean> agencyBeans = new ArrayList<>();
 
@@ -123,7 +123,7 @@ public class RequestItineraryController {
     }
 
     public AgencyBean getAgency(String username, String sessionID) {
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         Account account = accountDao.getAccount(username);
 
 
@@ -134,10 +134,10 @@ public class RequestItineraryController {
 
     public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) {
 
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
-        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
 
         Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
