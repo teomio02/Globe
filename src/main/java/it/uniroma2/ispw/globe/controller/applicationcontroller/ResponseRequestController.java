@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
@@ -18,9 +17,9 @@ import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 public class ResponseRequestController {
 
     public void createProposal(ProposalBean proposalBean, String userUsername, String requestId, String sessionID) {
-        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-        RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        ProposalDao proposalDao = DaoFactory.getFactory().getProposalDao();
+        RequestDao requestDao = DaoFactory.getFactory().getRequestDao();
+        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
 
         User user = (User) accountDao.getAccount(userUsername);
         String proposalID = UUID.randomUUID().toString();
@@ -40,9 +39,9 @@ public class ResponseRequestController {
     }
 
     public void saveProposal(String sessionID) {
-        ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-        ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-        RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+        ItineraryDao itineraryDao = DaoFactory.getFactory().getItineraryDao();
+        ProposalDao proposalDao = DaoFactory.getFactory().getProposalDao();
+        RequestDao requestDao = DaoFactory.getFactory().getRequestDao();
 
         Session session = SessionManager.getInstance().getSession(sessionID);
         Agency agency = (Agency) session.getAccount();
@@ -84,8 +83,8 @@ public class ResponseRequestController {
                 return null;
             }
         } else {
-            ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
-            AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            ProposalDao proposalDao = DaoFactory.getFactory().getProposalDao();
+            AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
             proposal = proposalDao.getProposal(proposalID);
             agency = accountDao.getAgencyByProposal(proposalID);
             user = accountDao.getUserByProposal(proposalID);
@@ -111,8 +110,8 @@ public class ResponseRequestController {
                 agency = (Agency) session.getPendingAccount();
             }
         } else {
-            RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
-            AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            RequestDao requestDao = DaoFactory.getFactory().getRequestDao();
+            AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
 
             request = requestDao.getRequest(requestID);
             agency = accountDao.getAgencyByRequest(requestID);
@@ -137,7 +136,7 @@ public class ResponseRequestController {
 
     public List<ProposalBean> getAgencyProposals(String sessionID) {
 
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
 
         Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
         List<Proposal> proposals = agency.getProposals();
@@ -153,7 +152,7 @@ public class ResponseRequestController {
 
     public List<AgencyRequestBean> getAgencyRequests(String sessionID) {
 
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
 
         Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
         List<Request> requests = agency.getRequests();
@@ -167,7 +166,7 @@ public class ResponseRequestController {
     }
 
     public void setPendingRequest(String sessionID,String requestID) {
-        RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
+        RequestDao requestDao = DaoFactory.getFactory().getRequestDao();
         Request request = requestDao.getRequest(requestID);
 
         SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);

@@ -1,6 +1,8 @@
 package it.uniroma2.ispw.globe;
 
 import it.uniroma2.ispw.globe.controller.guicontroller.LogInGUIController;
+import it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory;
+import it.uniroma2.ispw.globe.other.Persistence;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,6 +27,7 @@ public class GlobeApplicationGUI extends Application {
         }
 
         LogInGUIController controller = new LogInGUIController();
+        Persistence.getInstance().setType(Persistence.IN_DATABASE);
         fxmlLoader.setController(controller);
 
         Scene scene = new Scene(fxmlLoader.load());

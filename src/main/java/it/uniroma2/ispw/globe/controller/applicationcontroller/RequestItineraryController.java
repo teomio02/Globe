@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import it.uniroma2.ispw.globe.util.decorator.*;
@@ -68,7 +67,7 @@ public class RequestItineraryController {
     }
 
     public List<AgencyBean> getAgenciesByType(List<String> types) {
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
         List<Agency> agencies = accountDao.getAgenciesByType(types);
         List<AgencyBean> agencyBeans = new ArrayList<>();
 
@@ -123,7 +122,7 @@ public class RequestItineraryController {
     }
 
     public AgencyBean getAgency(String username, String sessionID) {
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
         Account account = accountDao.getAccount(username);
 
 
@@ -134,10 +133,10 @@ public class RequestItineraryController {
 
     public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) {
 
-        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        RequestDao requestDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getRequestDao();
-        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
+        RequestDao requestDao = DaoFactory.getFactory().getRequestDao();
+        CityDao cityDao = DaoFactory.getFactory().getCityDao();
+        AttractionDao attractionDao = DaoFactory.getFactory().getAttractionDao();
 
 
         Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
