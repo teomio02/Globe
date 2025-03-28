@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
+import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
@@ -21,10 +22,10 @@ public class CreateItineraryController {
     private static final String ATTRACTION = "";
 
     public void createItinerary(ItineraryBean itineraryBean, String sessionID) {
-        ItineraryDao itineraryDao = DaoFactory.getFactory().getItineraryDao();
-        DayDao dayDao = DaoFactory.getFactory().getDayDao();
-        CityDao cityDao = DaoFactory.getFactory().getCityDao();
-        AttractionDao attractionDao = DaoFactory.getFactory().getAttractionDao();
+        ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+        DayDao dayDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getDayDao();
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
         String itineraryId = UUID.randomUUID().toString();
         itineraryBean.setId(itineraryId);
@@ -60,7 +61,7 @@ public class CreateItineraryController {
         calculateItinerary(itinerary);
 
         if (itineraryBean.getAccommodations() != null) {
-            AccommodationDao accommodationDao = DaoFactory.getFactory().getAccommodationDao();
+            AccommodationDao accommodationDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
 
             List<Accommodation> accommodations = new ArrayList<>();
             for (Pair<String,String> a : itineraryBean.getAccommodations()) {
@@ -74,7 +75,7 @@ public class CreateItineraryController {
         }
 
         if (itineraryBean.getInboundFlightArrivalTime() != 0) {
-            FlightDao flightDao = DaoFactory.getFactory().getFlightDao();
+            FlightDao flightDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getFlightDao();
 
             Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
             Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
@@ -91,7 +92,7 @@ public class CreateItineraryController {
     }
 
     public void saveItinerary(String sessionID) {
-        ItineraryDao itineraryDao = DaoFactory.getFactory().getItineraryDao();
+        ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
 
         Session session = SessionManager.getInstance().getSession(sessionID);
         Account account = session.getAccount();
@@ -215,7 +216,7 @@ public class CreateItineraryController {
         if (itineraryId == null) {
             itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
         } else {
-            ItineraryDao itineraryDao = DaoFactory.getFactory().getItineraryDao();
+            ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
             itinerary = itineraryDao.getItinerary(itineraryId);
         }
 
@@ -292,7 +293,7 @@ public class CreateItineraryController {
                 return null;
             }
         } else {
-            ItineraryDao itineraryDao = DaoFactory.getFactory().getItineraryDao();
+            ItineraryDao itineraryDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getItineraryDao();
             itinerary = itineraryDao.getItinerary(itineraryId);
         }
 
@@ -331,7 +332,7 @@ public class CreateItineraryController {
     }
 
     public CityBean getCity(int stepNum,String cityID,String sessionID) {
-        CityDao cityDao = DaoFactory.getFactory().getCityDao();
+        CityDao cityDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getCityDao();
         City city = null;
 
         if (sessionID != null) {
@@ -356,7 +357,7 @@ public class CreateItineraryController {
     }
 
     public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) {
-        AttractionDao attractionDao = DaoFactory.getFactory().getAttractionDao();
+        AttractionDao attractionDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAttractionDao();
         Attraction attraction = null;
 
         if (sessionID != null) {

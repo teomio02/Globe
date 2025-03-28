@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
+import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
@@ -27,8 +28,8 @@ public class ManageItineraryController {
             }
 
         } else {
-            ProposalDao proposalDao = DaoFactory.getFactory().getProposalDao();
-            AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
+            ProposalDao proposalDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getProposalDao();
+            AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
             proposal = proposalDao.getProposal(proposalID);
             user = accountDao.getUserByProposal(proposalID);
             agency = accountDao.getAgencyByProposal(proposalID);
@@ -49,7 +50,7 @@ public class ManageItineraryController {
     }
 
     public List<ProposalBean> getUserProposals(String sessionId) {
-        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
         User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
         List<Proposal> proposals = user.getProposals();
         List<ProposalBean> proposalBeans = new ArrayList<>();

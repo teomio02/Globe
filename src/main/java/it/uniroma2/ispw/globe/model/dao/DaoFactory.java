@@ -1,14 +1,18 @@
 package it.uniroma2.ispw.globe.model.dao;
 
 
-import it.uniroma2.ispw.globe.other.Persistence;
-
-import java.lang.reflect.InvocationTargetException;
+import it.uniroma2.ispw.globe.model.dao.db.InDbDaoFactory;
+import it.uniroma2.ispw.globe.model.dao.memory.InMemoryDaoFactory;
 
 public abstract class DaoFactory {
+    public static final String IN_MEMORY = "MEMORY";
+    public static final String IN_DATABASE = "DB";
 
-    public static DaoFactory getFactory() {
-        return Persistence.getInstance().getDaoFactoryClass();
+    public static DaoFactory getFactory(String s) {
+        if (s.equals(IN_DATABASE)) {
+            return InDbDaoFactory.getInstance();
+        }
+        return InMemoryDaoFactory.getInstance();
     }
 
     public abstract AccommodationDao getAccommodationDao();

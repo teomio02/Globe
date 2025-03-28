@@ -5,6 +5,7 @@ import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
 import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.memory.InMemoryAccountDao;
+import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 
 public class LogInController{
@@ -12,7 +13,7 @@ public class LogInController{
     private static final String GUEST = "guest";
 
     public String logIn(CredentialsBean credentials) {
-        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
         if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
             accountDao.addAccount(credentials);
@@ -23,7 +24,7 @@ public class LogInController{
     }
 
     public boolean signIn(CredentialsBean credentials) {
-        AccountDao accountDao = DaoFactory.getFactory().getAccountDao();
+        AccountDao accountDao = DaoFactory.getFactory(Persistence.getInstance().getType()).getAccountDao();
         if (accountDao.getAccount(credentials.getUsername()) != null) {
             return false;
         } else {
