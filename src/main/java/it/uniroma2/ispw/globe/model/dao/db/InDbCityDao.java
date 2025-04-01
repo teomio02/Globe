@@ -46,7 +46,9 @@ public class InDbCityDao extends CityDao {
     public City getCity(String cityID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from City where placeID = ?";
+        String query = "select City.placeID, City.name, City.country ,City.latitude, City.longitude from City where placeID = ?";
+
+
 
         PreparedStatement stmt = null;
         ResultSet rs = null;

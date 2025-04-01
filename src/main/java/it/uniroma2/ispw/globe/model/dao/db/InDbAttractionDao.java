@@ -45,7 +45,7 @@ public class InDbAttractionDao extends AttractionDao {
     public Attraction getAttraction(String attractionID) {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select Attraction.osm_type, Attraction.osm_id, Attraction.name, Attraction.lat, Attraction.lon, Attraction.city, Attraction.road from Attraction where placeID = ?";
+        String query = "select Attraction.placeID, Attraction.name, Attraction.latitude, Attraction.longitude, Attraction.city, Attraction.address from Attraction where placeID = ?";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
