@@ -62,6 +62,8 @@ public class InDbItineraryDao extends ItineraryDao {
                                     accommodationStmt.execute();
                                 } catch (SQLException e) {
                                     throw new RuntimeException(e);
+                                } finally {
+                                    DBConnection.getInstance().closeConnection(accommodationStmt, null);
                                 }
                             }
                         }
@@ -81,6 +83,8 @@ public class InDbItineraryDao extends ItineraryDao {
                                 flightStmt.execute();
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
+                            } finally {
+                                DBConnection.getInstance().closeConnection(flightStmt, null);
                             }
                         }
                         current = ((ItineraryDecorator) current).getItinerary();
@@ -103,8 +107,6 @@ public class InDbItineraryDao extends ItineraryDao {
                     throw new RuntimeException(e);
                 } finally {
                     DBConnection.getInstance().closeConnection(stmt,null);
-                    DBConnection.getInstance().closeConnection(accommodationStmt,null);
-                    DBConnection.getInstance().closeConnection(flightStmt,null);
                     DBConnection.getInstance().closeConnection(finalStmt,null);
                 }
             }
