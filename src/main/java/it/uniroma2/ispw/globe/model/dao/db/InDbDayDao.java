@@ -23,6 +23,8 @@ public class InDbDayDao extends DayDao {
             String cityQuery = "insert into dayCity (dayNum,itineraryID,cityID) values (?,?,?)";
 
             PreparedStatement stmt = null;
+            PreparedStatement attractionStmt = null;
+            PreparedStatement cityStmt = null;
 
             try {
                 Connection connection = connect.getConnection();
@@ -32,33 +34,35 @@ public class InDbDayDao extends DayDao {
                 stmt.setInt(1, day.getDayNum());
                 stmt.execute();
 
-                stmt = connection.prepareStatement(attractionQuery);
+                attractionStmt = connection.prepareStatement(attractionQuery);
 
                 for (Attraction attraction : day.getAttractions()) {
                     InDbAttractionDao attractionDao = new InDbAttractionDao();
                     attractionDao.addAttraction(attraction);
 
-                    stmt.setString(2, day.getId());
-                    stmt.setInt(1, day.getDayNum());
-                    stmt.setString(3, attraction.getPlaceID());
-                    stmt.execute();
+                    attractionStmt.setString(2, day.getId());
+                    attractionStmt.setInt(1, day.getDayNum());
+                    attractionStmt.setString(3, attraction.getPlaceID());
+                    attractionStmt.execute();
                 }
 
-                stmt = connection.prepareStatement(cityQuery);
+                cityStmt = connection.prepareStatement(cityQuery);
 
                 for (City city : day.getCities()) {
                     InDbCityDao cityDao = new InDbCityDao();
                     cityDao.addCity(city);
 
-                    stmt.setString(2, day.getId());
-                    stmt.setInt(1, day.getDayNum());
-                    stmt.setString(3, city.getPlaceID());
-                    stmt.execute();
+                    cityStmt.setString(2, day.getId());
+                    cityStmt.setInt(1, day.getDayNum());
+                    cityStmt.setString(3, city.getPlaceID());
+                    cityStmt.execute();
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
+                DBConnection.getInstance().closeConnection(attractionStmt,null);
+                DBConnection.getInstance().closeConnection(cityStmt,null);
             }
         }
     }
@@ -72,6 +76,8 @@ public class InDbDayDao extends DayDao {
         String cityQuery = "select * from dayCity where itineraryID = ? and dayNum = ?";
 
         PreparedStatement stmt = null;
+        PreparedStatement attractionStmt = null;
+        PreparedStatement cityStmt = null;
         ResultSet resultSet= null;
 
         Day day = null;
@@ -93,12 +99,12 @@ public class InDbDayDao extends DayDao {
                 day.setId(resultSet.getString("itineraryID"));
                 day.setDayNum(resultSet.getInt("dayNum"));
 
-                stmt = connection.prepareStatement(attractionQuery);
+                attractionStmt = connection.prepareStatement(attractionQuery);
 
-                stmt.setString(1, itineraryID);
-                stmt.setInt(2, dayNum);
+                attractionStmt.setString(1, itineraryID);
+                attractionStmt.setInt(2, dayNum);
 
-                resultSet = stmt.executeQuery();
+                resultSet = attractionStmt.executeQuery();
 
                 while (resultSet.next()) {
                     InDbAttractionDao attractionDao = new InDbAttractionDao();
@@ -106,12 +112,12 @@ public class InDbDayDao extends DayDao {
                     attractions.add(attraction);
                 }
 
-                stmt = connection.prepareStatement(cityQuery);
+                cityStmt = connection.prepareStatement(cityQuery);
 
-                stmt.setString(1, itineraryID);
-                stmt.setInt(2, dayNum);
+                cityStmt.setString(1, itineraryID);
+                cityStmt.setInt(2, dayNum);
 
-                resultSet = stmt.executeQuery();
+                resultSet = cityStmt.executeQuery();
 
                 while (resultSet.next()) {
                     InDbCityDao cityDao = new InDbCityDao();
@@ -126,6 +132,8 @@ public class InDbDayDao extends DayDao {
             throw new RuntimeException(e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
+            DBConnection.getInstance().closeConnection(attractionStmt,null);
+            DBConnection.getInstance().closeConnection(cityStmt,null);
         }
 
         return day;

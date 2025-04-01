@@ -23,6 +23,8 @@ public class InDbProposalDao extends ProposalDao {
             String accountQuery= "insert into accountProposal (account,proposalID) values (?,?)";
 
             PreparedStatement stmt = null;
+            PreparedStatement firstAccountStmt = null;
+            PreparedStatement secondAccountStmt = null;
 
             try {
                 Connection connection = connect.getConnection();
@@ -37,20 +39,22 @@ public class InDbProposalDao extends ProposalDao {
                 stmt.setString(7, proposal.getAccepted());
                 stmt.execute();
 
-                stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, agency.getUsername());
-                stmt.setString(2, proposal.getId());
-                stmt.execute();
+                firstAccountStmt = connection.prepareStatement(accountQuery);
+                firstAccountStmt.setString(1, agency.getUsername());
+                firstAccountStmt.setString(2, proposal.getId());
+                firstAccountStmt.execute();
 
-                stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, user.getUsername());
-                stmt.setString(2, proposal.getId());
-                stmt.execute();
+                secondAccountStmt = connection.prepareStatement(accountQuery);
+                secondAccountStmt.setString(1, user.getUsername());
+                secondAccountStmt.setString(2, proposal.getId());
+                secondAccountStmt.execute();
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
+                DBConnection.getInstance().closeConnection(firstAccountStmt,null);
+                DBConnection.getInstance().closeConnection(secondAccountStmt,null);
             }
         }
     }

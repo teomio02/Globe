@@ -26,6 +26,10 @@ public class InDbRequestDao extends RequestDao {
             String attractionQuery = "insert into requestAttraction (requestID,attractionID) values (?,?)";
 
             PreparedStatement stmt = null;
+            PreparedStatement firstAccountStmt = null;
+            PreparedStatement secondAccountStmt = null;
+            PreparedStatement cityStmt = null;
+            PreparedStatement attrStmt = null;
 
             try {
                 Connection connection = connect.getConnection();
@@ -39,33 +43,37 @@ public class InDbRequestDao extends RequestDao {
                 stmt.setInt(6, request.getDayNum());
                 stmt.execute();
 
-                stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, agency.getUsername());
-                stmt.setString(2, request.getId());
-                stmt.execute();
+                firstAccountStmt = connection.prepareStatement(accountQuery);
+                firstAccountStmt.setString(1, agency.getUsername());
+                firstAccountStmt.setString(2, request.getId());
+                firstAccountStmt.execute();
 
-                stmt = connection.prepareStatement(accountQuery);
-                stmt.setString(1, user.getUsername());
-                stmt.setString(2, request.getId());
-                stmt.execute();
+                secondAccountStmt = connection.prepareStatement(accountQuery);
+                secondAccountStmt.setString(1, user.getUsername());
+                secondAccountStmt.setString(2, request.getId());
+                secondAccountStmt.execute();
 
-                stmt = connection.prepareStatement(cityQuery);
+                cityStmt = connection.prepareStatement(cityQuery);
                 for (City city : request.getCities()) {
-                    stmt.setString(1, request.getId());
-                    stmt.setString(2, city.getPlaceID());
-                    stmt.execute();
+                    cityStmt.setString(1, request.getId());
+                    cityStmt.setString(2, city.getPlaceID());
+                    cityStmt.execute();
                 }
-                stmt = connection.prepareStatement(attractionQuery);
+                attrStmt = connection.prepareStatement(attractionQuery);
                 for (Attraction attraction : request.getAttractions()) {
-                    stmt.setString(1, request.getId());
-                    stmt.setString(2, attraction.getPlaceID());
-                    stmt.execute();
+                    attrStmt.setString(1, request.getId());
+                    attrStmt.setString(2, attraction.getPlaceID());
+                    attrStmt.execute();
                 }
 
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
+                DBConnection.getInstance().closeConnection(firstAccountStmt,null);
+                DBConnection.getInstance().closeConnection(secondAccountStmt,null);
+                DBConnection.getInstance().closeConnection(cityStmt,null);
+                DBConnection.getInstance().closeConnection(attrStmt,null);
             }
         }
     }
@@ -86,6 +94,9 @@ public class InDbRequestDao extends RequestDao {
 
 
         PreparedStatement stmt = null;
+        PreparedStatement cityStmt = null;
+        PreparedStatement attrStmt = null;
+        PreparedStatement typeStmt = null;
         ResultSet resultSet= null;
 
         Request request = null;
@@ -109,18 +120,18 @@ public class InDbRequestDao extends RequestDao {
                 request.setDayNum(resultSet.getInt("days"));
 
                 List<String> types = new ArrayList<>();
-                stmt = connection.prepareStatement(typeQuery);
-                stmt.setString(1, requestId);
-                resultSet = stmt.executeQuery();
+                typeStmt = connection.prepareStatement(typeQuery);
+                typeStmt.setString(1, requestId);
+                resultSet = typeStmt.executeQuery();
                 while (resultSet.next()) {
                     types.add(resultSet.getString("type"));
                 }
                 request.setItineraryType(types);
 
                 List<City> cities = new ArrayList<>();
-                stmt = connection.prepareStatement(cityQuery);
-                stmt.setString(1, requestId);
-                resultSet = stmt.executeQuery();
+                cityStmt = connection.prepareStatement(cityQuery);
+                cityStmt.setString(1, requestId);
+                resultSet = cityStmt.executeQuery();
                 InDbCityDao cityDao = new InDbCityDao();
                 while (resultSet.next()) {
                     City city = cityDao.getCity(resultSet.getString("cityID"));
@@ -129,9 +140,9 @@ public class InDbRequestDao extends RequestDao {
                 request.setCities(cities);
 
                 List<Attraction> attractions = new ArrayList<>();
-                stmt = connection.prepareStatement(attractionQuery);
-                stmt.setString(1, requestId);
-                resultSet = stmt.executeQuery();
+                attrStmt = connection.prepareStatement(attractionQuery);
+                attrStmt.setString(1, requestId);
+                resultSet = attrStmt.executeQuery();
                 InDbAttractionDao attractionDao = new InDbAttractionDao();
                 while (resultSet.next()) {
                     Attraction attraction = attractionDao.getAttraction(resultSet.getString("attractionID"));
@@ -143,6 +154,9 @@ public class InDbRequestDao extends RequestDao {
             throw new RuntimeException(e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
+            DBConnection.getInstance().closeConnection(cityStmt,null);
+            DBConnection.getInstance().closeConnection(attrStmt,null);
+            DBConnection.getInstance().closeConnection(typeStmt,null);
         }
 
         return request;

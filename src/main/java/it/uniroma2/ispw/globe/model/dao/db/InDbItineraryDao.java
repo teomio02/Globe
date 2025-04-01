@@ -24,7 +24,14 @@ public class InDbItineraryDao extends ItineraryDao {
 
             if (getItinerary(itinerary.getItineraryID()) == null) {
                 String query = "insert into Itinerary (itineraryID,name,description,daysNumber,inFlight,outFlight) values (?,?,?,?,?,?)";
+                String accommodationQuery = "insert into itineraryAccommodation (itineraryID,accommodationID) values (?,?)";
+                String flightQuery = "update Itinerary set inFlight = ?, outFlight = ? where itineraryID = ?";
+                String finalQuery = "insert into accountItinerary (account,itineraryID) values (?,?)";
+
                 PreparedStatement stmt = null;
+                PreparedStatement accommodationStmt = null;
+                PreparedStatement flightStmt = null;
+                PreparedStatement finalStmt = null;
 
                 try {
                     Connection connection = connect.getConnection();
@@ -46,35 +53,32 @@ public class InDbItineraryDao extends ItineraryDao {
                                 InDbAccommodationDao accommodationDao = new InDbAccommodationDao();
                                 accommodationDao.addAccommodation(accommodation);
 
-                                String accommodationQuery = "insert into itineraryAccommodation (itineraryID,accommodationID) values (?,?)";
-
                                 try {
 
-                                    stmt = connection.prepareStatement(accommodationQuery);
+                                    accommodationStmt = connection.prepareStatement(accommodationQuery);
 
-                                    stmt.setString(1, itinerary.getItineraryID());
-                                    stmt.setString(2, accommodation.getId());
-                                    stmt.execute();
+                                    accommodationStmt.setString(1, itinerary.getItineraryID());
+                                    accommodationStmt.setString(2, accommodation.getId());
+                                    accommodationStmt.execute();
                                 } catch (SQLException e) {
                                     throw new RuntimeException(e);
                                 }
                             }
                         }
                         if (current instanceof FlightDecorator) {
-                            String flightQuery = "update Itinerary set inFlight = ?, outFlight = ? where itineraryID = ?";
 
                             try {
-                                stmt = connection.prepareStatement(flightQuery);
+                                flightStmt = connection.prepareStatement(flightQuery);
 
                                 InDbFlightDao flightDao = new InDbFlightDao();
 
                                 flightDao.addFlight(((FlightDecorator) current).getInFlight());
                                 flightDao.addFlight(((FlightDecorator) current).getOutFlight());
 
-                                stmt.setString(1, ((FlightDecorator) current).getInFlight().getId());
-                                stmt.setString(2, ((FlightDecorator) current).getOutFlight().getId());
-                                stmt.setString(3, itinerary.getItineraryID());
-                                stmt.execute();
+                                flightStmt.setString(1, ((FlightDecorator) current).getInFlight().getId());
+                                flightStmt.setString(2, ((FlightDecorator) current).getOutFlight().getId());
+                                flightStmt.setString(3, itinerary.getItineraryID());
+                                flightStmt.execute();
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
@@ -89,17 +93,19 @@ public class InDbItineraryDao extends ItineraryDao {
 
                     account.getItineraries().add(itinerary);
 
-                    query = "insert into accountItinerary (account,itineraryID) values (?,?)";
-                    stmt = connection.prepareStatement(query);
-                    stmt.setString(1,account.getUsername());
-                    stmt.setString(2, itinerary.getItineraryID());
-                    stmt.execute();
+                    finalStmt = connection.prepareStatement(finalQuery);
+                    finalStmt.setString(1,account.getUsername());
+                    finalStmt.setString(2, itinerary.getItineraryID());
+                    finalStmt.execute();
 
 
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 } finally {
                     DBConnection.getInstance().closeConnection(stmt,null);
+                    DBConnection.getInstance().closeConnection(accommodationStmt,null);
+                    DBConnection.getInstance().closeConnection(flightStmt,null);
+                    DBConnection.getInstance().closeConnection(finalStmt,null);
                 }
             }
         }
@@ -115,6 +121,10 @@ public class InDbItineraryDao extends ItineraryDao {
         String typeQuery = "select * from itineraryType where itineraryID = ?";
 
         PreparedStatement stmt = null;
+        PreparedStatement dayStmt = null;
+        PreparedStatement accommodationStmt = null;
+        PreparedStatement typeStmt = null;
+
         ResultSet resultSet= null;
         ResultSet otherResultSet= null;
 
@@ -133,10 +143,10 @@ public class InDbItineraryDao extends ItineraryDao {
                 List<Accommodation> accommodations = new ArrayList<>();
                 List<String> types = new ArrayList<>();
 
-                stmt = connection.prepareStatement(dayQuery);
+                dayStmt = connection.prepareStatement(dayQuery);
 
-                stmt.setString(1, id);
-                otherResultSet = stmt.executeQuery();
+                dayStmt.setString(1, id);
+                otherResultSet = dayStmt.executeQuery();
 
                 while (otherResultSet.next()) {
                     InDbDayDao dayDao = new InDbDayDao();
@@ -144,10 +154,10 @@ public class InDbItineraryDao extends ItineraryDao {
                     days.add(day);
                 }
 
-                stmt = connection.prepareStatement(accommodationQuery);
+                accommodationStmt = connection.prepareStatement(accommodationQuery);
 
-                stmt.setString(1, id);
-                otherResultSet = stmt.executeQuery();
+                accommodationStmt.setString(1, id);
+                otherResultSet = accommodationStmt.executeQuery();
 
                 while (otherResultSet.next()) {
                     InDbAccommodationDao accommodationDao = new InDbAccommodationDao();
@@ -155,10 +165,10 @@ public class InDbItineraryDao extends ItineraryDao {
                     accommodations.add(accommodation);
                 }
 
-                stmt = connection.prepareStatement(typeQuery);
+                typeStmt = connection.prepareStatement(typeQuery);
 
-                stmt.setString(1, id);
-                otherResultSet = stmt.executeQuery();
+                typeStmt.setString(1, id);
+                otherResultSet = typeStmt.executeQuery();
 
                 while (otherResultSet.next()) {
                     types.add(otherResultSet.getString("type"));
@@ -194,7 +204,9 @@ public class InDbItineraryDao extends ItineraryDao {
             throw new RuntimeException(e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
-            DBConnection.getInstance().closeConnection(null,otherResultSet);
+            DBConnection.getInstance().closeConnection(dayStmt,otherResultSet);
+            DBConnection.getInstance().closeConnection(accommodationStmt,null);
+            DBConnection.getInstance().closeConnection(typeStmt,null);
         }
 
         return itinerary;
