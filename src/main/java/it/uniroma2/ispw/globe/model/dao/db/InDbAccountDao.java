@@ -254,6 +254,7 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
+        PreparedStatement otherStmt = null;
         ResultSet resultSet = null;
         ResultSet otherResultSet = null;
 
@@ -262,14 +263,15 @@ public class InDbAccountDao extends AccountDao {
             stmt = connection.prepareStatement(query);
 
             stmt.setString(1, username);
+
             resultSet = stmt.executeQuery();
 
             if (resultSet.next()) {
                 List<String> types = new ArrayList<>();
-                stmt = connection.prepareStatement(agencyTypeQuery);
+                otherStmt = connection.prepareStatement(agencyTypeQuery);
 
-                stmt.setString(1, username);
-                otherResultSet = stmt.executeQuery();
+                otherStmt.setString(1, username);
+                otherResultSet = otherStmt.executeQuery();
 
                 while (otherResultSet.next()) {
                     types.add(otherResultSet.getString("type"));
@@ -302,7 +304,7 @@ public class InDbAccountDao extends AccountDao {
             throw new RuntimeException(e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
-            DBConnection.getInstance().closeConnection(null,otherResultSet);
+            DBConnection.getInstance().closeConnection(otherStmt,otherResultSet);
         }
 
         return null;
