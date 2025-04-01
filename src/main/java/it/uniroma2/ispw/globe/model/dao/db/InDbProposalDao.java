@@ -18,9 +18,7 @@ public class InDbProposalDao extends ProposalDao {
     public void addProposal(Proposal proposal,User user, Agency agency) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getProposal(proposal.getId()) != null) {
-            System.out.println("Proposal already exists");
-        } else {
+        if (getProposal(proposal.getId()) == null) {
             String query = "insert into Proposal (id,itineraryID,price,description,user,agency,accepted) values (?,?,?,?,?,?,?)";
             String accountQuery= "insert into accountProposal (account,proposalID) values (?,?)";
 
@@ -76,9 +74,7 @@ public class InDbProposalDao extends ProposalDao {
 
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such day");
-            } else {
+            if (resultSet.next()) {
                 proposal = new Proposal();
 
                 proposal.setId(resultSet.getString("id"));

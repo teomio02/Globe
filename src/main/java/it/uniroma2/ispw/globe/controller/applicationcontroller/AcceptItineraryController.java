@@ -6,7 +6,6 @@ import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;

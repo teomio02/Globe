@@ -22,9 +22,7 @@ public class InDbItineraryDao extends ItineraryDao {
         if (account != null) {
             DBConnection connect = DBConnection.getInstance();
 
-            if (getItinerary(itinerary.getItineraryID()) != null) {
-                System.out.println("itinerary already exists");
-            } else {
+            if (getItinerary(itinerary.getItineraryID()) == null) {
                 String query = "insert into Itinerary (itineraryID,name,description,daysNumber,inFlight,outFlight) values (?,?,?,?,?,?)";
                 PreparedStatement stmt = null;
 
@@ -104,13 +102,7 @@ public class InDbItineraryDao extends ItineraryDao {
                     DBConnection.getInstance().closeConnection(stmt,null);
                 }
             }
-
-
-
-        } else {
-            // errore
         }
-
     }
 
     @Override
@@ -135,9 +127,7 @@ public class InDbItineraryDao extends ItineraryDao {
             stmt.setString(1, id);
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such itinerary");
-            } else {
+            if (resultSet.next()) {
 
                 List<Day> days = new ArrayList<>();
                 List<Accommodation> accommodations = new ArrayList<>();
@@ -203,14 +193,8 @@ public class InDbItineraryDao extends ItineraryDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (otherResultSet != null) {
-                try {
-                    otherResultSet.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
             DBConnection.getInstance().closeConnection(stmt,resultSet);
+            DBConnection.getInstance().closeConnection(null,otherResultSet);
         }
 
         return itinerary;

@@ -15,9 +15,7 @@ public class InDbFlightDao extends FlightDao {
     public void addFlight(Flight flight) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getFlight(flight.getId()) != null) {
-            System.out.println("Flight already exists");
-        } else {
+        if (getFlight(flight.getId()) == null) {
             String query = "insert into Flight (id,departureTime,arrivalTime) values (?,?,?)";
 
             PreparedStatement stmt = null;
@@ -58,9 +56,7 @@ public class InDbFlightDao extends FlightDao {
 
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such day");
-            } else {
+            if (resultSet.next()) {
                 flight = new Flight();
 
                 flight.setId(resultSet.getString("id"));

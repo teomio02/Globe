@@ -19,9 +19,7 @@ public class InDbRequestDao extends RequestDao {
     public void addAgencyRequest(Request request, User user, Agency agency) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getRequest(request.getId()) != null) {
-            System.out.println("Request already exists");
-        } else {
+        if (getRequest(request.getId()) == null) {
             String query = "insert into Request (id,user,agency,accepted,description,days) values (?,?,?,?,?,?)";
             String accountQuery= "insert into accountRequest (account,requestID) values (?,?)";
             String cityQuery = "insert into requestCity (requestID,cityID) values (?,?)";
@@ -100,9 +98,7 @@ public class InDbRequestDao extends RequestDao {
 
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such request");
-            } else {
+            if (resultSet.next()) {
                 request = new BaseRequest();
 
                 request.setId(resultSet.getString("id"));

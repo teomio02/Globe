@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
-import it.uniroma2.ispw.globe.model.dao.DaoFactory;
 import it.uniroma2.ispw.globe.model.dao.memory.InMemoryAccountDao;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.SessionManager;

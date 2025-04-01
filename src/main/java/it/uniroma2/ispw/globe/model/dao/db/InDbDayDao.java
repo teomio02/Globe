@@ -17,9 +17,7 @@ public class InDbDayDao extends DayDao {
     public void addDay(Day day) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getDay(day.getId(), day.getDayNum()) != null) {
-            System.out.println("Day already exists");
-        } else {
+        if (getDay(day.getId(), day.getDayNum()) == null) {
             String query = "insert into Day (dayNum,itineraryID) values (?,?)";
             String attractionQuery = "insert into dayAttraction (dayNum,itineraryID,attractionID) values (?,?,?)";
             String cityQuery = "insert into dayCity (dayNum,itineraryID,cityID) values (?,?,?)";
@@ -87,9 +85,7 @@ public class InDbDayDao extends DayDao {
 
             resultSet = stmt.executeQuery();
 
-            if (!resultSet.next()) {
-                System.out.println("No such day");
-            } else {
+            if (resultSet.next()) {
                 day = new Day();
                 List<Attraction> attractions = new ArrayList<>();
                 List<City> cities = new ArrayList<>();

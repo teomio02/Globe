@@ -43,13 +43,7 @@ public class InDbAccountDao extends AccountDao {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             } finally {
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                DBConnection.getInstance().closeConnection(stmt,null);
             }
         }
     }
@@ -61,7 +55,7 @@ public class InDbAccountDao extends AccountDao {
         String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
 
         PreparedStatement stmt = null;
-        ResultSet resultSet;
+        ResultSet resultSet = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -107,13 +101,7 @@ public class InDbAccountDao extends AccountDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
         return null;
@@ -138,7 +126,7 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet;
+        ResultSet resultSet = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -158,13 +146,7 @@ public class InDbAccountDao extends AccountDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
@@ -176,7 +158,7 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet;
+        ResultSet resultSet = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -196,13 +178,7 @@ public class InDbAccountDao extends AccountDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
@@ -214,7 +190,7 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet;
+        ResultSet resultSet = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -234,13 +210,7 @@ public class InDbAccountDao extends AccountDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
@@ -252,7 +222,7 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet;
+        ResultSet resultSet = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -272,13 +242,7 @@ public class InDbAccountDao extends AccountDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
@@ -290,8 +254,8 @@ public class InDbAccountDao extends AccountDao {
 
 
         PreparedStatement stmt = null;
-        ResultSet resultSet;
-        ResultSet otherResultSet;
+        ResultSet resultSet = null;
+        ResultSet otherResultSet = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -337,13 +301,8 @@ public class InDbAccountDao extends AccountDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
+            DBConnection.getInstance().closeConnection(null,otherResultSet);
         }
 
         return null;
@@ -351,8 +310,8 @@ public class InDbAccountDao extends AccountDao {
 
     public List<Proposal> getAccountProposals(String username, Connection connection) {
         String proposalQuery = "select accountProposal.proposalID from accountProposal where account = ?";
-        PreparedStatement stmt;
-        ResultSet resultSet;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
 
         List<Proposal> proposals = new ArrayList<>();
 
@@ -369,6 +328,8 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
         return proposals;
@@ -376,8 +337,8 @@ public class InDbAccountDao extends AccountDao {
 
     public List<Itinerary> getAccountItineraries(String username, Connection connection) {
         String itineraryQuery = "select accountItinerary.itineraryID from accountItinerary where account = ?";
-        PreparedStatement stmt;
-        ResultSet resultSet;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
 
         List<Itinerary> itineraries = new ArrayList<>();
         try {
@@ -393,6 +354,8 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
         return itineraries;
@@ -400,8 +363,8 @@ public class InDbAccountDao extends AccountDao {
 
     public List<Request> getAccountRequests(String username, Connection connection) {
         String requestQuery = "select accountRequest.requestID from accountRequest where account = ?";
-        PreparedStatement stmt;
-        ResultSet resultSet;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
 
         List<Request> requests = new ArrayList<>();
         try {
@@ -417,6 +380,8 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
         return requests;
@@ -424,8 +389,8 @@ public class InDbAccountDao extends AccountDao {
 
     public List<String> getAgencyTypes(String username, Connection connection) {
         String agencyTypeQuery = "select agencyType.type from agencyType where agency = ?";
-        PreparedStatement stmt;
-        ResultSet resultSet;
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
 
         List<String> types = new ArrayList<>();
         try {
@@ -437,9 +402,10 @@ public class InDbAccountDao extends AccountDao {
             while (resultSet.next()) {
                 types.add(resultSet.getString("type"));
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
         return types;
