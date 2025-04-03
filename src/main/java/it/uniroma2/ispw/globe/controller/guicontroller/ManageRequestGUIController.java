@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
@@ -35,8 +36,14 @@ public class ManageRequestGUIController {
 
     public void initialize() {
 
-        List<ProposalBean> proposals = new ResponseRequestController().getAgencyProposals(sessionId);
-        List<AgencyRequestBean> requests = new ResponseRequestController().getAgencyRequests(sessionId);
+        List<ProposalBean> proposals = null;
+        List<AgencyRequestBean> requests = null;
+        try {
+            proposals = new ResponseRequestController().getAgencyProposals(sessionId);
+            requests = new ResponseRequestController().getAgencyRequests(sessionId);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
 
         for (ProposalBean proposal : proposals) {
             try {

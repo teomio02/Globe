@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,7 +50,12 @@ public class DisplayProposalGUIController {
     public void initialize() {
         String type = new ManageItineraryController().getAccountType(sessionId);
 
-        ProposalBean proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
+        ProposalBean proposal = null;
+        try {
+            proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
         nameLabel.setText(proposal.getID());
         descriptionLabel.setText(proposal.getDescription());
         agencyLabel.setText(proposal.getAgency());
@@ -80,7 +86,12 @@ public class DisplayProposalGUIController {
     }
 
     public void acceptProposal() {
-        String paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
+        String paymentResult = null;
+        try {
+            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
 
         if (paymentResult != null) {
             responseHBox.getChildren().clear();
@@ -102,7 +113,11 @@ public class DisplayProposalGUIController {
     }
 
     public void rejectProposal() {
-        new AcceptItineraryController().sendResponse(proposalID,REJECTED);
+        try {
+            new AcceptItineraryController().sendResponse(proposalID,REJECTED);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
         responseHBox.getChildren().clear();
     }
 

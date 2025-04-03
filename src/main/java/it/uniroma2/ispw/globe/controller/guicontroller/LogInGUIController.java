@@ -1,6 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
+import it.uniroma2.ispw.globe.exception.AccountAlreadyExistsException;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,17 +54,16 @@ public class LogInGUIController {
             SignInGUIController controller = new SignInGUIController();
             loader.setController(controller);
             root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            new ErrorPopUpGUIController().createPopUp(e);
         }
-
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
     }
 
-    public void logIn(ActionEvent event) {
+    public void logIn(ActionEvent event) throws AccountAlreadyExistsException {
         // da mettere limite massimo di caratteri per password e username (nella guest è a 12)
 
         errorLabel.setVisible(false);
@@ -81,7 +82,12 @@ public class LogInGUIController {
             credentials = new CredentialsBean(UUID.randomUUID().toString().substring(0,12), "",GUEST);
         }
 
-        String sessionId = new LogInController().logIn(credentials);
+        String sessionId = null;
+        try {
+            sessionId = new LogInController().logIn(credentials);
+        } catch (AccountNotFoundException exception) {
+            new ErrorPopUpGUIController().createPopUp(exception);
+        }
 
         if (sessionId != null) {
             URL url;
@@ -109,15 +115,14 @@ public class LogInGUIController {
                 contentPane = loader.load();
                 root.setCenter(contentPane);
                 root.setBottom(toolBarLoader.load());
+
+                Scene scene = new Scene(root);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp(e);
             }
-
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
         } else {
             errorLabel.setVisible(true);
         }

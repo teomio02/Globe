@@ -1,6 +1,9 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
+import it.uniroma2.ispw.globe.exception.AccountAlreadyExistsException;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +57,7 @@ public class SignInGUIController {
         agencyForm.setVisible(!agencyForm.isVisible());
     }
 
-    public void signIn(ActionEvent event) {
+    public void signIn(ActionEvent event) throws AccountNotFoundException {
         errorLabel.setVisible(false);
         CredentialsBean credentials;
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
@@ -66,10 +69,12 @@ public class SignInGUIController {
             } else {
                 credentials.setType(USER);
             }
-            if (new LogInController().signIn(credentials)) {
+
+            try {
+                new LogInController().signIn(credentials);
                 goBack(event);
-            } else {
-                // errore
+            } catch (AccountAlreadyExistsException exception) {
+                // pop up !!!!!
             }
         }
     }

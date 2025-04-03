@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,7 +92,12 @@ public class CreateItineraryGUIController {
         if (requestId != null) {
 
             //create proposal use case
-            AgencyRequestBean requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
+            AgencyRequestBean requestBean = null;
+            try {
+                requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
+            } catch (AccountNotFoundException e) {
+                // pop up
+            }
 
             if (requestBean != null) {
                 requestVBox.setVisible(true);

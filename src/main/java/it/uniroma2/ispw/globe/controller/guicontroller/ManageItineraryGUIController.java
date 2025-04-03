@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
@@ -35,7 +36,12 @@ public class ManageItineraryGUIController {
 
     public void initialize() {
         List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
-        List<ProposalBean> proposals = new ManageItineraryController().getUserProposals(sessionId);
+        List<ProposalBean> proposals = null;
+        try {
+            proposals = new ManageItineraryController().getUserProposals(sessionId);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
         for (ItineraryBean itinerary : itineraries) {
             try {
                 URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/ItineraryElement.fxml").toURI().toURL();

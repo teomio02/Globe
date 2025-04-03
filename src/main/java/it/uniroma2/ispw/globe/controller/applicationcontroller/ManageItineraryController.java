@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class ManageItineraryController {
 
-    public ProposalBean getProposal(String proposalID, String sessionID) {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws AccountNotFoundException {
         Proposal proposal;
         User user;
         Agency agency;
@@ -49,7 +50,7 @@ public class ManageItineraryController {
         return itineraryBeans;
     }
 
-    public List<ProposalBean> getUserProposals(String sessionId) {
+    public List<ProposalBean> getUserProposals(String sessionId) throws AccountNotFoundException {
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
         List<Proposal> proposals = user.getProposals();

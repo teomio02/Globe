@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
@@ -97,7 +98,11 @@ public class DisplayItineraryGUIController {
         if (requestId != null) {
             nextUserButton.setVisible(false);
             nextAgencyButton.setVisible(true);
-            nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
+            try {
+                nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
+            } catch (AccountNotFoundException e) {
+                // pop up
+            }
         }
         if (itineraryId != null) {
             nextUserButton.setVisible(false);

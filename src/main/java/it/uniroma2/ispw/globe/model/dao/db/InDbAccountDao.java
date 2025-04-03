@@ -1,5 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
+import it.uniroma2.ispw.globe.exception.AccountAlreadyExistsException;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -13,7 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
 public class InDbAccountDao extends AccountDao {
@@ -22,10 +27,13 @@ public class InDbAccountDao extends AccountDao {
     public static final String ACCOUNT = "account";
 
     @Override
-    public void addAccount(CredentialsBean credentials){
+    public void addAccount(CredentialsBean credentials) throws AccountAlreadyExistsException {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getAccount(credentials.getUsername()) == null) {
+        try {
+            getAccount(credentials.getUsername());
+            throw new AccountAlreadyExistsException("account already exists");
+        } catch (AccountNotFoundException exception) {
             String query = "insert into Account (username, password, paymentCredential, rating, description, type) values (?,?,?,?,?,?)";
             PreparedStatement stmt = null;
 
@@ -41,7 +49,7 @@ public class InDbAccountDao extends AccountDao {
                 stmt.setString(6, credentials.getType());
                 stmt.execute();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -49,13 +57,15 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public Account getAccount(String username) {
+    public Account getAccount(String username) throws AccountNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
 
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
+
+        Account account = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -72,39 +82,40 @@ public class InDbAccountDao extends AccountDao {
                 if ((resultSet.getString("type")).equals(AGENCY)) {
                     List<String> types = getAgencyTypes(username, connection);
 
-                    Agency agency = new Agency();
-                    agency.setUsername(resultSet.getString(USERNAME));
-                    agency.setPassword(resultSet.getString(PASSWORD));
-                    agency.setType(resultSet.getString("type"));
-                    agency.setProposals(proposals);
-                    agency.setItineraries(itineraries);
-                    agency.setRequests(requests);
-                    agency.setDescription(resultSet.getString("description"));
-                    agency.setPreferences(types);
-                    agency.setRating(resultSet.getDouble("rating"));
-
-                    return agency;
+                    account = new Agency();
+                    account.setUsername(resultSet.getString(USERNAME));
+                    account.setPassword(resultSet.getString(PASSWORD));
+                    account.setType(resultSet.getString("type"));
+                    account.setProposals(proposals);
+                    account.setItineraries(itineraries);
+                    account.setRequests(requests);
+                    ((Agency) account).setDescription(resultSet.getString("description"));
+                    ((Agency) account).setPreferences(types);
+                    ((Agency) account).setRating(resultSet.getDouble("rating"));
 
                 } else {
 
-                    User user = new User();
-                    user.setUsername(resultSet.getString(USERNAME));
-                    user.setPassword(resultSet.getString(PASSWORD));
-                    user.setType(resultSet.getString("type"));
-                    user.setProposals(proposals);
-                    user.setItineraries(itineraries);
-                    user.setRequests(requests);
+                    account = new User();
+                    account.setUsername(resultSet.getString(USERNAME));
+                    account.setPassword(resultSet.getString(PASSWORD));
+                    account.setType(resultSet.getString("type"));
+                    account.setProposals(proposals);
+                    account.setItineraries(itineraries);
+                    account.setRequests(requests);
 
-                    return user;
                 }
             }
+
+            if (account == null ) {
+                throw new AccountNotFoundException("account not found");
+            }
+            return account;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
-
-        return null;
     }
 
     @Override
@@ -119,7 +130,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public Agency getAgencyByProposal(String proposalID) {
+    public Agency getAgencyByProposal(String proposalID) throws AccountNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountProposal.account from accountProposal where proposalID = ?";
@@ -144,14 +155,15 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
     @Override
-    public User getUserByProposal(String proposalID) {
+    public User getUserByProposal(String proposalID) throws AccountNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountProposal.account from accountProposal where proposalID = ?";
@@ -176,14 +188,15 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
     @Override
-    public Agency getAgencyByRequest(String requestID) {
+    public Agency getAgencyByRequest(String requestID) throws AccountNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountRequest.account from accountRequest where requestID = ?";
@@ -208,14 +221,15 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
     @Override
-    public User getUserByRequest(String requestID) {
+    public User getUserByRequest(String requestID) throws AccountNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountRequest.account from accountRequest where requestID = ?";
@@ -240,13 +254,14 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
 
-    public Account getAccountPrimaryData(String username) {
+    public Account getAccountPrimaryData(String username) throws AccountNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
@@ -257,6 +272,8 @@ public class InDbAccountDao extends AccountDao {
         PreparedStatement otherStmt = null;
         ResultSet resultSet = null;
         ResultSet otherResultSet = null;
+
+        Account account = null;
 
         try {
             Connection connection = connect.getConnection();
@@ -280,34 +297,34 @@ public class InDbAccountDao extends AccountDao {
 
                 if ((resultSet.getString("type")).equals(AGENCY)) {
 
-                    Agency agency = new Agency();
-                    agency.setUsername(resultSet.getString(USERNAME));
-                    agency.setPassword(resultSet.getString(PASSWORD));
-                    agency.setType(resultSet.getString("type"));
-                    agency.setDescription(resultSet.getString("description"));
-                    agency.setPreferences(types);
-                    agency.setRating(resultSet.getDouble("rating"));
-
-                    return agency;
+                    account = new Agency();
+                    account.setUsername(resultSet.getString(USERNAME));
+                    account.setPassword(resultSet.getString(PASSWORD));
+                    account.setType(resultSet.getString("type"));
+                    ((Agency) account).setDescription(resultSet.getString("description"));
+                    ((Agency) account).setPreferences(types);
+                    ((Agency) account).setRating(resultSet.getDouble("rating"));
 
                 } else {
 
-                    User user = new User();
-                    user.setUsername(resultSet.getString(USERNAME));
-                    user.setPassword(resultSet.getString(PASSWORD));
-                    user.setType(resultSet.getString("type"));
+                    account = new User();
+                    account.setUsername(resultSet.getString(USERNAME));
+                    account.setPassword(resultSet.getString(PASSWORD));
+                    account.setType(resultSet.getString("type"));
 
-                    return user;
                 }
             }
+            if (account == null ) {
+                throw new AccountNotFoundException("account not found");
+            }
+            return account;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(otherStmt,otherResultSet);
         }
-
-        return null;
     }
 
     public List<Proposal> getAccountProposals(String username, Connection connection) {
@@ -329,7 +346,8 @@ public class InDbAccountDao extends AccountDao {
                 proposals.add(proposal);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -355,7 +373,8 @@ public class InDbAccountDao extends AccountDao {
                 itineraries.add(itinerary);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -381,7 +400,8 @@ public class InDbAccountDao extends AccountDao {
                 requests.add(request);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -405,7 +425,8 @@ public class InDbAccountDao extends AccountDao {
                 types.add(resultSet.getString("type"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }

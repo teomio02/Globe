@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,8 +44,14 @@ public class CreateProposalGUIController {
     }
 
     public void initialize() {
-        AgencyRequestBean request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
-        ProposalBean proposal = new ResponseRequestController().getProposal(null,sessionId);
+        AgencyRequestBean request = null;
+        ProposalBean proposal = null;
+        try {
+            request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
+            proposal = new ResponseRequestController().getProposal(null,sessionId);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
 
         userLabel.setText(request.getUser());
         requestLabel.setText(request.getDescription());
@@ -76,7 +83,11 @@ public class CreateProposalGUIController {
 
         ProposalBean proposalBean = new ProposalBean(Double.parseDouble(priceField.getText()),descriptionField.getText());
 
-        new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
+        try {
+            new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
+        } catch (AccountNotFoundException e) {
+            // pop up
+        }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);

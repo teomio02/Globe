@@ -1,5 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
+import it.uniroma2.ispw.globe.exception.AccountAlreadyExistsException;
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
@@ -11,7 +13,7 @@ public class LogInController{
 
     private static final String GUEST = "guest";
 
-    public String logIn(CredentialsBean credentials) {
+    public String logIn(CredentialsBean credentials) throws AccountAlreadyExistsException, AccountNotFoundException {
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
         if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
@@ -22,7 +24,7 @@ public class LogInController{
         return SessionManager.getInstance().addSession(account);
     }
 
-    public boolean signIn(CredentialsBean credentials) {
+    public boolean signIn(CredentialsBean credentials) throws AccountAlreadyExistsException, AccountNotFoundException {
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         if (accountDao.getAccount(credentials.getUsername()) != null) {
             return false;

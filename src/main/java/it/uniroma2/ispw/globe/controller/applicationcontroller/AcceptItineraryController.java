@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
+import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
@@ -15,7 +16,7 @@ import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 
 public class AcceptItineraryController {
 
-    public String sendResponse(String proposalId, String response) {
+    public String sendResponse(String proposalId, String response) throws AccountNotFoundException {
         ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         Agency agency = accountDao.getAgencyByProposal(proposalId);
@@ -35,7 +36,8 @@ public class AcceptItineraryController {
 
     }
 
-    public String executePayment(String userUsername, String agencyUsername, double amount) {
+    public String executePayment(String userUsername, String agencyUsername, double amount) throws AccountNotFoundException {
+
         Account payer = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(userUsername);
         Account payee = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(agencyUsername);
 
