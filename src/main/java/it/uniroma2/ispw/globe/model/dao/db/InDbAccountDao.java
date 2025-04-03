@@ -8,6 +8,7 @@ import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.Request;
+import kotlin.collections.EmptyList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -347,7 +348,7 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
-            return null;
+            return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -374,7 +375,7 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
-            return null;
+            return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -401,7 +402,7 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
-            return null;
+            return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -426,7 +427,7 @@ public class InDbAccountDao extends AccountDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL);
-            return null;
+            return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
