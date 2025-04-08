@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
+import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.model.Accommodation;
 import it.uniroma2.ispw.globe.model.dao.AccommodationDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -8,6 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class InDbAccommodationDao extends AccommodationDao {
 
@@ -31,7 +37,9 @@ public class InDbAccommodationDao extends AccommodationDao {
                 stmt.execute();
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            } catch (DBConnectionException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -66,6 +74,8 @@ public class InDbAccommodationDao extends AccommodationDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (DBConnectionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }

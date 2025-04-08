@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
+import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
@@ -11,6 +12,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class InDbProposalDao extends ProposalDao {
 
@@ -50,7 +56,9 @@ public class InDbProposalDao extends ProposalDao {
                 secondAccountStmt.execute();
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            } catch (DBConnectionException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
                 DBConnection.getInstance().closeConnection(firstAccountStmt,null);
@@ -92,7 +100,9 @@ public class InDbProposalDao extends ProposalDao {
                 proposal.setItinerary(itinerary);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+        } catch (DBConnectionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -117,7 +127,9 @@ public class InDbProposalDao extends ProposalDao {
             stmt.execute();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+        } catch (DBConnectionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }

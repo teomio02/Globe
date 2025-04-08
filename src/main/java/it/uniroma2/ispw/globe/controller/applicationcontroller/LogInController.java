@@ -19,7 +19,7 @@ public class LogInController{
         if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
             accountDao.addAccount(credentials);
         }
-        Account account = accountDao.getAccount(credentials.getUsername());
+        Account account = accountDao.authenticate(credentials.getUsername(), credentials.getPassword());
 
         return SessionManager.getInstance().addSession(account);
     }

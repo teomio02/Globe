@@ -1,6 +1,12 @@
 package it.uniroma2.ispw.globe.util;
 
+import it.uniroma2.ispw.globe.exception.DBConnectionException;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
+import java.util.Properties;
 
 public class DBConnection {
     private static DBConnection instance = null;
@@ -11,15 +17,24 @@ public class DBConnection {
 
     private DBConnection(){}
 
-    public Connection getConnection() throws SQLException {
-        String myUrl="jdbc:mysql://localhost:3306/globeDB?useSSL=false&allowPublicKeyRetrieval=true";
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        }catch (ClassNotFoundException e) {
-            throw new SQLException();
-        }
+    public Connection getConnection() throws DBConnectionException {
+        try (InputStream input = new FileInputStream("src/main/resources/application.properties")){
+            if (input == null) {
+                throw new DBConnectionException("Database connection configuration not found");
+            } else {
+                Properties properties = new Properties();
+                properties.load(input);
 
-        return DriverManager.getConnection(myUrl,this.username,this.password);
+                String dbUrl = properties.getProperty("db.url");
+                String dbUsr = properties.getProperty("db.user");
+                String dbPwd = properties.getProperty("db.password");
+
+                conn = DriverManager.getConnection(dbUrl, dbUsr, dbPwd);
+            }
+        } catch (IOException | SQLException e) {
+            throw new DBConnectionException(e.getMessage());
+        }
+        return conn;
     }
 
     public static synchronized DBConnection getInstance() {

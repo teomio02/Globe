@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
+import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -12,6 +13,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class InDbRequestDao extends RequestDao {
 
@@ -67,7 +73,9 @@ public class InDbRequestDao extends RequestDao {
                 }
 
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            } catch (DBConnectionException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
                 DBConnection.getInstance().closeConnection(firstAccountStmt,null);
@@ -151,7 +159,9 @@ public class InDbRequestDao extends RequestDao {
                 request.setAttractions(attractions);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+        } catch (DBConnectionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(cityStmt,null);
@@ -178,7 +188,9 @@ public class InDbRequestDao extends RequestDao {
             stmt.setString(2, request.getId());
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+        } catch (DBConnectionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }

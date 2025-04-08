@@ -28,6 +28,27 @@ public class InMemoryAccountDao extends AccountDao {
     }
 
     @Override
+    public Account authenticate(String username, String password) {
+        for (Agency a : agencies) {
+            if (a.getUsername().equals(username)) {
+                if (a.getPassword().equals(password)) {
+                    return a;
+                }
+                return null;
+            }
+        }
+        for (User u : users) {
+            if (u.getUsername().equals(username)) {
+                if (u.getPassword().equals(password)) {
+                    return u;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void addAccount(CredentialsBean credentials) {
         if (credentials.getType().equals(AGENCY)) {
             for (Agency a : agencies) {

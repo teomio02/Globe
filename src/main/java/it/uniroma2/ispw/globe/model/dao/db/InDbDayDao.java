@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
+import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -10,6 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class InDbDayDao extends DayDao {
 
@@ -17,14 +23,14 @@ public class InDbDayDao extends DayDao {
     public void addDay(Day day) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getDay(day.getId(), day.getDayNum()) == null) {
+        if (getDay(day.getId(), day.getDayNum()) != null) {
+            System.out.println("Day already exists");
+        } else {
             String query = "insert into Day (dayNum,itineraryID) values (?,?)";
             String attractionQuery = "insert into dayAttraction (dayNum,itineraryID,attractionID) values (?,?,?)";
             String cityQuery = "insert into dayCity (dayNum,itineraryID,cityID) values (?,?,?)";
 
             PreparedStatement stmt = null;
-            PreparedStatement attractionStmt = null;
-            PreparedStatement cityStmt = null;
 
             try {
                 Connection connection = connect.getConnection();
@@ -34,35 +40,35 @@ public class InDbDayDao extends DayDao {
                 stmt.setInt(1, day.getDayNum());
                 stmt.execute();
 
-                attractionStmt = connection.prepareStatement(attractionQuery);
+                stmt = connection.prepareStatement(attractionQuery);
 
                 for (Attraction attraction : day.getAttractions()) {
                     InDbAttractionDao attractionDao = new InDbAttractionDao();
                     attractionDao.addAttraction(attraction);
 
-                    attractionStmt.setString(2, day.getId());
-                    attractionStmt.setInt(1, day.getDayNum());
-                    attractionStmt.setString(3, attraction.getPlaceID());
-                    attractionStmt.execute();
+                    stmt.setString(2, day.getId());
+                    stmt.setInt(1, day.getDayNum());
+                    stmt.setString(3, attraction.getPlaceID());
+                    stmt.execute();
                 }
 
-                cityStmt = connection.prepareStatement(cityQuery);
+                stmt = connection.prepareStatement(cityQuery);
 
                 for (City city : day.getCities()) {
                     InDbCityDao cityDao = new InDbCityDao();
                     cityDao.addCity(city);
 
-                    cityStmt.setString(2, day.getId());
-                    cityStmt.setInt(1, day.getDayNum());
-                    cityStmt.setString(3, city.getPlaceID());
-                    cityStmt.execute();
+                    stmt.setString(2, day.getId());
+                    stmt.setInt(1, day.getDayNum());
+                    stmt.setString(3, city.getPlaceID());
+                    stmt.execute();
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (DBConnectionException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
-                DBConnection.getInstance().closeConnection(attractionStmt,null);
-                DBConnection.getInstance().closeConnection(cityStmt,null);
             }
         }
     }
@@ -76,8 +82,6 @@ public class InDbDayDao extends DayDao {
         String cityQuery = "select * from dayCity where itineraryID = ? and dayNum = ?";
 
         PreparedStatement stmt = null;
-        PreparedStatement attractionStmt = null;
-        PreparedStatement cityStmt = null;
         ResultSet resultSet= null;
 
         Day day = null;
@@ -91,7 +95,9 @@ public class InDbDayDao extends DayDao {
 
             resultSet = stmt.executeQuery();
 
-            if (resultSet.next()) {
+            if (!resultSet.next()) {
+                System.out.println("No such day");
+            } else {
                 day = new Day();
                 List<Attraction> attractions = new ArrayList<>();
                 List<City> cities = new ArrayList<>();
@@ -99,12 +105,12 @@ public class InDbDayDao extends DayDao {
                 day.setId(resultSet.getString("itineraryID"));
                 day.setDayNum(resultSet.getInt("dayNum"));
 
-                attractionStmt = connection.prepareStatement(attractionQuery);
+                stmt = connection.prepareStatement(attractionQuery);
 
-                attractionStmt.setString(1, itineraryID);
-                attractionStmt.setInt(2, dayNum);
+                stmt.setString(1, itineraryID);
+                stmt.setInt(2, dayNum);
 
-                resultSet = attractionStmt.executeQuery();
+                resultSet = stmt.executeQuery();
 
                 while (resultSet.next()) {
                     InDbAttractionDao attractionDao = new InDbAttractionDao();
@@ -112,12 +118,12 @@ public class InDbDayDao extends DayDao {
                     attractions.add(attraction);
                 }
 
-                cityStmt = connection.prepareStatement(cityQuery);
+                stmt = connection.prepareStatement(cityQuery);
 
-                cityStmt.setString(1, itineraryID);
-                cityStmt.setInt(2, dayNum);
+                stmt.setString(1, itineraryID);
+                stmt.setInt(2, dayNum);
 
-                resultSet = cityStmt.executeQuery();
+                resultSet = stmt.executeQuery();
 
                 while (resultSet.next()) {
                     InDbCityDao cityDao = new InDbCityDao();
@@ -129,11 +135,13 @@ public class InDbDayDao extends DayDao {
                 day.setCities(cities);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            return null;
+        } catch (DBConnectionException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
-            DBConnection.getInstance().closeConnection(attractionStmt,null);
-            DBConnection.getInstance().closeConnection(cityStmt,null);
         }
 
         return day;

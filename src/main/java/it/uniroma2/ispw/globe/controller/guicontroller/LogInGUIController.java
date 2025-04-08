@@ -82,11 +82,12 @@ public class LogInGUIController {
             credentials = new CredentialsBean(UUID.randomUUID().toString().substring(0,12), "",GUEST);
         }
 
-        String sessionId = null;
+        String sessionId;
         try {
             sessionId = new LogInController().logIn(credentials);
         } catch (AccountNotFoundException exception) {
             new ErrorPopUpGUIController().createPopUp(exception);
+           return;
         }
 
         if (sessionId != null) {
@@ -96,7 +97,7 @@ public class LogInGUIController {
             AnchorPane contentPane;
 
             try {
-                FXMLLoader loader = null;
+                FXMLLoader loader;
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/ToolBar.fxml").toURI().toURL();
                 FXMLLoader toolBarLoader = new FXMLLoader(url);
                 ToolBarGUIController controllerToolBar = new ToolBarGUIController(sessionId,type,root);
