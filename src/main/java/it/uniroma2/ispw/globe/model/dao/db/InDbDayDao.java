@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -23,9 +24,9 @@ public class InDbDayDao extends DayDao {
     public void addDay(Day day) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getDay(day.getId(), day.getDayNum()) != null) {
-            System.out.println("Day already exists");
-        } else {
+        try {
+            getDay(day.getId(), day.getDayNum());
+        } catch (ItemNotFoundException exception) {
             String query = "insert into Day (dayNum,itineraryID) values (?,?)";
             String attractionQuery = "insert into dayAttraction (dayNum,itineraryID,attractionID) values (?,?,?)";
             String cityQuery = "insert into dayCity (dayNum,itineraryID,cityID) values (?,?,?)";
@@ -74,7 +75,7 @@ public class InDbDayDao extends DayDao {
     }
 
     @Override
-    public Day getDay(String itineraryID, int dayNum) {
+    public Day getDay(String itineraryID, int dayNum) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select * from Day where itineraryID = ? and dayNum = ?";
@@ -142,6 +143,10 @@ public class InDbDayDao extends DayDao {
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
+        }
+
+        if (day == null) {
+            throw new ItemNotFoundException("day not found");
         }
 
         return day;

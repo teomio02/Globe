@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.model.City;
 
@@ -33,7 +34,7 @@ public class InMemoryCityDao extends CityDao {
     }
 
     @Override
-    public City getCity(String cityID) {
+    public City getCity(String cityID) throws ItemNotFoundException {
         City cityResult = null;
         for (City city : cities) {
             if (city.getPlaceID().equals(cityID)) {
@@ -45,6 +46,9 @@ public class InMemoryCityDao extends CityDao {
             if (cityResult != null) {
                 addCity(cityResult);
             }
+        }
+        if (cityResult == null) {
+            throw new ItemNotFoundException("city not found");
         }
         return cityResult;
     }

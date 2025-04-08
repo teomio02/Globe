@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.util.decorator.Request;
@@ -43,13 +44,13 @@ public class InMemoryRequestDao extends RequestDao {
     }
 
     @Override
-    public Request getRequest(String requestId) {
+    public Request getRequest(String requestId) throws ItemNotFoundException {
         for (Request request : requests) {
             if (request.getId().equals(requestId)) {
                 return request;
             }
         }
-        return null;
+        throw new ItemNotFoundException("request not found");
     }
 
     @Override

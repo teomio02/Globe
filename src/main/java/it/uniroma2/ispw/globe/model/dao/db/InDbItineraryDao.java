@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -28,7 +29,9 @@ public class InDbItineraryDao extends ItineraryDao {
         if (account != null) {
             DBConnection connect = DBConnection.getInstance();
 
-            if (getItinerary(itinerary.getItineraryID()) == null) {
+            try {
+                getItinerary(itinerary.getItineraryID());
+            } catch (ItemNotFoundException exception) {
                 String query = "insert into Itinerary (itineraryID,name,description,daysNumber,inFlight,outFlight) values (?,?,?,?,?,?)";
                 String accommodationQuery = "insert into itineraryAccommodation (itineraryID,accommodationID) values (?,?)";
                 String flightQuery = "update Itinerary set inFlight = ?, outFlight = ? where itineraryID = ?";
@@ -122,7 +125,7 @@ public class InDbItineraryDao extends ItineraryDao {
     }
 
     @Override
-    public Itinerary getItinerary(String id) {
+    public Itinerary getItinerary(String id) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select * from Itinerary where itineraryID = ?";

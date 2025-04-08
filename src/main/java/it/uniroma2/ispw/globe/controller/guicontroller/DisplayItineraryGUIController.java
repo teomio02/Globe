@@ -2,7 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
@@ -61,9 +61,16 @@ public class DisplayItineraryGUIController {
     public void initialize() {
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
+        ItineraryBean itinerary = null;
+        List<StepBean> steps = null;
+        try {
+            itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
+            steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
+        } catch (ItemNotFoundException e) {
+            new ErrorPopUpGUIController().createPopUp(e);
+            return;
+        }
 
-        ItineraryBean itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
-        List<StepBean> steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
         nameLabel.setText(itinerary.getName());
         descriptionLabel.setText(itinerary.getDescription());
         dayLabel.setText(String.valueOf(itinerary.getDuration()));
@@ -100,8 +107,9 @@ public class DisplayItineraryGUIController {
             nextAgencyButton.setVisible(true);
             try {
                 nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
-            } catch (AccountNotFoundException e) {
-                // pop up
+            } catch (ItemNotFoundException e) {
+                new ErrorPopUpGUIController().createPopUp(e);
+                return;
             }
         }
         if (itineraryId != null) {
@@ -120,26 +128,31 @@ public class DisplayItineraryGUIController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        ScrollPane scrollPane = (ScrollPane) dayVBox.lookup("#scrollPane");
-        VBox attractionVBox = (VBox) scrollPane.getContent();
-        Label cityLabel = (Label) dayVBox.lookup("#cityLabel");
-        CityBean city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
-        cityLabel.setText(city.getName()+", "+city.getCountry());
-        for (String attractionID : step.getAttractions()) {
-            AttractionBean attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,null);
-            Label attractionLabel = new Label(attraction.getName());
-            Label addressLabel = new Label(attraction.getCity()+", "+attraction.getAddress());
-            attractionLabel.setMaxWidth(Double.MAX_VALUE);
-            addressLabel.setMaxWidth(Double.MAX_VALUE);
-            attractionLabel.getStyleClass().add(LIGHT);
-            addressLabel.getStyleClass().add(LIGHT);
-            HBox attractionHBox = new HBox(attractionLabel,addressLabel);
-            HBox.setHgrow(attractionLabel, Priority.ALWAYS);
-            HBox.setHgrow(addressLabel, Priority.ALWAYS);
-            attractionVBox.getChildren().add(attractionHBox);
+
+        try {
+            ScrollPane scrollPane = (ScrollPane) dayVBox.lookup("#scrollPane");
+            VBox attractionVBox = (VBox) scrollPane.getContent();
+            Label cityLabel = (Label) dayVBox.lookup("#cityLabel");
+            CityBean city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
+            cityLabel.setText(city.getName()+", "+city.getCountry());
+            for (String attractionID : step.getAttractions()) {
+                AttractionBean attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,null);
+                Label attractionLabel = new Label(attraction.getName());
+                Label addressLabel = new Label(attraction.getCity()+", "+attraction.getAddress());
+                attractionLabel.setMaxWidth(Double.MAX_VALUE);
+                addressLabel.setMaxWidth(Double.MAX_VALUE);
+                attractionLabel.getStyleClass().add(LIGHT);
+                addressLabel.getStyleClass().add(LIGHT);
+                HBox attractionHBox = new HBox(attractionLabel,addressLabel);
+                HBox.setHgrow(attractionLabel, Priority.ALWAYS);
+                HBox.setHgrow(addressLabel, Priority.ALWAYS);
+                attractionVBox.getChildren().add(attractionHBox);
+            }
+            tab.setContent(dayVBox);
+            daysTabPane.getTabs().add(tab);
+        } catch (ItemNotFoundException e) {
+            new ErrorPopUpGUIController().createPopUp(e);
         }
-        tab.setContent(dayVBox);
-        daysTabPane.getTabs().add(tab);
     }
 
     public void showItineraries(ActionEvent event) {

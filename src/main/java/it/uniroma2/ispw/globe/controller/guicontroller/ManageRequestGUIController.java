@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
@@ -41,8 +41,9 @@ public class ManageRequestGUIController {
         try {
             proposals = new ResponseRequestController().getAgencyProposals(sessionId);
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
-        } catch (AccountNotFoundException e) {
-            // pop up
+        } catch (ItemNotFoundException e) {
+            new ErrorPopUpGUIController().createPopUp(e);
+            return;
         }
 
         for (ProposalBean proposal : proposals) {
@@ -107,7 +108,12 @@ public class ManageRequestGUIController {
 
     public void viewRequest(ActionEvent event) {
         String requestID = (String) ((Button)event.getSource()).getUserData();
-        new ResponseRequestController().setPendingRequest(sessionId,requestID);
+        try {
+            new ResponseRequestController().setPendingRequest(sessionId,requestID);
+        } catch (ItemNotFoundException e) {
+            new ErrorPopUpGUIController().createPopUp(e);
+            return;
+        }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);

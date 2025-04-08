@@ -2,7 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
@@ -42,8 +42,9 @@ public class DisplayRequestGUIController {
             AgencyRequestBean request = null;
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
-            } catch (AccountNotFoundException e) {
-                // pop up
+            } catch (ItemNotFoundException e) {
+                new ErrorPopUpGUIController().createPopUp(e);
+                return;
             }
             userLabel.setText(request.getUser());
             descriptionLabel.setText(request.getDescription());
@@ -56,8 +57,9 @@ public class DisplayRequestGUIController {
             AgencyBean agency = null;
             try {
                 agency = new RequestItineraryController().getAgency(null,sessionId);
-            } catch (AccountNotFoundException e) {
-                // pop up
+            } catch (ItemNotFoundException e) {
+                new ErrorPopUpGUIController().createPopUp(e);
+                return;
             }
             userLabel.setText(agency.getName());
             descriptionLabel.setText(request.getOtherRequests());

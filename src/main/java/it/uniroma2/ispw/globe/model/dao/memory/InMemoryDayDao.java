@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.Day;
@@ -40,7 +41,15 @@ public class InMemoryDayDao extends DayDao {
     }
 
     @Override
-    public Day getDay(String itineraryID, int dayNum) {
-        return null;
+    public Day getDay(String itineraryID, int dayNum) throws ItemNotFoundException {
+        for (Day day : days) {
+            if (day.getId().equals(itineraryID)) {
+                if (day.getDayNum() == dayNum) {
+                    return day;
+                }
+            }
+        }
+        
+        throw new ItemNotFoundException("day not found");
     }
 }

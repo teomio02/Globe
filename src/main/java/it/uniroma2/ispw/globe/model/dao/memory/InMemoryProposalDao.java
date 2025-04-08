@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
@@ -36,13 +37,13 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public Proposal getProposal(String proposalID) {
+    public Proposal getProposal(String proposalID) throws ItemNotFoundException {
         for (Proposal proposal : proposals) {
             if (proposal.getId().equals(proposalID)){
                 return proposal;
             }
         }
-        return null;
+        throw new ItemNotFoundException("proposal not found");
     }
 
     @Override

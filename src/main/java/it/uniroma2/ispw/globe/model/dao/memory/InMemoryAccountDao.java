@@ -1,5 +1,8 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.InvalidCredentialsException;
+import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.AccountDao;
@@ -28,32 +31,35 @@ public class InMemoryAccountDao extends AccountDao {
     }
 
     @Override
-    public Account authenticate(String username, String password) {
+    public Account authenticate(String username, String password) throws ItemNotFoundException, InvalidCredentialsException {
+        Account account = null;
         for (Agency a : agencies) {
             if (a.getUsername().equals(username)) {
-                if (a.getPassword().equals(password)) {
-                    return a;
-                }
-                return null;
+                account = a;
             }
         }
         for (User u : users) {
             if (u.getUsername().equals(username)) {
-                if (u.getPassword().equals(password)) {
-                    return u;
-                }
-                return null;
+                account = u;
             }
         }
-        return null;
+
+        if (account == null) {
+            throw new ItemNotFoundException("account not found");
+        }
+        if (account.getPassword().equals(password)) {
+            return account;
+        } else {
+            throw new InvalidCredentialsException("Invalid password");
+        }
     }
 
     @Override
-    public void addAccount(CredentialsBean credentials) {
+    public void addAccount(CredentialsBean credentials) throws ItemAlreadyExistsException {
         if (credentials.getType().equals(AGENCY)) {
             for (Agency a : agencies) {
                 if (credentials.getUsername().equals(a.getUsername())) {
-                    // eccezione - utente già esistente
+                    throw new ItemAlreadyExistsException("account already exists");
                 }
             }
             Agency agency = new Agency();
@@ -71,8 +77,7 @@ public class InMemoryAccountDao extends AccountDao {
             if (credentials.getType().equals(USER)) {
                 for (User u : users) {
                     if (credentials.getUsername().equals(u.getUsername())) {
-                        // eccezione - utente già esistente
-                        return;
+                        throw new ItemAlreadyExistsException("account already exists");
                     }
                 }
             }
@@ -88,7 +93,7 @@ public class InMemoryAccountDao extends AccountDao {
     }
 
     @Override
-    public Account getAccount(String username) {
+    public Account getAccount(String username) throws ItemNotFoundException {
         for (Agency a : agencies) {
             if (a.getUsername().equals(username)) {
                 return a;
@@ -99,11 +104,11 @@ public class InMemoryAccountDao extends AccountDao {
                 return u;
             }
         }
-        return null;
+        throw new ItemNotFoundException("account not found");
     }
 
     @Override
-    public void removeAccount(CredentialsBean credentials) {
+    public void removeAccount(CredentialsBean credentials) throws ItemNotFoundException {
         if (credentials.getType().equals(AGENCY)) {
             agencies.remove(getAccount(credentials.getUsername()));
         } else {

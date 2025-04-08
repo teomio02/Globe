@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -123,7 +123,7 @@ public class RequestItineraryController {
         return new RequestBean(request.getId(),citiesID, attractionsID, request.getOtherRequest(), request.getDayNum(), agencies, request.getFlightRequest(), request.getAccommodationRequest(), request.getItineraryType(), trekkingDifficulty, trekkingDistance, travelMode, drivingHours);
     }
 
-    public AgencyBean getAgency(String username, String sessionID) throws AccountNotFoundException {
+    public AgencyBean getAgency(String username, String sessionID) throws ItemNotFoundException {
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         Account account = accountDao.getAccount(username);
 
@@ -133,7 +133,7 @@ public class RequestItineraryController {
 
 
 
-    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws AccountNotFoundException {
+    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws ItemNotFoundException {
 
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();

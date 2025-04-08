@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,7 +49,7 @@ public class CreateProposalGUIController {
         try {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             proposal = new ResponseRequestController().getProposal(null,sessionId);
-        } catch (AccountNotFoundException e) {
+        } catch (ItemNotFoundException e) {
             // pop up
         }
 
@@ -85,7 +85,7 @@ public class CreateProposalGUIController {
 
         try {
             new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
-        } catch (AccountNotFoundException e) {
+        } catch (ItemNotFoundException e) {
             // pop up
         }
 

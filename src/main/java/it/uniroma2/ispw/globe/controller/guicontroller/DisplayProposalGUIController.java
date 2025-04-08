@@ -3,7 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,7 +53,7 @@ public class DisplayProposalGUIController {
         ProposalBean proposal = null;
         try {
             proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
-        } catch (AccountNotFoundException e) {
+        } catch (ItemNotFoundException e) {
             // pop up
         }
         nameLabel.setText(proposal.getID());
@@ -75,7 +75,12 @@ public class DisplayProposalGUIController {
         String itineraryId;
 
         if (proposalID != null) {
-            itineraryId = new AcceptItineraryController().getProposalItinerary(proposalID).getId();
+            try {
+                itineraryId = new AcceptItineraryController().getProposalItinerary(proposalID).getId();
+            } catch (ItemNotFoundException e) {
+                new ErrorPopUpGUIController().createPopUp(e);
+                return;
+            }
         } else {
             itineraryId = null;
         }
@@ -89,7 +94,7 @@ public class DisplayProposalGUIController {
         String paymentResult = null;
         try {
             paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
-        } catch (AccountNotFoundException e) {
+        } catch (ItemNotFoundException e) {
             // pop up
         }
 
@@ -115,7 +120,7 @@ public class DisplayProposalGUIController {
     public void rejectProposal() {
         try {
             new AcceptItineraryController().sendResponse(proposalID,REJECTED);
-        } catch (AccountNotFoundException e) {
+        } catch (ItemNotFoundException e) {
             // pop up
         }
         responseHBox.getChildren().clear();

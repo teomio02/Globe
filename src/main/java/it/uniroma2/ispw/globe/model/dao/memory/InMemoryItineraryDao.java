@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
@@ -43,7 +44,7 @@ public class InMemoryItineraryDao extends ItineraryDao {
     }
 
     @Override
-    public Itinerary getItinerary(String id) {
+    public Itinerary getItinerary(String id) throws ItemNotFoundException {
         for (Itinerary itinerary : itineraries) {
             System.out.println("       id: "+itinerary.getItineraryID());
             if (itinerary.getItineraryID().equals(id)) {
@@ -51,7 +52,7 @@ public class InMemoryItineraryDao extends ItineraryDao {
                 return itinerary;
             }
         }
-        return null;
+        throw new ItemNotFoundException("itinerary not found");
     }
 
     @Override

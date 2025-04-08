@@ -2,7 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -90,31 +90,31 @@ public class CreateItineraryGUIController {
         flightVBox.setVisible(false);
 
         if (requestId != null) {
-
-            //create proposal use case
-            AgencyRequestBean requestBean = null;
             try {
+                //create proposal use case
+                AgencyRequestBean requestBean = null;
                 requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
-            } catch (AccountNotFoundException e) {
-                // pop up
+
+                if (requestBean != null) {
+                    requestVBox.setVisible(true);
+                    userLabel.setText(requestBean.getUser());
+                    descriptionLabel.setText(requestBean.getDescription());
+                    for (String type : requestBean.getTypes()) {
+                        typesHBox.getChildren().add(new Label(type));
+                    }
+                    for (String city : requestBean.getCities()) {
+                        CityBean cityBean = new CreateItineraryController().getCity(0,city,null);
+                        requestCityVBox.getChildren().add(new Label(cityBean.getName()+" - "+cityBean.getCountry()));
+                    }
+                    for (String attraction : requestBean.getAttractions()) {
+                        AttractionBean attractionBean = new CreateItineraryController().getAttraction(0,attraction,null);
+                        requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
+                    }
+                }
+            } catch (ItemNotFoundException e) {
+                new ErrorPopUpGUIController().createPopUp(e);
             }
 
-            if (requestBean != null) {
-                requestVBox.setVisible(true);
-                userLabel.setText(requestBean.getUser());
-                descriptionLabel.setText(requestBean.getDescription());
-                for (String type : requestBean.getTypes()) {
-                    typesHBox.getChildren().add(new Label(type));
-                }
-                for (String city : requestBean.getCities()) {
-                    CityBean cityBean = new CreateItineraryController().getCity(0,city,null);
-                    requestCityVBox.getChildren().add(new Label(cityBean.getName()+" - "+cityBean.getCountry()));
-                }
-                for (String attraction : requestBean.getAttractions()) {
-                    AttractionBean attractionBean = new CreateItineraryController().getAttraction(0,attraction,null);
-                    requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
-                }
-            }
         } else {
             requestVBox.setVisible(false);
         }

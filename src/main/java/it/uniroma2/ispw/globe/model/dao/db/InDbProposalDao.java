@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
@@ -24,7 +25,9 @@ public class InDbProposalDao extends ProposalDao {
     public void addProposal(Proposal proposal,User user, Agency agency) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getProposal(proposal.getId()) == null) {
+        try {
+            getProposal(proposal.getId());
+        } catch (ItemNotFoundException exception) {
             String query = "insert into Proposal (id,itineraryID,price,description,user,agency,accepted) values (?,?,?,?,?,?,?)";
             String accountQuery= "insert into accountProposal (account,proposalID) values (?,?)";
 
@@ -68,7 +71,7 @@ public class InDbProposalDao extends ProposalDao {
     }
 
     @Override
-    public Proposal getProposal(String id) {
+    public Proposal getProposal(String id) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select * from Proposal where id = ?";
@@ -105,6 +108,10 @@ public class InDbProposalDao extends ProposalDao {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
+        }
+
+        if (proposal == null) {
+            throw new ItemNotFoundException("proposal not found");
         }
 
         return proposal;

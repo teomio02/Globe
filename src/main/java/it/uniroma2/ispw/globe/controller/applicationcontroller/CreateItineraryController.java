@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -209,7 +210,7 @@ public class CreateItineraryController {
         return path;
     }
 
-    public List<StepBean> getSteps(String itineraryId, String sessionID) {
+    public List<StepBean> getSteps(String itineraryId, String sessionID) throws ItemNotFoundException {
         List<StepBean> steps = new ArrayList<>();
         Itinerary itinerary;
 
@@ -284,7 +285,7 @@ public class CreateItineraryController {
         return citiesBeans;
     }
 
-    public ItineraryBean getItinerary(String itineraryId, String sessionID) {
+    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws ItemNotFoundException {
         Itinerary itinerary;
 
         if (itineraryId == null) {
@@ -331,7 +332,7 @@ public class CreateItineraryController {
         return itineraryBean;
     }
 
-    public CityBean getCity(int stepNum,String cityID,String sessionID) {
+    public CityBean getCity(int stepNum,String cityID,String sessionID) throws ItemNotFoundException {
         CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
         City city = null;
 
@@ -356,7 +357,7 @@ public class CreateItineraryController {
         }
     }
 
-    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) {
+    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws ItemNotFoundException {
         AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
         Attraction attraction = null;
 

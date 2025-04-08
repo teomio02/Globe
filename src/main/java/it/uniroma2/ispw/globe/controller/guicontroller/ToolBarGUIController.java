@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -109,7 +110,11 @@ public class ToolBarGUIController {
             URL url;
             Parent newRoot;
 
-            new LogInController().logOut(sessionId);
+            try {
+                new LogInController().logOut(sessionId);
+            } catch (ItemNotFoundException e) {
+                new ErrorPopUpGUIController().createPopUp(e);
+            }
 
             try {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/LoginView.fxml").toURI().toURL();

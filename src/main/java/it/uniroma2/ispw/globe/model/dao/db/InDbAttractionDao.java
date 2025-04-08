@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.model.dao.db;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -23,7 +24,9 @@ public class InDbAttractionDao extends AttractionDao {
     public void addAttraction(Attraction attraction) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getAttraction(attraction.getPlaceID()) == null) {
+        try {
+            getAttraction(attraction.getPlaceID());
+        } catch (ItemNotFoundException exception) {
             String query = "insert into Attraction (placeID,name,city,address,latitude,longitude) values (?,?,?,?,?,?)";
 
             PreparedStatement stmt = null;
@@ -50,7 +53,7 @@ public class InDbAttractionDao extends AttractionDao {
     }
 
     @Override
-    public Attraction getAttraction(String attractionID) {
+    public Attraction getAttraction(String attractionID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Attraction.placeID, Attraction.name, Attraction.latitude, Attraction.longitude, Attraction.city, Attraction.address from Attraction where placeID = ?";
@@ -92,6 +95,10 @@ public class InDbAttractionDao extends AttractionDao {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
         } finally {
             DBConnection.getInstance().closeConnection(stmt, rs);
+        }
+
+        if (attraction == null) {
+            throw new ItemNotFoundException("attraction not found");
         }
 
         return attraction;

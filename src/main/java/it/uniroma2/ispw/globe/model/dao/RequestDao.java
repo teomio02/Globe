@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.util.decorator.Request;
@@ -28,6 +29,6 @@ public abstract class RequestDao {
 
     public abstract void addAgencyRequest(Request request, User user, Agency agency);
     public abstract void addUserRequest(RequestBean requestBean, User user, Agency agency);
-    public abstract Request getRequest(String requestId);
+    public abstract Request getRequest(String requestId) throws ItemNotFoundException;
     public abstract void updateRequest(Request request);
 }

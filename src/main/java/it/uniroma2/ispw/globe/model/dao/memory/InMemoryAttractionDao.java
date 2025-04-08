@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.model.Attraction;
 
@@ -33,7 +34,7 @@ public class InMemoryAttractionDao extends AttractionDao {
     }
 
     @Override
-    public Attraction getAttraction(String attractionID) {
+    public Attraction getAttraction(String attractionID) throws ItemNotFoundException {
         Attraction attractionResult = null;
         for (Attraction attraction : attractions) {
             if (attraction.getPlaceID().equals(attractionID)) {
@@ -45,6 +46,9 @@ public class InMemoryAttractionDao extends AttractionDao {
             if (attractionResult != null) {
                 addAttraction(attractionResult);
             }
+        }
+        if (attractionResult == null) {
+            throw new ItemNotFoundException("attraction not found");
         }
         return attractionResult;
     }

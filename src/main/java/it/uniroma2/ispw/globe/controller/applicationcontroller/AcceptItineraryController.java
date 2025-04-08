@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
@@ -16,7 +16,7 @@ import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 
 public class AcceptItineraryController {
 
-    public String sendResponse(String proposalId, String response) throws AccountNotFoundException {
+    public String sendResponse(String proposalId, String response) throws ItemNotFoundException {
         ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         Agency agency = accountDao.getAgencyByProposal(proposalId);
@@ -36,7 +36,7 @@ public class AcceptItineraryController {
 
     }
 
-    public String executePayment(String userUsername, String agencyUsername, double amount) throws AccountNotFoundException {
+    public String executePayment(String userUsername, String agencyUsername, double amount) throws ItemNotFoundException {
 
         Account payer = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(userUsername);
         Account payee = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(agencyUsername);
@@ -46,7 +46,7 @@ public class AcceptItineraryController {
         return api.processPayment(payer.getPaymentCredential(), payee.getPaymentCredential(),amount);
     }
 
-    public ItineraryBean getProposalItinerary(String proposalId) {
+    public ItineraryBean getProposalItinerary(String proposalId) throws ItemNotFoundException {
         ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
         Proposal proposal = proposalDao.getProposal(proposalId);
         Itinerary itinerary = proposal.getItinerary();

@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -18,7 +18,7 @@ import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 
 public class ResponseRequestController {
 
-    public void createProposal(ProposalBean proposalBean, String userUsername, String requestId, String sessionID) throws AccountNotFoundException {
+    public void createProposal(ProposalBean proposalBean, String userUsername, String requestId, String sessionID) throws ItemNotFoundException {
         ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
         RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
@@ -65,7 +65,7 @@ public class ResponseRequestController {
         session.setPendingRequest(null);
     }
 
-    public ProposalBean getProposal(String proposalID, String sessionID) throws AccountNotFoundException {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws ItemNotFoundException {
         Proposal proposal;
         User user;
         Agency agency;
@@ -95,7 +95,7 @@ public class ResponseRequestController {
         return new ProposalBean(proposalID,proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
     }
 
-    public AgencyRequestBean getAgencyRequest(String requestID, String sessionID) throws AccountNotFoundException {
+    public AgencyRequestBean getAgencyRequest(String requestID, String sessionID) throws ItemNotFoundException {
         Request request;
         Agency agency;
         User user;
@@ -136,7 +136,7 @@ public class ResponseRequestController {
         return requestBean;
     }
 
-    public List<ProposalBean> getAgencyProposals(String sessionID) throws AccountNotFoundException {
+    public List<ProposalBean> getAgencyProposals(String sessionID) throws ItemNotFoundException {
 
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
@@ -152,7 +152,7 @@ public class ResponseRequestController {
         return proposalBeans;
     }
 
-    public List<AgencyRequestBean> getAgencyRequests(String sessionID) throws AccountNotFoundException {
+    public List<AgencyRequestBean> getAgencyRequests(String sessionID) throws ItemNotFoundException {
 
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
@@ -167,7 +167,7 @@ public class ResponseRequestController {
         return requestBeans;
     }
 
-    public void setPendingRequest(String sessionID,String requestID) {
+    public void setPendingRequest(String sessionID,String requestID) throws ItemNotFoundException {
         RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
         Request request = requestDao.getRequest(requestID);
 

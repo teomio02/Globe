@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Accommodation;
 
 import java.util.UUID;
@@ -15,5 +16,5 @@ public abstract class AccommodationDao {
         return accommodation;
     }
     public abstract void addAccommodation(Accommodation accommodation);
-    public abstract Accommodation getAccommodation(String id);
+    public abstract Accommodation getAccommodation(String id) throws ItemNotFoundException;
 }

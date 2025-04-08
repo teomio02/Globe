@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.model.dao;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
@@ -18,5 +19,5 @@ public abstract class CityDao {
         return new PlaceAdapter(jsonCity);
     }
     public abstract void addCity(City city);
-    public abstract City getCity(String cityID);
+    public abstract City getCity(String cityID) throws ItemNotFoundException;
 }

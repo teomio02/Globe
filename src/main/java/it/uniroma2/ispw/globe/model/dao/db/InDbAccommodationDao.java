@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Accommodation;
 import it.uniroma2.ispw.globe.model.dao.AccommodationDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -21,8 +22,9 @@ public class InDbAccommodationDao extends AccommodationDao {
     public void addAccommodation(Accommodation accommodation) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getAccommodation(accommodation.getId()) == null) {
-
+        try {
+            getAccommodation(accommodation.getId());
+        } catch (ItemNotFoundException e) {
             String query = "insert into Accommodation (id,name,address) values (?,?,?)";
 
             PreparedStatement stmt = null;
@@ -36,10 +38,10 @@ public class InDbAccommodationDao extends AccommodationDao {
                 stmt.setString(3, accommodation.getAddress());
                 stmt.execute();
 
-            } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
-            } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            } catch (SQLException exception) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + exception.getMessage());
+            } catch (DBConnectionException exception) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + exception.getMessage());
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -47,7 +49,7 @@ public class InDbAccommodationDao extends AccommodationDao {
     }
 
     @Override
-    public Accommodation getAccommodation(String id) {
+    public Accommodation getAccommodation(String id) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Accommodation.id , Accommodation.name , Accommodation.address from Accommodation where id = ?";
@@ -80,6 +82,9 @@ public class InDbAccommodationDao extends AccommodationDao {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
+        if (accommodation == null) {
+            throw new ItemNotFoundException("accommodation not found");
+        }
         return accommodation;
     }
 }

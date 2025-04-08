@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -21,7 +22,9 @@ public class InDbFlightDao extends FlightDao {
     public void addFlight(Flight flight) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getFlight(flight.getId()) == null) {
+        try {
+            getFlight(flight.getId());
+        } catch (ItemNotFoundException exception) {
             String query = "insert into Flight (id,departureTime,arrivalTime) values (?,?,?)";
 
             PreparedStatement stmt = null;
@@ -46,7 +49,7 @@ public class InDbFlightDao extends FlightDao {
     }
 
     @Override
-    public Flight getFlight(String flightID) {
+    public Flight getFlight(String flightID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select * from Flight where id = ?";
@@ -79,6 +82,9 @@ public class InDbFlightDao extends FlightDao {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
+        if (flight == null) {
+            throw new ItemNotFoundException("flight not found");
+        }
         return flight;
     }
 }

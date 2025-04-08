@@ -1,7 +1,8 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.AccountAlreadyExistsException;
-import it.uniroma2.ispw.globe.exception.AccountNotFoundException;
+import it.uniroma2.ispw.globe.exception.InvalidCredentialsException;
+import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
@@ -28,7 +29,7 @@ public class InDbAccountDao extends AccountDao {
     public static final String ACCOUNT = "account";
 
     @Override
-    public Account authenticate(String username, String password) throws AccountNotFoundException {
+    public Account authenticate(String username, String password) throws ItemNotFoundException, InvalidCredentialsException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Account.username, Account.password from Account where username = ?";
@@ -49,12 +50,12 @@ public class InDbAccountDao extends AccountDao {
                 if (resultSet.getString(PASSWORD).equals(password)) {
                     account = getAccount(username);
                 } else {
-                    throw new AccountNotFoundException("Invalid password");
+                    throw new InvalidCredentialsException("Invalid password");
                 }
             }
 
             if (account == null ) {
-                throw new AccountNotFoundException("account not found");
+                throw new ItemNotFoundException("account not found");
             }
             return account;
         } catch (SQLException e) {
@@ -69,13 +70,13 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public void addAccount(CredentialsBean credentials) throws AccountAlreadyExistsException {
+    public void addAccount(CredentialsBean credentials) throws ItemAlreadyExistsException {
         DBConnection connect = DBConnection.getInstance();
 
         try {
             getAccount(credentials.getUsername());
-            throw new AccountAlreadyExistsException("account already exists");
-        } catch (AccountNotFoundException exception) {
+            throw new ItemAlreadyExistsException("account already exists");
+        } catch (ItemNotFoundException exception) {
             String query = "insert into Account (username, password, paymentCredential, rating, description, type) values (?,?,?,?,?,?)";
             PreparedStatement stmt = null;
 
@@ -101,7 +102,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public Account getAccount(String username) throws AccountNotFoundException {
+    public Account getAccount(String username) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
@@ -151,7 +152,7 @@ public class InDbAccountDao extends AccountDao {
             }
 
             if (account == null ) {
-                throw new AccountNotFoundException("account not found");
+                throw new ItemNotFoundException("account not found");
             }
             return account;
         } catch (SQLException e) {
@@ -177,7 +178,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public Agency getAgencyByProposal(String proposalID) throws AccountNotFoundException {
+    public Agency getAgencyByProposal(String proposalID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountProposal.account from accountProposal where proposalID = ?";
@@ -213,7 +214,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public User getUserByProposal(String proposalID) throws AccountNotFoundException {
+    public User getUserByProposal(String proposalID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountProposal.account from accountProposal where proposalID = ?";
@@ -249,7 +250,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public Agency getAgencyByRequest(String requestID) throws AccountNotFoundException {
+    public Agency getAgencyByRequest(String requestID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountRequest.account from accountRequest where requestID = ?";
@@ -285,7 +286,7 @@ public class InDbAccountDao extends AccountDao {
     }
 
     @Override
-    public User getUserByRequest(String requestID) throws AccountNotFoundException {
+    public User getUserByRequest(String requestID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select accountRequest.account from accountRequest where requestID = ?";
@@ -320,7 +321,7 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
-    public Account getAccountPrimaryData(String username) throws AccountNotFoundException {
+    public Account getAccountPrimaryData(String username) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
@@ -374,7 +375,7 @@ public class InDbAccountDao extends AccountDao {
                 }
             }
             if (account == null ) {
-                throw new AccountNotFoundException("account not found");
+                throw new ItemNotFoundException("account not found");
             }
             return account;
         } catch (SQLException e) {
@@ -389,7 +390,7 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
-    public List<Proposal> getAccountProposals(String username, Connection connection) {
+    public List<Proposal> getAccountProposals(String username, Connection connection) throws ItemNotFoundException {
         String proposalQuery = "select accountProposal.proposalID from accountProposal where account = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
@@ -417,7 +418,7 @@ public class InDbAccountDao extends AccountDao {
         return proposals;
     }
 
-    public List<Itinerary> getAccountItineraries(String username, Connection connection) {
+    public List<Itinerary> getAccountItineraries(String username, Connection connection) throws ItemNotFoundException {
         String itineraryQuery = "select accountItinerary.itineraryID from accountItinerary where account = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
@@ -444,7 +445,7 @@ public class InDbAccountDao extends AccountDao {
         return itineraries;
     }
 
-    public List<Request> getAccountRequests(String username, Connection connection) {
+    public List<Request> getAccountRequests(String username, Connection connection) throws ItemNotFoundException {
         String requestQuery = "select accountRequest.requestID from accountRequest where account = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;

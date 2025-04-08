@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Accommodation;
 import it.uniroma2.ispw.globe.model.dao.AccommodationDao;
 
@@ -32,12 +33,12 @@ public class InMemoryAccommodationDao extends AccommodationDao {
     }
 
     @Override
-    public Accommodation getAccommodation(String id) {
+    public Accommodation getAccommodation(String id) throws ItemNotFoundException {
         for (Accommodation a : accommodations) {
             if (a.getId().equals(id)) {
                 return a;
             }
         }
-        return null;
+        throw new ItemNotFoundException("accommodation not found");
     }
 }

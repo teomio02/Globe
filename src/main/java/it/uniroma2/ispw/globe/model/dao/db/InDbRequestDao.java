@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -25,7 +26,9 @@ public class InDbRequestDao extends RequestDao {
     public void addAgencyRequest(Request request, User user, Agency agency) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getRequest(request.getId()) == null) {
+        try {
+            getRequest(request.getId());
+        } catch (ItemNotFoundException exception) {
             String query = "insert into Request (id,user,agency,accepted,description,days) values (?,?,?,?,?,?)";
             String accountQuery= "insert into accountRequest (account,requestID) values (?,?)";
             String cityQuery = "insert into requestCity (requestID,cityID) values (?,?)";
@@ -92,7 +95,7 @@ public class InDbRequestDao extends RequestDao {
     }
 
     @Override
-    public Request getRequest(String requestId) {
+    public Request getRequest(String requestId) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select * from Request where id = ?";
@@ -167,6 +170,10 @@ public class InDbRequestDao extends RequestDao {
             DBConnection.getInstance().closeConnection(cityStmt,null);
             DBConnection.getInstance().closeConnection(attrStmt,null);
             DBConnection.getInstance().closeConnection(typeStmt,null);
+        }
+
+        if (request == null) {
+            throw new ItemNotFoundException("request not found");
         }
 
         return request;

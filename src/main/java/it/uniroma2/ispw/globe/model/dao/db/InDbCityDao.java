@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.model.dao.db;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.exception.DBConnectionException;
+import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -23,9 +24,9 @@ public class InDbCityDao extends CityDao {
     public void addCity(City city) {
         DBConnection connect = DBConnection.getInstance();
 
-        if (getCity(city.getPlaceID()) != null) {
-            System.out.println("City already exists");
-        } else {
+        try {
+            getCity(city.getPlaceID());
+        } catch (ItemNotFoundException exception) {
             String query = "insert into City (placeID,name,country,latitude,longitude) values (?,?,?,?,?)";
 
             PreparedStatement stmt = null;
@@ -51,7 +52,7 @@ public class InDbCityDao extends CityDao {
     }
 
     @Override
-    public City getCity(String cityID) {
+    public City getCity(String cityID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select City.placeID, City.name, City.country ,City.latitude, City.longitude from City where placeID = ?";
@@ -98,7 +99,9 @@ public class InDbCityDao extends CityDao {
         } finally {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }
-
+        if (city == null) {
+            throw new ItemNotFoundException("city not found");
+        }
         return city;
     }
 }
