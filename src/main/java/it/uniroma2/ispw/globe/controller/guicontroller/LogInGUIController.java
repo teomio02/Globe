@@ -60,7 +60,7 @@ public class LogInGUIController {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp(e);
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }
 
@@ -87,7 +87,7 @@ public class LogInGUIController {
         try {
             sessionId = new LogInController().logIn(credentials);
         } catch (ItemNotFoundException | InvalidCredentialsException exception) {
-            new ErrorPopUpGUIController().createPopUp(exception);
+            new ErrorPopUpGUIController().createPopUp(exception.getMessage());
             return;
         }
 
@@ -123,7 +123,7 @@ public class LogInGUIController {
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
             }
         } else {
             errorLabel.setVisible(true);

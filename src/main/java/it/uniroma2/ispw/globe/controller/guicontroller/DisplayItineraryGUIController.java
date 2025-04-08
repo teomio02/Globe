@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.LoadViewException;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
@@ -67,7 +68,7 @@ public class DisplayItineraryGUIController {
             itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
             steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
         } catch (ItemNotFoundException e) {
-            new ErrorPopUpGUIController().createPopUp(e);
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
 
@@ -77,7 +78,12 @@ public class DisplayItineraryGUIController {
 
         int day = 1;
         for (StepBean step : steps) {
-            drawDay(step, day);
+            try {
+                drawDay(step, day);
+            } catch (LoadViewException e) {
+                new ErrorPopUpGUIController().createPopUp("page loading failed");
+                goBack();
+            }
             day ++;
         }
 
@@ -108,7 +114,7 @@ public class DisplayItineraryGUIController {
             try {
                 nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
             } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
         }
@@ -117,16 +123,16 @@ public class DisplayItineraryGUIController {
         }
     }
 
-    public void drawDay(StepBean step, int day) {
+    public void drawDay(StepBean step, int day) throws LoadViewException {
         Tab tab = new Tab(String.valueOf(day));
         URL url;
-        VBox dayVBox;
+        VBox dayVBox = null;
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DayTab.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             dayVBox = loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LoadViewException("days tab loading failed");
         }
 
         try {
@@ -151,7 +157,7 @@ public class DisplayItineraryGUIController {
             tab.setContent(dayVBox);
             daysTabPane.getTabs().add(tab);
         } catch (ItemNotFoundException e) {
-            new ErrorPopUpGUIController().createPopUp(e);
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }
 
@@ -171,8 +177,8 @@ public class DisplayItineraryGUIController {
         nav.goToCreateProposalGUI(sessionId, requestId);
     }
 
-    public void goBack(ActionEvent event) {
-        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+    public void goBack() {
+        BorderPane root = (BorderPane) dayLabel.getScene().getRoot();
         if (prev != null) {
             root.setCenter(prev);
         }

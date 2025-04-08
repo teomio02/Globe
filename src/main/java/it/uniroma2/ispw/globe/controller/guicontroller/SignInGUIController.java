@@ -73,7 +73,7 @@ public class SignInGUIController {
                 new LogInController().signIn(credentials);
                 goBack(event);
             } catch (ItemAlreadyExistsException exception) {
-                new ErrorPopUpGUIController().createPopUp(exception);
+                new ErrorPopUpGUIController().createPopUp(exception.getMessage());
             }
         }
     }

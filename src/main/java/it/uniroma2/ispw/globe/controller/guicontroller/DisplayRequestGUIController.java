@@ -43,7 +43,7 @@ public class DisplayRequestGUIController {
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
             userLabel.setText(request.getUser());
@@ -58,7 +58,7 @@ public class DisplayRequestGUIController {
             try {
                 agency = new RequestItineraryController().getAgency(null,sessionId);
             } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
             userLabel.setText(agency.getName());

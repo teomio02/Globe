@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -17,6 +18,11 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_API;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class CreateItineraryController {
     private static final String CITY = "administrative";
@@ -237,19 +243,19 @@ public class CreateItineraryController {
         return steps;
     }
 
-    public List<JsonObject> getPlaces(String name, String type) {
+    public List<JsonObject> getPlaces(String name, String type) throws PlaceApiException {
         NominatimAPIClient api = new NominatimAPIClient();
         List<JsonObject> apiPlaces;
         try {
             apiPlaces = api.getPlaces(name,type);
         } catch (IOException e) {
-            // crea eccezione
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API + e.getMessage());
+            throw new PlaceApiException("Error with external Api");
         }
         return apiPlaces;
     }
 
-    public List<AttractionBean> getAttractions(String name) {
+    public List<AttractionBean> getAttractions(String name) throws PlaceApiException {
 //        //chiama la DAO/API per ottenere i nomi delle attrazioni
         List<JsonObject> jsonAttractions = getPlaces(name, ATTRACTION);
         List<Attraction> attractions = new ArrayList<>();
@@ -268,7 +274,7 @@ public class CreateItineraryController {
         return attractionBeans;
     }
 
-    public List<CityBean> getCities(String name) {
+    public List<CityBean> getCities(String name) throws PlaceApiException {
         List<JsonObject> jsonCities = getPlaces(name, CITY);
         List<City> cities = new ArrayList<>();
         List<CityBean> citiesBeans = new ArrayList<>();

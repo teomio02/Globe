@@ -50,7 +50,8 @@ public class CreateProposalGUIController {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             proposal = new ResponseRequestController().getProposal(null,sessionId);
         } catch (ItemNotFoundException e) {
-            // pop up
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
 
         userLabel.setText(request.getUser());

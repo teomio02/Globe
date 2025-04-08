@@ -113,7 +113,7 @@ public class ToolBarGUIController {
             try {
                 new LogInController().logOut(sessionId);
             } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
             }
 
             try {

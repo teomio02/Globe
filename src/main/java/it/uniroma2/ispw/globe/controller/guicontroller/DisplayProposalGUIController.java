@@ -50,11 +50,12 @@ public class DisplayProposalGUIController {
     public void initialize() {
         String type = new ManageItineraryController().getAccountType(sessionId);
 
-        ProposalBean proposal = null;
+        ProposalBean proposal;
         try {
             proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
         } catch (ItemNotFoundException e) {
-            // pop up
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
         nameLabel.setText(proposal.getID());
         descriptionLabel.setText(proposal.getDescription());
@@ -78,7 +79,7 @@ public class DisplayProposalGUIController {
             try {
                 itineraryId = new AcceptItineraryController().getProposalItinerary(proposalID).getId();
             } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
         } else {

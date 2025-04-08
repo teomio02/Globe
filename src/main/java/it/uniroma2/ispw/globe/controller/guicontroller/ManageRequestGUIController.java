@@ -42,7 +42,7 @@ public class ManageRequestGUIController {
             proposals = new ResponseRequestController().getAgencyProposals(sessionId);
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
         } catch (ItemNotFoundException e) {
-            new ErrorPopUpGUIController().createPopUp(e);
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
 
@@ -111,7 +111,7 @@ public class ManageRequestGUIController {
         try {
             new ResponseRequestController().setPendingRequest(sessionId,requestID);
         } catch (ItemNotFoundException e) {
-            new ErrorPopUpGUIController().createPopUp(e);
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
 

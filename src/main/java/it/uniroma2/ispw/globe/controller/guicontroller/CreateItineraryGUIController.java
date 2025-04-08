@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -112,7 +113,7 @@ public class CreateItineraryGUIController {
                     }
                 }
             } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
             }
 
         } else {
@@ -182,7 +183,12 @@ public class CreateItineraryGUIController {
 
         String city = cityField.getText();
 
-        cities = new CreateItineraryController().getCities(city);
+        try {
+            cities = new CreateItineraryController().getCities(city);
+        } catch (PlaceApiException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
@@ -224,7 +230,12 @@ public class CreateItineraryGUIController {
 
         String attraction = attractionField.getText();
 
-        attractions = new CreateItineraryController().getAttractions(attraction);
+        try {
+            attractions = new CreateItineraryController().getAttractions(attraction);
+        } catch (PlaceApiException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
 
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
