@@ -39,9 +39,9 @@ public class InDbFlightDao extends FlightDao {
                 stmt.execute();
 
             } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -75,9 +75,9 @@ public class InDbFlightDao extends FlightDao {
                 flight.setArrivalTime(resultSet.getDouble("arrivalTime"));
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }

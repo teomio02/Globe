@@ -70,7 +70,7 @@ public class InDbItineraryDao extends ItineraryDao {
                                     accommodationStmt.setString(2, accommodation.getId());
                                     accommodationStmt.execute();
                                 } catch (SQLException e) {
-                                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+                                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
                                 } finally {
                                     DBConnection.getInstance().closeConnection(accommodationStmt, null);
                                 }
@@ -91,7 +91,7 @@ public class InDbItineraryDao extends ItineraryDao {
                                 flightStmt.setString(3, itinerary.getItineraryID());
                                 flightStmt.execute();
                             } catch (SQLException e) {
-                                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+                                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
                             } finally {
                                 DBConnection.getInstance().closeConnection(flightStmt, null);
                             }
@@ -113,9 +113,9 @@ public class InDbItineraryDao extends ItineraryDao {
 
 
                 } catch (SQLException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
                 } catch (DBConnectionException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
                 } finally {
                     DBConnection.getInstance().closeConnection(stmt,null);
                     DBConnection.getInstance().closeConnection(finalStmt,null);
@@ -215,9 +215,9 @@ public class InDbItineraryDao extends ItineraryDao {
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(dayStmt,otherResultSet);

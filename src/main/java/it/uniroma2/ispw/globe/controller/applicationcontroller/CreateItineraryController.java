@@ -22,7 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_API;
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class CreateItineraryController {
     private static final String CITY = "administrative";
@@ -249,7 +248,7 @@ public class CreateItineraryController {
         try {
             apiPlaces = api.getPlaces(name,type);
         } catch (IOException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
             throw new PlaceApiException("Error with external Api");
         }
         return apiPlaces;

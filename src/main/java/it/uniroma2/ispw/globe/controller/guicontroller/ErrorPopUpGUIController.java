@@ -17,7 +17,6 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
 
 public class ErrorPopUpGUIController {
@@ -51,7 +50,7 @@ public class ErrorPopUpGUIController {
             popupStage.setScene(scene);
             popupStage.showAndWait();
         } catch (IOException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO, e);
         }
     }
 }

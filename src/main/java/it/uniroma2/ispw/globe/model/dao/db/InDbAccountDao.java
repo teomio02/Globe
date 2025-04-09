@@ -59,10 +59,10 @@ public class InDbAccountDao extends AccountDao {
             }
             return account;
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -92,9 +92,9 @@ public class InDbAccountDao extends AccountDao {
                 stmt.setString(6, credentials.getType());
                 stmt.execute();
             } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -156,10 +156,10 @@ public class InDbAccountDao extends AccountDao {
             }
             return account;
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -203,10 +203,10 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -239,10 +239,10 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -275,10 +275,10 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -311,10 +311,10 @@ public class InDbAccountDao extends AccountDao {
             return null;
 
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -379,10 +379,10 @@ public class InDbAccountDao extends AccountDao {
             }
             return account;
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return null;
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             return null;
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -409,7 +409,7 @@ public class InDbAccountDao extends AccountDao {
                 proposals.add(proposal);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -436,7 +436,7 @@ public class InDbAccountDao extends AccountDao {
                 itineraries.add(itinerary);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -463,7 +463,7 @@ public class InDbAccountDao extends AccountDao {
                 requests.add(request);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
@@ -488,7 +488,7 @@ public class InDbAccountDao extends AccountDao {
                 types.add(resultSet.getString("type"));
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             return new ArrayList<>();
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);

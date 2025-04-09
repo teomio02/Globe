@@ -39,9 +39,9 @@ public class InDbAccommodationDao extends AccommodationDao {
                 stmt.execute();
 
             } catch (SQLException exception) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL + exception.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, exception);
             } catch (DBConnectionException exception) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + exception.getMessage());
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, exception);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -77,7 +77,7 @@ public class InDbAccommodationDao extends AccommodationDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION + e.getMessage());
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }

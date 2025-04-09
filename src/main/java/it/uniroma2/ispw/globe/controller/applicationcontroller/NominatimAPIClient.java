@@ -27,7 +27,8 @@ public class NominatimAPIClient {
 
     public List<JsonObject> getPlaces(String query, String type) throws IOException {
         String url = String.format("%ssearch?q=%s&format=json&addressdetails=1", BASE_URL, query.replace(" ", "+"));
-        return getPlace(url, type);
+        throw new IOException();
+        //return getPlace(url, type);
     }
 
     public JsonObject getPlaceByID(String id) throws IOException {
