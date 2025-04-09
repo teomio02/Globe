@@ -9,13 +9,9 @@ import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import java.io.IOException;
 
 public abstract class AttractionDao {
-    public Attraction createAttraction(String attractionID) {
+    public Attraction createAttraction(String attractionID) throws IOException {
         JsonObject jsonAttraction;
-        try {
-            jsonAttraction = new NominatimAPIClient().getPlaceByID(attractionID);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        jsonAttraction = new NominatimAPIClient().getPlaceByID(attractionID);
         return new PlaceAdapter(jsonAttraction);
     }
     public abstract void addAttraction(Attraction attraction);

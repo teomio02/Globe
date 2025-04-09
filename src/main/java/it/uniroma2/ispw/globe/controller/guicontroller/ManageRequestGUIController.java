@@ -70,7 +70,7 @@ public class ManageRequestGUIController {
 
                 proposalsVBox.getChildren().add(proposalBox);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp("'Manage Request' page loading failed");
             }
         }
 
@@ -92,7 +92,7 @@ public class ManageRequestGUIController {
                     requestsVBox.getChildren().add(requestsBox);
 
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    new ErrorPopUpGUIController().createPopUp("'Manage Request' page loading failed");
                 }
             }
         }

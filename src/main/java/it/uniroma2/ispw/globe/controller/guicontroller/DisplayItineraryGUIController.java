@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryCo
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.LoadViewException;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.AttractionBean;
 import it.uniroma2.ispw.globe.model.bean.CityBean;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
@@ -156,7 +157,7 @@ public class DisplayItineraryGUIController {
             }
             tab.setContent(dayVBox);
             daysTabPane.getTabs().add(tab);
-        } catch (ItemNotFoundException e) {
+        } catch (ItemNotFoundException | PlaceApiException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }

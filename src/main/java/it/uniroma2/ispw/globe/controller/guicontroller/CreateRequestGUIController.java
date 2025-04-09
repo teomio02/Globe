@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -329,8 +330,9 @@ public class CreateRequestGUIController {
                 RequestItineraryController controller = new RequestItineraryController();
                 try {
                     controller.createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
-                } catch (ItemNotFoundException e) {
-                    // pop up
+                } catch (ItemNotFoundException | PlaceApiException e) {
+                    new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                    return;
                 }
             }
         }

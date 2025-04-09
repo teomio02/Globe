@@ -112,7 +112,7 @@ public class CreateItineraryGUIController {
                         requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
                     }
                 }
-            } catch (ItemNotFoundException e) {
+            } catch (ItemNotFoundException | PlaceApiException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
             }
 
@@ -166,7 +166,12 @@ public class CreateItineraryGUIController {
             }
         }
 
-        new CreateItineraryController().createItinerary(itineraryBean,sessionId);
+        try {
+            new CreateItineraryController().createItinerary(itineraryBean,sessionId);
+        } catch (PlaceApiException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);

@@ -75,7 +75,7 @@ public class InDbAccommodationDao extends AccommodationDao {
 
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
         } catch (DBConnectionException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {

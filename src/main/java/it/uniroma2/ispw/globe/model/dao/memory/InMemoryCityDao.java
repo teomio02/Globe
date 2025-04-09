@@ -42,12 +42,6 @@ public class InMemoryCityDao extends CityDao {
             }
         }
         if (cityResult == null) {
-            cityResult = createCity(cityID);
-            if (cityResult != null) {
-                addCity(cityResult);
-            }
-        }
-        if (cityResult == null) {
             throw new ItemNotFoundException("city not found");
         }
         return cityResult;

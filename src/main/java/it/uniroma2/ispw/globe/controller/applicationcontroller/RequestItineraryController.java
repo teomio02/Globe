@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -14,7 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_API;
 import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
 
 public class RequestItineraryController {
@@ -133,7 +137,7 @@ public class RequestItineraryController {
 
 
 
-    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws ItemNotFoundException {
+    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws ItemNotFoundException, PlaceApiException {
 
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
@@ -147,12 +151,24 @@ public class RequestItineraryController {
         List<Attraction> attractions = new ArrayList<>();
 
         for (String cityId : requestBean.getCities()) {
-            City city = cityDao.createCity(cityId);
+            City city = null;
+            try {
+                city = cityDao.createCity(cityId);
+            } catch (IOException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
+                throw new PlaceApiException("Error with external Api");
+            }
             cities.add(city);
         }
 
         for (String attractionId : requestBean.getAttractions()) {
-            Attraction attraction = attractionDao.createAttraction(attractionId);
+            Attraction attraction = null;
+            try {
+                attraction = attractionDao.createAttraction(attractionId);
+            } catch (IOException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
+                throw new PlaceApiException("Error with external Api");
+            }
             attractions.add(attraction);
         }
 

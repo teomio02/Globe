@@ -42,12 +42,6 @@ public class InMemoryAttractionDao extends AttractionDao {
             }
         }
         if (attractionResult == null) {
-            attractionResult = createAttraction(attractionID);
-            if (attractionResult != null) {
-                addAttraction(attractionResult);
-            }
-        }
-        if (attractionResult == null) {
             throw new ItemNotFoundException("attraction not found");
         }
         return attractionResult;

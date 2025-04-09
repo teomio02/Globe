@@ -9,13 +9,9 @@ import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import java.io.IOException;
 
 public abstract class CityDao {
-    public City createCity(String cityID) {
+    public City createCity(String cityID) throws IOException {
         JsonObject jsonCity;
-        try {
-            jsonCity= new NominatimAPIClient().getPlaceByID(cityID);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        jsonCity= new NominatimAPIClient().getPlaceByID(cityID);
         return new PlaceAdapter(jsonCity);
     }
     public abstract void addCity(City city);

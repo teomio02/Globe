@@ -72,9 +72,7 @@ public class InDbCityDao extends CityDao {
 
             rs = stmt.executeQuery();
 
-            if (!rs.next()) {
-                System.out.println("No such city");
-            } else {
+            if (rs.next()) {
                 JsonObject json = new JsonObject();
 
                 json.addProperty("osm_type", rs.getString("placeID").substring(0,1));

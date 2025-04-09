@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.LoadViewException;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
@@ -34,7 +35,7 @@ public class ManageItineraryGUIController {
         this.sessionId = sessionId;
     }
 
-    public void initialize() {
+    public void initialize() throws LoadViewException {
         List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
         List<ProposalBean> proposals = null;
         try {
@@ -58,7 +59,8 @@ public class ManageItineraryGUIController {
 
                 itinerariesVBox.getChildren().add(itineraryBox);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp("'Manage Itinerary' page loading failed");
+                return;
             }
         }
         for (ProposalBean proposal : proposals) {
@@ -85,7 +87,8 @@ public class ManageItineraryGUIController {
 
                 proposalsVBox.getChildren().add(proposalBox);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp("'Manage Itinerary' page loading failed");
+                return;
             }
         }
     }

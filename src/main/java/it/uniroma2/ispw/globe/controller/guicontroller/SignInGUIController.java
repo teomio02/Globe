@@ -116,7 +116,8 @@ public class SignInGUIController {
             loader.setController(controller);
             root = loader.load();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            return;
         }
 
         Scene scene = new Scene(root);

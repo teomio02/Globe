@@ -56,7 +56,7 @@ public class ToolBarGUIController {
             newContentPane = loader.load();
             root.setCenter(newContentPane);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
         }
     }
     public void manageItinerary(){
@@ -80,7 +80,7 @@ public class ToolBarGUIController {
             newContentPane = loader.load();
             root.setCenter(newContentPane);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
         }
     }
     public void manageProfile(){}
@@ -123,7 +123,8 @@ public class ToolBarGUIController {
                 loader.setController(controller);
                 newRoot = loader.load();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp("page loading failed");
+                return;
             }
 
             Scene scene = new Scene(newRoot);
