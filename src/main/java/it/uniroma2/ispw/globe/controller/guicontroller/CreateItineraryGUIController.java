@@ -19,7 +19,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateItineraryGUIController extends GUIController {
+public class CreateItineraryGUIController {
     @FXML
     private TextField cityField;
     @FXML
@@ -174,21 +174,12 @@ public class CreateItineraryGUIController extends GUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-
-//        NavigationGUIController nav = new NavigationGUIController(root);
-//        if (requestId != null) {
-//            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null);
-//        } else {
-//            nav.goToDisplayItineraryGUI(sessionId,null,null,null);
-//        }
-//
-        DisplayItineraryGUIController controller;
+        NavigationGUIController nav = new NavigationGUIController(root);
         if (requestId != null) {
-            controller = new DisplayItineraryGUIController(sessionId,null,requestId,null,root.getCenter());
+            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null);
         } else {
-            controller = new DisplayItineraryGUIController(sessionId,null,null,null,root.getCenter());
+            nav.goToDisplayItineraryGUI(sessionId,null,null,null);
         }
-        loadView(DISPALY_ITINERARY, controller, root);
     }
 
     public void searchCity() {
