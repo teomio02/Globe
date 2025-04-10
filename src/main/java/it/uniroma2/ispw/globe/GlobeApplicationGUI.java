@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe;
 
-import it.uniroma2.ispw.globe.controller.guicontroller.LogInGUIController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

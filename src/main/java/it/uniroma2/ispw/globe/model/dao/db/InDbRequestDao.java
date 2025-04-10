@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class InDbRequestDao extends RequestDao {

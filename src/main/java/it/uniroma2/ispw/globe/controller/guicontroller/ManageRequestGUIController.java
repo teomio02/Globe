@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_REQUEST;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 

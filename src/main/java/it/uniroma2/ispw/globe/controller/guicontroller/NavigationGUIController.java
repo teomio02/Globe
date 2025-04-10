@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_VIEW;
 
 public class NavigationGUIController {

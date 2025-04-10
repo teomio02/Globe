@@ -1,7 +1,5 @@
 package it.uniroma2.ispw.globe.util;
 
-import it.uniroma2.ispw.globe.exception.DBConnectionException;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;

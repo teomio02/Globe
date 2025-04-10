@@ -14,7 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_REQUEST;
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 
 public class DisplayRequestGUIController implements ViewObserver {
     @FXML

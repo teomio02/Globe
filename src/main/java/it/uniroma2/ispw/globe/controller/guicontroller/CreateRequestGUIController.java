@@ -17,7 +17,6 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.REQUEST_ITINERARY;
 import static it.uniroma2.ispw.globe.other.ItineraryType.NATURE;
 import static it.uniroma2.ispw.globe.other.ItineraryType.ON_THE_ROAD;

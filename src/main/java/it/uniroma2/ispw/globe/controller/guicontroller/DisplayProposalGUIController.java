@@ -8,7 +8,6 @@ import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +19,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_PROPOSAL;
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 

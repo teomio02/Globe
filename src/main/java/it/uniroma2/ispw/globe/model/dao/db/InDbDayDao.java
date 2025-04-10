@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_CONNECTION;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class InDbDayDao extends DayDao {
@@ -52,8 +50,9 @@ public class InDbDayDao extends DayDao {
                     attractionStmt.setString(2, day.getId());
                     attractionStmt.setInt(1, day.getDayNum());
                     attractionStmt.setString(3, attraction.getPlaceID());
-                    attractionStmt.execute();
+                    attractionStmt.addBatch();
                 }
+                attractionStmt.executeBatch();
 
                 cityStmt = connection.prepareStatement(cityQuery);
 
@@ -64,8 +63,9 @@ public class InDbDayDao extends DayDao {
                     cityStmt.setString(2, day.getId());
                     cityStmt.setInt(1, day.getDayNum());
                     cityStmt.setString(3, city.getPlaceID());
-                    cityStmt.execute();
+                    cityStmt.addBatch();
                 }
+                cityStmt.executeBatch();
             } catch (SQLException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
             } finally {

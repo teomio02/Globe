@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.model.dao.db;
 import it.uniroma2.ispw.globe.exception.InvalidCredentialsException;
 import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
-import it.uniroma2.ispw.globe.exception.DBConnectionException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.model.dao.*;

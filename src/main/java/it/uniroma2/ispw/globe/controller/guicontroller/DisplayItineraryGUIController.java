@@ -10,7 +10,6 @@ import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -25,7 +24,6 @@ import java.net.URL;
 import java.util.List;
 
 import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_ITINERARY;
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 
 public class DisplayItineraryGUIController implements ViewObserver {
 

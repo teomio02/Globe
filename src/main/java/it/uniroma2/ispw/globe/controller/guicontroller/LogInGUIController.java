@@ -24,7 +24,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_VIEW;
 import static it.uniroma2.ispw.globe.other.UserType.*;
 
@@ -99,7 +98,6 @@ public class LogInGUIController {
             URL url;
             String type = new LogInController().getUserType(sessionId);
             BorderPane root = new BorderPane();
-            AnchorPane contentPane;
 
             try {
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/ToolBar.fxml").toURI().toURL();
