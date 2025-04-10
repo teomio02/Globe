@@ -43,8 +43,6 @@ public class InDbCityDao extends CityDao {
                 stmt.execute();
             } catch (SQLException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -92,8 +90,6 @@ public class InDbCityDao extends CityDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-        } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }

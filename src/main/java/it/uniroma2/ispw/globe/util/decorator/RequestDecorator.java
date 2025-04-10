@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class RequestDecorator extends Request{
     private Request request;
 
-    public RequestDecorator(Request request) {
+    protected RequestDecorator(Request request) {
         this.request = request;
     }
 

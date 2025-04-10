@@ -43,10 +43,8 @@ public class InMemoryDayDao extends DayDao {
     @Override
     public Day getDay(String itineraryID, int dayNum) throws ItemNotFoundException {
         for (Day day : days) {
-            if (day.getId().equals(itineraryID)) {
-                if (day.getDayNum() == dayNum) {
-                    return day;
-                }
+            if (day.getId().equals(itineraryID) && day.getDayNum() == dayNum) {
+                return day;
             }
         }
         

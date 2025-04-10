@@ -35,7 +35,7 @@ public class ManageItineraryGUIController {
         this.sessionId = sessionId;
     }
 
-    public void initialize() throws LoadViewException {
+    public void initialize() {
         List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
         List<ProposalBean> proposals = null;
         try {

@@ -46,9 +46,7 @@ public class InMemoryItineraryDao extends ItineraryDao {
     @Override
     public Itinerary getItinerary(String id) throws ItemNotFoundException {
         for (Itinerary itinerary : itineraries) {
-            System.out.println("       id: "+itinerary.getItineraryID());
             if (itinerary.getItineraryID().equals(id)) {
-                System.out.println("       itinerary found");
                 return itinerary;
             }
         }

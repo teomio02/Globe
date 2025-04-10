@@ -32,6 +32,8 @@ public class ToolBarGUIController {
     @FXML
     private Button logOutButton;
 
+    private static final String ERROR = "page loading failed";
+
     public ToolBarGUIController(String sessionId, String userType, BorderPane root) {
         this.sessionId = sessionId;
         this.userType = userType;
@@ -56,7 +58,7 @@ public class ToolBarGUIController {
             newContentPane = loader.load();
             root.setCenter(newContentPane);
         } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            new ErrorPopUpGUIController().createPopUp(ERROR);
         }
     }
     public void manageItinerary(){
@@ -80,7 +82,7 @@ public class ToolBarGUIController {
             newContentPane = loader.load();
             root.setCenter(newContentPane);
         } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            new ErrorPopUpGUIController().createPopUp(ERROR);
         }
     }
     public void manageProfile(){}
@@ -123,7 +125,7 @@ public class ToolBarGUIController {
                 loader.setController(controller);
                 newRoot = loader.load();
             } catch (IOException e) {
-                new ErrorPopUpGUIController().createPopUp("page loading failed");
+                new ErrorPopUpGUIController().createPopUp(ERROR);
                 return;
             }
 

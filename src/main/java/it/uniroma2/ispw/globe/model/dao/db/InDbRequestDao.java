@@ -66,19 +66,20 @@ public class InDbRequestDao extends RequestDao {
                 for (City city : request.getCities()) {
                     cityStmt.setString(1, request.getId());
                     cityStmt.setString(2, city.getPlaceID());
-                    cityStmt.execute();
+                    cityStmt.addBatch();
                 }
+                cityStmt.executeBatch();
+
                 attrStmt = connection.prepareStatement(attractionQuery);
                 for (Attraction attraction : request.getAttractions()) {
                     attrStmt.setString(1, request.getId());
                     attrStmt.setString(2, attraction.getPlaceID());
-                    attrStmt.execute();
+                    attrStmt.addBatch();
                 }
+                attrStmt.executeBatch();
 
             } catch (SQLException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
                 DBConnection.getInstance().closeConnection(firstAccountStmt,null);
@@ -98,10 +99,10 @@ public class InDbRequestDao extends RequestDao {
     public Request getRequest(String requestId) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Request where id = ?";
-        String cityQuery = "select * from requestCity where requestID = ?";
-        String attractionQuery = "select * from requestAttraction where requestID = ?";
-        String typeQuery = "select * from requestType where requestID = ?";
+        String query = "select Request.id, Request.accepted, Request.description, Request.days from Request where id = ?";
+        String cityQuery = "select requestCity.cityID from requestCity where requestID = ?";
+        String attractionQuery = "select requestAttraction.attractionID from requestAttraction where requestID = ?";
+        String typeQuery = "select requestType.type from requestType where requestID = ?";
 
 
         PreparedStatement stmt = null;
@@ -126,7 +127,6 @@ public class InDbRequestDao extends RequestDao {
                 request.setId(resultSet.getString("id"));
                 request.setAccepted(resultSet.getString("accepted"));
                 request.setOtherRequest(resultSet.getString("description"));
-                request.setDayNum(resultSet.getInt("days"));
                 request.setDescription(resultSet.getString("description"));
                 request.setDayNum(resultSet.getInt("days"));
 
@@ -163,8 +163,6 @@ public class InDbRequestDao extends RequestDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-        } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(cityStmt,null);
@@ -196,8 +194,6 @@ public class InDbRequestDao extends RequestDao {
 
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-        } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }

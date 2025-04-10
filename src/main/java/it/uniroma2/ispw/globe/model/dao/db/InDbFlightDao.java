@@ -40,8 +40,6 @@ public class InDbFlightDao extends FlightDao {
 
             } catch (SQLException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
             }
@@ -52,7 +50,7 @@ public class InDbFlightDao extends FlightDao {
     public Flight getFlight(String flightID) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Flight where id = ?";
+        String query = "select Flight.id, Flight.departureTime, Flight.arrivalTime from Flight where id = ?";
 
         PreparedStatement stmt = null;
         ResultSet resultSet= null;
@@ -76,8 +74,6 @@ public class InDbFlightDao extends FlightDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-        } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }

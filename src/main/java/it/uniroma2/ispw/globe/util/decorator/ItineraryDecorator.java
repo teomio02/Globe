@@ -7,7 +7,7 @@ import java.util.List;
 public abstract class ItineraryDecorator extends Itinerary {
     private Itinerary itinerary;
 
-    public ItineraryDecorator( Itinerary itinerary){
+    protected ItineraryDecorator( Itinerary itinerary){
         this.itinerary = itinerary;
     }
 

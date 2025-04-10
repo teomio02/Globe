@@ -57,38 +57,9 @@ public class InMemoryAccountDao extends AccountDao {
     @Override
     public void addAccount(CredentialsBean credentials) throws ItemAlreadyExistsException {
         if (credentials.getType().equals(AGENCY)) {
-            for (Agency a : agencies) {
-                if (credentials.getUsername().equals(a.getUsername())) {
-                    throw new ItemAlreadyExistsException("account already exists");
-                }
-            }
-            Agency agency = new Agency();
-            agency.setUsername(credentials.getUsername());
-            agency.setPassword(credentials.getPassword());
-            agency.setType(credentials.getType());
-            agency.setProposals(new ArrayList<>());
-            agency.setItineraries(new ArrayList<>());
-            agency.setRequests(new ArrayList<>());
-            agency.setDescription(credentials.getDescription());
-            agency.setPreferences(credentials.getPreferences());
-            agency.setRating(0);
-            agencies.add(agency);
+            addAgency(credentials);
         } else {
-            if (credentials.getType().equals(USER)) {
-                for (User u : users) {
-                    if (credentials.getUsername().equals(u.getUsername())) {
-                        throw new ItemAlreadyExistsException("account already exists");
-                    }
-                }
-            }
-            User user = new User();
-            user.setUsername(credentials.getUsername());
-            user.setPassword(credentials.getPassword());
-            user.setType(credentials.getType());
-            user.setItineraries(new ArrayList<>());
-            user.setProposals(new ArrayList<>());
-            user.setRequests(new ArrayList<>());
-            users.add(user);
+            addUser(credentials);
         }
     }
 
@@ -180,5 +151,42 @@ public class InMemoryAccountDao extends AccountDao {
             }
         }
         return null;
+    }
+
+    public void addAgency(CredentialsBean credentials) throws ItemAlreadyExistsException {
+        for (Agency a : agencies) {
+            if (credentials.getUsername().equals(a.getUsername())) {
+                throw new ItemAlreadyExistsException("account already exists");
+            }
+        }
+        Agency agency = new Agency();
+        agency.setUsername(credentials.getUsername());
+        agency.setPassword(credentials.getPassword());
+        agency.setType(credentials.getType());
+        agency.setProposals(new ArrayList<>());
+        agency.setItineraries(new ArrayList<>());
+        agency.setRequests(new ArrayList<>());
+        agency.setDescription(credentials.getDescription());
+        agency.setPreferences(credentials.getPreferences());
+        agency.setRating(0);
+        agencies.add(agency);
+    }
+
+    public void addUser(CredentialsBean credentials) throws ItemAlreadyExistsException {
+        if (credentials.getType().equals(USER)) {
+            for (User u : users) {
+                if (credentials.getUsername().equals(u.getUsername())) {
+                    throw new ItemAlreadyExistsException("account already exists");
+                }
+            }
+        }
+        User user = new User();
+        user.setUsername(credentials.getUsername());
+        user.setPassword(credentials.getPassword());
+        user.setType(credentials.getType());
+        user.setItineraries(new ArrayList<>());
+        user.setProposals(new ArrayList<>());
+        user.setRequests(new ArrayList<>());
+        users.add(user);
     }
 }

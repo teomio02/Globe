@@ -60,8 +60,6 @@ public class InDbProposalDao extends ProposalDao {
 
             } catch (SQLException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } catch (DBConnectionException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
             } finally {
                 DBConnection.getInstance().closeConnection(stmt,null);
                 DBConnection.getInstance().closeConnection(firstAccountStmt,null);
@@ -74,7 +72,7 @@ public class InDbProposalDao extends ProposalDao {
     public Proposal getProposal(String id) throws ItemNotFoundException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select * from Proposal where id = ?";
+        String query = "select Proposal.id, Proposal.price, Proposal.description, Proposal.accepted, Proposal.itineraryID from Proposal where id = ?";
 
         PreparedStatement stmt = null;
         ResultSet resultSet= null;
@@ -104,8 +102,6 @@ public class InDbProposalDao extends ProposalDao {
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-        } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
@@ -135,8 +131,6 @@ public class InDbProposalDao extends ProposalDao {
 
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-        } catch (DBConnectionException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_CONNECTION, e);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }
