@@ -8,6 +8,7 @@ import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,11 +20,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 import static it.uniroma2.ispw.globe.other.ProposalState.REJECTED;
 
-public class ManageItineraryGUIController {
+public class ManageItineraryGUIController implements Initializable {
     @FXML
     private VBox itinerariesVBox;
     @FXML
@@ -35,7 +37,64 @@ public class ManageItineraryGUIController {
         this.sessionId = sessionId;
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
+        List<ProposalBean> proposals = null;
+        try {
+            proposals = new ManageItineraryController().getUserProposals(sessionId);
+        } catch (ItemNotFoundException e) {
+            // pop up
+        }
+        for (ItineraryBean itinerary : itineraries) {
+            try {
+                FXMLLoader loader = new FXMLLoader(new File("src/main/java/it/uniroma2/ispw/globe/view/ItineraryElement.fxml").toURI().toURL());
+                Button itineraryBox = loader.load();
+                itineraryBox.setUserData(itinerary.getId());
+                itineraryBox.setOnAction(this::viewItinerary);
+                Label nameLabel = (Label) itineraryBox.getGraphic().lookup("#nameLabel");
+                nameLabel.setText(itinerary.getName());
+                Label descriptionLabel = (Label) itineraryBox.getGraphic().lookup("#descriptionLabel");
+                descriptionLabel.setText(itinerary.getDescription());
+                Label daysLabel = (Label) itineraryBox.getGraphic().lookup("#daysLabel");
+                daysLabel.setText(String.valueOf(itinerary.getDuration()));
+
+                itinerariesVBox.getChildren().add(itineraryBox);
+            } catch (IOException e) {
+                new ErrorPopUpGUIController().createPopUp("'Manage Itinerary' page loading failed");
+                return;
+            }
+        }
+        for (ProposalBean proposal : proposals) {
+            try {
+                FXMLLoader loader = new FXMLLoader(new File("src/main/java/it/uniroma2/ispw/globe/view/proposalElement.fxml").toURI().toURL());
+                Button proposalBox = loader.load();
+                proposalBox.setUserData(proposal.getID());
+                proposalBox.setOnAction(this::viewProposal);
+                Label nameLabel = (Label) proposalBox.getGraphic().lookup("#nameLabel");
+                nameLabel.setText(proposal.getAgency());
+                Label descriptionLabel = (Label) proposalBox.getGraphic().lookup("#descriptionLabel");
+                descriptionLabel.setText(proposal.getDescription());
+                Label priceLabel = (Label) proposalBox.getGraphic().lookup("#priceLabel");
+                priceLabel.setText(String.valueOf(proposal.getPrice()));
+
+                if (proposal.getAccepted().equals(ACCEPTED)) {
+                    ImageView acceptedImage = (ImageView) proposalBox.getGraphic().lookup("#acceptedImage");
+                    acceptedImage.setVisible(true);
+                } else if (proposal.getAccepted().equals(REJECTED)){
+                    ImageView acceptedImage = (ImageView) proposalBox.getGraphic().lookup("#rejectedImage");
+                    acceptedImage.setVisible(true);
+                }
+
+                proposalsVBox.getChildren().add(proposalBox);
+            } catch (IOException e) {
+                new ErrorPopUpGUIController().createPopUp("'Manage Itinerary' page loading failed");
+                return;
+            }
+        }
+    }
+
+    public void initialize2() {
         List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
         List<ProposalBean> proposals = null;
         try {
