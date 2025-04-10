@@ -5,8 +5,10 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryCo
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,10 +19,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_PROPOSAL;
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
-public class DisplayProposalGUIController {
+public class DisplayProposalGUIController implements ViewObserver {
     @FXML
     private Label priceLabel;
     @FXML
@@ -40,14 +44,22 @@ public class DisplayProposalGUIController {
     private String proposalID;
     private Node prev;
 
-    public DisplayProposalGUIController(String sessionId, String requestID, String proposalID, Node prev) {
-        this.sessionId = sessionId;
-        this.requestID = requestID;
-        this.proposalID = proposalID;
-        this.prev = prev;
+    public void initialize() {
+        ViewManager.getInstance().addObserver(this);
     }
 
-    public void initialize() {
+    @Override
+    public void onViewChanged(String viewName, NavigationData data) {
+        if (viewName.equals(DISPALY_PROPOSAL)) {
+            this.sessionId = data.getSessionID();
+            this.requestID = data.getRequestID();
+            this.proposalID = data.getProposalID();
+            this.prev = data.getPrev();
+            initializeData();
+        }
+    }
+
+    public void initializeData() {
         String type = new ManageItineraryController().getAccountType(sessionId);
 
         ProposalBean proposal;
@@ -88,7 +100,7 @@ public class DisplayProposalGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID);
+        nav.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID, root.getCenter());
     }
 
     public void acceptProposal() {

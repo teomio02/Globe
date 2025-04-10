@@ -5,6 +5,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -19,7 +20,9 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateItineraryGUIController {
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.CREATE_ITINERARY;
+
+public class CreateItineraryGUIController implements ViewObserver {
     @FXML
     private TextField cityField;
     @FXML
@@ -80,13 +83,22 @@ public class CreateItineraryGUIController {
 
     private Node prev;
 
-    public CreateItineraryGUIController(String sessionId,String requestId, Node prev) {
-        this.sessionId = sessionId;
-        this.requestId = requestId;
-        this.prev = prev;
+    public void initialize() {
+        ViewManager.getInstance().addObserver(this);
     }
 
-    public void initialize() {
+    @Override
+    public void onViewChanged(String viewName, NavigationData data) {
+        if (viewName.equals(CREATE_ITINERARY)) {
+            this.sessionId = data.getSessionID();
+            this.requestId = data.getRequestID();
+            this.prev = data.getPrev();
+            initializeData();
+        }
+    }
+
+    public void initializeData() {
+
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
 
@@ -176,9 +188,9 @@ public class CreateItineraryGUIController {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
         if (requestId != null) {
-            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null);
+            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null, root.getCenter());
         } else {
-            nav.goToDisplayItineraryGUI(sessionId,null,null,null);
+            nav.goToDisplayItineraryGUI(sessionId,null,null,null, root.getCenter());
         }
     }
 

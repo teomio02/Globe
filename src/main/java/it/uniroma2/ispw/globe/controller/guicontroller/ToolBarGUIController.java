@@ -47,42 +47,18 @@ public class ToolBarGUIController {
     }
 
     public void requestItinerary()  {
-        URL url;
-        AnchorPane newContentPane;
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/RequestItineraryView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            CreateRequestGUIController controller = new CreateRequestGUIController(sessionId);
-            loader.setController(controller);
-            newContentPane = loader.load();
-            root.setCenter(newContentPane);
-        } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp(ERROR);
-        }
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.goToRequestItineraryGUI(sessionId);
     }
+
+
     public void manageItinerary(){
-        URL url;
-        AnchorPane newContentPane;
-        FXMLLoader loader = null;
 
-        try {
-            if (userType.equals(USER) || userType.equals(GUEST)) {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-                loader = new FXMLLoader(url);
-                ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-                loader.setController(controller);
-            } else {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
-                loader = new FXMLLoader(url);
-                ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
-                loader.setController(controller);
-            }
-
-            newContentPane = loader.load();
-            root.setCenter(newContentPane);
-        } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp(ERROR);
+        NavigationGUIController nav = new NavigationGUIController(root);
+        if (userType.equals(USER) || userType.equals(GUEST)) {
+            nav.goToManageItineraryGUI(sessionId);
+        } else {
+            nav.goToManageRequestGUI(sessionId);
         }
     }
     public void manageProfile(){}

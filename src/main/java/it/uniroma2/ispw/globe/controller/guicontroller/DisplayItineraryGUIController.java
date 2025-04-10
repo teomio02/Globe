@@ -5,13 +5,12 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.LoadViewException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
-import it.uniroma2.ispw.globe.model.bean.AttractionBean;
-import it.uniroma2.ispw.globe.model.bean.CityBean;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.model.bean.StepBean;
+import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -25,7 +24,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class DisplayItineraryGUIController {
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_ITINERARY;
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
+
+public class DisplayItineraryGUIController implements ViewObserver {
 
     @FXML
     private Label dayLabel;
@@ -44,23 +46,31 @@ public class DisplayItineraryGUIController {
     @FXML
     private VBox flightVBox;
 
-    private final String sessionId;
-    private final String itineraryId;
-    private final String requestId;
-    private final String proposalId;
-    private final Node prev;
+    private String sessionId;
+    private String itineraryId;
+    private String requestId;
+    private String proposalId;
+    private Node prev;
 
     private static final String LIGHT = "label-light";
 
-    public DisplayItineraryGUIController(String sessionId,String itineraryId, String requestId, String proposalId,Node prev) {
-        this.sessionId = sessionId;
-        this.itineraryId = itineraryId;
-        this.requestId = requestId;
-        this.proposalId = proposalId;
-        this.prev = prev;
+    public void initialize() {
+        ViewManager.getInstance().addObserver(this);
     }
 
-    public void initialize() {
+    @Override
+    public void onViewChanged(String viewName, NavigationData data) {
+        if (viewName.equals(DISPALY_ITINERARY)) {
+            this.sessionId = data.getSessionID();
+            this.itineraryId = data.getItineraryID();
+            this.requestId = data.getRequestID();
+            this.proposalId = data.getProposalID();
+            this.prev = data.getPrev();
+            initializeData();
+        }
+    }
+
+    public void initializeData() {
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
         ItineraryBean itinerary = null;
@@ -169,13 +179,13 @@ public class DisplayItineraryGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToManageItineraryGUI(sessionId,root);
+        nav.goToManageItineraryGUI(sessionId);
     }
 
     public void createProposal(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToCreateProposalGUI(sessionId, requestId);
+        nav.goToCreateProposalGUI(sessionId, requestId, root.getCenter());
     }
 
     public void goBack() {

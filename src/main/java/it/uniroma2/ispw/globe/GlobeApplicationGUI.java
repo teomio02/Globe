@@ -24,9 +24,6 @@ public class GlobeApplicationGUI extends Application {
             stage.getIcons().add(icon);
         }
 
-        LogInGUIController controller = new LogInGUIController();
-        fxmlLoader.setController(controller);
-
         Scene scene = new Scene(fxmlLoader.load());
 
         stage.setTitle("GLOBE");

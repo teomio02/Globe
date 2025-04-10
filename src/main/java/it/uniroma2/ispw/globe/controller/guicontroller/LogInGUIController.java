@@ -21,7 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_VIEW;
 import static it.uniroma2.ispw.globe.other.UserType.*;
 
 
@@ -98,24 +102,16 @@ public class LogInGUIController {
             AnchorPane contentPane;
 
             try {
-                FXMLLoader loader;
                 url = new File("src/main/java/it/uniroma2/ispw/globe/view/ToolBar.fxml").toURI().toURL();
                 FXMLLoader toolBarLoader = new FXMLLoader(url);
                 ToolBarGUIController controllerToolBar = new ToolBarGUIController(sessionId,type,root);
                 toolBarLoader.setController(controllerToolBar);
+                NavigationGUIController nav = new NavigationGUIController(root);
                 if (type.equals(USER) || type.equals(GUEST)) {
-                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml").toURI().toURL();
-                    loader = new FXMLLoader(url);
-                    ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionId);
-                    loader.setController(controller);
+                    nav.goToManageItineraryGUI(sessionId);
                 } else {
-                    url = new File("src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml").toURI().toURL();
-                    loader = new FXMLLoader(url);
-                    ManageRequestGUIController controller = new ManageRequestGUIController(sessionId);
-                    loader.setController(controller);
+                    nav.goToManageRequestGUI(sessionId);
                 }
-                contentPane = loader.load();
-                root.setCenter(contentPane);
                 root.setBottom(toolBarLoader.load());
 
                 Scene scene = new Scene(root);
@@ -123,6 +119,7 @@ public class LogInGUIController {
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
             }
         } else {

@@ -3,7 +3,9 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.NavigationData;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,9 +21,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_REQUEST;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 
-public class ManageRequestGUIController {
+public class ManageRequestGUIController implements ViewObserver {
 
     @FXML
     private VBox proposalsVBox;
@@ -30,11 +34,19 @@ public class ManageRequestGUIController {
 
     private String sessionId;
 
-    public ManageRequestGUIController(String sessionId) {
-        this.sessionId = sessionId;
+    public void initialize() {
+        ViewManager.getInstance().addObserver(this);
     }
 
-    public void initialize() {
+    @Override
+    public void onViewChanged(String viewName, NavigationData data) {
+        if (viewName.equals(MANAGE_REQUEST)) {
+            this.sessionId = data.getSessionID();
+            initializeData();
+        }
+    }
+
+    public void initializeData() {
 
         List<ProposalBean> proposals = null;
         List<AgencyRequestBean> requests = null;
@@ -103,7 +115,7 @@ public class ManageRequestGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToDisplayProposalGUI(sessionId, null, proposalID);
+        nav.goToDisplayProposalGUI(sessionId, null, proposalID, root.getCenter());
     }
 
     public void viewRequest(ActionEvent event) {
@@ -117,6 +129,6 @@ public class ManageRequestGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToDisplayRequestGUI(sessionId,requestID);
+        nav.goToDisplayRequestGUI(sessionId,requestID, root.getCenter());
     }
 }

@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryC
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -16,10 +17,12 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.REQUEST_ITINERARY;
 import static it.uniroma2.ispw.globe.other.ItineraryType.NATURE;
 import static it.uniroma2.ispw.globe.other.ItineraryType.ON_THE_ROAD;
 
-public class CreateRequestGUIController {
+public class CreateRequestGUIController implements ViewObserver {
     @FXML
     private TextField citiesField;
     @FXML
@@ -74,11 +77,19 @@ public class CreateRequestGUIController {
 
     private String sessionId;
 
-    public CreateRequestGUIController(String sessionId) {
-        this.sessionId = sessionId;
+    public void initialize() {
+        ViewManager.getInstance().addObserver(this);
     }
 
-    public void initialize() {
+    @Override
+    public void onViewChanged(String viewName, NavigationData data) {
+        if (viewName.equals(REQUEST_ITINERARY)) {
+            this.sessionId = data.getSessionID();
+            initializeData();
+        }
+    }
+
+    public void initializeData() {
         onTheRoadButton.setUserData(false);
         flightButton.setUserData(false);
         accommodationButton.setUserData(false);
@@ -210,8 +221,6 @@ public class CreateRequestGUIController {
         Button difficulty = (Button) event.getSource();
         difficulty.setUserData(true);
     }
-
-
     public void searchAgencyHandler () {
         List<AgencyBean> agencies;
         List<String> types = new ArrayList<>();
@@ -339,6 +348,6 @@ public class CreateRequestGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToDisplayRequestGUI(sessionId,null);
+        nav.goToDisplayRequestGUI(sessionId,null, root.getCenter());
     }
 }

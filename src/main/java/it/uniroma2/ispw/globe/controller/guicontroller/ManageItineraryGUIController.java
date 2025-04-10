@@ -2,9 +2,10 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
-import it.uniroma2.ispw.globe.exception.LoadViewException;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.model.bean.NavigationData;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+import it.uniroma2.ispw.globe.util.observer.ViewObserver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,10 +21,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.MANAGE_ITINERARY;
 import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
 import static it.uniroma2.ispw.globe.other.ProposalState.REJECTED;
 
-public class ManageItineraryGUIController {
+public class ManageItineraryGUIController implements ViewObserver {
     @FXML
     private VBox itinerariesVBox;
     @FXML
@@ -31,13 +33,20 @@ public class ManageItineraryGUIController {
 
     private String sessionId;
 
-    private NavigationGUIController nav = new NavigationGUIController();
-
-    public ManageItineraryGUIController(String sessionId) {
-        this.sessionId = sessionId;
+    public void initialize() {
+        ViewManager.getInstance().addObserver(this);
     }
 
-    public void initialize() {
+    @Override
+    public void onViewChanged(String viewName, NavigationData data) {
+        if (viewName.equals(MANAGE_ITINERARY)) {
+            this.sessionId = data.getSessionID();
+            initializeData();
+        }
+    }
+
+    public void initializeData() {
+
         List<ItineraryBean> itineraries = new ManageItineraryController().getUserItineraries(sessionId);
         List<ProposalBean> proposals = null;
         try {
@@ -99,18 +108,21 @@ public class ManageItineraryGUIController {
         String itineraryId = (String) ((Button)event.getSource()).getUserData();
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        nav.goToDisplayItineraryGUI1(sessionId,itineraryId,null,null, root);
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.goToDisplayItineraryGUI(sessionId,itineraryId,null,null, root.getCenter());
     }
 
     public void viewProposal(ActionEvent event) {
         String proposalId = (String) ((Button)event.getSource()).getUserData();
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        nav.goToDisplayProposalGUI1(sessionId, null, proposalId,root);
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.goToDisplayProposalGUI(sessionId, null, proposalId, root.getCenter());
     }
 
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        nav.goToCreateItineraryGUI1(sessionId,null,root);
+        NavigationGUIController nav = new NavigationGUIController(root);
+        nav.goToCreateItineraryGUI(sessionId,null, root.getCenter());
     }
 }
