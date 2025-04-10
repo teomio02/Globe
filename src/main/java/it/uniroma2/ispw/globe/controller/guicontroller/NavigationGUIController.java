@@ -32,6 +32,7 @@ public class NavigationGUIController {
             loader.setController(controller);
             root.setCenter(loader.load());
         } catch (IOException e) {
+
             new ErrorPopUpGUIController().createPopUp("page loading failed");
         }
     }

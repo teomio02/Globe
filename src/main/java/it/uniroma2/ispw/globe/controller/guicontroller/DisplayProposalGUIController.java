@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
-public class DisplayProposalGUIController {
+public class DisplayProposalGUIController extends GUIController {
     @FXML
     private Label priceLabel;
     @FXML
@@ -87,8 +87,11 @@ public class DisplayProposalGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID);
+//        NavigationGUIController nav = new NavigationGUIController(root);
+//        nav.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID);
+
+        DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionId,itineraryId,requestID,proposalID,root.getCenter());
+        loadView(DISPALY_ITINERARY, controller, root);
     }
 
     public void acceptProposal() {
@@ -132,8 +135,9 @@ public class DisplayProposalGUIController {
         new ResponseRequestController().saveProposal(sessionId);
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToManageRequestGUI(sessionId);
+//        NavigationGUIController nav = new NavigationGUIController(root);
+//        nav.goToManageRequestGUI(sessionId);
+        goBack(event);
     }
 
     public void goBack(ActionEvent event) {

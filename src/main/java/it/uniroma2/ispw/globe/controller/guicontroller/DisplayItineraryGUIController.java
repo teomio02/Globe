@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class DisplayItineraryGUIController {
+public class DisplayItineraryGUIController extends GUIController {
 
     @FXML
     private Label dayLabel;
