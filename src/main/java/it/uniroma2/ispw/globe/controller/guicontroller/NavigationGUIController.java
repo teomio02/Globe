@@ -39,16 +39,17 @@ public class NavigationGUIController {
         }
     }
 
-    public void loadView1(String fxmlPath, Object controller, BorderPane root1) {
+    public void loadViewNew(String fxmlPath, Object controller, BorderPane center) {
         try {
             URL url = new File(fxmlPath).toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             loader.setController(controller);
-            root1.setCenter(loader.load());
+            center.setCenter(loader.load());
         } catch (IOException e) {
             new ErrorPopUpGUIController().createPopUp("page loading failed");
         }
     }
+
 
     public void goToCreateItineraryGUI(String sessionID, String requestID) {
         CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionID,requestID, root.getCenter());
@@ -57,7 +58,7 @@ public class NavigationGUIController {
 
     public void goToCreateItineraryGUI1(String sessionID, String requestID, BorderPane root1) {
         CreateItineraryGUIController controller = new CreateItineraryGUIController(sessionID,requestID, root1.getCenter());
-        loadView1(CREATE_ITINERARY, controller,root1);
+        loadView(CREATE_ITINERARY, controller);
     }
 
     public void goToCreateProposalGUI(String sessionID, String requestID) {
@@ -72,7 +73,7 @@ public class NavigationGUIController {
 
     public void goToDisplayItineraryGUI1(String sessionID, String itineraryID, String requestID, String proposalID, BorderPane root1) {
         DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionID,itineraryID,requestID,proposalID,root1.getCenter());
-        loadView1(DISPALY_ITINERARY, controller, root1);
+        loadView(DISPALY_ITINERARY, controller);
     }
 
     public void goToDisplayProposalGUI(String sessionID, String requestID, String proposalID) {
@@ -82,7 +83,7 @@ public class NavigationGUIController {
 
     public void goToDisplayProposalGUI1(String sessionID, String requestID, String proposalID, BorderPane root1) {
         DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionID, requestID, proposalID, root1.getCenter());
-        loadView1(DISPALY_PROPOSAL, controller, root1);
+        loadView(DISPALY_PROPOSAL, controller);
     }
 
     public void goToDisplayRequestGUI(String sessionID, String requestID) {
@@ -90,9 +91,9 @@ public class NavigationGUIController {
         loadView(DISPALY_REQUEST, controller);
     }
 
-    public void goToManageItineraryGUI(String sessionID) {
+    public void goToManageItineraryGUI(String sessionID, BorderPane center) {
         ManageItineraryGUIController controller = new ManageItineraryGUIController(sessionID);
-        loadView(MANAGE_ITINERARY, controller);
+        loadViewNew(MANAGE_ITINERARY, controller,center);
     }
 
     public void goToManageRequestGUI(String sessionID) {

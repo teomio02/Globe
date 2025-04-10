@@ -169,7 +169,7 @@ public class DisplayItineraryGUIController {
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToManageItineraryGUI(sessionId);
+        nav.goToManageItineraryGUI(sessionId,root);
     }
 
     public void createProposal(ActionEvent event) {
