@@ -46,11 +46,7 @@ public class NavigationGUIController {
         CreateProposalGUIController controller = new CreateProposalGUIController(sessionID, requestID, root.getCenter());
         loadView(CREATE_PROPOSAL, controller);
     }
-
-    public void goToDisplayItineraryGUI(String sessionID, String itineraryID, String requestID, String proposalID) {
-        DisplayItineraryGUIController controller = new DisplayItineraryGUIController(sessionID,itineraryID,requestID,proposalID,root.getCenter());
-        loadView(DISPALY_ITINERARY, controller);
-    }
+    
 
     public void goToDisplayProposalGUI(String sessionID, String requestID, String proposalID) {
         DisplayProposalGUIController controller = new DisplayProposalGUIController(sessionID, requestID, proposalID, root.getCenter());
