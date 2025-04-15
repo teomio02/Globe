@@ -1,9 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
-import it.uniroma2.ispw.globe.exception.InvalidCredentialsException;
-import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +53,7 @@ public class LogInGUIController {
 
     }
 
-    public void logIn(ActionEvent event) throws ItemAlreadyExistsException {
+    public void logIn(ActionEvent event) {
         // da mettere limite massimo di caratteri per password e username (nella guest è a 12)
 
         errorLabel.setVisible(false);
@@ -76,7 +75,7 @@ public class LogInGUIController {
         String sessionId;
         try {
             sessionId = new LogInController().logIn(credentials);
-        } catch (ItemNotFoundException | InvalidCredentialsException exception) {
+        } catch (FailedOperationException | DuplicateItemException exception) {
             new ErrorPopUpGUIController().createPopUp(exception.getMessage());
             return;
         }

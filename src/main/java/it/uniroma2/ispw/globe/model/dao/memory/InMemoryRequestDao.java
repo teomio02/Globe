@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.util.decorator.Request;
@@ -9,6 +9,8 @@ import it.uniroma2.ispw.globe.model.dao.RequestDao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 
 public class InMemoryRequestDao extends RequestDao {
 
@@ -26,16 +28,14 @@ public class InMemoryRequestDao extends RequestDao {
     }
 
     @Override
-    public void addAgencyRequest(Request request, User user, Agency agency) {
-        for (Request savedRequest : requests) {
-            if (request.getId().equals(savedRequest.getId())){
-                // proposta già esistente
-                return;
-            }
+    public void addAgencyRequest(Request request, User user, Agency agency) throws DaoException {
+        if (getRequest(request.getId()) == null) {
+            requests.add(request);
+            user.getRequests().add(request);
+            agency.getRequests().add(request);
+        } else {
+            throw new DaoException("addAgencyRequest", DUPLICATE);
         }
-        requests.add(request);
-        user.getRequests().add(request);
-        agency.getRequests().add(request);
     }
 
     @Override
@@ -44,13 +44,13 @@ public class InMemoryRequestDao extends RequestDao {
     }
 
     @Override
-    public Request getRequest(String requestId) throws ItemNotFoundException {
+    public Request getRequest(String requestId) {
         for (Request request : requests) {
             if (request.getId().equals(requestId)) {
                 return request;
             }
         }
-        throw new ItemNotFoundException("request not found");
+        return null;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Flight;
 
 import java.util.UUID;
@@ -16,6 +16,6 @@ public abstract class FlightDao {
 
         return flight;
     }
-    public abstract void addFlight(Flight flight);
-    public abstract Flight getFlight(String flightID) throws ItemNotFoundException;
+    public abstract void addFlight(Flight flight) throws DaoException;
+    public abstract Flight getFlight(String flightID) throws DaoException;
 }

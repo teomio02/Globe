@@ -1,7 +1,9 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
@@ -15,7 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
 
 public class RequestItineraryController {
@@ -27,7 +33,7 @@ public class RequestItineraryController {
         List<JsonObject> apiPlaces;
         try {
             apiPlaces = api.getPlaces(name,type);
-        } catch (IOException e) {
+        } catch (PlaceApiException e) {
             throw new RuntimeException(e);
         }
         return apiPlaces;
@@ -69,16 +75,24 @@ public class RequestItineraryController {
         return citiesBeans;
     }
 
-    public List<AgencyBean> getAgenciesByType(List<String> types) {
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        List<Agency> agencies = accountDao.getAgenciesByType(types);
-        List<AgencyBean> agencyBeans = new ArrayList<>();
+    public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, DuplicateItemException {
+        try {
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            List<Agency> agencies = accountDao.getAgenciesByType(types);
+            List<AgencyBean> agencyBeans = new ArrayList<>();
 
-        for (Agency agency: agencies){
-            AgencyBean agencyBean = new AgencyBean(agency.getUsername(), agency.getRating(), agency.getPreferences());
-            agencyBeans.add(agencyBean);
+            for (Agency agency: agencies){
+                AgencyBean agencyBean = new AgencyBean(agency.getUsername(), agency.getRating(), agency.getPreferences());
+                agencyBeans.add(agencyBean);
+            }
+            return agencyBeans;
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Get agency by type");
         }
-        return agencyBeans;
     }
 
     public RequestBean getRequest(String requestID, String sessionID) {
@@ -124,52 +138,64 @@ public class RequestItineraryController {
         return new RequestBean(request.getId(),citiesID, attractionsID, request.getOtherRequest(), request.getDayNum(), agencies, request.getFlightRequest(), request.getAccommodationRequest(), request.getItineraryType(), trekkingDifficulty, trekkingDistance, travelMode, drivingHours);
     }
 
-    public AgencyBean getAgency(String username, String sessionID) throws ItemNotFoundException {
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        Account account = accountDao.getAccount(username);
+    public AgencyBean getAgency(String username, String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            Account account = accountDao.getAccount(username);
 
-
-        return null;
+            return null;
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Get agency");
+        }
     }
 
 
 
-    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws ItemNotFoundException, PlaceApiException {
+    public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
+            Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
 
-        Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+            List<City> cities = new ArrayList<>();
+            List<Attraction> attractions = new ArrayList<>();
 
-        List<City> cities = new ArrayList<>();
-        List<Attraction> attractions = new ArrayList<>();
+            for (String cityId : requestBean.getCities()) {
+                City city = cityDao.createCity(cityId);
+                cities.add(city);
+            }
 
-        for (String cityId : requestBean.getCities()) {
-            City city = cityDao.createCity(cityId);
-            cities.add(city);
+            for (String attractionId : requestBean.getAttractions()) {
+                Attraction attraction = attractionDao.createAttraction(attractionId);
+                attractions.add(attraction);
+            }
+
+            request.setAttractions(attractions);
+            request.setCities(cities);
+
+            SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
+
+            List<Agency> agencies = new ArrayList<>();
+            for (String agencyName : requestBean.getAgencies()){
+                Agency agency = (Agency) accountDao.getAccount(agencyName);
+                agencies.add(agency);
+            }
+            SessionManager.getInstance().getSession(sessionID).setPendingAgencies(agencies);
+
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Create request");
         }
-
-        for (String attractionId : requestBean.getAttractions()) {
-            Attraction attraction = attractionDao.createAttraction(attractionId);
-            attractions.add(attraction);
-        }
-
-        request.setAttractions(attractions);
-        request.setCities(cities);
-
-        SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
-
-        List<Agency> agencies = new ArrayList<>();
-        for (String agencyName : requestBean.getAgencies()){
-            Agency agency = (Agency) accountDao.getAccount(agencyName);
-            agencies.add(agency);
-        }
-        SessionManager.getInstance().getSession(sessionID).setPendingAgencies(agencies);
-
-
-
     }
 }

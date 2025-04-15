@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -15,64 +15,62 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InDbItineraryDao extends ItineraryDao {
 
     @Override
-    public void addItinerary(Itinerary itinerary, Account account) {
+    public void addItinerary(Itinerary itinerary, Account account) throws DaoException {
         if (account != null) {
             DBConnection connect = DBConnection.getInstance();
 
+            String query = "insert into Itinerary (itineraryID,name,description,daysNumber,inFlight,outFlight) values (?,?,?,?,?,?)";
+            String finalQuery = "insert into accountItinerary (account,itineraryID) values (?,?)";
+
+            PreparedStatement stmt = null;
+            PreparedStatement finalStmt = null;
+
             try {
-                getItinerary(itinerary.getItineraryID());
-            } catch (ItemNotFoundException exception) {
-                String query = "insert into Itinerary (itineraryID,name,description,daysNumber,inFlight,outFlight) values (?,?,?,?,?,?)";
-                String finalQuery = "insert into accountItinerary (account,itineraryID) values (?,?)";
+                Connection connection = connect.getConnection();
+                stmt = connection.prepareStatement(query);
 
-                PreparedStatement stmt = null;
-                PreparedStatement finalStmt = null;
+                stmt.setString(1, itinerary.getItineraryID());
+                stmt.setString(2, itinerary.getName());
+                stmt.setString(3, itinerary.getDescription());
+                stmt.setInt(4, itinerary.getDaysNumber());
+                stmt.setString(5, null);
+                stmt.setString(6, null);
 
-                try {
-                    Connection connection = connect.getConnection();
-                    stmt = connection.prepareStatement(query);
+                stmt.execute();
 
-                    stmt.setString(1, itinerary.getItineraryID());
-                    stmt.setString(2, itinerary.getName());
-                    stmt.setString(3, itinerary.getDescription());
-                    stmt.setInt(4, itinerary.getDaysNumber());
-                    stmt.setString(5, null);
-                    stmt.setString(6, null);
+                addDecorationsData(itinerary);
 
-                    stmt.execute();
+                addDays(itinerary);
 
-                    addDecorationsData(itinerary);
+                account.getItineraries().add(itinerary);
 
-                    addDays(itinerary);
-
-                    account.getItineraries().add(itinerary);
-
-                    finalStmt = connection.prepareStatement(finalQuery);
-                    finalStmt.setString(1,account.getUsername());
-                    finalStmt.setString(2, itinerary.getItineraryID());
-                    finalStmt.execute();
+                finalStmt = connection.prepareStatement(finalQuery);
+                finalStmt.setString(1,account.getUsername());
+                finalStmt.setString(2, itinerary.getItineraryID());
+                finalStmt.execute();
 
 
-                } catch (SQLException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-                } finally {
-                    DBConnection.getInstance().closeConnection(stmt,null);
-                    DBConnection.getInstance().closeConnection(finalStmt,null);
+            } catch (SQLException e) {
+                if (e.getErrorCode() == 1062) {
+                    throw new DaoException("addItinerary: "+ e.getMessage(), DUPLICATE);
                 }
+                throw new DaoException("addItinerary: " + e.getMessage(), GENERAL);
+            } finally {
+                DBConnection.getInstance().closeConnection(stmt,null);
+                DBConnection.getInstance().closeConnection(finalStmt,null);
             }
         }
     }
 
     @Override
-    public Itinerary getItinerary(String id) throws ItemNotFoundException {
+    public Itinerary getItinerary(String id) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Itinerary.itineraryID, Itinerary.name, Itinerary.description, Itinerary.daysNumber, Itinerary.inFlight, Itinerary.outFlight from Itinerary where itineraryID = ?";
@@ -160,11 +158,9 @@ public class InDbItineraryDao extends ItineraryDao {
                     flightItinerary.setOutFlight(outFlight);
                     itinerary = flightItinerary;
                 }
-            } else {
-                throw new ItemNotFoundException("Itinerary not found");
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("addItinerary: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(dayStmt,otherResultSet);
@@ -180,7 +176,7 @@ public class InDbItineraryDao extends ItineraryDao {
         
     }
 
-    public void addDecorationsData(Itinerary itinerary) throws SQLException {
+    public void addDecorationsData(Itinerary itinerary) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
         Connection connection = connect.getConnection();
 
@@ -197,7 +193,7 @@ public class InDbItineraryDao extends ItineraryDao {
         }
     }
 
-    public void addAccommodations(AccommodationDecorator itinerary) throws SQLException {
+    public void addAccommodations(AccommodationDecorator itinerary) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
         Connection connection = connect.getConnection();
 
@@ -206,7 +202,7 @@ public class InDbItineraryDao extends ItineraryDao {
         }
     }
 
-    public void addAccommodation(Accommodation accommodation, String itineraryID) throws SQLException {
+    public void addAccommodation(Accommodation accommodation, String itineraryID) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
         Connection connection = connect.getConnection();
 
@@ -217,20 +213,19 @@ public class InDbItineraryDao extends ItineraryDao {
         accommodationDao.addAccommodation(accommodation);
 
         try {
-
             accommodationStmt = connection.prepareStatement(accommodationQuery);
 
             accommodationStmt.setString(1, itineraryID);
             accommodationStmt.setString(2, accommodation.getId());
             accommodationStmt.execute();
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("addAccommodation: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(accommodationStmt, null);
         }
     }
 
-    public void addFlight(FlightDecorator itinerary) {
+    public void addFlight(FlightDecorator itinerary) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
         Connection connection = connect.getConnection();
 
@@ -250,13 +245,13 @@ public class InDbItineraryDao extends ItineraryDao {
             flightStmt.setString(3, itinerary.getItineraryID());
             flightStmt.execute();
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("addFlight: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(flightStmt, null);
         }
     }
 
-    public void addDays(Itinerary itinerary) {
+    public void addDays(Itinerary itinerary) throws DaoException {
         for (Day day : itinerary.getDays()) {
             InDbDayDao dayDao = new InDbDayDao();
             dayDao.addDay(day);

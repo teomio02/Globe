@@ -1,7 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
@@ -38,8 +39,9 @@ public class ManageItineraryGUIController extends AbstractGUIController {
         List<ProposalBean> proposals = null;
         try {
             proposals = new ManageItineraryController().getUserProposals(sessionId);
-        } catch (ItemNotFoundException e) {
-            // pop up
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
         for (ItineraryBean itinerary : itineraries) {
             try {

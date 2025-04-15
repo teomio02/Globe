@@ -1,8 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
-import it.uniroma2.ispw.globe.exception.PlaceApiException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -219,7 +219,12 @@ public class CreateRequestGUIController extends AbstractGUIController {
             types.add(NATURE);
         }
 
-        agencies = new RequestItineraryController().getAgenciesByType(types);
+        try {
+            agencies = new RequestItineraryController().getAgenciesByType(types);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
 
         if (!agencies.isEmpty()) {
             for (AgencyBean agencyResult : agencies) {
@@ -327,7 +332,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
                 RequestItineraryController controller = new RequestItineraryController();
                 try {
                     controller.createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
-                } catch (ItemNotFoundException | PlaceApiException e) {
+                } catch (FailedOperationException | DuplicateItemException e) {
                     new ErrorPopUpGUIController().createPopUp(e.getMessage());
                     return;
                 }

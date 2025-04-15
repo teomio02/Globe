@@ -1,11 +1,13 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Flight;
 import it.uniroma2.ispw.globe.model.dao.FlightDao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 
 public class InMemoryFlightDao extends FlightDao {
 
@@ -22,22 +24,21 @@ public class InMemoryFlightDao extends FlightDao {
         return instance;
     }
     @Override
-    public void addFlight(Flight flight) {
-        for (Flight f : flights) {
-            if (f.getId().equals(flight.getId())) {
-                return;
-            }
+    public void addFlight(Flight flight) throws DaoException {
+        if (getFlight(flight.getId()) == null) {
+            flights.add(flight);
+        } else {
+            throw new DaoException("addFlight", DUPLICATE);
         }
-        flights.add(flight);
     }
 
     @Override
-    public Flight getFlight(String flightID) throws ItemNotFoundException {
+    public Flight getFlight(String flightID) {
         for (Flight f : flights) {
             if (f.getId().equals(flightID)) {
                 return f;
             }
         }
-        throw new ItemNotFoundException("flight not found");
+        return null;
     }
 }

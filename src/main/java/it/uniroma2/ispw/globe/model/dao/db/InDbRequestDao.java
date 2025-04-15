@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -13,78 +13,76 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InDbRequestDao extends RequestDao {
 
     @Override
-    public void addAgencyRequest(Request request, User user, Agency agency) {
+    public void addAgencyRequest(Request request, User user, Agency agency) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
+        String query = "insert into Request (id,user,agency,accepted,description,days) values (?,?,?,?,?,?)";
+        String accountQuery= "insert into accountRequest (account,requestID) values (?,?)";
+        String cityQuery = "insert into requestCity (requestID,cityID) values (?,?)";
+        String attractionQuery = "insert into requestAttraction (requestID,attractionID) values (?,?)";
+
+        PreparedStatement stmt = null;
+        PreparedStatement firstAccountStmt = null;
+        PreparedStatement secondAccountStmt = null;
+        PreparedStatement cityStmt = null;
+        PreparedStatement attrStmt = null;
+
         try {
-            getRequest(request.getId());
-        } catch (ItemNotFoundException exception) {
-            String query = "insert into Request (id,user,agency,accepted,description,days) values (?,?,?,?,?,?)";
-            String accountQuery= "insert into accountRequest (account,requestID) values (?,?)";
-            String cityQuery = "insert into requestCity (requestID,cityID) values (?,?)";
-            String attractionQuery = "insert into requestAttraction (requestID,attractionID) values (?,?)";
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
 
-            PreparedStatement stmt = null;
-            PreparedStatement firstAccountStmt = null;
-            PreparedStatement secondAccountStmt = null;
-            PreparedStatement cityStmt = null;
-            PreparedStatement attrStmt = null;
+            stmt.setString(1, request.getId());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, agency.getUsername());
+            stmt.setString(4, request.getAccepted());
+            stmt.setString(5, request.getOtherRequest());
+            stmt.setInt(6, request.getDayNum());
+            stmt.execute();
 
-            try {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
+            firstAccountStmt = connection.prepareStatement(accountQuery);
+            firstAccountStmt.setString(1, agency.getUsername());
+            firstAccountStmt.setString(2, request.getId());
+            firstAccountStmt.execute();
 
-                stmt.setString(1, request.getId());
-                stmt.setString(2, user.getUsername());
-                stmt.setString(3, agency.getUsername());
-                stmt.setString(4, request.getAccepted());
-                stmt.setString(5, request.getOtherRequest());
-                stmt.setInt(6, request.getDayNum());
-                stmt.execute();
+            secondAccountStmt = connection.prepareStatement(accountQuery);
+            secondAccountStmt.setString(1, user.getUsername());
+            secondAccountStmt.setString(2, request.getId());
+            secondAccountStmt.execute();
 
-                firstAccountStmt = connection.prepareStatement(accountQuery);
-                firstAccountStmt.setString(1, agency.getUsername());
-                firstAccountStmt.setString(2, request.getId());
-                firstAccountStmt.execute();
-
-                secondAccountStmt = connection.prepareStatement(accountQuery);
-                secondAccountStmt.setString(1, user.getUsername());
-                secondAccountStmt.setString(2, request.getId());
-                secondAccountStmt.execute();
-
-                cityStmt = connection.prepareStatement(cityQuery);
-                for (City city : request.getCities()) {
-                    cityStmt.setString(1, request.getId());
-                    cityStmt.setString(2, city.getPlaceID());
-                    cityStmt.addBatch();
-                }
-                cityStmt.executeBatch();
-
-                attrStmt = connection.prepareStatement(attractionQuery);
-                for (Attraction attraction : request.getAttractions()) {
-                    attrStmt.setString(1, request.getId());
-                    attrStmt.setString(2, attraction.getPlaceID());
-                    attrStmt.addBatch();
-                }
-                attrStmt.executeBatch();
-
-            } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } finally {
-                DBConnection.getInstance().closeConnection(stmt,null);
-                DBConnection.getInstance().closeConnection(firstAccountStmt,null);
-                DBConnection.getInstance().closeConnection(secondAccountStmt,null);
-                DBConnection.getInstance().closeConnection(cityStmt,null);
-                DBConnection.getInstance().closeConnection(attrStmt,null);
+            cityStmt = connection.prepareStatement(cityQuery);
+            for (City city : request.getCities()) {
+                cityStmt.setString(1, request.getId());
+                cityStmt.setString(2, city.getPlaceID());
+                cityStmt.addBatch();
             }
+            cityStmt.executeBatch();
+
+            attrStmt = connection.prepareStatement(attractionQuery);
+            for (Attraction attraction : request.getAttractions()) {
+                attrStmt.setString(1, request.getId());
+                attrStmt.setString(2, attraction.getPlaceID());
+                attrStmt.addBatch();
+            }
+            attrStmt.executeBatch();
+
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addAgencyRequest: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addAgencyRequest: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+            DBConnection.getInstance().closeConnection(firstAccountStmt,null);
+            DBConnection.getInstance().closeConnection(secondAccountStmt,null);
+            DBConnection.getInstance().closeConnection(cityStmt,null);
+            DBConnection.getInstance().closeConnection(attrStmt,null);
         }
     }
 
@@ -94,7 +92,7 @@ public class InDbRequestDao extends RequestDao {
     }
 
     @Override
-    public Request getRequest(String requestId) throws ItemNotFoundException {
+    public Request getRequest(String requestId) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Request.id, Request.accepted, Request.description, Request.days from Request where id = ?";
@@ -160,7 +158,7 @@ public class InDbRequestDao extends RequestDao {
                 request.setAttractions(attractions);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("getRequest: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(cityStmt,null);
@@ -168,15 +166,11 @@ public class InDbRequestDao extends RequestDao {
             DBConnection.getInstance().closeConnection(typeStmt,null);
         }
 
-        if (request == null) {
-            throw new ItemNotFoundException("request not found");
-        }
-
         return request;
     }
 
     @Override
-    public void updateRequest(Request request) {
+    public void updateRequest(Request request) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "update Proposal set accepted = ? where id = ?";
@@ -191,7 +185,7 @@ public class InDbRequestDao extends RequestDao {
             stmt.setString(2, request.getId());
 
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("updateRequest: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }

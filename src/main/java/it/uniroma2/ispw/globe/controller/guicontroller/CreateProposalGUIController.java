@@ -1,7 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -49,7 +50,7 @@ public class CreateProposalGUIController {
         try {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             proposal = new ResponseRequestController().getProposal(null,sessionId);
-        } catch (ItemNotFoundException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -86,8 +87,9 @@ public class CreateProposalGUIController {
 
         try {
             new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
-        } catch (ItemNotFoundException e) {
-            // pop up
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();

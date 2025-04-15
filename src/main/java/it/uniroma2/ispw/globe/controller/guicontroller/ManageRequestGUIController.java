@@ -1,7 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
@@ -38,7 +39,7 @@ public class ManageRequestGUIController extends AbstractGUIController {
         try {
             proposals = new ResponseRequestController().getAgencyProposals(sessionId);
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
-        } catch (ItemNotFoundException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -107,7 +108,7 @@ public class ManageRequestGUIController extends AbstractGUIController {
         String requestID = (String) ((Button)event.getSource()).getUserData();
         try {
             new ResponseRequestController().setPendingRequest(sessionId,requestID);
-        } catch (ItemNotFoundException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

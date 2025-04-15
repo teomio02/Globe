@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -11,73 +11,71 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InDbDayDao extends DayDao {
 
     @Override
-    public void addDay(Day day) {
+    public void addDay(Day day) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
+        String query = "insert into Day (dayNum,itineraryID) values (?,?)";
+        String attractionQuery = "insert into dayAttraction (dayNum,itineraryID,attractionID) values (?,?,?)";
+        String cityQuery = "insert into dayCity (dayNum,itineraryID,cityID) values (?,?,?)";
+
+        PreparedStatement stmt = null;
+        PreparedStatement attractionStmt = null;
+        PreparedStatement cityStmt = null;
+
         try {
-            getDay(day.getId(), day.getDayNum());
-        } catch (ItemNotFoundException exception) {
-            String query = "insert into Day (dayNum,itineraryID) values (?,?)";
-            String attractionQuery = "insert into dayAttraction (dayNum,itineraryID,attractionID) values (?,?,?)";
-            String cityQuery = "insert into dayCity (dayNum,itineraryID,cityID) values (?,?,?)";
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
 
-            PreparedStatement stmt = null;
-            PreparedStatement attractionStmt = null;
-            PreparedStatement cityStmt = null;
+            stmt.setString(2, day.getId());
+            stmt.setInt(1, day.getDayNum());
+            stmt.execute();
 
-            try {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
+            attractionStmt = connection.prepareStatement(attractionQuery);
 
-                stmt.setString(2, day.getId());
-                stmt.setInt(1, day.getDayNum());
-                stmt.execute();
+            for (Attraction attraction : day.getAttractions()) {
+                InDbAttractionDao attractionDao = new InDbAttractionDao();
+                attractionDao.addAttraction(attraction);
 
-                attractionStmt = connection.prepareStatement(attractionQuery);
-
-                for (Attraction attraction : day.getAttractions()) {
-                    InDbAttractionDao attractionDao = new InDbAttractionDao();
-                    attractionDao.addAttraction(attraction);
-
-                    attractionStmt.setString(2, day.getId());
-                    attractionStmt.setInt(1, day.getDayNum());
-                    attractionStmt.setString(3, attraction.getPlaceID());
-                    attractionStmt.addBatch();
-                }
-                attractionStmt.executeBatch();
-
-                cityStmt = connection.prepareStatement(cityQuery);
-
-                for (City city : day.getCities()) {
-                    InDbCityDao cityDao = new InDbCityDao();
-                    cityDao.addCity(city);
-
-                    cityStmt.setString(2, day.getId());
-                    cityStmt.setInt(1, day.getDayNum());
-                    cityStmt.setString(3, city.getPlaceID());
-                    cityStmt.addBatch();
-                }
-                cityStmt.executeBatch();
-            } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } finally {
-                DBConnection.getInstance().closeConnection(stmt,null);
-                DBConnection.getInstance().closeConnection(attractionStmt,null);
-                DBConnection.getInstance().closeConnection(cityStmt,null);
+                attractionStmt.setString(2, day.getId());
+                attractionStmt.setInt(1, day.getDayNum());
+                attractionStmt.setString(3, attraction.getPlaceID());
+                attractionStmt.addBatch();
             }
+            attractionStmt.executeBatch();
+
+            cityStmt = connection.prepareStatement(cityQuery);
+
+            for (City city : day.getCities()) {
+                InDbCityDao cityDao = new InDbCityDao();
+                cityDao.addCity(city);
+
+                cityStmt.setString(2, day.getId());
+                cityStmt.setInt(1, day.getDayNum());
+                cityStmt.setString(3, city.getPlaceID());
+                cityStmt.addBatch();
+            }
+            cityStmt.executeBatch();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addDay: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addDay: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+            DBConnection.getInstance().closeConnection(attractionStmt,null);
+            DBConnection.getInstance().closeConnection(cityStmt,null);
         }
     }
 
     @Override
-    public Day getDay(String itineraryID, int dayNum) throws ItemNotFoundException {
+    public Day getDay(String itineraryID, int dayNum) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Day.itineraryID, Day.dayNum from Day where itineraryID = ? and dayNum = ?";
@@ -138,16 +136,11 @@ public class InDbDayDao extends DayDao {
                 day.setCities(cities);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            return null;
+            throw new DaoException("getDay: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(attractionStmt,null);
             DBConnection.getInstance().closeConnection(cityStmt,null);
-        }
-
-        if (day == null) {
-            throw new ItemNotFoundException("day not found");
         }
 
         return day;

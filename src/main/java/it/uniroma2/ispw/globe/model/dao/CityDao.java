@@ -2,19 +2,23 @@ package it.uniroma2.ispw.globe.model.dao;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
-import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 
-import java.io.IOException;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public abstract class CityDao {
-    public City createCity(String cityID) {
+    public City createCity(String cityID) throws DaoException {
         JsonObject jsonCity;
-        jsonCity= new NominatimAPIClient().getPlaceByID(cityID);
+        try {
+            jsonCity= new NominatimAPIClient().getPlaceByID(cityID);
+        } catch (PlaceApiException e) {
+            throw new DaoException("createCity: " + e.getMessage(), GENERAL);
+        }
         return new PlaceAdapter(jsonCity);
     }
-    public abstract void addCity(City city);
-    public abstract City getCity(String cityID);
+    public abstract void addCity(City city) throws DaoException;
+    public abstract City getCity(String cityID) throws DaoException;
 }

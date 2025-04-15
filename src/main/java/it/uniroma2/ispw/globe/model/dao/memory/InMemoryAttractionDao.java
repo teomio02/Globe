@@ -1,11 +1,13 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.model.Attraction;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 
 public class InMemoryAttractionDao extends AttractionDao {
 
@@ -23,18 +25,16 @@ public class InMemoryAttractionDao extends AttractionDao {
     }
 
     @Override
-    public void addAttraction(Attraction attraction) {
-        for (Attraction attr : attractions) {
-            if (attr.getPlaceID().equals(attraction.getPlaceID())) {
-                // errore
-                return;
-            }
+    public void addAttraction(Attraction attraction) throws DaoException {
+        if (getAttraction(attraction.getPlaceID()) == null) {
+            attractions.add(attraction);
+        } else {
+            throw new DaoException("addAttraction", DUPLICATE);
         }
-        attractions.add(attraction);
     }
 
     @Override
-    public Attraction getAttraction(String attractionID) {
+    public Attraction getAttraction(String attractionID) throws DaoException {
         Attraction attractionResult = null;
         for (Attraction attraction : attractions) {
             if (attraction.getPlaceID().equals(attractionID)) {

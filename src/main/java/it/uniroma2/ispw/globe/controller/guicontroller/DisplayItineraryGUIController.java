@@ -2,9 +2,8 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
-import it.uniroma2.ispw.globe.exception.LoadViewException;
-import it.uniroma2.ispw.globe.exception.PlaceApiException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -64,7 +63,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         try {
             itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
             steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
-        } catch (ItemNotFoundException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -75,12 +74,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
 
         int day = 1;
         for (StepBean step : steps) {
-            try {
-                drawDay(step, day);
-            } catch (LoadViewException e) {
-                new ErrorPopUpGUIController().createPopUp("page loading failed");
-                goBack();
-            }
+            drawDay(step, day);
             day ++;
         }
 
@@ -110,7 +104,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             nextAgencyButton.setVisible(true);
             try {
                 nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
-            } catch (ItemNotFoundException e) {
+            } catch (FailedOperationException | DuplicateItemException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
@@ -120,7 +114,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
     }
 
-    public void drawDay(StepBean step, int day) throws LoadViewException {
+    public void drawDay(StepBean step, int day) {
         Tab tab = new Tab(String.valueOf(day));
         URL url;
         VBox dayVBox = null;
@@ -129,7 +123,8 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             FXMLLoader loader = new FXMLLoader(url);
             dayVBox = loader.load();
         } catch (IOException e) {
-            throw new LoadViewException("days tab loading failed");
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            goBack();
         }
 
         try {
@@ -153,14 +148,19 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             }
             tab.setContent(dayVBox);
             daysTabPane.getTabs().add(tab);
-        } catch ( PlaceApiException e) {
+        } catch ( FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }
 
     public void showItineraries(ActionEvent event) {
         if (itineraryId == null) {
-            new CreateItineraryController().saveItinerary(sessionId);
+            try {
+                new CreateItineraryController().saveItinerary(sessionId);
+            } catch (FailedOperationException | DuplicateItemException e) {
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                return;
+            }
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();

@@ -3,7 +3,8 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -53,7 +54,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         ProposalBean proposal;
         try {
             proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
-        } catch (ItemNotFoundException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -78,7 +79,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         if (proposalID != null) {
             try {
                 itineraryId = new AcceptItineraryController().getProposalItinerary(proposalID).getId();
-            } catch (ItemNotFoundException e) {
+            } catch (FailedOperationException | DuplicateItemException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
@@ -95,8 +96,9 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         String paymentResult = null;
         try {
             paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
-        } catch (ItemNotFoundException e) {
-            // pop up
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
 
         if (paymentResult != null) {
@@ -121,15 +123,20 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     public void rejectProposal() {
         try {
             new AcceptItineraryController().sendResponse(proposalID,REJECTED);
-        } catch (ItemNotFoundException e) {
-            // pop up
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
         responseHBox.getChildren().clear();
     }
 
     public void saveProposal(ActionEvent event) {
-
-        new ResponseRequestController().saveProposal(sessionId);
+        try {
+            new ResponseRequestController().saveProposal(sessionId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();

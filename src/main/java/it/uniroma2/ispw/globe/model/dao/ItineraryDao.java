@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.BaseItinerary;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
@@ -17,7 +17,7 @@ public abstract class ItineraryDao {
 
         return itinerary;
     }
-    public abstract void addItinerary(Itinerary itinerary, Account account);
-    public abstract Itinerary getItinerary(String itineraryName) throws ItemNotFoundException;
-    public abstract void removeItinerary(String itineraryID);
+    public abstract void addItinerary(Itinerary itinerary, Account account) throws DaoException;
+    public abstract Itinerary getItinerary(String itineraryName) throws DaoException;
+    public abstract void removeItinerary(String itineraryID) throws DaoException;
 }

@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
@@ -20,7 +20,7 @@ public abstract class ProposalDao {
 
         return proposal;
     }
-    public abstract void addProposal(Proposal proposal, User user, Agency agency);
-    public abstract Proposal getProposal(String proposalName) throws ItemNotFoundException;
-    public abstract void updateProposal(Proposal proposal);
+    public abstract void addProposal(Proposal proposal, User user, Agency agency) throws DaoException;
+    public abstract Proposal getProposal(String proposalName) throws DaoException;
+    public abstract void updateProposal(Proposal proposal) throws DaoException;
 }

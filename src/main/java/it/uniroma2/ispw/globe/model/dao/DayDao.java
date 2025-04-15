@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Day;
 
 import java.util.ArrayList;
@@ -14,6 +14,6 @@ public abstract class DayDao {
         day.setAttractions(new ArrayList<>());
         return day;
     }
-    public abstract void addDay(Day day);
-    public abstract Day getDay(String itineraryID, int dayNum) throws ItemNotFoundException;
+    public abstract void addDay(Day day) throws DaoException;
+    public abstract Day getDay(String itineraryID, int dayNum) throws DaoException;
 }

@@ -1,12 +1,14 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 
 public class InMemoryItineraryDao extends ItineraryDao {
 
@@ -24,33 +26,29 @@ public class InMemoryItineraryDao extends ItineraryDao {
     }
 
     @Override
-    public void addItinerary(Itinerary itinerary, Account account) {
-        for (Day day : itinerary.getDays()) {
-            InMemoryDayDao.getInstance().addDay(day);
-        }
-
-        if (account != null) {
-            for (Itinerary savedItinerary : itineraries) {
-                if (savedItinerary.getItineraryID().equals(itinerary.getItineraryID())) {
-                    // errore
-                    return;
-                }
+    public void addItinerary(Itinerary itinerary, Account account) throws DaoException {
+        if (getItinerary(itinerary.getItineraryID()) == null) {
+            for (Day day : itinerary.getDays()) {
+                InMemoryDayDao.getInstance().addDay(day);
             }
-            itineraries.add(itinerary);
-            account.getItineraries().add(itinerary);
+
+            if (account != null) {
+                itineraries.add(itinerary);
+                account.getItineraries().add(itinerary);
+            }
         } else {
-            // errore
+            throw new DaoException("addItinerary", DUPLICATE);
         }
     }
 
     @Override
-    public Itinerary getItinerary(String id) throws ItemNotFoundException {
+    public Itinerary getItinerary(String id) {
         for (Itinerary itinerary : itineraries) {
             if (itinerary.getItineraryID().equals(id)) {
                 return itinerary;
             }
         }
-        throw new ItemNotFoundException("itinerary not found");
+        return null;
     }
 
     @Override

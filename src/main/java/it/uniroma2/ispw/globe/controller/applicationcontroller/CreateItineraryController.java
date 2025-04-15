@@ -1,7 +1,9 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
@@ -21,94 +23,112 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_API;
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 
 public class CreateItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
-    public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws PlaceApiException {
-        ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-        DayDao dayDao = Persistence.getFactory(Persistence.getInstance().getType()).getDayDao();
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+    public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+            DayDao dayDao = Persistence.getFactory(Persistence.getInstance().getType()).getDayDao();
+            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
-        String itineraryId = UUID.randomUUID().toString();
-        itineraryBean.setId(itineraryId);
+            String itineraryId = UUID.randomUUID().toString();
+            itineraryBean.setId(itineraryId);
 
-        Itinerary itinerary = itineraryDao.createItinerary(itineraryId,itineraryBean.getName(),itineraryBean.getDescription(), itineraryBean.getDuration());
+            Itinerary itinerary = itineraryDao.createItinerary(itineraryId,itineraryBean.getName(),itineraryBean.getDescription(), itineraryBean.getDuration());
 
-        List<Day> days = new ArrayList<>();
+            List<Day> days = new ArrayList<>();
 
-        Day day0 = dayDao.createDay(itineraryId,0);
-        List<City> cities = new ArrayList<>();
-        List<Attraction> attractions = new ArrayList<>();
+            Day day0 = dayDao.createDay(itineraryId,0);
+            List<City> cities = new ArrayList<>();
+            List<Attraction> attractions = new ArrayList<>();
 
-        for (String cityId : itineraryBean.getCities()) {
-            City city;
-            city = cityDao.createCity(cityId);
-            cities.add(city);
-        }
-
-        for (String attractionId : itineraryBean.getAttractions()) {
-            Attraction attraction;
-            attraction = attractionDao.createAttraction(attractionId);
-            attractions.add(attraction);
-        }
-        day0.setCities(cities);
-        day0.setAttractions(attractions);
-
-        days.add(day0);
-        for (int i=1; i<=itineraryBean.getDuration(); i++) {
-            Day day = dayDao.createDay(itineraryId, i);
-            days.add(day);
-        }
-
-        itinerary.setDays(days);
-
-        calculateItinerary(itinerary);
-
-        if (itineraryBean.getAccommodations() != null) {
-            AccommodationDao accommodationDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
-
-            List<Accommodation> accommodations = new ArrayList<>();
-            for (Pair<String,String> a : itineraryBean.getAccommodations()) {
-                Accommodation accommodation = accommodationDao.createAccommodation(a.getKey(), a.getValue());
-                accommodationDao.addAccommodation(accommodation);
-                accommodations.add(accommodation);
+            for (String cityId : itineraryBean.getCities()) {
+                City city;
+                city = cityDao.createCity(cityId);
+                cities.add(city);
             }
-            AccommodationDecorator accommodationItinerary = new AccommodationDecorator(itinerary);
-            accommodationItinerary.setAccommodations(accommodations);
-            itinerary = accommodationItinerary;
+
+            for (String attractionId : itineraryBean.getAttractions()) {
+                Attraction attraction;
+                attraction = attractionDao.createAttraction(attractionId);
+                attractions.add(attraction);
+            }
+            day0.setCities(cities);
+            day0.setAttractions(attractions);
+
+            days.add(day0);
+            for (int i=1; i<=itineraryBean.getDuration(); i++) {
+                Day day = dayDao.createDay(itineraryId, i);
+                days.add(day);
+            }
+
+            itinerary.setDays(days);
+
+            calculateItinerary(itinerary);
+
+            if (itineraryBean.getAccommodations() != null) {
+                AccommodationDao accommodationDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
+
+                List<Accommodation> accommodations = new ArrayList<>();
+                for (Pair<String,String> a : itineraryBean.getAccommodations()) {
+                    Accommodation accommodation = accommodationDao.createAccommodation(a.getKey(), a.getValue());
+                    accommodationDao.addAccommodation(accommodation);
+                    accommodations.add(accommodation);
+                }
+                AccommodationDecorator accommodationItinerary = new AccommodationDecorator(itinerary);
+                accommodationItinerary.setAccommodations(accommodations);
+                itinerary = accommodationItinerary;
+            }
+
+            if (itineraryBean.getInboundFlightArrivalTime() != 0) {
+                FlightDao flightDao = Persistence.getFactory(Persistence.getInstance().getType()).getFlightDao();
+
+                Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
+                Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
+                flightDao.addFlight(inFlight);
+                flightDao.addFlight(outFlight);
+
+                FlightDecorator flightItinerary = new FlightDecorator(itinerary);
+                flightItinerary.setInFlight(inFlight);
+                flightItinerary.setOutFlight(outFlight);
+                itinerary = flightItinerary;
+            }
+
+            SessionManager.getInstance().getSession(sessionID).setPendingItinerary(itinerary);
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Create itinerary");
         }
-
-        if (itineraryBean.getInboundFlightArrivalTime() != 0) {
-            FlightDao flightDao = Persistence.getFactory(Persistence.getInstance().getType()).getFlightDao();
-
-            Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
-            Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
-            flightDao.addFlight(inFlight);
-            flightDao.addFlight(outFlight);
-
-            FlightDecorator flightItinerary = new FlightDecorator(itinerary);
-            flightItinerary.setInFlight(inFlight);
-            flightItinerary.setOutFlight(outFlight);
-            itinerary = flightItinerary;
-        }
-
-        SessionManager.getInstance().getSession(sessionID).setPendingItinerary(itinerary);
     }
 
-    public void saveItinerary(String sessionID) {
-        ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+    public void saveItinerary(String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
 
-        Session session = SessionManager.getInstance().getSession(sessionID);
-        Account account = session.getAccount();
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            Account account = session.getAccount();
 
-        Itinerary itinerary = session.getPendingItinerary();
-        itineraryDao.addItinerary(itinerary, account);
+            Itinerary itinerary = session.getPendingItinerary();
+            itineraryDao.addItinerary(itinerary, account);
 
-        session.setPendingItinerary(null);
+            session.setPendingItinerary(null);
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Save itinerary");
+        }
     }
 
     public void calculateItinerary(Itinerary itinerary) {
@@ -217,46 +237,54 @@ public class CreateItineraryController {
         return path;
     }
 
-    public List<StepBean> getSteps(String itineraryId, String sessionID) throws ItemNotFoundException {
-        List<StepBean> steps = new ArrayList<>();
-        Itinerary itinerary;
+    public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            List<StepBean> steps = new ArrayList<>();
+            Itinerary itinerary;
 
-        if (itineraryId == null) {
-            itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
-        } else {
-            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-            itinerary = itineraryDao.getItinerary(itineraryId);
-        }
+            if (itineraryId == null) {
+                itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
+            } else {
+                ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+                itinerary = itineraryDao.getItinerary(itineraryId);
+            }
 
-        List<Day> days = itinerary.getDays();
-        for (Day day : days) {
-            List<String> attractions = new ArrayList<>();
-            for (Attraction attraction : day.getAttractions()) {
-                attractions.add(attraction.getPlaceID());
+            List<Day> days = itinerary.getDays();
+            for (Day day : days) {
+                List<String> attractions = new ArrayList<>();
+                for (Attraction attraction : day.getAttractions()) {
+                    attractions.add(attraction.getPlaceID());
+                }
+                List<String> cities = new ArrayList<>();
+                for (City city : day.getCities()) {
+                    cities.add(city.getPlaceID());
+                }
+                StepBean stepBean = new StepBean(day.getDayNum()-1,cities,attractions);
+                steps.add(stepBean);
             }
-            List<String> cities = new ArrayList<>();
-            for (City city : day.getCities()) {
-                cities.add(city.getPlaceID());
+            return steps;
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
             }
-            StepBean stepBean = new StepBean(day.getDayNum()-1,cities,attractions);
-            steps.add(stepBean);
+            throw new FailedOperationException("Get steps");
         }
-        return steps;
     }
 
-    public List<JsonObject> getPlaces(String name, String type) throws PlaceApiException {
+    public List<JsonObject> getPlaces(String name, String type) throws FailedOperationException {
         NominatimAPIClient api = new NominatimAPIClient();
         List<JsonObject> apiPlaces;
         try {
             apiPlaces = api.getPlaces(name,type);
-        } catch (IOException e) {
+        } catch (PlaceApiException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
-            throw new PlaceApiException("Error with external Api");
+            throw new FailedOperationException("Api error in get places");
         }
         return apiPlaces;
     }
 
-    public List<AttractionBean> getAttractions(String name) throws PlaceApiException {
+    public List<AttractionBean> getAttractions(String name) throws FailedOperationException {
 //        //chiama la DAO/API per ottenere i nomi delle attrazioni
         List<JsonObject> jsonAttractions = getPlaces(name, ATTRACTION);
         List<Attraction> attractions = new ArrayList<>();
@@ -275,7 +303,7 @@ public class CreateItineraryController {
         return attractionBeans;
     }
 
-    public List<CityBean> getCities(String name) throws PlaceApiException {
+    public List<CityBean> getCities(String name) throws FailedOperationException {
         List<JsonObject> jsonCities = getPlaces(name, CITY);
         List<City> cities = new ArrayList<>();
         List<CityBean> citiesBeans = new ArrayList<>();
@@ -292,100 +320,124 @@ public class CreateItineraryController {
         return citiesBeans;
     }
 
-    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws ItemNotFoundException {
-        Itinerary itinerary;
+    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            Itinerary itinerary;
 
-        if (itineraryId == null) {
-            itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
-            if (itinerary == null) {
+            if (itineraryId == null) {
+                itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
+                if (itinerary == null) {
+                    return null;
+                }
+            } else {
+                ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+                itinerary = itineraryDao.getItinerary(itineraryId);
+            }
+
+            List<String> types = new ArrayList<>();
+
+            List<Pair<String,String>> accommodations = new ArrayList<>();
+            double inDepartureTime = -1;
+            double inArrivalTime = -1;
+            double outDepartureTime = -1;
+            double outArrivalTime = -1;
+
+            Itinerary current = itinerary;
+            while (current instanceof ItineraryDecorator itineraryDecorator) {
+                if (current instanceof AccommodationDecorator accommodationDecorator) {
+                    for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
+                        accommodations.add(new Pair<>(accommodation.getName(), accommodation.getAddress()));
+                    }
+                }
+                if (current instanceof FlightDecorator flightDecorator) {
+                    inDepartureTime = flightDecorator.getInFlight().getDepartureTime();
+                    inArrivalTime = flightDecorator.getInFlight().getArrivalTime();
+                    outDepartureTime = flightDecorator.getOutFlight().getDepartureTime();
+                    outArrivalTime = flightDecorator.getOutFlight().getArrivalTime();
+                }
+                current = itineraryDecorator.getItinerary();
+            }
+
+            ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), types, itinerary.getDaysNumber());
+            itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
+            itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
+            itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
+            itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
+            itineraryBean.setAccommodations(accommodations);
+
+            return itineraryBean;
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Get itinerary");
+        }
+    }
+
+    public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+            City city = null;
+
+            if (sessionID != null) {
+                Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
+                for (City savedCity : itinerary.getDays().get(stepNum).getCities()) {
+                    if (cityID.equals(savedCity.getPlaceID())) {
+                        city = savedCity;
+                    }
+                }
+            } else {
+                city = cityDao.getCity(cityID);
+                if (city == null) {
+                    city = cityDao.createCity(cityID);
+                }
+            }
+
+            if (city != null) {
+                return new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+            } else {
                 return null;
             }
-        } else {
-            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-            itinerary = itineraryDao.getItinerary(itineraryId);
-        }
-
-        List<String> types = new ArrayList<>();
-
-        List<Pair<String,String>> accommodations = new ArrayList<>();
-        double inDepartureTime = -1;
-        double inArrivalTime = -1;
-        double outDepartureTime = -1;
-        double outArrivalTime = -1;
-
-        Itinerary current = itinerary;
-        while (current instanceof ItineraryDecorator itineraryDecorator) {
-            if (current instanceof AccommodationDecorator accommodationDecorator) {
-                for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
-                    accommodations.add(new Pair<>(accommodation.getName(), accommodation.getAddress()));
-                }
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
             }
-            if (current instanceof FlightDecorator flightDecorator) {
-                inDepartureTime = flightDecorator.getInFlight().getDepartureTime();
-                inArrivalTime = flightDecorator.getInFlight().getArrivalTime();
-                outDepartureTime = flightDecorator.getOutFlight().getDepartureTime();
-                outArrivalTime = flightDecorator.getOutFlight().getArrivalTime();
-            }
-            current = itineraryDecorator.getItinerary();
-        }
-
-        ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), types, itinerary.getDaysNumber());
-        itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
-        itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
-        itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
-        itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
-        itineraryBean.setAccommodations(accommodations);
-
-        return itineraryBean;
-    }
-
-    public CityBean getCity(int stepNum,String cityID,String sessionID) throws PlaceApiException {
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        City city = null;
-
-        if (sessionID != null) {
-            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
-            for (City savedCity : itinerary.getDays().get(stepNum).getCities()) {
-                if (cityID.equals(savedCity.getPlaceID())) {
-                    city = savedCity;
-                }
-            }
-        } else {
-            city = cityDao.getCity(cityID);
-            if (city == null) {
-                city = cityDao.createCity(cityID);
-            }
-        }
-
-        if (city != null) {
-            return new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
-        } else {
-            return null;
+            throw new FailedOperationException("Get city");
         }
     }
 
-    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws PlaceApiException {
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
-        Attraction attraction = null;
+    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+            Attraction attraction = null;
 
-        if (sessionID != null) {
-            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
-            for (Attraction savedeAttraction : itinerary.getDays().get(stepNum).getAttractions()) {
-                if (attractionID.equals(savedeAttraction.getPlaceID())) {
-                    attraction = savedeAttraction;
+            if (sessionID != null) {
+                Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
+                for (Attraction savedeAttraction : itinerary.getDays().get(stepNum).getAttractions()) {
+                    if (attractionID.equals(savedeAttraction.getPlaceID())) {
+                        attraction = savedeAttraction;
+                    }
+                }
+            } else {
+                attraction = attractionDao.getAttraction(attractionID);
+                if (attraction == null) {
+                    attraction = attractionDao.createAttraction(attractionID);
                 }
             }
-        } else {
-            attraction = attractionDao.getAttraction(attractionID);
-            if (attraction == null) {
-                attraction = attractionDao.createAttraction(attractionID);
-            }
-        }
 
-        if (attraction != null) {
-            return new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
-        } else {
-            return null;
+            if (attraction != null) {
+                return new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+            } else {
+                return null;
+            }
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Get attraction");
         }
     }
 }

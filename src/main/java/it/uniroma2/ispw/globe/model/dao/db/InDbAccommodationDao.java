@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Accommodation;
 import it.uniroma2.ispw.globe.model.dao.AccommodationDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -9,43 +9,41 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InDbAccommodationDao extends AccommodationDao {
 
     @Override
-    public void addAccommodation(Accommodation accommodation) {
+    public void addAccommodation(Accommodation accommodation) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
+        String query = "insert into Accommodation (id,name,address) values (?,?,?)";
+
+        PreparedStatement stmt = null;
+
         try {
-            getAccommodation(accommodation.getId());
-        } catch (ItemNotFoundException e) {
-            String query = "insert into Accommodation (id,name,address) values (?,?,?)";
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
 
-            PreparedStatement stmt = null;
+            stmt.setString(1, accommodation.getId());
+            stmt.setString(2, accommodation.getName());
+            stmt.setString(3, accommodation.getAddress());
+            stmt.execute();
 
-            try {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
-
-                stmt.setString(1, accommodation.getId());
-                stmt.setString(2, accommodation.getName());
-                stmt.setString(3, accommodation.getAddress());
-                stmt.execute();
-
-            } catch (SQLException exception) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, exception);
-            } finally {
-                DBConnection.getInstance().closeConnection(stmt,null);
+        } catch (SQLException exception) {
+            if (exception.getErrorCode() == 1062) {
+                throw new DaoException("addAccommodation: "+ exception.getMessage(), DUPLICATE);
             }
+            throw new DaoException("addAccommodation: "+ exception.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
         }
     }
 
     @Override
-    public Accommodation getAccommodation(String id) throws ItemNotFoundException {
+    public Accommodation getAccommodation(String id) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Accommodation.id , Accommodation.name , Accommodation.address from Accommodation where id = ?";
@@ -71,14 +69,11 @@ public class InDbAccommodationDao extends AccommodationDao {
 
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("getAccommodation: "+ e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
 
-        if (accommodation == null) {
-            throw new ItemNotFoundException("accommodation not found");
-        }
         return accommodation;
     }
 }

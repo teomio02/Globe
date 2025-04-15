@@ -2,7 +2,8 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
@@ -42,7 +43,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             AgencyRequestBean request = null;
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
-            } catch (ItemNotFoundException e) {
+            } catch (FailedOperationException | DuplicateItemException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
@@ -54,10 +55,10 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
         } else {
             RequestBean request = new RequestItineraryController().getRequest(requestId, sessionId);
-            AgencyBean agency = null;
+            AgencyBean agency;
             try {
                 agency = new RequestItineraryController().getAgency(null,sessionId);
-            } catch (ItemNotFoundException e) {
+            } catch (FailedOperationException | DuplicateItemException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }

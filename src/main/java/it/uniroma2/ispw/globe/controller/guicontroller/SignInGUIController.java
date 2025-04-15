@@ -1,8 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
-import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -50,7 +50,7 @@ public class SignInGUIController {
         agencyForm.setVisible(!agencyForm.isVisible());
     }
 
-    public void signIn(ActionEvent event) throws ItemNotFoundException {
+    public void signIn(ActionEvent event) {
         errorLabel.setVisible(false);
         CredentialsBean credentials;
         if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
@@ -62,11 +62,10 @@ public class SignInGUIController {
             } else {
                 credentials.setType(USER);
             }
-
             try {
                 new LogInController().signIn(credentials);
                 goBack(event);
-            } catch (ItemAlreadyExistsException exception) {
+            } catch (FailedOperationException | DuplicateItemException exception) {
                 new ErrorPopUpGUIController().createPopUp(exception.getMessage());
             }
         }

@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import com.google.gson.JsonObject;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -10,15 +11,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InDbAttractionDao extends AttractionDao {
 
     @Override
-    public void addAttraction(Attraction attraction) {
+    public void addAttraction(Attraction attraction) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         if (attraction.equals(getAttraction(attraction.getPlaceID()))) {
@@ -41,14 +41,14 @@ public class InDbAttractionDao extends AttractionDao {
             stmt.setDouble(6, attraction.getLongitude());
             stmt.execute();
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("addAttraction: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }
     }
 
     @Override
-    public Attraction getAttraction(String attractionID) {
+    public Attraction getAttraction(String attractionID) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Attraction.placeID, Attraction.name, Attraction.latitude, Attraction.longitude, Attraction.city, Attraction.address from Attraction where placeID = ?";
@@ -85,7 +85,7 @@ public class InDbAttractionDao extends AttractionDao {
                 attraction = new PlaceAdapter(json);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("getAttraction: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }

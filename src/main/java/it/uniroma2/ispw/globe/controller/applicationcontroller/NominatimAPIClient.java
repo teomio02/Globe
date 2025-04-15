@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -28,26 +29,22 @@ public class NominatimAPIClient {
         this.httpClient = new OkHttpClient();
     }
 
-    public List<JsonObject> getPlaces(String query, String type) throws IOException {
+    public List<JsonObject> getPlaces(String query, String type) throws PlaceApiException {
         String url = String.format("%ssearch?q=%s&format=json&addressdetails=1", BASE_URL, query.replace(" ", "+"));
         return getPlace(url, type);
     }
 
-    public JsonObject getPlaceByID(String id) {
+    public JsonObject getPlaceByID(String id) throws PlaceApiException {
         String url = String.format("%slookup?osm_ids=%s&format=json&addressdetails=1", BASE_URL, id);
-        List<JsonObject> places = null;
-        try {
-            places = getPlace(url,"id");
-        } catch (IOException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
-        }
+        List<JsonObject> places;
+        places = getPlace(url,"id");
         if (!places.isEmpty()) {
             return places.get(0);
         }
         return null;
     }
 
-    public List<JsonObject> getPlace(String url, String type) throws IOException {
+    public List<JsonObject> getPlace(String url, String type) throws PlaceApiException {
         List<JsonObject> places = new ArrayList<>();
 
         Request request = new Request.Builder().url(url).header("User-Agent", "Globe/1.0").build();
@@ -78,6 +75,8 @@ public class NominatimAPIClient {
                     }
                 }
             }
+        } catch (IOException e) {
+            throw new PlaceApiException(e.getMessage());
         }
         return places;
     }

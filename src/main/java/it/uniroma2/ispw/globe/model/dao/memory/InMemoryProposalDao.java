@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
@@ -8,6 +8,8 @@ import it.uniroma2.ispw.globe.model.dao.ProposalDao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 
 public class InMemoryProposalDao extends ProposalDao {
     private static InMemoryProposalDao instance = null;
@@ -24,26 +26,24 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public void addProposal(Proposal proposal, User user, Agency agency) {
-        for (Proposal savedProposal : proposals) {
-            if (proposal.getId().equals(savedProposal.getId())){
-                // proposta già esistente
-                return;
-            }
+    public void addProposal(Proposal proposal, User user, Agency agency) throws DaoException {
+        if (getProposal(proposal.getId()) == null) {
+            proposals.add(proposal);
+            user.getProposals().add(proposal);
+            agency.getProposals().add(proposal);
+        } else {
+            throw new DaoException("addProposal", DUPLICATE);
         }
-        proposals.add(proposal);
-        user.getProposals().add(proposal);
-        agency.getProposals().add(proposal);
     }
 
     @Override
-    public Proposal getProposal(String proposalID) throws ItemNotFoundException {
+    public Proposal getProposal(String proposalID) {
         for (Proposal proposal : proposals) {
             if (proposal.getId().equals(proposalID)){
                 return proposal;
             }
         }
-        throw new ItemNotFoundException("proposal not found");
+        return null;
     }
 
     @Override

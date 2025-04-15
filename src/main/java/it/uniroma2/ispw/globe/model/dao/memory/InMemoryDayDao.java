@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.memory;
 
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.Day;
@@ -8,6 +8,8 @@ import it.uniroma2.ispw.globe.model.dao.DayDao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 
 public class InMemoryDayDao extends DayDao {
 
@@ -25,29 +27,27 @@ public class InMemoryDayDao extends DayDao {
     }
 
     @Override
-    public void addDay(Day day) {
-        for (Day savedDay : days) {
-            if (savedDay.getId().equals(day.getId())) {
-                return;
+    public void addDay(Day day) throws DaoException {
+        if (getDay(day.getId(), day.getDayNum()) == null) {
+            for (City city : day.getCities()) {
+                InMemoryCityDao.getInstance().addCity(city);
             }
+            for (Attraction attraction : day.getAttractions()) {
+                InMemoryAttractionDao.getInstance().addAttraction(attraction);
+            }
+            days.add(day);
+        } else {
+            throw new DaoException("addDay", DUPLICATE);
         }
-        for (City city : day.getCities()) {
-            InMemoryCityDao.getInstance().addCity(city);
-        }
-        for (Attraction attraction : day.getAttractions()) {
-            InMemoryAttractionDao.getInstance().addAttraction(attraction);
-        }
-        days.add(day);
     }
 
     @Override
-    public Day getDay(String itineraryID, int dayNum) throws ItemNotFoundException {
+    public Day getDay(String itineraryID, int dayNum) {
         for (Day day : days) {
             if (day.getId().equals(itineraryID) && day.getDayNum() == dayNum) {
                 return day;
             }
         }
-        
-        throw new ItemNotFoundException("day not found");
+        return null;
     }
 }

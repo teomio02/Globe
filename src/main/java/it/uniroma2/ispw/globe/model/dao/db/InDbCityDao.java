@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import com.google.gson.JsonObject;
+import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -10,15 +11,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
+import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InDbCityDao extends CityDao {
 
     @Override
-    public void addCity(City city) {
+    public void addCity(City city) throws DaoException {
         if (city.equals(getCity(city.getPlaceID()))) {
             return;
         }
@@ -40,14 +40,14 @@ public class InDbCityDao extends CityDao {
             stmt.setDouble(5, city.getLongitude());
             stmt.execute();
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("addCity: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
         }
     }
 
     @Override
-    public City getCity(String cityID) {
+    public City getCity(String cityID) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select City.placeID, City.name, City.country ,City.latitude, City.longitude from City where placeID = ?";
@@ -86,7 +86,7 @@ public class InDbCityDao extends CityDao {
                 city = new PlaceAdapter(json);
             }
         } catch (SQLException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+            throw new DaoException("getCity: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }

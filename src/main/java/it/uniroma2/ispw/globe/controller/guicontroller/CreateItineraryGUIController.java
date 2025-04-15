@@ -2,7 +2,8 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
@@ -114,7 +115,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                         requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
                     }
                 }
-            } catch (ItemNotFoundException | PlaceApiException e) {
+            } catch (FailedOperationException | DuplicateItemException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
             }
 
@@ -170,7 +171,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
         try {
             new CreateItineraryController().createItinerary(itineraryBean,sessionId);
-        } catch (PlaceApiException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -192,7 +193,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
         try {
             cities = new CreateItineraryController().getCities(city);
-        } catch (PlaceApiException e) {
+        } catch (FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -239,7 +240,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
         try {
             attractions = new CreateItineraryController().getAttractions(attraction);
-        } catch (PlaceApiException e) {
+        } catch (FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
