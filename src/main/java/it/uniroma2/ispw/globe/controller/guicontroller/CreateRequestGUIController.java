@@ -335,6 +335,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayRequestGUI(sessionId,null, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayRequestGUI(sessionId,null, root);
     }
 }

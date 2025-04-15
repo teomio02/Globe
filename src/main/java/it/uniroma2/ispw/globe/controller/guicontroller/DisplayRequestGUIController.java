@@ -75,7 +75,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
 
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToCreateItineraryGUI(sessionId,requestId,root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToCreateItineraryGUI(sessionId,requestId,root);
     }
 
     public void goBack(ActionEvent event) {

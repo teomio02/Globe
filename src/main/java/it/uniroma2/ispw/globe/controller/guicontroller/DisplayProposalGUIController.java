@@ -87,7 +87,8 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID, root);
     }
 
     public void acceptProposal() {
@@ -131,7 +132,8 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         new ResponseRequestController().saveProposal(sessionId);
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToManageRequestGUI(sessionId, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToManageRequestGUI(sessionId, root);
     }
 
     public void goBack(ActionEvent event) {

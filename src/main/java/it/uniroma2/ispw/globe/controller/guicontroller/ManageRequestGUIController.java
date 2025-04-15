@@ -99,7 +99,8 @@ public class ManageRequestGUIController extends AbstractGUIController {
         String proposalID = (String) ((Button)event.getSource()).getUserData();
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayProposalGUI(sessionId, null, proposalID, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayProposalGUI(sessionId, null, proposalID, root);
     }
 
     public void viewRequest(ActionEvent event) {
@@ -112,6 +113,7 @@ public class ManageRequestGUIController extends AbstractGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayRequestGUI(sessionId,requestID, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayRequestGUI(sessionId,requestID, root);
     }
 }

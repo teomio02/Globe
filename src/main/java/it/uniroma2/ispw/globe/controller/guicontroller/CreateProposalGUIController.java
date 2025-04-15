@@ -91,7 +91,8 @@ public class CreateProposalGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayProposalGUI(sessionId,requestId,null, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayProposalGUI(sessionId,requestId,null, root);
     }
 
     public void goBack(ActionEvent event) {

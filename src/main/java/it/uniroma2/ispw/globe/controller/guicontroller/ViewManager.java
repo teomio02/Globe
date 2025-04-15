@@ -25,16 +25,6 @@ public class ViewManager {
     public static final String MANAGE_REQUEST= "src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml";
     public static final String REQUEST_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/RequestItineraryView.fxml";
 
-
-    private ViewManager() {}
-
-    public static ViewManager getInstance() {
-        if (instance == null) {
-            instance = new ViewManager();
-        }
-        return instance;
-    }
-
     private void loadView(String fxmlPath, NavigationData data, BorderPane root) {
         try {
             URL url = new File(fxmlPath).toURI().toURL();

@@ -165,12 +165,14 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToManageItineraryGUI(sessionId,root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToManageItineraryGUI(sessionId,root);
     }
 
     public void createProposal(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToCreateProposalGUI(sessionId, requestId, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToCreateProposalGUI(sessionId, requestId, root);
     }
 
     public void goBack() {

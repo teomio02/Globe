@@ -176,10 +176,11 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        ViewManager viewManager = new ViewManager();
         if (requestId != null) {
-            ViewManager.getInstance().goToDisplayItineraryGUI(sessionId,null,requestId,null, root);
+            viewManager.goToDisplayItineraryGUI(sessionId,null,requestId,null, root);
         } else {
-            ViewManager.getInstance().goToDisplayItineraryGUI(sessionId,null,null,null, root);
+            viewManager.goToDisplayItineraryGUI(sessionId,null,null,null, root);
         }
     }
 

@@ -94,17 +94,20 @@ public class ManageItineraryGUIController extends AbstractGUIController {
     public void viewItinerary(ActionEvent event) {
         String itineraryId = (String) ((Button)event.getSource()).getUserData();
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayItineraryGUI(sessionId,itineraryId,null,null, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayItineraryGUI(sessionId,itineraryId,null,null, root);
     }
 
     public void viewProposal(ActionEvent event) {
         String proposalId = (String) ((Button)event.getSource()).getUserData();
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToDisplayProposalGUI(sessionId, null, proposalId, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToDisplayProposalGUI(sessionId, null, proposalId, root);
     }
 
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        ViewManager.getInstance().goToCreateItineraryGUI(sessionId,null, root);
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToCreateItineraryGUI(sessionId,null, root);
     }
 }

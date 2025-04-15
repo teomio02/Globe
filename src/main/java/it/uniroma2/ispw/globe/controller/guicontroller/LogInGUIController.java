@@ -103,10 +103,11 @@ public class LogInGUIController {
                 FXMLLoader toolBarLoader = new FXMLLoader(url);
                 ToolBarGUIController controllerToolBar = new ToolBarGUIController(sessionId,type,root);
                 toolBarLoader.setController(controllerToolBar);
+                ViewManager viewManager = new ViewManager();
                 if (type.equals(USER) || type.equals(GUEST)) {
-                    ViewManager.getInstance().goToManageItineraryGUI(sessionId,root);
+                    viewManager.goToManageItineraryGUI(sessionId,root);
                 } else {
-                    ViewManager.getInstance().goToManageRequestGUI(sessionId,root);
+                    viewManager.goToManageRequestGUI(sessionId,root);
                 }
                 root.setBottom(toolBarLoader.load());
 
