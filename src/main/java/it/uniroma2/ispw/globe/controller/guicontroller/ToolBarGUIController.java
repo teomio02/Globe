@@ -46,18 +46,15 @@ public class ToolBarGUIController {
     }
 
     public void requestItinerary()  {
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToRequestItineraryGUI(sessionId);
+        ViewManager.getInstance().goToRequestItineraryGUI(sessionId,root);
     }
 
 
     public void manageItinerary(){
-
-        NavigationGUIController nav = new NavigationGUIController(root);
         if (userType.equals(USER) || userType.equals(GUEST)) {
-            nav.goToManageItineraryGUI(sessionId);
+            ViewManager.getInstance().goToManageItineraryGUI(sessionId,root);
         } else {
-            nav.goToManageRequestGUI(sessionId);
+            ViewManager.getInstance().goToManageRequestGUI(sessionId,root);
         }
     }
     public void manageProfile(){}

@@ -3,7 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.util.observer.ViewObserver;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -13,9 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.*;
-
-public class CreateProposalGUIController implements ViewObserver {
+public class CreateProposalGUIController {
     @FXML
     private Label userLabel;
     @FXML
@@ -40,21 +38,12 @@ public class CreateProposalGUIController implements ViewObserver {
 
     private Node prev;
 
-    public void initialize() {
-        ViewManager.getInstance().addObserver(this);
-    }
+    public void initialize(String sessionId) {
+        NavigationData data = SessionManager.getInstance().getSession(sessionId).getNavigationData();
+        this.sessionId = data.getSessionID();
+        this.requestId = data.getRequestID();
+        this.prev = data.getPrev();
 
-    @Override
-    public void onViewChanged(String viewName, NavigationData data) {
-        if (viewName.equals(CREATE_PROPOSAL)) {
-            this.sessionId = data.getSessionID();
-            this.requestId = data.getRequestID();
-            this.prev = data.getPrev();
-            initializeData();
-        }
-    }
-
-    public void initializeData() {
         AgencyRequestBean request = null;
         ProposalBean proposal = null;
         try {
@@ -102,8 +91,7 @@ public class CreateProposalGUIController implements ViewObserver {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToDisplayProposalGUI(sessionId,requestId,null, root.getCenter());
+        ViewManager.getInstance().goToDisplayProposalGUI(sessionId,requestId,null, root);
     }
 
     public void goBack(ActionEvent event) {

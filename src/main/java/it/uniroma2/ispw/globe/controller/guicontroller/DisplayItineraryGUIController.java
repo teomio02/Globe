@@ -6,7 +6,7 @@ import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.LoadViewException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.util.observer.ViewObserver;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_ITINERARY;
-
-public class DisplayItineraryGUIController implements ViewObserver {
+public class DisplayItineraryGUIController extends AbstractGUIController {
 
     @FXML
     private Label dayLabel;
@@ -52,23 +50,14 @@ public class DisplayItineraryGUIController implements ViewObserver {
 
     private static final String LIGHT = "label-light";
 
-    public void initialize() {
-        ViewManager.getInstance().addObserver(this);
-    }
+    public void initialize(String sessionId) {
+        NavigationData data = SessionManager.getInstance().getSession(sessionId).getNavigationData();
+        this.sessionId = data.getSessionID();
+        this.itineraryId = data.getItineraryID();
+        this.requestId = data.getRequestID();
+        this.proposalId = data.getProposalID();
+        this.prev = data.getPrev();
 
-    @Override
-    public void onViewChanged(String viewName, NavigationData data) {
-        if (viewName.equals(DISPALY_ITINERARY)) {
-            this.sessionId = data.getSessionID();
-            this.itineraryId = data.getItineraryID();
-            this.requestId = data.getRequestID();
-            this.proposalId = data.getProposalID();
-            this.prev = data.getPrev();
-            initializeData();
-        }
-    }
-
-    public void initializeData() {
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
         ItineraryBean itinerary = null;
@@ -176,14 +165,12 @@ public class DisplayItineraryGUIController implements ViewObserver {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToManageItineraryGUI(sessionId);
+        ViewManager.getInstance().goToManageItineraryGUI(sessionId,root);
     }
 
     public void createProposal(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToCreateProposalGUI(sessionId, requestId, root.getCenter());
+        ViewManager.getInstance().goToCreateProposalGUI(sessionId, requestId, root);
     }
 
     public void goBack() {

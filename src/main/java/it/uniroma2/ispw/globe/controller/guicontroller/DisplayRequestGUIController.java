@@ -5,7 +5,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.util.observer.ViewObserver;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -13,9 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.DISPALY_REQUEST;
-
-public class DisplayRequestGUIController implements ViewObserver {
+public class DisplayRequestGUIController extends AbstractGUIController {
     @FXML
     private Label daysLabel;
     @FXML
@@ -30,21 +28,12 @@ public class DisplayRequestGUIController implements ViewObserver {
     private String requestId;
     private Node prev;
 
-    public void initialize() {
-        ViewManager.getInstance().addObserver(this);
-    }
+    public void initialize(String sessionId) {
+        NavigationData data = SessionManager.getInstance().getSession(sessionId).getNavigationData();
+        this.sessionId = data.getSessionID();
+        this.requestId = data.getRequestID();
+        this.prev = data.getPrev();
 
-    @Override
-    public void onViewChanged(String viewName, NavigationData data) {
-        if (viewName.equals(DISPALY_REQUEST)) {
-            this.sessionId = data.getSessionID();
-            this.requestId = data.getRequestID();
-            this.prev = data.getPrev();
-            initializeData();
-        }
-    }
-
-    public void initializeData() {
         // popola con use case simo (create request use case)
 
         if (requestId != null) {
@@ -86,8 +75,7 @@ public class DisplayRequestGUIController implements ViewObserver {
 
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
-        nav.goToCreateItineraryGUI(sessionId,requestId,root.getCenter());
+        ViewManager.getInstance().goToCreateItineraryGUI(sessionId,requestId,root);
     }
 
     public void goBack(ActionEvent event) {

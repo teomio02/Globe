@@ -1,15 +1,30 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.model.bean.NavigationData;
-import it.uniroma2.ispw.globe.util.observer.Subject;
-import it.uniroma2.ispw.globe.util.observer.ViewObserver;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class ViewManager implements Subject {
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_VIEW;
+
+public class ViewManager {
     private static ViewManager instance;
-    private final List<ViewObserver> observers = new ArrayList<>();
+
+    public static final String CREATE_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml";
+    public static final String CREATE_PROPOSAL = "src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml";
+    public static final String DISPALY_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml";
+    public static final String DISPALY_PROPOSAL = "src/main/java/it/uniroma2/ispw/globe/view/DisplayProposalView.fxml";
+    public static final String DISPALY_REQUEST = "src/main/java/it/uniroma2/ispw/globe/view/DisplayRequestView.fxml";
+    public static final String MANAGE_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/ManageItineraryView.fxml";
+    public static final String MANAGE_REQUEST= "src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml";
+    public static final String REQUEST_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/RequestItineraryView.fxml";
+
 
     private ViewManager() {}
 
@@ -20,20 +35,58 @@ public class ViewManager implements Subject {
         return instance;
     }
 
-    @Override
-    public void addObserver(ViewObserver o) {
-        observers.add(o);
-    }
-
-    @Override
-    public void removeObserver(ViewObserver o) {
-        observers.remove(o);
-    }
-
-    public void notifyViewChange(String viewPath, NavigationData data) {
-        for (ViewObserver o : observers) {
-            o.onViewChanged(viewPath, data);
+    private void loadView(String fxmlPath, NavigationData data, BorderPane root) {
+        try {
+            URL url = new File(fxmlPath).toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            root.setCenter(loader.load());
+            SessionManager.getInstance().getSession(data.getSessionID()).setNavigationData(data);
+            AbstractGUIController controller = loader.getController();
+            controller.initialize(data.getSessionID());
+        } catch (IOException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
         }
+    }
+
+    public void goToCreateItineraryGUI(String sessionID, String requestID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, null, requestID, root.getCenter());
+        loadView(CREATE_ITINERARY, data, root);
+    }
+
+    public void goToCreateProposalGUI(String sessionID, String requestID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, null, requestID, root.getCenter());
+        loadView(CREATE_PROPOSAL, data, root);
+    }
+
+    public void goToDisplayItineraryGUI(String sessionID, String itineraryID, String requestID, String proposalID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, itineraryID, proposalID, requestID, root.getCenter());
+        loadView(DISPALY_ITINERARY, data, root);
+    }
+
+    public void goToDisplayProposalGUI(String sessionID, String requestID, String proposalID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, proposalID, requestID, root.getCenter());
+        loadView(DISPALY_PROPOSAL, data, root);
+    }
+
+    public void goToDisplayRequestGUI(String sessionID, String requestID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, null, requestID, root.getCenter());
+        loadView(DISPALY_REQUEST, data, root);
+    }
+
+    public void goToManageItineraryGUI(String sessionID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, null, null, null);
+        loadView(MANAGE_ITINERARY, data, root);
+    }
+
+    public void goToManageRequestGUI(String sessionID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, null, null, null);
+        loadView(MANAGE_REQUEST, data, root);
+    }
+
+    public void goToRequestItineraryGUI(String sessionID, BorderPane root) {
+        NavigationData data = new NavigationData(sessionID, null, null, null, null);
+        loadView(REQUEST_ITINERARY, data, root);
     }
 }
 

@@ -5,7 +5,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.exception.PlaceApiException;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.util.observer.ViewObserver;
+import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -20,9 +20,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.controller.guicontroller.NavigationGUIController.CREATE_ITINERARY;
-
-public class CreateItineraryGUIController implements ViewObserver {
+public class CreateItineraryGUIController extends AbstractGUIController {
     @FXML
     private TextField cityField;
     @FXML
@@ -83,21 +81,13 @@ public class CreateItineraryGUIController implements ViewObserver {
 
     private Node prev;
 
-    public void initialize() {
-        ViewManager.getInstance().addObserver(this);
-    }
+    public void initialize(String sessionId) {
 
-    @Override
-    public void onViewChanged(String viewName, NavigationData data) {
-        if (viewName.equals(CREATE_ITINERARY)) {
-            this.sessionId = data.getSessionID();
-            this.requestId = data.getRequestID();
-            this.prev = data.getPrev();
-            initializeData();
-        }
-    }
+        NavigationData data = SessionManager.getInstance().getSession(sessionId).getNavigationData();
+        this.sessionId = data.getSessionID();
+        this.requestId = data.getRequestID();
+        this.prev = data.getPrev();
 
-    public void initializeData() {
 
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
@@ -186,11 +176,10 @@ public class CreateItineraryGUIController implements ViewObserver {
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-        NavigationGUIController nav = new NavigationGUIController(root);
         if (requestId != null) {
-            nav.goToDisplayItineraryGUI(sessionId,null,requestId,null, root.getCenter());
+            ViewManager.getInstance().goToDisplayItineraryGUI(sessionId,null,requestId,null, root);
         } else {
-            nav.goToDisplayItineraryGUI(sessionId,null,null,null, root.getCenter());
+            ViewManager.getInstance().goToDisplayItineraryGUI(sessionId,null,null,null, root);
         }
     }
 

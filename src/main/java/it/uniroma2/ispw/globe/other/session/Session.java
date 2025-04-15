@@ -1,12 +1,14 @@
 package it.uniroma2.ispw.globe.other.session;
 
 import it.uniroma2.ispw.globe.model.*;
+import it.uniroma2.ispw.globe.model.bean.NavigationData;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.Request;
 
 import java.util.List;
 
 public class Session {
+    private NavigationData navigationData;
     private String id;
     private Account account;
     private Itinerary pendingItinerary;
@@ -18,6 +20,13 @@ public class Session {
     public Session(String id, Account account) {
         this.id = id;
         this.account = account;
+    }
+
+    public NavigationData getNavigationData() {
+        return navigationData;
+    }
+    public void setNavigationData(NavigationData navigationData) {
+        this.navigationData = navigationData;
     }
 
     public String getId() {
