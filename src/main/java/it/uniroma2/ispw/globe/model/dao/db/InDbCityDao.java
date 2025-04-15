@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.dao.CityDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -20,35 +19,35 @@ public class InDbCityDao extends CityDao {
 
     @Override
     public void addCity(City city) {
+        if (city.equals(getCity(city.getPlaceID()))) {
+            return;
+        }
+
         DBConnection connect = DBConnection.getInstance();
 
+        String query = "insert into City (placeID,name,country,latitude,longitude) values (?,?,?,?,?)";
+
+        PreparedStatement stmt = null;
+
         try {
-            getCity(city.getPlaceID());
-        } catch (ItemNotFoundException exception) {
-            String query = "insert into City (placeID,name,country,latitude,longitude) values (?,?,?,?,?)";
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
 
-            PreparedStatement stmt = null;
-
-            try {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
-
-                stmt.setString(1, city.getPlaceID());
-                stmt.setString(2, city.getName());
-                stmt.setString(3, city.getCountry());
-                stmt.setDouble(4, city.getLatitude());
-                stmt.setDouble(5, city.getLongitude());
-                stmt.execute();
-            } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } finally {
-                DBConnection.getInstance().closeConnection(stmt,null);
-            }
+            stmt.setString(1, city.getPlaceID());
+            stmt.setString(2, city.getName());
+            stmt.setString(3, city.getCountry());
+            stmt.setDouble(4, city.getLatitude());
+            stmt.setDouble(5, city.getLongitude());
+            stmt.execute();
+        } catch (SQLException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
         }
     }
 
     @Override
-    public City getCity(String cityID) throws ItemNotFoundException {
+    public City getCity(String cityID) {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select City.placeID, City.name, City.country ,City.latitude, City.longitude from City where placeID = ?";
@@ -92,8 +91,9 @@ public class InDbCityDao extends CityDao {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }
         if (city == null) {
-            throw new ItemNotFoundException("city not found");
+            city = createCity(cityID);
         }
+
         return city;
     }
 }

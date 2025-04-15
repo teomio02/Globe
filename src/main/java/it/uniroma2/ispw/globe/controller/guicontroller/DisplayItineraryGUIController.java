@@ -153,7 +153,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             }
             tab.setContent(dayVBox);
             daysTabPane.getTabs().add(tab);
-        } catch (ItemNotFoundException | PlaceApiException e) {
+        } catch ( PlaceApiException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }

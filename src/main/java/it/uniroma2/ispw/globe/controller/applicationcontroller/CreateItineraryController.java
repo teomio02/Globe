@@ -46,23 +46,13 @@ public class CreateItineraryController {
 
         for (String cityId : itineraryBean.getCities()) {
             City city;
-            try {
-                city = cityDao.createCity(cityId);
-            } catch (IOException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
-                throw new PlaceApiException("Error with external Api");
-            }
+            city = cityDao.createCity(cityId);
             cities.add(city);
         }
 
         for (String attractionId : itineraryBean.getAttractions()) {
             Attraction attraction;
-            try {
-                attraction = attractionDao.createAttraction(attractionId);
-            } catch (IOException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
-                throw new PlaceApiException("Error with external Api");
-            }
+            attraction = attractionDao.createAttraction(attractionId);
             attractions.add(attraction);
         }
         day0.setCities(cities);
@@ -349,7 +339,7 @@ public class CreateItineraryController {
         return itineraryBean;
     }
 
-    public CityBean getCity(int stepNum,String cityID,String sessionID) throws ItemNotFoundException, PlaceApiException {
+    public CityBean getCity(int stepNum,String cityID,String sessionID) throws PlaceApiException {
         CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
         City city = null;
 
@@ -363,12 +353,7 @@ public class CreateItineraryController {
         } else {
             city = cityDao.getCity(cityID);
             if (city == null) {
-                try {
-                    city = cityDao.createCity(cityID);
-                } catch (IOException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
-                    throw new PlaceApiException("Error with external Api");
-                }
+                city = cityDao.createCity(cityID);
             }
         }
 
@@ -379,7 +364,7 @@ public class CreateItineraryController {
         }
     }
 
-    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws ItemNotFoundException, PlaceApiException {
+    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws PlaceApiException {
         AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
         Attraction attraction = null;
 
@@ -393,12 +378,7 @@ public class CreateItineraryController {
         } else {
             attraction = attractionDao.getAttraction(attractionID);
             if (attraction == null) {
-                try {
-                    attraction = attractionDao.createAttraction(attractionID);
-                } catch (IOException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
-                    throw new PlaceApiException("Error with external Api");
-                }
+                attraction = attractionDao.createAttraction(attractionID);
             }
         }
 

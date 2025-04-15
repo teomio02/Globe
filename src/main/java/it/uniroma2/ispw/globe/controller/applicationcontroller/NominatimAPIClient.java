@@ -10,7 +10,10 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_API;
 
 
 public class NominatimAPIClient {
@@ -30,9 +33,14 @@ public class NominatimAPIClient {
         return getPlace(url, type);
     }
 
-    public JsonObject getPlaceByID(String id) throws IOException {
+    public JsonObject getPlaceByID(String id) {
         String url = String.format("%slookup?osm_ids=%s&format=json&addressdetails=1", BASE_URL, id);
-        List<JsonObject> places = getPlace(url,"id");
+        List<JsonObject> places = null;
+        try {
+            places = getPlace(url,"id");
+        } catch (IOException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_API, e);
+        }
         if (!places.isEmpty()) {
             return places.get(0);
         }

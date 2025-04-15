@@ -34,7 +34,7 @@ public class InMemoryAttractionDao extends AttractionDao {
     }
 
     @Override
-    public Attraction getAttraction(String attractionID) throws ItemNotFoundException {
+    public Attraction getAttraction(String attractionID) {
         Attraction attractionResult = null;
         for (Attraction attraction : attractions) {
             if (attraction.getPlaceID().equals(attractionID)) {
@@ -42,7 +42,8 @@ public class InMemoryAttractionDao extends AttractionDao {
             }
         }
         if (attractionResult == null) {
-            throw new ItemNotFoundException("attraction not found");
+            attractionResult = createAttraction(attractionID);
+            addAttraction(attractionResult);
         }
         return attractionResult;
     }

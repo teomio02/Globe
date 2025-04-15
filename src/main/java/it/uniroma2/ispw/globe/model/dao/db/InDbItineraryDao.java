@@ -49,7 +49,7 @@ public class InDbItineraryDao extends ItineraryDao {
 
                     stmt.execute();
 
-                    addDecorationsData(itinerary, connection);
+                    addDecorationsData(itinerary);
 
                     addDays(itinerary);
 
@@ -160,6 +160,8 @@ public class InDbItineraryDao extends ItineraryDao {
                     flightItinerary.setOutFlight(outFlight);
                     itinerary = flightItinerary;
                 }
+            } else {
+                throw new ItemNotFoundException("Itinerary not found");
             }
         } catch (SQLException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
@@ -178,27 +180,36 @@ public class InDbItineraryDao extends ItineraryDao {
         
     }
 
-    public void addDecorationsData(Itinerary itinerary ,Connection connection) throws SQLException {
+    public void addDecorationsData(Itinerary itinerary) throws SQLException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         Itinerary current = itinerary;
 
         while (current instanceof ItineraryDecorator itineraryDecorator) {
             if (current instanceof AccommodationDecorator accommodationDecorator) {
-                addAccommodations(accommodationDecorator, connection);
+                addAccommodations(accommodationDecorator);
             }
             if (current instanceof FlightDecorator flightDecorator) {
-                addFlight(flightDecorator,connection);
+                addFlight(flightDecorator);
             }
             current = itineraryDecorator.getItinerary();
         }
     }
 
-    public void addAccommodations(AccommodationDecorator itinerary, Connection connection) throws SQLException {
+    public void addAccommodations(AccommodationDecorator itinerary) throws SQLException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         for (Accommodation accommodation : itinerary.getAccommodations()) {
-            addAccommodation(accommodation,itinerary.getItineraryID(),connection);
+            addAccommodation(accommodation,itinerary.getItineraryID());
         }
     }
 
-    public void addAccommodation(Accommodation accommodation, String itineraryID,Connection connection) throws SQLException {
+    public void addAccommodation(Accommodation accommodation, String itineraryID) throws SQLException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         String accommodationQuery = "insert into itineraryAccommodation (itineraryID,accommodationID) values (?,?)";
         PreparedStatement accommodationStmt = null;
 
@@ -219,7 +230,10 @@ public class InDbItineraryDao extends ItineraryDao {
         }
     }
 
-    public void addFlight(FlightDecorator itinerary, Connection connection) {
+    public void addFlight(FlightDecorator itinerary) {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         String flightQuery = "update Itinerary set inFlight = ?, outFlight = ? where itineraryID = ?";
         PreparedStatement flightStmt = null;
 

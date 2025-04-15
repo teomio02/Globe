@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.model.dao;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.NominatimAPIClient;
+import it.uniroma2.ispw.globe.exception.ItemAlreadyExistsException;
 import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
@@ -9,11 +10,11 @@ import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import java.io.IOException;
 
 public abstract class CityDao {
-    public City createCity(String cityID) throws IOException {
+    public City createCity(String cityID) {
         JsonObject jsonCity;
         jsonCity= new NominatimAPIClient().getPlaceByID(cityID);
         return new PlaceAdapter(jsonCity);
     }
     public abstract void addCity(City city);
-    public abstract City getCity(String cityID) throws ItemNotFoundException;
+    public abstract City getCity(String cityID);
 }

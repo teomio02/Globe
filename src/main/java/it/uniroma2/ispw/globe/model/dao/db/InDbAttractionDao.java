@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.model.dao.db;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.dao.AttractionDao;
 import it.uniroma2.ispw.globe.util.DBConnection;
@@ -22,34 +21,34 @@ public class InDbAttractionDao extends AttractionDao {
     public void addAttraction(Attraction attraction) {
         DBConnection connect = DBConnection.getInstance();
 
+        if (attraction.equals(getAttraction(attraction.getPlaceID()))) {
+            return;
+        }
+
+        String query = "insert into Attraction (placeID,name,city,address,latitude,longitude) values (?,?,?,?,?,?)";
+
+        PreparedStatement stmt = null;
+
         try {
-            getAttraction(attraction.getPlaceID());
-        } catch (ItemNotFoundException exception) {
-            String query = "insert into Attraction (placeID,name,city,address,latitude,longitude) values (?,?,?,?,?,?)";
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
 
-            PreparedStatement stmt = null;
-
-            try {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
-
-                stmt.setString(1, attraction.getPlaceID());
-                stmt.setString(2, attraction.getName());
-                stmt.setString(3, attraction.getCity());
-                stmt.setString(4, attraction.getAddress());
-                stmt.setDouble(5, attraction.getLatitude());
-                stmt.setDouble(6, attraction.getLongitude());
-                stmt.execute();
-            } catch (SQLException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
-            } finally {
-                DBConnection.getInstance().closeConnection(stmt,null);
-            }
+            stmt.setString(1, attraction.getPlaceID());
+            stmt.setString(2, attraction.getName());
+            stmt.setString(3, attraction.getCity());
+            stmt.setString(4, attraction.getAddress());
+            stmt.setDouble(5, attraction.getLatitude());
+            stmt.setDouble(6, attraction.getLongitude());
+            stmt.execute();
+        } catch (SQLException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_SQL, e);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
         }
     }
 
     @Override
-    public Attraction getAttraction(String attractionID) throws ItemNotFoundException {
+    public Attraction getAttraction(String attractionID) {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "select Attraction.placeID, Attraction.name, Attraction.latitude, Attraction.longitude, Attraction.city, Attraction.address from Attraction where placeID = ?";
@@ -92,7 +91,7 @@ public class InDbAttractionDao extends AttractionDao {
         }
 
         if (attraction == null) {
-            throw new ItemNotFoundException("attraction not found");
+            attraction = createAttraction(attractionID);
         }
 
         return attraction;

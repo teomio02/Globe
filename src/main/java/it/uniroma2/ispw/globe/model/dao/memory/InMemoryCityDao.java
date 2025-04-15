@@ -34,7 +34,7 @@ public class InMemoryCityDao extends CityDao {
     }
 
     @Override
-    public City getCity(String cityID) throws ItemNotFoundException {
+    public City getCity(String cityID) {
         City cityResult = null;
         for (City city : cities) {
             if (city.getPlaceID().equals(cityID)) {
@@ -42,7 +42,8 @@ public class InMemoryCityDao extends CityDao {
             }
         }
         if (cityResult == null) {
-            throw new ItemNotFoundException("city not found");
+            cityResult = createCity(cityID);
+            addCity(cityResult);
         }
         return cityResult;
     }

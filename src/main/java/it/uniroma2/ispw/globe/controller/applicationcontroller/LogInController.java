@@ -24,14 +24,12 @@ public class LogInController{
         return SessionManager.getInstance().addSession(account);
     }
 
-    public boolean signIn(CredentialsBean credentials) throws ItemAlreadyExistsException, ItemNotFoundException {
+    public void signIn(CredentialsBean credentials) throws ItemAlreadyExistsException {
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        if (accountDao.getAccount(credentials.getUsername()) != null) {
-            return false;
-        } else {
+        try {
+            accountDao.getAccount(credentials.getUsername());
+        } catch (ItemNotFoundException e) {
             accountDao.addAccount(credentials);
-
-            return true;
         }
     }
 

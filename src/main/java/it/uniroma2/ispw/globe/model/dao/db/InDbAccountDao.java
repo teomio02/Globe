@@ -114,12 +114,12 @@ public class InDbAccountDao extends AccountDao {
             resultSet = stmt.executeQuery();
 
             if (resultSet.next()) {
-                List<Proposal> proposals = getAccountProposals(username, connection);
-                List<Itinerary> itineraries = getAccountItineraries(username, connection);
-                List<Request> requests = getAccountRequests(username, connection);
+                List<Proposal> proposals = getAccountProposals(username);
+                List<Itinerary> itineraries = getAccountItineraries(username);
+                List<Request> requests = getAccountRequests(username);
 
                 if ((resultSet.getString("type")).equals(AGENCY)) {
-                    List<String> types = getAgencyTypes(username, connection);
+                    List<String> types = getAgencyTypes(username);
 
                     account = new Agency();
                     account.setUsername(resultSet.getString(USERNAME));
@@ -366,7 +366,10 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
-    public List<Proposal> getAccountProposals(String username, Connection connection) throws ItemNotFoundException {
+    public List<Proposal> getAccountProposals(String username) throws ItemNotFoundException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         String proposalQuery = "select accountProposal.proposalID from accountProposal where account = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
@@ -394,7 +397,10 @@ public class InDbAccountDao extends AccountDao {
         return proposals;
     }
 
-    public List<Itinerary> getAccountItineraries(String username, Connection connection) throws ItemNotFoundException {
+    public List<Itinerary> getAccountItineraries(String username) throws ItemNotFoundException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         String itineraryQuery = "select accountItinerary.itineraryID from accountItinerary where account = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
@@ -421,7 +427,10 @@ public class InDbAccountDao extends AccountDao {
         return itineraries;
     }
 
-    public List<Request> getAccountRequests(String username, Connection connection) throws ItemNotFoundException {
+    public List<Request> getAccountRequests(String username) throws ItemNotFoundException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         String requestQuery = "select accountRequest.requestID from accountRequest where account = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
@@ -448,7 +457,10 @@ public class InDbAccountDao extends AccountDao {
         return requests;
     }
 
-    public List<String> getAgencyTypes(String username, Connection connection) {
+    public List<String> getAgencyTypes(String username) {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
         String agencyTypeQuery = "select agencyType.type from agencyType where agency = ?";
         PreparedStatement stmt = null;
         ResultSet resultSet = null;

@@ -23,8 +23,6 @@ public class ToolBarGUIController {
     @FXML
     private Button logOutButton;
 
-    private static final String ERROR = "page loading failed";
-
     public ToolBarGUIController(String sessionId, String userType, BorderPane root) {
         this.sessionId = sessionId;
         this.userType = userType;
