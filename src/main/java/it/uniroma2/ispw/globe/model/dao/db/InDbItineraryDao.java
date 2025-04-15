@@ -49,16 +49,7 @@ public class InDbItineraryDao extends ItineraryDao {
 
                     stmt.execute();
 
-                    Itinerary current = itinerary;
-                    while (current instanceof ItineraryDecorator itineraryDecorator) {
-                        if (current instanceof AccommodationDecorator accommodationDecorator) {
-                            addAccommodations(accommodationDecorator, connection);
-                        }
-                        if (current instanceof FlightDecorator flightDecorator) {
-                            addFlight(flightDecorator,connection);
-                        }
-                        current = itineraryDecorator.getItinerary();
-                    }
+                    addDecorationsData(itinerary, connection);
 
                     addDays(itinerary);
 
@@ -185,6 +176,20 @@ public class InDbItineraryDao extends ItineraryDao {
     @Override
     public void removeItinerary(String itineraryID) {
         
+    }
+
+    public void addDecorationsData(Itinerary itinerary ,Connection connection) throws SQLException {
+        Itinerary current = itinerary;
+
+        while (current instanceof ItineraryDecorator itineraryDecorator) {
+            if (current instanceof AccommodationDecorator accommodationDecorator) {
+                addAccommodations(accommodationDecorator, connection);
+            }
+            if (current instanceof FlightDecorator flightDecorator) {
+                addFlight(flightDecorator,connection);
+            }
+            current = itineraryDecorator.getItinerary();
+        }
     }
 
     public void addAccommodations(AccommodationDecorator itinerary, Connection connection) throws SQLException {

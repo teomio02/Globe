@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.model.bean.NavigationData;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -29,6 +28,8 @@ public class ViewManager {
     public static final String MANAGE_REQUEST= "src/main/java/it/uniroma2/ispw/globe/view/ManageRequestView.fxml";
     public static final String REQUEST_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/RequestItineraryView.fxml";
 
+    public static final String ERROR_MESSAGE = "page loading failed";
+
     private void loadView(String fxmlPath, NavigationData data, BorderPane root) {
         try {
             URL url = new File(fxmlPath).toURI().toURL();
@@ -39,7 +40,7 @@ public class ViewManager {
             controller.initialize(data.getSessionID());
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            new ErrorPopUpGUIController().createPopUp(ERROR_MESSAGE);
         }
     }
 
@@ -51,7 +52,7 @@ public class ViewManager {
             stage.setScene(scene);
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            new ErrorPopUpGUIController().createPopUp(ERROR_MESSAGE);
         }
     }
 
@@ -63,7 +64,7 @@ public class ViewManager {
             stage.setScene(scene);
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            new ErrorPopUpGUIController().createPopUp(ERROR_MESSAGE);
         }
     }
 
