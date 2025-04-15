@@ -6,17 +6,11 @@ import it.uniroma2.ispw.globe.exception.ItemNotFoundException;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,23 +100,8 @@ public class SignInGUIController {
     }
 
     public void goBack(ActionEvent event) {
-        URL url;
-        Parent root;
-
-        try {
-            url = new File("src/main/java/it/uniroma2/ispw/globe/view/LoginView.fxml").toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            LogInGUIController controller = new LogInGUIController();
-            loader.setController(controller);
-            root = loader.load();
-        } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
-            return;
-        }
-
-        Scene scene = new Scene(root);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToLogInGUI(stage);
     }
 }

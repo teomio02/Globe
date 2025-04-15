@@ -3,7 +3,10 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.model.bean.NavigationData;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +17,9 @@ import java.util.logging.Logger;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_VIEW;
 
 public class ViewManager {
-    private static ViewManager instance;
 
+    public static final String LOGIN = "src/main/java/it/uniroma2/ispw/globe/view/LoginView.fxml";
+    public static final String SIGNIN = "src/main/java/it/uniroma2/ispw/globe/view/SigninView.fxml";
     public static final String CREATE_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/CreateItineraryView.fxml";
     public static final String CREATE_PROPOSAL = "src/main/java/it/uniroma2/ispw/globe/view/CreateProposalView.fxml";
     public static final String DISPALY_ITINERARY = "src/main/java/it/uniroma2/ispw/globe/view/DisplayItineraryView.fxml";
@@ -33,6 +37,30 @@ public class ViewManager {
             SessionManager.getInstance().getSession(data.getSessionID()).setNavigationData(data);
             AbstractGUIController controller = loader.getController();
             controller.initialize(data.getSessionID());
+        } catch (IOException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
+        }
+    }
+
+    public void goToLogInGUI(Stage stage) {
+        try {
+            URL url = new File(LOGIN).toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+        } catch (IOException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
+        }
+    }
+
+    public void goToSignInGUI(Stage stage) {
+        try {
+            URL url = new File(SIGNIN).toURI().toURL();
+            FXMLLoader loader = new FXMLLoader(url);
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
             new ErrorPopUpGUIController().createPopUp("page loading failed");

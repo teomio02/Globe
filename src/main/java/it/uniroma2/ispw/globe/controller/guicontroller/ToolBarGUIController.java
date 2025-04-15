@@ -83,30 +83,9 @@ public class ToolBarGUIController {
             popupStage.showAndWait();
         }
         if (!userType.equals(GUEST) || (boolean) yesButton.getUserData()) {
-            URL url;
-            Parent newRoot;
-
-            try {
-                new LogInController().logOut(sessionId);
-            } catch (ItemNotFoundException e) {
-                new ErrorPopUpGUIController().createPopUp(e.getMessage());
-            }
-
-            try {
-                url = new File("src/main/java/it/uniroma2/ispw/globe/view/LoginView.fxml").toURI().toURL();
-                FXMLLoader loader = new FXMLLoader(url);
-                LogInGUIController controller = new LogInGUIController();
-                loader.setController(controller);
-                newRoot = loader.load();
-            } catch (IOException e) {
-                new ErrorPopUpGUIController().createPopUp(ERROR);
-                return;
-            }
-
-            Scene scene = new Scene(newRoot);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
+            ViewManager viewManager = new ViewManager();
+            viewManager.goToLogInGUI(stage);
         }
     }
 }

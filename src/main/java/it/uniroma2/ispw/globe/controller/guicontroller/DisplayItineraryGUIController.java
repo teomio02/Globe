@@ -45,7 +45,6 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
     private String sessionId;
     private String itineraryId;
     private String requestId;
-    private String proposalId;
     private Node prev;
 
     private static final String LIGHT = "label-light";
@@ -55,7 +54,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         this.sessionId = data.getSessionID();
         this.itineraryId = data.getItineraryID();
         this.requestId = data.getRequestID();
-        this.proposalId = data.getProposalID();
+        String proposalId = data.getProposalID();
         this.prev = data.getPrev();
 
         accommodationVBox.setVisible(false);

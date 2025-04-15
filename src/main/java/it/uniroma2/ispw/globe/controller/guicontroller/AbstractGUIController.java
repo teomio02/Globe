@@ -4,9 +4,4 @@ public abstract class AbstractGUIController {
 
     public abstract void initialize(String sessionID);
 
-    public void goNext() {
-    }
-
-    public void goBack() {
-    }
 }
