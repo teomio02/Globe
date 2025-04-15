@@ -5,7 +5,7 @@ public class DaoException extends Exception {
     public static final int GENERAL = 1;
     public static final int DUPLICATE = 2;
 
-    private int type;
+    private final int type;
 
     public DaoException(String message, int type) {
         super("Dao exception:\n " + message);

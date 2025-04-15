@@ -18,7 +18,6 @@ import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.ItineraryDecorator;
 import javafx.util.Pair;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;

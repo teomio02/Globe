@@ -122,12 +122,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DayTab.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             dayVBox = loader.load();
-        } catch (IOException e) {
-            new ErrorPopUpGUIController().createPopUp("page loading failed");
-            goBack();
-        }
 
-        try {
             ScrollPane scrollPane = (ScrollPane) dayVBox.lookup("#scrollPane");
             VBox attractionVBox = (VBox) scrollPane.getContent();
             Label cityLabel = (Label) dayVBox.lookup("#cityLabel");
@@ -148,6 +143,10 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             }
             tab.setContent(dayVBox);
             daysTabPane.getTabs().add(tab);
+
+        } catch (IOException e) {
+            new ErrorPopUpGUIController().createPopUp("page loading failed");
+            goBack();
         } catch ( FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }

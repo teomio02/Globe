@@ -42,11 +42,8 @@ public class InDbAccountDao extends AccountDao {
             stmt.setString(1, username);
             resultSet = stmt.executeQuery();
 
-            if (resultSet.next()) {
-
-                if (resultSet.getString(PASSWORD).equals(password)) {
-                    account = getAccount(username);
-                }
+            if (resultSet.next() && resultSet.getString(PASSWORD).equals(password)) {
+                account = getAccount(username);
             }
             return account;
         } catch (SQLException e) {

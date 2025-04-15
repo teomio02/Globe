@@ -42,11 +42,11 @@ public class InMemoryAccountDao extends AccountDao {
                 account = u;
             }
         }
-
-        if (account.getPassword().equals(password)) {
-            return account;
+        if (account != null) {
+            if (account.getPassword().equals(password)) {
+                return account;
+            }
         }
-
         return null;
     }
 

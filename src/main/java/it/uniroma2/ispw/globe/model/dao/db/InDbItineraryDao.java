@@ -177,8 +177,6 @@ public class InDbItineraryDao extends ItineraryDao {
     }
 
     public void addDecorationsData(Itinerary itinerary) throws DaoException {
-        DBConnection connect = DBConnection.getInstance();
-        Connection connection = connect.getConnection();
 
         Itinerary current = itinerary;
 
@@ -194,9 +192,6 @@ public class InDbItineraryDao extends ItineraryDao {
     }
 
     public void addAccommodations(AccommodationDecorator itinerary) throws DaoException {
-        DBConnection connect = DBConnection.getInstance();
-        Connection connection = connect.getConnection();
-
         for (Accommodation accommodation : itinerary.getAccommodations()) {
             addAccommodation(accommodation,itinerary.getItineraryID());
         }

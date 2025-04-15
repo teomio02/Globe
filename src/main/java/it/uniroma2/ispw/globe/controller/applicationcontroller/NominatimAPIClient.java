@@ -11,11 +11,6 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_API;
-
 
 public class NominatimAPIClient {
 
@@ -45,7 +40,7 @@ public class NominatimAPIClient {
     }
 
     public List<JsonObject> getPlace(String url, String type) throws PlaceApiException {
-        List<JsonObject> places = new ArrayList<>();
+        List<JsonObject> places;
 
         Request request = new Request.Builder().url(url).header("User-Agent", "Globe/1.0").build();
 
@@ -60,6 +55,8 @@ public class NominatimAPIClient {
             }
 
             JsonArray results = gson.fromJson(responseBody, JsonArray.class);
+
+            places = selectPlaces(results,type);
 
             for (int i = 0; i < results.size() && i < 10; i++) {
                 JsonObject place = results.get(i).getAsJsonObject();
@@ -78,6 +75,27 @@ public class NominatimAPIClient {
         } catch (IOException e) {
             throw new PlaceApiException(e.getMessage());
         }
+        return places;
+    }
+
+    public List<JsonObject> selectPlaces(JsonArray results, String type) {
+        List<JsonObject> places = new ArrayList<>();
+
+        for (int i = 0; i < results.size() && i < 10; i++) {
+            JsonObject place = results.get(i).getAsJsonObject();
+            if (type.equals("id")) {
+                places.add(place);
+            } else if (type.equals("administrative")) {
+                if (place.get(TYPE).getAsString().equals("city")||place.get(TYPE).getAsString().equals("town")||place.get(TYPE).getAsString().equals("village")) {
+                    places.add(place);
+                }
+            } else {
+                if (!place.get("type").getAsString().equals(type)) {
+                    places.add(place);
+                }
+            }
+        }
+
         return places;
     }
 }
