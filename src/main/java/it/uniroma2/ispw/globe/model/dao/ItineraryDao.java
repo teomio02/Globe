@@ -5,15 +5,17 @@ import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.BaseItinerary;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
+import java.util.List;
+
 public abstract class ItineraryDao {
-    public BaseItinerary createItinerary(String id, String name, String description, int duration) {
+    public BaseItinerary createItinerary(String id, String name, String description, int duration, List<String> types) {
         BaseItinerary itinerary = new BaseItinerary();
 
         itinerary.setItineraryID(id);
         itinerary.setName(name);
         itinerary.setDescription(description);
         itinerary.setDaysNumber(duration);
-        //itinerary.setType(itineraryBean.getType());
+        itinerary.setTypes(types);
 
         return itinerary;
     }

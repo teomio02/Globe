@@ -1,10 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.DaoException;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
-import it.uniroma2.ispw.globe.exception.FailedOperationException;
-import it.uniroma2.ispw.globe.exception.PlaceApiException;
+import it.uniroma2.ispw.globe.exception.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -40,7 +37,7 @@ public class CreateItineraryController {
             String itineraryId = UUID.randomUUID().toString();
             itineraryBean.setId(itineraryId);
 
-            Itinerary itinerary = itineraryDao.createItinerary(itineraryId,itineraryBean.getName(),itineraryBean.getDescription(), itineraryBean.getDuration());
+            Itinerary itinerary = itineraryDao.createItinerary(itineraryId,itineraryBean.getName(),itineraryBean.getDescription(), itineraryBean.getDuration(), itineraryBean.getTypes());
 
             List<Day> days = new ArrayList<>();
 
@@ -236,7 +233,7 @@ public class CreateItineraryController {
         return path;
     }
 
-    public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             List<StepBean> steps = new ArrayList<>();
             Itinerary itinerary;
@@ -258,7 +255,10 @@ public class CreateItineraryController {
                 for (City city : day.getCities()) {
                     cities.add(city.getPlaceID());
                 }
-                StepBean stepBean = new StepBean(day.getDayNum()-1,cities,attractions);
+                StepBean stepBean = new StepBean();
+                stepBean.setNum(day.getDayNum()-1);
+                stepBean.setAttractions(attractions);
+                stepBean.setCity(cities);
                 steps.add(stepBean);
             }
             return steps;
@@ -295,7 +295,12 @@ public class CreateItineraryController {
         }
 
         for (Attraction attraction : attractions) {
-            AttractionBean attractionBean = new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+            AttractionBean attractionBean = new AttractionBean();
+            attractionBean.setId(attraction.getPlaceID());
+            attractionBean.setName(attraction.getName());
+            attractionBean.setAddress(attraction.getAddress());
+            attractionBean.setCity(attraction.getCity());
+
             attractionBeans.add(attractionBean);
         }
 
@@ -313,13 +318,17 @@ public class CreateItineraryController {
         }
 
         for (City city : cities) {
-            CityBean cityBean = new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+            CityBean cityBean = new CityBean();
+            cityBean.setId(city.getPlaceID());
+            cityBean.setName(city.getName());
+            cityBean.setCountry(city.getCountry());
+
             citiesBeans.add(cityBean);
         }
         return citiesBeans;
     }
 
-    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             Itinerary itinerary;
 
@@ -333,36 +342,40 @@ public class CreateItineraryController {
                 itinerary = itineraryDao.getItinerary(itineraryId);
             }
 
-            List<String> types = new ArrayList<>();
+            ItineraryBean itineraryBean = new ItineraryBean();
+            itineraryBean.setId(itinerary.getItineraryID());
+            itineraryBean.setName(itinerary.getName());
+            itineraryBean.setDescription(itinerary.getDescription());
+            itineraryBean.setTypes(itinerary.getTypes());
+            itineraryBean.setDuration(itinerary.getDaysNumber());
 
-            List<Pair<String,String>> accommodations = new ArrayList<>();
-            double inDepartureTime = -1;
-            double inArrivalTime = -1;
-            double outDepartureTime = -1;
-            double outArrivalTime = -1;
+            itineraryBean.setInboundFlightDepartureTime(-1);
+            itineraryBean.setInboundFlightArrivalTime(-1);
+            itineraryBean.setOutboundFlightDepartureTime(-1);
+            itineraryBean.setOutboundFlightArrivalTime(-1);
 
             Itinerary current = itinerary;
             while (current instanceof ItineraryDecorator itineraryDecorator) {
                 if (current instanceof AccommodationDecorator accommodationDecorator) {
+                    List<Pair<String,String>> accommodations = new ArrayList<>();
                     for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
                         accommodations.add(new Pair<>(accommodation.getName(), accommodation.getAddress()));
                     }
+                    itineraryBean.setAccommodations(accommodations);
                 }
                 if (current instanceof FlightDecorator flightDecorator) {
-                    inDepartureTime = flightDecorator.getInFlight().getDepartureTime();
-                    inArrivalTime = flightDecorator.getInFlight().getArrivalTime();
-                    outDepartureTime = flightDecorator.getOutFlight().getDepartureTime();
-                    outArrivalTime = flightDecorator.getOutFlight().getArrivalTime();
+                    double inDepartureTime = flightDecorator.getInFlight().getDepartureTime();
+                    double inArrivalTime = flightDecorator.getInFlight().getArrivalTime();
+                    double outDepartureTime = flightDecorator.getOutFlight().getDepartureTime();
+                    double outArrivalTime = flightDecorator.getOutFlight().getArrivalTime();
+
+                    itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
+                    itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
+                    itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
+                    itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
                 }
                 current = itineraryDecorator.getItinerary();
             }
-
-            ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(), types, itinerary.getDaysNumber());
-            itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
-            itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
-            itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
-            itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
-            itineraryBean.setAccommodations(accommodations);
 
             return itineraryBean;
         } catch (DaoException e) {
@@ -394,7 +407,11 @@ public class CreateItineraryController {
             }
 
             if (city != null) {
-                return new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+                CityBean cityBean = new CityBean();
+                cityBean.setId(city.getPlaceID());
+                cityBean.setName(city.getName());
+                cityBean.setCountry(city.getCountry());
+                return cityBean;
             } else {
                 return null;
             }
@@ -427,7 +444,13 @@ public class CreateItineraryController {
             }
 
             if (attraction != null) {
-                return new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+                AttractionBean attractionBean = new AttractionBean();
+                attractionBean.setId(attraction.getPlaceID());
+                attractionBean.setName(attraction.getName());
+                attractionBean.setAddress(attraction.getAddress());
+                attractionBean.setCity(attraction.getCity());
+
+                return attractionBean;
             } else {
                 return null;
             }

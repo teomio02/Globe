@@ -1,6 +1,12 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+import it.uniroma2.ispw.globe.other.ProposalState;
+
 import java.util.List;
+
+import static it.uniroma2.ispw.globe.other.ItineraryType.*;
+import static it.uniroma2.ispw.globe.other.ProposalState.*;
 
 public class AgencyRequestBean {
     private String id;
@@ -12,16 +18,6 @@ public class AgencyRequestBean {
     private List<String> cities;
     private List<String> attractions;
     private String accepted;
-
-    public AgencyRequestBean(String id, String user, String agency, String description, int days, List<String> types, String accepted) {
-        this.id = id;
-        this.user = user;
-        this.agency = agency;
-        this.description = description;
-        this.days = days;
-        this.types = types;
-        this.accepted = accepted;
-    }
 
     public String getID() {
         return id;
@@ -35,19 +31,30 @@ public class AgencyRequestBean {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(String user) throws IncorrectDataException {
+        if (user == null || user.isEmpty()) {
+            throw new IncorrectDataException("Request user not valid");
+        }
         this.user = user;
     }
 
     public String getAgency() { return agency; }
 
-    public void setAgency(String agency) { this.agency = agency; }
+    public void setAgency(String agency) throws IncorrectDataException{
+        if (agency == null || agency.isEmpty()) {
+            throw new IncorrectDataException("Request agency not valid");
+        }
+        this.agency = agency;
+    }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description) throws IncorrectDataException {
+        if (description == null || description.isEmpty()) {
+            throw new IncorrectDataException("Request description not valid");
+        }
         this.description = description;
     }
 
@@ -55,7 +62,10 @@ public class AgencyRequestBean {
         return days;
     }
 
-    public void setDays(int days) {
+    public void setDays(int days) throws IncorrectDataException {
+        if (days < 1 || days > 99) {
+            throw new IncorrectDataException("Request days not valid");
+        }
         this.days = days;
     }
 
@@ -63,7 +73,10 @@ public class AgencyRequestBean {
         return cities;
     }
 
-    public void setCities(List<String> cities) {
+    public void setCities(List<String> cities) throws IncorrectDataException {
+        if (cities == null || cities.isEmpty()) {
+            throw new IncorrectDataException("Request cities not valid");
+        }
         this.cities = cities;
     }
 
@@ -71,7 +84,10 @@ public class AgencyRequestBean {
         return attractions;
     }
 
-    public void setAttractions(List<String> attractions) {
+    public void setAttractions(List<String> attractions) throws IncorrectDataException {
+        if (attractions == null || attractions.isEmpty()) {
+            throw new IncorrectDataException("Request attractions not valid");
+        }
         this.attractions = attractions;
     }
 
@@ -79,15 +95,21 @@ public class AgencyRequestBean {
         return accepted;
     }
 
-    public void setAccepted(String accepted) {
-        this.accepted = accepted;
+    public void setAccepted(String accepted) throws IncorrectDataException {
+        if (accepted.equals(ACCEPTED) || accepted.equals(REJECTED) || accepted.equals(PENDING)) {
+            this.accepted = accepted;
+        }
+        throw new IncorrectDataException("Request accepted not valid");
     }
 
     public List<String> getTypes() {
         return types;
     }
 
-    public void setTypes(List<String> types) {
+    public void setTypes(List<String> types) throws IncorrectDataException {
+        if (types == null || types.isEmpty()) {
+            throw new IncorrectDataException("Request types not valid");
+        }
         this.types = types;
     }
 }

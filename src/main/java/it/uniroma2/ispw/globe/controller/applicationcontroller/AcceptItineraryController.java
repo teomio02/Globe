@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
@@ -69,13 +70,20 @@ public class AcceptItineraryController {
         }
     }
 
-    public ItineraryBean getProposalItinerary(String proposalId) throws FailedOperationException, DuplicateItemException {
+    public ItineraryBean getProposalItinerary(String proposalId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
             Proposal proposal = proposalDao.getProposal(proposalId);
             Itinerary itinerary = proposal.getItinerary();
 
-            return new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(), itinerary.getDescription(), itinerary.getTypes(), itinerary.getDaysNumber());
+            ItineraryBean itineraryBean = new ItineraryBean();
+            itineraryBean.setId(itinerary.getItineraryID());
+            itineraryBean.setName(itinerary.getName());
+            itineraryBean.setDescription(itinerary.getDescription());
+            itineraryBean.setTypes(itinerary.getTypes());
+            itineraryBean.setDuration(itinerary.getDaysNumber());
+
+            return itineraryBean;
 
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);

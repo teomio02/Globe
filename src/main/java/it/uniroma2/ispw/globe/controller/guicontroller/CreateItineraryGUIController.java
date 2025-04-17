@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryCo
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -20,13 +21,15 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.uniroma2.ispw.globe.other.ItineraryType.*;
+
 public class CreateItineraryGUIController extends AbstractGUIController {
     @FXML
     private TextField cityField;
     @FXML
     private TextField itineraryField;
     @FXML
-    private TextField dayField;
+    private Label dayLabel;
     @FXML
     private VBox cityVBox;
     @FXML
@@ -73,6 +76,20 @@ public class CreateItineraryGUIController extends AbstractGUIController {
     private TextField outArrivalTimeLabel;
     @FXML
     private VBox accommodationResultVBox;
+    @FXML
+    private Button plusButton;
+    @FXML
+    private Button minusButton;
+    @FXML
+    private Button onTheRoadButton;
+    @FXML
+    private Button natureButton;
+    @FXML
+    private Button cultureButton;
+    @FXML
+    private Button relaxButton;
+    @FXML
+    private Button cityButton;
 
 
 
@@ -91,6 +108,12 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
+
+        onTheRoadButton.setUserData(false);
+        natureButton.setUserData(false);
+        cultureButton.setUserData(false);
+        relaxButton.setUserData(false);
+        cityButton.setUserData(false);
 
         if (requestId != null) {
             try {
@@ -114,10 +137,10 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                         requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
                     }
                 }
-            } catch (FailedOperationException | DuplicateItemException e) {
+            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                goBack();
             }
-
         } else {
             requestVBox.setVisible(false);
         }
@@ -128,7 +151,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         String attraction;
 
         String itinerary = itineraryField.getText();
-        int day =  Integer.parseInt(dayField.getText());
+        int day =  Integer.parseInt(dayLabel.getText());
         String description = descriptionField.getText();
 
         List<String> cities = new ArrayList<>();
@@ -145,32 +168,54 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         }
 
         List<String> types = new ArrayList<>();
-        //popola types
-
-        ItineraryBean itineraryBean = new ItineraryBean(null,itinerary,description,types,day,cities,attractions);
-
-        if (accommodationVBox.isVisible()) {
-            List<Pair<String, String>> accommodations = new ArrayList<>();
-            for (int i = 0; i < accommodationResultVBox.getChildren().size(); i++) {
-                accommodations.add((Pair<String, String>) accommodationResultVBox.getChildren().get(i).getUserData());
-            }
-            itineraryBean.setAccommodations(accommodations);
+        if ((boolean)onTheRoadButton.getUserData()) {
+            types.add(ON_THE_ROAD);
+        }
+        if ((boolean)natureButton.getUserData()) {
+            types.add(NATURE);
+        }
+        if ((boolean)cultureButton.getUserData()) {
+            types.add(CULTURE);
+        }
+        if ((boolean)relaxButton.getUserData()) {
+            types.add(RELAX);
+        }
+        if ((boolean)cityButton.getUserData()) {
+            types.add(CITY);
         }
 
-        if (flightVBox.isVisible()) {
-            if (!inArrivalTimeLabel.getText().isEmpty() && !inDepartureTimeLabel.getText().isEmpty()) {
-                itineraryBean.setInboundFlightDepartureTime(Double.valueOf(inDepartureTimeLabel.getText()));
-                itineraryBean.setInboundFlightArrivalTime(Double.valueOf(inArrivalTimeLabel.getText()));
-            }
-            if (!outArrivalTimeLabel.getText().isEmpty() && !outDepartureTimeLabel.getText().isEmpty()) {
-                itineraryBean.setOutboundFlightArrivalTime(Double.valueOf(outArrivalTimeLabel.getText()));
-                itineraryBean.setOutboundFlightDepartureTime(Double.valueOf(outDepartureTimeLabel.getText()));
-            }
-        }
-
+        ItineraryBean itineraryBean = new ItineraryBean();
         try {
+            itineraryBean.setId(null);
+            itineraryBean.setName(itinerary);
+            itineraryBean.setDescription(description);
+            itineraryBean.setTypes(types);
+            itineraryBean.setCities(cities);
+            itineraryBean.setAttractions(attractions);
+            itineraryBean.setDuration(day);
+
+
+            if (accommodationVBox.isVisible()) {
+                List<Pair<String, String>> accommodations = new ArrayList<>();
+                for (int i = 0; i < accommodationResultVBox.getChildren().size(); i++) {
+                    accommodations.add((Pair<String, String>) accommodationResultVBox.getChildren().get(i).getUserData());
+                }
+                itineraryBean.setAccommodations(accommodations);
+            }
+
+            if (flightVBox.isVisible()) {
+                if (!inArrivalTimeLabel.getText().isEmpty() && !inDepartureTimeLabel.getText().isEmpty()) {
+                    itineraryBean.setInboundFlightDepartureTime(Double.valueOf(inDepartureTimeLabel.getText()));
+                    itineraryBean.setInboundFlightArrivalTime(Double.valueOf(inArrivalTimeLabel.getText()));
+                }
+                if (!outArrivalTimeLabel.getText().isEmpty() && !outDepartureTimeLabel.getText().isEmpty()) {
+                    itineraryBean.setOutboundFlightArrivalTime(Double.valueOf(outArrivalTimeLabel.getText()));
+                    itineraryBean.setOutboundFlightDepartureTime(Double.valueOf(outDepartureTimeLabel.getText()));
+                }
+            }
+
             new CreateItineraryController().createItinerary(itineraryBean,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -199,8 +244,12 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
+                cityButton.getStyleClass().add("button-default");
                 cityButton.setOnAction(event -> addCity(cityResult));
                 cityResultVBox.getChildren().add(cityButton);
+                if (cityResultVBox.getChildren().size() == 3) {
+                    break;
+                }
             }
         } else {
             Label errorLabel = new Label("Error: no place");
@@ -214,6 +263,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if(cityVBox.getChildren().isEmpty()){
             Label cityLabel = new Label(city.getName());
             cityLabel.setUserData(city.getId());
+            cityLabel.getStyleClass().add("label-light");
             cityVBox.getChildren().add(cityLabel);
         } else {
             for (int i = 0; i < cityVBox.getChildren().size(); i++) {
@@ -247,8 +297,12 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
                 Button attractionButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
+                attractionButton.getStyleClass().add("button-default");
                 attractionButton.setOnAction(event -> addAttraction(attractionResult));
                 attractionResultVBox.getChildren().add(attractionButton);
+                if (attractionResultVBox.getChildren().size() == 3) {
+                    break;
+                }
             }
         } else {
             Label errorLabel = new Label("Error: no place");
@@ -261,6 +315,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if(attractionVBox.getChildren().isEmpty()){
             Label attractionLabel = new Label(attraction.getName());
             attractionLabel.setUserData(attraction.getId());
+            attractionLabel.getStyleClass().add("label-light");
             attractionVBox.getChildren().add(attractionLabel);
         } else {
             for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
@@ -300,8 +355,32 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         }
     }
 
-    public void goBack(ActionEvent event) {
-        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+    public void addDay() {
+        int dayNum = Integer.parseInt(dayLabel.getText());
+        if (dayNum < 99) {
+            dayLabel.setText(String.valueOf(dayNum + 1));
+        }
+    }
+
+    public void removeDay() {
+        int dayNum = Integer.parseInt(dayLabel.getText());
+        if(dayNum>0){
+            dayLabel.setText(String.valueOf(dayNum-1));}
+    }
+
+    public void setType(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        button.setUserData(!((boolean)button.getUserData()));
+        button.getStyleClass().removeAll("button-pressed", "button-default");
+        if ((boolean)button.getUserData()) {
+            button.getStyleClass().add("button-pressed");
+        } else {
+            button.getStyleClass().add("button-default");
+        }
+    }
+
+    public void goBack() {
+        BorderPane root = (BorderPane) dayLabel.getScene().getRoot();
         if (prev != null) {
             root.setCenter(prev);
         }

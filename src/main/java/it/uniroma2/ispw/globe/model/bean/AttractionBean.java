@@ -1,5 +1,7 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 public class AttractionBean {
     private String id;
     private String name;
@@ -7,15 +9,6 @@ public class AttractionBean {
     private String city;
     private double openingHours;
     private double closingHours;
-
-    public AttractionBean(String id, String name, String address, String city, double openingHours, double closingHours) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.city = city;
-        this.openingHours = openingHours;
-        this.closingHours = closingHours;
-    }
 
     public String getId() {
         return id;

@@ -20,7 +20,7 @@ public class InDbAttractionDao extends AttractionDao {
     public void addAttraction(Attraction attraction) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        if (attraction.equals(getAttraction(attraction.getPlaceID()))) {
+        if (getAttraction(attraction.getPlaceID()) != null) {
             return;
         }
 

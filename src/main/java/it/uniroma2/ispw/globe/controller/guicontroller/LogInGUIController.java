@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,28 +55,28 @@ public class LogInGUIController {
     }
 
     public void logIn(ActionEvent event) {
-        // da mettere limite massimo di caratteri per password e username (nella guest è a 12)
-
         errorLabel.setVisible(false);
 
         Button clickedButton = (Button) event.getSource();
-        CredentialsBean credentials;
-
-        if (clickedButton == loginButton) {
-            if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-                errorLabel.setVisible(true);
-                return;
-            } else {
-                credentials = new CredentialsBean(usernameField.getText(), passwordField.getText());
-            }
-        } else {
-            credentials = new CredentialsBean(UUID.randomUUID().toString().substring(0,12), "",GUEST);
-        }
+        CredentialsBean credentials = new CredentialsBean();
 
         String sessionId;
         try {
+            if (clickedButton == loginButton) {
+                if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+                    errorLabel.setVisible(true);
+                    return;
+                } else {
+                    credentials.setUsername(usernameField.getText());
+                    credentials.setPassword(passwordField.getText());
+                }
+            } else {
+                credentials.setUsername(UUID.randomUUID().toString().substring(0,12));
+                credentials.setPassword("xxxxxxxx");
+                credentials.setType(GUEST);
+            }
             sessionId = new LogInController().logIn(credentials);
-        } catch (FailedOperationException | DuplicateItemException exception) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException exception) {
             new ErrorPopUpGUIController().createPopUp(exception.getMessage());
             return;
         }
@@ -105,6 +106,7 @@ public class LogInGUIController {
             } catch (IOException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                return;
             }
         } else {
             errorLabel.setVisible(true);

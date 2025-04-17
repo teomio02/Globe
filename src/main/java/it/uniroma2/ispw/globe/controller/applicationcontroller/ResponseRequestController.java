@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -86,7 +87,7 @@ public class ResponseRequestController {
         }
     }
 
-    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             Proposal proposal;
             User user;
@@ -114,7 +115,15 @@ public class ResponseRequestController {
                 user = accountDao.getUserByProposal(proposalID);
             }
 
-            return new ProposalBean(proposalID,proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
+            ProposalBean proposalBean = new ProposalBean();
+            proposalBean.setID(proposalID);
+            proposalBean.setPrice(proposal.getPrice());
+            proposalBean.setAgency(agency.getUsername());
+            proposalBean.setUser(user.getUsername());
+            proposalBean.setDescription(proposal.getDescription());
+            proposalBean.setAccepted(proposal.getAccepted());
+
+            return proposalBean;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             if (e.getType() == DUPLICATE) {
@@ -124,7 +133,7 @@ public class ResponseRequestController {
         }
     }
 
-    public AgencyRequestBean getAgencyRequest(String requestID, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public AgencyRequestBean getAgencyRequest(String requestID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             Request request;
             Agency agency;
@@ -159,9 +168,15 @@ public class ResponseRequestController {
                 attractions.add(attraction.getPlaceID());
             }
 
-            AgencyRequestBean requestBean = new AgencyRequestBean(requestID,user.getUsername(),agency.getUsername(),request.getOtherRequest(),request.getDayNum(),request.getItineraryType(),request.getAccepted());
+            AgencyRequestBean requestBean = new AgencyRequestBean();
+            requestBean.setUser(user.getUsername());
+            requestBean.setAgency(agency.getUsername());
             requestBean.setCities(cities);
             requestBean.setAttractions(attractions);
+            requestBean.setDescription(request.getOtherRequest());
+            requestBean.setAccepted(request.getAccepted());
+            requestBean.setDays(request.getDayNum());
+            requestBean.setTypes(request.getItineraryType());
 
             return requestBean;
         } catch (DaoException e) {
@@ -173,7 +188,7 @@ public class ResponseRequestController {
         }
     }
 
-    public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, DuplicateItemException {
+    public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
@@ -182,7 +197,14 @@ public class ResponseRequestController {
             List<ProposalBean> proposalBeans = new ArrayList<>();
             for (Proposal proposal : proposals) {
                 User user = accountDao.getUserByProposal(proposal.getId());
-                ProposalBean proposalBean = new ProposalBean(proposal.getId(),proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
+                ProposalBean proposalBean = new ProposalBean();
+                proposalBean.setID(proposal.getId());
+                proposalBean.setPrice(proposal.getPrice());
+                proposalBean.setAgency(agency.getUsername());
+                proposalBean.setUser(user.getUsername());
+                proposalBean.setDescription(proposal.getDescription());
+                proposalBean.setAccepted(proposal.getAccepted());
+
                 proposalBeans.add(proposalBean);
             }
 
@@ -196,7 +218,7 @@ public class ResponseRequestController {
         }
     }
 
-    public List<AgencyRequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, DuplicateItemException {
+    public List<AgencyRequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
@@ -205,7 +227,16 @@ public class ResponseRequestController {
             List<AgencyRequestBean> requestBeans = new ArrayList<>();
             for (Request request : requests) {
                 User user = accountDao.getUserByRequest(request.getId());
-                AgencyRequestBean requestBean = new AgencyRequestBean(request.getId(),user.getUsername(), agency.getUsername(), request.getOtherRequest(), request.getDayNum(), request.getItineraryType(), request.getAccepted());
+
+                AgencyRequestBean requestBean = new AgencyRequestBean();
+                requestBean.setID(request.getId());
+                requestBean.setUser(user.getUsername());
+                requestBean.setAgency(agency.getUsername());
+                requestBean.setDescription(request.getOtherRequest());
+                requestBean.setAccepted(request.getAccepted());
+                requestBean.setDays(request.getDayNum());
+                requestBean.setTypes(request.getItineraryType());
+
                 requestBeans.add(requestBean);
             }
             return requestBeans;

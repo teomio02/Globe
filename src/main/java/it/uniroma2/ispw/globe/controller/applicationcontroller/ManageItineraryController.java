@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -19,7 +20,7 @@ import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 
 public class ManageItineraryController {
 
-    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             Proposal proposal;
             User user;
@@ -44,8 +45,15 @@ public class ManageItineraryController {
                 agency = accountDao.getAgencyByProposal(proposalID);
             }
 
-            return new ProposalBean(proposalID,proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
+            ProposalBean proposalBean = new ProposalBean();
+            proposalBean.setID(proposalID);
+            proposalBean.setPrice(proposal.getPrice());
+            proposalBean.setAgency(agency.getUsername());
+            proposalBean.setUser(user.getUsername());
+            proposalBean.setDescription(proposal.getDescription());
+            proposalBean.setAccepted(proposal.getAccepted());
 
+            return proposalBean;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             if (e.getType() == DUPLICATE) {
@@ -55,18 +63,24 @@ public class ManageItineraryController {
         }
     }
 
-    public List<ItineraryBean> getUserItineraries(String sessionId) {
+    public List<ItineraryBean> getUserItineraries(String sessionId) throws IncorrectDataException {
         User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
         List<Itinerary> itineraries = user.getItineraries();
         List<ItineraryBean> itineraryBeans = new ArrayList<>();
         for (Itinerary itinerary : itineraries) {
-            ItineraryBean itineraryBean = new ItineraryBean(itinerary.getItineraryID(),itinerary.getName(),itinerary.getDescription(),itinerary.getTypes(),itinerary.getDaysNumber());
+            ItineraryBean itineraryBean = new ItineraryBean();
+            itineraryBean.setId(itinerary.getItineraryID());
+            itineraryBean.setName(itinerary.getName());
+            itineraryBean.setDescription(itinerary.getDescription());
+            itineraryBean.setTypes(itinerary.getTypes());
+            itineraryBean.setDuration(itinerary.getDaysNumber());
+
             itineraryBeans.add(itineraryBean);
         }
         return itineraryBeans;
     }
 
-    public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, DuplicateItemException {
+    public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
             User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
@@ -74,7 +88,15 @@ public class ManageItineraryController {
             List<ProposalBean> proposalBeans = new ArrayList<>();
             for (Proposal proposal : proposals) {
                 Agency agency = accountDao.getAgencyByProposal(proposal.getId());
-                ProposalBean proposalBean = new ProposalBean(proposal.getId(),proposal.getPrice(),agency.getUsername(),user.getUsername(),proposal.getDescription(),proposal.getAccepted());
+
+                ProposalBean proposalBean = new ProposalBean();
+                proposalBean.setID(proposal.getId());
+                proposalBean.setPrice(proposal.getPrice());
+                proposalBean.setAgency(agency.getUsername());
+                proposalBean.setUser(user.getUsername());
+                proposalBean.setDescription(proposal.getDescription());
+                proposalBean.setAccepted(proposal.getAccepted());
+
                 proposalBeans.add(proposalBean);
             }
             return proposalBeans;

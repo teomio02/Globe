@@ -53,25 +53,8 @@ public class NominatimAPIClient {
             if (response.body() != null) {
                 responseBody = response.body().string();
             }
-
             JsonArray results = gson.fromJson(responseBody, JsonArray.class);
-
             places = selectPlaces(results,type);
-
-            for (int i = 0; i < results.size() && i < 10; i++) {
-                JsonObject place = results.get(i).getAsJsonObject();
-                if (type.equals("id")) {
-                    places.add(place);
-                } else if (type.equals("administrative")) {
-                    if (place.get(TYPE).getAsString().equals("city")||place.get(TYPE).getAsString().equals("town")||place.get(TYPE).getAsString().equals("village")) {
-                        places.add(place);
-                    }
-                } else {
-                    if (!place.get("type").getAsString().equals(type)) {
-                        places.add(place);
-                    }
-                }
-            }
         } catch (IOException e) {
             throw new PlaceApiException(e.getMessage());
         }

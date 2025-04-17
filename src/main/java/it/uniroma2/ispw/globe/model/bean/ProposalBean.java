@@ -1,6 +1,8 @@
 package it.uniroma2.ispw.globe.model.bean;
 
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 public class ProposalBean {
     private String id;
     private double price;
@@ -8,20 +10,6 @@ public class ProposalBean {
     private String user;
     private String description;
     private String accepted;
-
-    public ProposalBean(String id, double price, String agency, String user, String description, String accepted) {
-        this.id = id;
-        this.price = price;
-        this.agency = agency;
-        this.user = user;
-        this.description = description;
-        this.accepted = accepted;
-    }
-
-    public ProposalBean(double price, String description) {
-        this.price = price;
-        this.description = description;
-    }
 
     public String getID() {
         return id;
@@ -35,7 +23,10 @@ public class ProposalBean {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(double price) throws IncorrectDataException {
+        if (price < 0) {
+            throw new IncorrectDataException("Price not valid");
+        }
         this.price = price;
     }
 
@@ -59,7 +50,10 @@ public class ProposalBean {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description) throws IncorrectDataException {
+        if (description == null || description.isEmpty()) {
+            throw new IncorrectDataException("Description not valid");
+        }
         this.description = description;
     }
 

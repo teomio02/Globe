@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -18,24 +19,6 @@ public class ItineraryBean {
     private double inboundFlightArrivalTime;
     private List<Pair<String, String>> accommodations;
 
-    public ItineraryBean(String id,String name, String description, List<String> types, int duration) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.types = types;
-        this.duration = duration;
-    }
-
-    public ItineraryBean(String id,String name, String description, List<String> types, int duration, List<String> cities, List<String> attractions) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.types = types;
-        this.duration = duration;
-        this.cities = cities;
-        this.attractions = attractions;
-    }
-
     public String getId() { return id; }
 
     public void setId(String id) { this.id = id; }
@@ -44,7 +27,10 @@ public class ItineraryBean {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws IncorrectDataException {
+        if (name == null || name.isEmpty()) {
+            throw new IncorrectDataException("Itinerary name not valid");
+        }
         this.name = name;
     }
 
@@ -52,7 +38,10 @@ public class ItineraryBean {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(String description) throws IncorrectDataException {
+        if (description == null || description.isEmpty()) {
+            throw new IncorrectDataException("Itinerary description not valid");
+        }
         this.description = description;
     }
 
@@ -60,7 +49,10 @@ public class ItineraryBean {
         return types;
     }
 
-    public void setTypes(List<String> types) {
+    public void setTypes(List<String> types) throws IncorrectDataException {
+        if (types == null || types.isEmpty()) {
+            throw new IncorrectDataException("Itinerary type not valid");
+        }
         this.types = types;
     }
 
@@ -68,7 +60,10 @@ public class ItineraryBean {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(int duration) throws IncorrectDataException {
+        if (duration < 1 || duration > 99) {
+            throw new IncorrectDataException("Itinerary duration not valid");
+        }
         this.duration = duration;
     }
 
@@ -76,7 +71,10 @@ public class ItineraryBean {
         return cities;
     }
 
-    public void setCities(List<String> cities) {
+    public void setCities(List<String> cities) throws IncorrectDataException {
+        if (cities == null || cities.isEmpty()) {
+            throw new IncorrectDataException("Itinerary city not valid");
+        }
         this.cities = cities;
     }
 
@@ -84,7 +82,10 @@ public class ItineraryBean {
         return attractions;
     }
 
-    public void setAttractions(List<String> attractions) {
+    public void setAttractions(List<String> attractions) throws IncorrectDataException {
+        if (attractions == null || attractions.isEmpty()) {
+            throw new IncorrectDataException("Itinerary attraction not valid");
+        }
         this.attractions = attractions;
     }
 
@@ -92,39 +93,68 @@ public class ItineraryBean {
         return outboundFlightDepartureTime;
     }
 
-    public void setOutboundFlightDepartureTime(double outboundFlightDepartureTime) {
-        this.outboundFlightDepartureTime = outboundFlightDepartureTime;
+    public void setOutboundFlightDepartureTime(double outboundFlightDepartureTime) throws IncorrectDataException {
+        int hours = (int) outboundFlightDepartureTime;
+        int minutes = (int) (outboundFlightDepartureTime-hours)*100;
+        if (outboundFlightDepartureTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+            this.outboundFlightDepartureTime = outboundFlightDepartureTime;
+            return;
+        }
+        throw new IncorrectDataException("Itinerary outbound departure time not valid");
     }
 
     public double getOutboundFlightArrivalTime() {
         return outboundFlightArrivalTime;
     }
 
-    public void setOutboundFlightArrivalTime(double outboundFlightArrivalTime) {
-        this.outboundFlightArrivalTime = outboundFlightArrivalTime;
+    public void setOutboundFlightArrivalTime(double outboundFlightArrivalTime) throws IncorrectDataException {
+        int hours = (int) outboundFlightArrivalTime;
+        int minutes = (int) (outboundFlightArrivalTime-hours)*100;
+        if (outboundFlightArrivalTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+            this.outboundFlightArrivalTime = outboundFlightArrivalTime;
+            return;
+        }
+        throw new IncorrectDataException("Itinerary outbound arrival time not valid");
     }
 
     public double getInboundFlightDepartureTime() {
         return inboundFlightDepartureTime;
     }
 
-    public void setInboundFlightDepartureTime(double inboundFlightDepartureTime) {
-        this.inboundFlightDepartureTime = inboundFlightDepartureTime;
+    public void setInboundFlightDepartureTime(double inboundFlightDepartureTime) throws IncorrectDataException {
+        int hours = (int) inboundFlightDepartureTime;
+        int minutes = (int) (inboundFlightDepartureTime-hours)*100;
+        if (inboundFlightDepartureTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+            this.inboundFlightDepartureTime = inboundFlightDepartureTime;
+            return;
+        }
+        throw new IncorrectDataException("Itinerary inbound departure time not valid");
     }
 
     public double getInboundFlightArrivalTime() {
         return inboundFlightArrivalTime;
     }
 
-    public void setInboundFlightArrivalTime(double inboundFlightArrivalTime) {
-        this.inboundFlightArrivalTime = inboundFlightArrivalTime;
+    public void setInboundFlightArrivalTime(double inboundFlightArrivalTime) throws IncorrectDataException {
+        int hours = (int) inboundFlightArrivalTime;
+        int minutes = (int) (inboundFlightArrivalTime-hours)*100;
+        if (inboundFlightArrivalTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+            this.inboundFlightArrivalTime = inboundFlightArrivalTime;
+            return;
+        }
+        throw new IncorrectDataException("Itinerary inbound arrival time not valid");
     }
 
     public  List<Pair<String, String>> getAccommodations() {
         return accommodations;
     }
 
-    public void setAccommodations( List<Pair<String, String>> accommodations) {
+    public void setAccommodations( List<Pair<String, String>> accommodations) throws IncorrectDataException {
+        for (Pair<String,String> accommodation : accommodations) {
+            if (!accommodation.getValue().matches("[A-Za-zÀ-ÿ0-9'’\\.\\,\\-\\s]+") || accommodation.getKey().isEmpty()) {
+                throw new IncorrectDataException("Accommodation not valid");
+            }
+        }
         this.accommodations = accommodations;
     }
 }

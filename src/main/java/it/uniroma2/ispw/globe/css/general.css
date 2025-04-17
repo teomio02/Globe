@@ -49,3 +49,30 @@
     -fx-font-style: normal;
     -fx-text-fill: #97c093;
 }
+
+.button-default {
+    -fx-background-color: #97c093;
+    -fx-text-fill: #314c1c;
+    -fx-background-radius: 40;
+}
+
+.button-pressed {
+    -fx-background-color: #314c1c;
+    -fx-text-fill:  #97c093;
+    -fx-content-display: TEXT_ONLY;
+}
+
+.rounded-label {
+    -fx-background-color: #314c1c;
+    -fx-padding: 2px 12px;
+    -fx-border-color: #97c093;
+    -fx-border-width: 2px;
+    -fx-border-radius: 40px;
+    -fx-background-radius: 40px;
+    -fx-alignment: center-left;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-font-style: normal;
+    -fx-text-fill: #97c093;
+}

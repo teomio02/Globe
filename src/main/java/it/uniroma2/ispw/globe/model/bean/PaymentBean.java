@@ -1,15 +1,11 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 public class PaymentBean {
     private String payerUsername;
     private String payeeUsername;
     private double amount;
-
-    public PaymentBean(String payerUsername, String payeeUsername, double amount) {
-        this.payerUsername = payerUsername;
-        this.payeeUsername = payeeUsername;
-        this.amount = amount;
-    }
 
     public String getPayerUsername() {
         return payerUsername;
@@ -26,7 +22,10 @@ public class PaymentBean {
     public double getAmount() {
         return amount;
     }
-    public void setAmount(double amount) {
+    public void setAmount(double amount) throws IncorrectDataException {
+        if (amount < 0) {
+            throw new IncorrectDataException("amount not valid");
+        }
         this.amount = amount;
     }
 }

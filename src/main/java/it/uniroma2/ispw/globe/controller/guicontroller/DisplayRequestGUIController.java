@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryC
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
@@ -43,8 +44,9 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             AgencyRequestBean request = null;
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
-            } catch (FailedOperationException | DuplicateItemException e) {
+            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                goBack();
                 return;
             }
             userLabel.setText(request.getUser());
@@ -54,12 +56,14 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 typesHBox.getChildren().add(new Label(type));
             }
         } else {
-            RequestBean request = new RequestItineraryController().getRequest(requestId, sessionId);
+            RequestBean request;
             AgencyBean agency;
             try {
+                request = new RequestItineraryController().getRequest(requestId, sessionId);
                 agency = new RequestItineraryController().getAgency(null,sessionId);
-            } catch (FailedOperationException | DuplicateItemException e) {
+            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                goBack();
                 return;
             }
             userLabel.setText(agency.getName());
@@ -80,8 +84,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
         viewManager.goToCreateItineraryGUI(sessionId,requestId,root);
     }
 
-    public void goBack(ActionEvent event) {
-        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+    public void goBack() {
+        BorderPane root = (BorderPane) userLabel.getScene().getRoot();
         if (prev != null) {
             root.setCenter(prev);
         }

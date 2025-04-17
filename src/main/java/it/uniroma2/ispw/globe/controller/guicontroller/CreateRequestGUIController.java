@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -221,7 +222,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
         try {
             agencies = new RequestItineraryController().getAgenciesByType(types);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -328,11 +329,20 @@ public class CreateRequestGUIController extends AbstractGUIController {
         }else{
            // this.dayErrorLabel.setVisible(false);
             if (count == 0 ){
-                RequestBean requestBean = new RequestBean(cities, attractions, otherRequests, dayNum, agencies, flight, accommodation, itineraryType);
-                RequestItineraryController controller = new RequestItineraryController();
                 try {
-                    controller.createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
-                } catch (FailedOperationException | DuplicateItemException e) {
+                    RequestBean requestBean = new RequestBean();
+
+                    requestBean.setCities(cities);
+                    requestBean.setAttractions(attractions);
+                    requestBean.setOtherRequests(otherRequests);
+                    requestBean.setDayNum(dayNum);
+                    requestBean.setAgencies(agencies);
+                    requestBean.setFlight(flight);
+                    requestBean.setAccommodation(accommodation);
+                    requestBean.setItineraryType(itineraryType);
+
+                    new RequestItineraryController().createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
+                } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                     new ErrorPopUpGUIController().createPopUp(e.getMessage());
                     return;
                 }

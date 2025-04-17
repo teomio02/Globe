@@ -26,7 +26,7 @@ public class InDbItineraryDao extends ItineraryDao {
         if (account != null) {
             DBConnection connect = DBConnection.getInstance();
 
-            String query = "insert into Itinerary (itineraryID,name,description,daysNumber,inFlight,outFlight) values (?,?,?,?,?,?)";
+            String query = "insert into Itinerary (itineraryID,name,description,daysNumber) values (?,?,?,?)";
             String finalQuery = "insert into accountItinerary (account,itineraryID) values (?,?)";
 
             PreparedStatement stmt = null;
@@ -40,14 +40,14 @@ public class InDbItineraryDao extends ItineraryDao {
                 stmt.setString(2, itinerary.getName());
                 stmt.setString(3, itinerary.getDescription());
                 stmt.setInt(4, itinerary.getDaysNumber());
-                stmt.setString(5, null);
-                stmt.setString(6, null);
 
                 stmt.execute();
 
                 addDecorationsData(itinerary);
 
                 addDays(itinerary);
+
+                addTypes(itinerary);
 
                 account.getItineraries().add(itinerary);
 
@@ -250,6 +250,29 @@ public class InDbItineraryDao extends ItineraryDao {
         for (Day day : itinerary.getDays()) {
             InDbDayDao dayDao = new InDbDayDao();
             dayDao.addDay(day);
+        }
+    }
+
+    public void addTypes(Itinerary itinerary) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
+        String typesQuery = "insert into ItineraryType (itineraryID,type) values (?,?)";
+        PreparedStatement typesStmt = null;
+
+        try {
+            for (String type : itinerary.getTypes()) {
+
+                typesStmt = connection.prepareStatement(typesQuery);
+
+                typesStmt.setString(1, itinerary.getItineraryID());
+                typesStmt.setString(2, type);
+                typesStmt.execute();
+            }
+        } catch (SQLException e) {
+            throw new DaoException("addTypes: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(typesStmt, null);
         }
     }
 }

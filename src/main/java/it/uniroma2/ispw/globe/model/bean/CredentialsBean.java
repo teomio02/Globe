@@ -1,6 +1,10 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 import java.util.List;
+
+import static java.util.regex.Pattern.matches;
 
 public class CredentialsBean {
     private String username;
@@ -10,34 +14,24 @@ public class CredentialsBean {
     private String paymentCredentials;
     private List<String> preferences;
 
-    public CredentialsBean(String username, String password, String type, String description, List<String> preferences) {
-        this.username = username;
-        this.password = password;
-        this.type = type;
-        this.description = description;
-        this.preferences = preferences;
-    }
-
-    public CredentialsBean(String username, String password, String type) {
-        this.username = username;
-        this.password = password;
-        this.type = type;
-    }
-
-    public CredentialsBean(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) { this.username = username; }
+    public void setUsername(String username) throws IncorrectDataException {
+        if (username == null || username.isEmpty()) {
+            throw new IncorrectDataException("Username not valid");
+        }
+        this.username = username; }
 
     public String getPassword() { return password; }
 
-    public void setPassword(String password) { this.password = password;}
+    public void setPassword(String password) throws IncorrectDataException {
+        if (password == null || password.length()<8) {
+            throw new IncorrectDataException("Password not valid (must be at least 8 characters)");
+        }
+        this.password = password;
+    }
 
     public String getType() { return type; }
 
@@ -45,13 +39,28 @@ public class CredentialsBean {
 
     public String getDescription() { return description;}
 
-    public void setDescription(String description) { this.description = description; }
+    public void setDescription(String description) throws IncorrectDataException {
+        if (description == null || description.isEmpty()) {
+            throw new IncorrectDataException("Description not valid");
+        }
+        this.description = description;
+    }
 
     public String getPaymentCredentials() { return paymentCredentials; }
 
-    public void setPaymentCredentials(String paymentCredentials) { this.paymentCredentials = paymentCredentials; }
+    public void setPaymentCredentials(String paymentCredentials) throws IncorrectDataException {
+        if (paymentCredentials == null || !paymentCredentials.matches("\\d{16}")) {
+            throw new IncorrectDataException("PaymentCredentials not valid (must be 16 number)");
+        }
+        this.paymentCredentials = paymentCredentials;
+    }
 
     public List<String> getPreferences() { return preferences; }
 
-    public void setPreferences(List<String> preferences) { this.preferences = preferences; }
+    public void setPreferences(List<String> preferences) throws IncorrectDataException {
+        if (preferences == null || preferences.isEmpty()) {
+            throw new IncorrectDataException("Preferences not valid");
+        }
+        this.preferences = preferences;
+    }
 }

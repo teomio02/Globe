@@ -1,10 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
-import it.uniroma2.ispw.globe.exception.DaoException;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
-import it.uniroma2.ispw.globe.exception.FailedOperationException;
-import it.uniroma2.ispw.globe.exception.PlaceApiException;
+import it.uniroma2.ispw.globe.exception.*;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
@@ -51,7 +48,12 @@ public class RequestItineraryController {
         }
 
         for (Attraction attraction : attractions) {
-            AttractionBean attractionBean = new AttractionBean(attraction.getPlaceID(), attraction.getName(), attraction.getAddress(), attraction.getCity(),0,0);
+            AttractionBean attractionBean = new AttractionBean();
+            attractionBean.setId(attraction.getPlaceID());
+            attractionBean.setName(attraction.getName());
+            attractionBean.setAddress(attraction.getAddress());
+            attractionBean.setCity(attraction.getCity());
+
             attractionBeans.add(attractionBean);
         }
 
@@ -69,20 +71,27 @@ public class RequestItineraryController {
         }
 
         for (City city : cities) {
-            CityBean cityBean = new CityBean(city.getPlaceID(), city.getName(), city.getCountry());
+            CityBean cityBean = new CityBean();
+            cityBean.setId(city.getPlaceID());
+            cityBean.setName(city.getName());
+            cityBean.setCountry(city.getCountry());
+
             citiesBeans.add(cityBean);
         }
         return citiesBeans;
     }
 
-    public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, DuplicateItemException {
+    public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
             List<Agency> agencies = accountDao.getAgenciesByType(types);
             List<AgencyBean> agencyBeans = new ArrayList<>();
 
             for (Agency agency: agencies){
-                AgencyBean agencyBean = new AgencyBean(agency.getUsername(), agency.getRating(), agency.getPreferences());
+                AgencyBean agencyBean = new AgencyBean();
+                agencyBean.setName(agency.getUsername());
+                agencyBean.setRating(agency.getRating());
+                agencyBean.setItineraryTypes(agency.getPreferences());
                 agencyBeans.add(agencyBean);
             }
             return agencyBeans;
@@ -95,7 +104,7 @@ public class RequestItineraryController {
         }
     }
 
-    public RequestBean getRequest(String requestID, String sessionID) {
+    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException {
         Request request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
         if (requestID == null) {
             return null;
@@ -134,8 +143,22 @@ public class RequestItineraryController {
             agencies.add(agency.getUsername());
         }
 
+        RequestBean requestBean = new RequestBean();
+        requestBean.setId(request.getId());
+        requestBean.setCities(citiesID);
+        requestBean.setAttractions(attractionsID);
+        requestBean.setOtherRequests(request.getOtherRequest());
+        requestBean.setDayNum(request.getDayNum());
+        requestBean.setAgencies(agencies);
+        requestBean.setFlight(request.getFlightRequest());
+        requestBean.setAccommodation(request.getAccommodationRequest());
+        requestBean.setItineraryType(request.getItineraryType());
+        requestBean.setTrekkingDifficulty(trekkingDifficulty);
+        requestBean.setTrekkingDistance(trekkingDistance);
+        requestBean.setTravelMode(travelMode);
+        requestBean.setDrivingHours(drivingHours);
 
-        return new RequestBean(request.getId(),citiesID, attractionsID, request.getOtherRequest(), request.getDayNum(), agencies, request.getFlightRequest(), request.getAccommodationRequest(), request.getItineraryType(), trekkingDifficulty, trekkingDistance, travelMode, drivingHours);
+        return requestBean;
     }
 
     public AgencyBean getAgency(String username, String sessionID) throws FailedOperationException, DuplicateItemException {

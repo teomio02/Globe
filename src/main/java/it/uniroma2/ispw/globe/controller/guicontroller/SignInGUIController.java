@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,26 +53,31 @@ public class SignInGUIController {
 
     public void signIn(ActionEvent event) {
         errorLabel.setVisible(false);
-        CredentialsBean credentials;
-        if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
-            errorLabel.setVisible(true);
-        } else {
-            credentials = new CredentialsBean(usernameField.getText(), passwordField.getText());
-            if (agencyForm.isVisible()) {
-                credentials = getAgencyDetails(credentials);
+        CredentialsBean credentials = new CredentialsBean();
+
+        try {
+            if (usernameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
+                errorLabel.setVisible(true);
             } else {
-                credentials.setType(USER);
-            }
-            try {
+                credentials.setUsername(usernameField.getText());
+                credentials.setPassword(passwordField.getText());
+                credentials.setPaymentCredentials(paymentCredentialsField.getText());
+                
+                if (agencyForm.isVisible()) {
+                    credentials = getAgencyDetails(credentials);
+                } else {
+                    credentials.setType(USER);
+                }
+
                 new LogInController().signIn(credentials);
                 goBack(event);
-            } catch (FailedOperationException | DuplicateItemException exception) {
-                new ErrorPopUpGUIController().createPopUp(exception.getMessage());
             }
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }
 
-    public CredentialsBean getAgencyDetails(CredentialsBean credentials) {
+    public CredentialsBean getAgencyDetails(CredentialsBean credentials) throws IncorrectDataException {
         List<String> preferences = new ArrayList<>();
 
         if (onTheRoadCheckBox.isSelected()) {
@@ -90,10 +96,10 @@ public class SignInGUIController {
             preferences.add(CITY);
         }
 
+
         credentials.setType(AGENCY);
         credentials.setDescription(descriptionField.getText());
         credentials.setPreferences(preferences);
-        credentials.setPaymentCredentials(paymentCredentialsField.getText());
 
         return credentials;
     }

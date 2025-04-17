@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -50,8 +51,9 @@ public class CreateProposalGUIController {
         try {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             proposal = new ResponseRequestController().getProposal(null,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            goBack();
             return;
         }
 
@@ -83,11 +85,13 @@ public class CreateProposalGUIController {
             return;
         }
 
-        ProposalBean proposalBean = new ProposalBean(Double.parseDouble(priceField.getText()),descriptionField.getText());
-
+        ProposalBean proposalBean = new ProposalBean();
         try {
+            proposalBean.setPrice(Double.parseDouble(priceField.getText()));
+            proposalBean.setDescription(descriptionField.getText());
+
             new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -97,8 +101,8 @@ public class CreateProposalGUIController {
         viewManager.goToDisplayProposalGUI(sessionId,requestId,null, root);
     }
 
-    public void goBack(ActionEvent event) {
-        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+    public void goBack() {
+        BorderPane root = (BorderPane) daysLabel.getScene().getRoot();
         if (prev != null) {
             root.setCenter(prev);
         }

@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryCo
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -40,10 +41,13 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
     private VBox accommodationVBox;
     @FXML
     private VBox flightVBox;
+    @FXML
+    private HBox typesHBox;
 
     private String sessionId;
     private String itineraryId;
     private String requestId;
+    private String proposalId;
     private Node prev;
 
     private static final String LIGHT = "label-light";
@@ -53,24 +57,31 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         this.sessionId = data.getSessionID();
         this.itineraryId = data.getItineraryID();
         this.requestId = data.getRequestID();
-        String proposalId = data.getProposalID();
+        this.proposalId = data.getProposalID();
         this.prev = data.getPrev();
 
         accommodationVBox.setVisible(false);
         flightVBox.setVisible(false);
-        ItineraryBean itinerary = null;
-        List<StepBean> steps = null;
+        ItineraryBean itinerary;
+        List<StepBean> steps;
         try {
             itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
             steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            goBack();
             return;
         }
 
         nameLabel.setText(itinerary.getName());
         descriptionLabel.setText(itinerary.getDescription());
         dayLabel.setText(String.valueOf(itinerary.getDuration()));
+
+        for (String type : itinerary.getTypes()) {
+            Label typeLabel = new Label(type);
+            typeLabel.getStyleClass().add("rounded-label");
+            typesHBox.getChildren().add(typeLabel);
+        }
 
         int day = 1;
         for (StepBean step : steps) {
@@ -79,7 +90,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
 
 
-        if (!itinerary.getAccommodations().isEmpty()) {
+        if (itinerary.getAccommodations() != null && !itinerary.getAccommodations().isEmpty()) {
             accommodationVBox.setVisible(true);
             for (int i = 0; i < itinerary.getAccommodations().size(); i++) {
                 Pair<String,String> accommodation = itinerary.getAccommodations().get(i);
@@ -91,7 +102,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         if (itinerary.getInboundFlightDepartureTime() != -1) {
             flightVBox.setVisible(true);
             flightVBox.getChildren().add(new Label("Inbound: "+itinerary.getInboundFlightDepartureTime()+" - "+itinerary.getInboundFlightArrivalTime()));
-            flightVBox.getChildren().add(new Label("Outbound"+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime()));
+            flightVBox.getChildren().add(new Label("Outbound: "+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime()));
         }
 
         nextAgencyButton.setVisible(false);
@@ -104,8 +115,9 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             nextAgencyButton.setVisible(true);
             try {
                 nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
-            } catch (FailedOperationException | DuplicateItemException e) {
+            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                goBack();
                 return;
             }
         }
@@ -149,6 +161,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             goBack();
         } catch ( FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            goBack();
         }
     }
 

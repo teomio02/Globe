@@ -50,13 +50,17 @@ public class LogInController{
         }
     }
 
-    public void logOut(String sessionId) throws FailedOperationException, DuplicateItemException {
+    public void logOut(String sessionId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             Account account = SessionManager.getInstance().getSession(sessionId).getAccount();
             if (account.getType().equals(GUEST)) {
-                CredentialsBean credentials = new CredentialsBean(account.getUsername(),account.getPassword(), account.getType());
+                CredentialsBean credentialsBean = new CredentialsBean();
+                credentialsBean.setUsername(account.getUsername());
+                credentialsBean.setPassword(account.getPassword());
+                credentialsBean.setType(account.getType());
+
                 AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-                accountDao.removeAccount(credentials);
+                accountDao.removeAccount(credentialsBean);
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);

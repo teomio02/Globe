@@ -5,6 +5,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryCo
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -54,8 +55,9 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         ProposalBean proposal;
         try {
             proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            goBack();
             return;
         }
         nameLabel.setText(proposal.getID());
@@ -79,7 +81,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         if (proposalID != null) {
             try {
                 itineraryId = new AcceptItineraryController().getProposalItinerary(proposalID).getId();
-            } catch (FailedOperationException | DuplicateItemException e) {
+            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
@@ -143,8 +145,8 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         viewManager.goToManageRequestGUI(sessionId, root);
     }
 
-    public void goBack(ActionEvent event) {
-        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+    public void goBack() {
+        BorderPane root = (BorderPane) agencyLabel.getScene().getRoot();
         if (prev != null) {
             root.setCenter(prev);
         }

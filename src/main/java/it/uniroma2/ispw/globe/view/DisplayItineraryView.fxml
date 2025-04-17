@@ -115,6 +115,7 @@
                   </VBox>
                </children>
             </HBox>
+            <HBox fx:id="typesHBox" prefHeight="36.0" style="-fx-background-color: #314c1c;" />
             <VBox alignment="CENTER" maxHeight="340.0" prefWidth="100.0" style="-fx-background-color: #97c093; -fx-background-radius: 30;">
                <children>
                   <TabPane fx:id="daysTabPane" maxHeight="1.7976931348623157E308" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/DayTabPane.css" tabClosingPolicy="UNAVAILABLE">

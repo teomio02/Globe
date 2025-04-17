@@ -1,5 +1,7 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 import java.util.List;
 
 public class AgencyBean {
@@ -7,17 +9,14 @@ public class AgencyBean {
     private double rating;
     private List<String> itineraryTypes;
 
-    public AgencyBean(String name, double rating, List<String> itineraryTypes) {
-        this.name = name;
-        this.rating = rating;
-        this.itineraryTypes = itineraryTypes;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws IncorrectDataException {
+        if (name == null || name.isEmpty()) {
+            throw new IncorrectDataException("Agency name not valid");
+        }
         this.name = name;
     }
 
@@ -25,7 +24,10 @@ public class AgencyBean {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(double rating) throws IncorrectDataException {
+        if (rating < 0 || rating > 5) {
+            throw new IncorrectDataException("Agency rating not valid");
+        }
         this.rating = rating;
     }
 
@@ -33,7 +35,10 @@ public class AgencyBean {
         return itineraryTypes;
     }
 
-    public void setItineraryTypes(List<String> itineraryTypes) {
+    public void setItineraryTypes(List<String> itineraryTypes) throws IncorrectDataException {
+        if (itineraryTypes == null || itineraryTypes.isEmpty()) {
+            throw new IncorrectDataException("Agency itinerary types not valid");
+        }
         this.itineraryTypes = itineraryTypes;
     }
 }

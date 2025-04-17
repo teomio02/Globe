@@ -18,7 +18,7 @@ public class InDbCityDao extends CityDao {
 
     @Override
     public void addCity(City city) throws DaoException {
-        if (city.equals(getCity(city.getPlaceID()))) {
+        if (getCity(city.getPlaceID()) != null) {
             return;
         }
 
