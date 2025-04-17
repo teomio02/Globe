@@ -1,11 +1,9 @@
 package it.uniroma2.ispw.globe.model.bean;
 
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.other.ProposalState;
 
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.other.ItineraryType.*;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 
 public class AgencyRequestBean {

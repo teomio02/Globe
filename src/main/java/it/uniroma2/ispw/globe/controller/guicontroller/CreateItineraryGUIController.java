@@ -98,6 +98,8 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
     private Node prev;
 
+    private static final String DEFAULT_BUTTON = "button-default";
+
     public void initialize(String sessionId) {
 
         NavigationData data = SessionManager.getInstance().getSession(sessionId).getNavigationData();
@@ -167,22 +169,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
             attractions.add(attraction);
         }
 
-        List<String> types = new ArrayList<>();
-        if ((boolean)onTheRoadButton.getUserData()) {
-            types.add(ON_THE_ROAD);
-        }
-        if ((boolean)natureButton.getUserData()) {
-            types.add(NATURE);
-        }
-        if ((boolean)cultureButton.getUserData()) {
-            types.add(CULTURE);
-        }
-        if ((boolean)relaxButton.getUserData()) {
-            types.add(RELAX);
-        }
-        if ((boolean)cityButton.getUserData()) {
-            types.add(CITY);
-        }
+        List<String> types = getItineraryTypes();
 
         ItineraryBean itineraryBean = new ItineraryBean();
         try {
@@ -243,10 +230,10 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         }
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
-                Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
-                cityButton.getStyleClass().add("button-default");
-                cityButton.setOnAction(event -> addCity(cityResult));
-                cityResultVBox.getChildren().add(cityButton);
+                Button cityResultButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
+                cityResultButton.getStyleClass().add(DEFAULT_BUTTON);
+                cityResultButton.setOnAction(event -> addCity(cityResult));
+                cityResultVBox.getChildren().add(cityResultButton);
                 if (cityResultVBox.getChildren().size() == 3) {
                     break;
                 }
@@ -296,10 +283,10 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
-                Button attractionButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
-                attractionButton.getStyleClass().add("button-default");
-                attractionButton.setOnAction(event -> addAttraction(attractionResult));
-                attractionResultVBox.getChildren().add(attractionButton);
+                Button attractionResultButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
+                attractionResultButton.getStyleClass().add(DEFAULT_BUTTON);
+                attractionResultButton.setOnAction(event -> addAttraction(attractionResult));
+                attractionResultVBox.getChildren().add(attractionResultButton);
                 if (attractionResultVBox.getChildren().size() == 3) {
                     break;
                 }
@@ -371,12 +358,34 @@ public class CreateItineraryGUIController extends AbstractGUIController {
     public void setType(ActionEvent event) {
         Button button = (Button) event.getSource();
         button.setUserData(!((boolean)button.getUserData()));
-        button.getStyleClass().removeAll("button-pressed", "button-default");
+        button.getStyleClass().removeAll("button-pressed", DEFAULT_BUTTON);
         if ((boolean)button.getUserData()) {
             button.getStyleClass().add("button-pressed");
         } else {
-            button.getStyleClass().add("button-default");
+            button.getStyleClass().add(DEFAULT_BUTTON);
         }
+    }
+
+    public List<String> getItineraryTypes() {
+        List<String> types = new ArrayList<>();
+
+        if ((boolean)onTheRoadButton.getUserData()) {
+            types.add(ON_THE_ROAD);
+        }
+        if ((boolean)natureButton.getUserData()) {
+            types.add(NATURE);
+        }
+        if ((boolean)cultureButton.getUserData()) {
+            types.add(CULTURE);
+        }
+        if ((boolean)relaxButton.getUserData()) {
+            types.add(RELAX);
+        }
+        if ((boolean)cityButton.getUserData()) {
+            types.add(CITY);
+        }
+
+        return types;
     }
 
     public void goBack() {

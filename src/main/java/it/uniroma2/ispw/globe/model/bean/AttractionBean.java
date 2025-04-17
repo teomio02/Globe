@@ -1,7 +1,5 @@
 package it.uniroma2.ispw.globe.model.bean;
 
-import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-
 public class AttractionBean {
     private String id;
     private String name;

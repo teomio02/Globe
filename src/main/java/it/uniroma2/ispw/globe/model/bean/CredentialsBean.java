@@ -4,8 +4,6 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 
 import java.util.List;
 
-import static java.util.regex.Pattern.matches;
-
 public class CredentialsBean {
     private String username;
     private String password;

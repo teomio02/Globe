@@ -106,7 +106,6 @@ public class LogInGUIController {
             } catch (IOException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
-                return;
             }
         } else {
             errorLabel.setVisible(true);
