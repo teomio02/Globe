@@ -100,7 +100,7 @@ public class CreateItineraryCLIController {
             itineraryBean.setCities(getCities());
             itineraryBean.setAttractions(getAttractions());
         } catch (IncorrectDataException e) {
-            throw new RuntimeException(e);
+            System.out.println(ERROR + e.getMessage());
         }
 
         itineraryBean = getOtherData(itineraryBean);
@@ -140,7 +140,7 @@ public class CreateItineraryCLIController {
     }
 
     public String getType(List<String> types) {
-        String str_choice;
+        String strChoice;
         int choice;
         String type;
 
@@ -148,9 +148,9 @@ public class CreateItineraryCLIController {
 
         while (true) {
             System.out.print("Please enter your choice: ");
-            str_choice = input.nextLine();
-            if (!str_choice.isEmpty() && str_choice.matches("[1-5]")) {
-                choice = Integer.parseInt(str_choice);
+            strChoice = input.nextLine();
+            if (!strChoice.isEmpty() && strChoice.matches("[1-5]")) {
+                choice = Integer.parseInt(strChoice);
                 switch (choice) {
                     case 1 -> type = ON_THE_ROAD;
                     case 2 -> type = NATURE;
@@ -353,8 +353,10 @@ public class CreateItineraryCLIController {
     }
 
     public ItineraryBean getFlight(ItineraryBean itineraryBean) {
-        String inDepartureTimeStr, inArrivalTimeStr, outDepartureTimeStr, outArrivalTimeStr;
-        double inDepartureTime, inArrivalTime, outDepartureTime, outArrivalTime ;
+        String inDepartureTimeStr;
+        String inArrivalTimeStr;
+        String outDepartureTimeStr;
+        String outArrivalTimeStr;
 
         Scanner input = new Scanner(System.in);
 
@@ -362,8 +364,7 @@ public class CreateItineraryCLIController {
             System.out.print("Please enter inbound departure time: ");
             inDepartureTimeStr = input.nextLine();
             try {
-                inDepartureTime = Double.parseDouble(inDepartureTimeStr);
-                itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
+                itineraryBean.setInboundFlightDepartureTime(Double.parseDouble(inDepartureTimeStr));
                 break;
             } catch (NumberFormatException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
@@ -373,8 +374,7 @@ public class CreateItineraryCLIController {
             System.out.print("Please enter inbound arrival time: ");
             inArrivalTimeStr = input.nextLine();
             try {
-                inArrivalTime = Double.parseDouble(inArrivalTimeStr);
-                itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
+                itineraryBean.setInboundFlightArrivalTime(Double.parseDouble(inArrivalTimeStr));
                 break;
             } catch (NumberFormatException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
@@ -384,8 +384,7 @@ public class CreateItineraryCLIController {
             System.out.print("Please enter outbound departure time: ");
             outDepartureTimeStr = input.nextLine();
             try {
-                outDepartureTime = Double.parseDouble(outDepartureTimeStr);
-                itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
+                itineraryBean.setOutboundFlightDepartureTime(Double.parseDouble(outDepartureTimeStr));
                 break;
             } catch (NumberFormatException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
@@ -395,8 +394,7 @@ public class CreateItineraryCLIController {
             System.out.print("Please enter outbound arrival time: ");
             outArrivalTimeStr = input.nextLine();
             try {
-                outArrivalTime = Double.parseDouble(outArrivalTimeStr);
-                itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
+                itineraryBean.setOutboundFlightArrivalTime(Double.parseDouble(outArrivalTimeStr));
                 break;
             } catch (NumberFormatException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
