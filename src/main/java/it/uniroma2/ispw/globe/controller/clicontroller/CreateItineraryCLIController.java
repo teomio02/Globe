@@ -32,7 +32,7 @@ public class CreateItineraryCLIController {
         if (requestId != null) {
             try {
                 //create proposal use case
-                AgencyRequestBean requestBean = null;
+                AgencyRequestBean requestBean;
                 requestBean = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
 
                 if (requestBean != null) {
@@ -53,62 +53,65 @@ public class CreateItineraryCLIController {
 
     public void getItineraryData() {
         String name;
-        String str_duration;
+        String strDuration;
         String description;
         int duration;
+
+        ItineraryBean itineraryBean = new ItineraryBean();
+
+        itineraryBean.setId(null);
 
         Scanner input = new Scanner(System.in);
 
         while (true){
             System.out.print("Please enter Itinerary name: ");
             name = input.nextLine();
-            if (!name.isEmpty()) {
+            try {
+                itineraryBean.setName(name);
                 break;
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
         while (true) {
             System.out.print("Please enter itinerary duration (1-99): ");
-            str_duration = input.nextLine();
+            strDuration = input.nextLine();
             try {
-                duration = Integer.parseInt(str_duration);
-                if (duration >= 1 && duration <= 99) {
-                    break;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(ERROR + "Invalid number");
+                duration = Integer.parseInt(strDuration);
+                itineraryBean.setDuration(duration);
+                break;
+            } catch (NumberFormatException | IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
         while (true) {
             System.out.print("Please enter itinerary description: ");
             description = input.nextLine();
-            if (!description.isEmpty()) {
+            try {
+                itineraryBean.setDescription(description);
                 break;
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
 
-        List<String> types = getTypes();
-        List<String> cities = getCities();
-        List<String> attractions = getAttractions();
-
-        ItineraryBean itineraryBean = new ItineraryBean();
         try {
-            itineraryBean.setId(null);
-            itineraryBean.setName(name);
-            itineraryBean.setDescription(description);
-            itineraryBean.setTypes(types);
-            itineraryBean.setCities(cities);
-            itineraryBean.setAttractions(attractions);
-            itineraryBean.setDuration(duration);
-
-            itineraryBean = getOtherData(itineraryBean);
-
-            new CreateItineraryController().createItinerary(itineraryBean,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-            System.out.println(ERROR + e.getMessage());
+            itineraryBean.setTypes(getTypes());
+            itineraryBean.setCities(getCities());
+            itineraryBean.setAttractions(getAttractions());
+        } catch (IncorrectDataException e) {
+            throw new RuntimeException(e);
         }
+
+        itineraryBean = getOtherData(itineraryBean);
+
+        try {
+            new CreateItineraryController().createItinerary(itineraryBean,sessionId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            System.out.println(ERROR + e.getMessage());
+            return;
+        }
+
         DisplayItineraryCLIController controller;
         if (requestId != null) {
             controller = new DisplayItineraryCLIController(sessionId,null,requestId,null);
@@ -121,7 +124,7 @@ public class CreateItineraryCLIController {
     public List<String> getTypes() {
         List<String> types = new ArrayList<>();
 
-        while (true){
+        do {
             System.out.println("Please enter the number of the type for your itinerary");
             System.out.println("1 -> " + ON_THE_ROAD);
             System.out.println("2 -> " + NATURE);
@@ -132,10 +135,7 @@ public class CreateItineraryCLIController {
             types.add(getType(types));
 
             System.out.println("Do you want to add another type? (yes/no)");
-            if (!getAnother()) {
-                break;
-            }
-        }
+        } while (getAnother());
         return types;
     }
 
@@ -162,7 +162,6 @@ public class CreateItineraryCLIController {
                 if (!types.contains(type)) {
                     break;
                 }
-                System.out.println(ERROR + "type already exist");
             }
             System.out.println(CHOICE_ERROR);
         }
@@ -176,14 +175,14 @@ public class CreateItineraryCLIController {
         Scanner input = new Scanner(System.in);
 
         while (true){
-            System.out.print("Please enter City (enter stop to termiante): ");
+            System.out.print("Please enter City (enter stop to terminate): ");
             city = input.nextLine();
             if (!city.isEmpty()) {
                 if (city.equalsIgnoreCase("stop")) {
                     break;
                 }
                 String cityID = getCity(city);
-                if (cityID != null) {
+                if (cityID != null && !cities.contains(cityID)) {
                     cities.add(cityID);
                 }
             }else {
@@ -195,43 +194,47 @@ public class CreateItineraryCLIController {
     }
 
     public String getCity(String city) {
-        List<CityBean> cities_result = new ArrayList<>();
+        List<CityBean> citiesResult = new ArrayList<>();
         try {
-            cities_result = new CreateItineraryController().getCities(city);
+            citiesResult = new CreateItineraryController().getCities(city);
         } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
-        if (!cities_result.isEmpty()) {
+        if (!citiesResult.isEmpty()) {
             int i = 0;
-            for (CityBean cityResult : cities_result) {
+            for (CityBean cityResult : citiesResult) {
                 i++;
                 System.out.println(i + " -> " + cityResult.getName()+" - "+ cityResult.getCountry());
                 if (i == 3) {
                     break;
                 }
             }
-            Scanner input = new Scanner(System.in);
-            String str_choice;
-            int choice;
-            while (true) {
-                System.out.println("Please enter the number of the city for your itinerary: ");
-                str_choice = input.nextLine();
-                try {
-                    choice = Integer.parseInt(str_choice);
-                    if (choice >= 1 && choice <= i) {
-                        break;
-                    } else {
-                        System.out.println(CHOICE_ERROR);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println(CHOICE_ERROR);
-                }
-            }
-            return cities_result.get(choice-1).getId();
+            return addCity(i, citiesResult);
         } else {
             System.out.println("> no place");
         }
         return null;
+    }
+
+    public String addCity(int max, List<CityBean> cities) {
+        Scanner input = new Scanner(System.in);
+        String strChoice;
+        int choice;
+        while (true) {
+            System.out.println("Please enter the number of the city for your itinerary: ");
+            strChoice = input.nextLine();
+            try {
+                choice = Integer.parseInt(strChoice);
+                if (choice >= 1 && choice <= max) {
+                    break;
+                } else {
+                    System.out.println(CHOICE_ERROR);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(CHOICE_ERROR);
+            }
+        }
+        return cities.get(choice-1).getId();
     }
 
     public List<String> getAttractions() {
@@ -248,7 +251,7 @@ public class CreateItineraryCLIController {
                     break;
                 }
                 String attrID = getAttraction(attraction);
-                if (attrID != null) {
+                if (attrID != null && !attractions.contains(attrID)) {
                     attractions.add(attrID);
                 }
             } else {
@@ -275,66 +278,57 @@ public class CreateItineraryCLIController {
                     break;
                 }
             }
-            Scanner input = new Scanner(System.in);
-            String str_choice;
-            int choice;
-            while (true) {
-                System.out.println("Please enter the number of the attraction for your itinerary: ");
-                str_choice = input.nextLine();
-                try {
-                    choice = Integer.parseInt(str_choice);
-                    if (choice >= 1 && choice <= i) {
-                        break;
-                    } else {
-                        System.out.println(CHOICE_ERROR);
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println(CHOICE_ERROR);
-                }
-            }
-            return attractionsResult.get(choice-1).getId();
+            return addAttraction(i,attractionsResult);
         } else {
             System.out.println("> no place");
         }
         return null;
     }
 
-    public ItineraryBean getOtherData(ItineraryBean itineraryBean) throws IncorrectDataException {
-        List<Pair<String, String>> accommodations = new ArrayList<>();
+    public String addAttraction(int max, List<AttractionBean> attractions) {
+        Scanner input = new Scanner(System.in);
+        String strChoice;
+        int choice;
+        while (true) {
+            System.out.println("Please enter the number of the attraction for your itinerary: ");
+            strChoice = input.nextLine();
+            try {
+                choice = Integer.parseInt(strChoice);
+                if (choice >= 1 && choice <= max) {
+                    break;
+                } else {
+                    System.out.println(CHOICE_ERROR);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(CHOICE_ERROR);
+            }
+        }
+        return attractions.get(choice-1).getId();
+    }
+
+    public ItineraryBean getOtherData(ItineraryBean itineraryBean) {
 
         System.out.println("Do you want to add an accommodation? (yes/no)");
         if (getAnother()) {
-            accommodations = getAccommodations();
+            itineraryBean = getAccommodations(itineraryBean);
         }
-
-        List<Double> flight = new ArrayList<>();
 
         System.out.println("Do you want to add flight? (yes/no)");
         if (getAnother()) {
-            flight = getFlight();
-        }
-
-        if (!accommodations.isEmpty()) {
-            itineraryBean.setAccommodations(accommodations);
-        }
-        if (!flight.isEmpty()) {
-            itineraryBean.setInboundFlightDepartureTime(flight.get(0));
-            itineraryBean.setInboundFlightArrivalTime(flight.get(1));
-            itineraryBean.setOutboundFlightDepartureTime(flight.get(2));
-            itineraryBean.setOutboundFlightArrivalTime(flight.get(3));
+            itineraryBean = getFlight(itineraryBean);
         }
 
         return itineraryBean;
     }
 
-    public  List<Pair<String, String>> getAccommodations() {
-        String accommodation, address;
-        List<Pair<String, String>> accommodations = new ArrayList<>();
+    public  ItineraryBean getAccommodations(ItineraryBean itineraryBean) {
+        String accommodation;
+        String address;
 
         Scanner input = new Scanner(System.in);
 
-        while (true) {
-            while (true){
+        do {
+            while (true) {
                 System.out.print("Please enter accommodation name: ");
                 accommodation = input.nextLine();
                 if (!accommodation.isEmpty()) {
@@ -342,7 +336,7 @@ public class CreateItineraryCLIController {
                 }
                 System.out.println(CHOICE_ERROR);
             }
-            while (true){
+            while (true) {
                 System.out.print("Please enter accommodation address: ");
                 address = input.nextLine();
                 if (!address.isEmpty()) {
@@ -350,65 +344,66 @@ public class CreateItineraryCLIController {
                 }
                 System.out.println(CHOICE_ERROR);
             }
-            accommodations.add(new Pair<>(accommodation, address));
+
+            itineraryBean.getAccommodations().add(new Pair<>(accommodation, address));
 
             System.out.println("Do you want to add another type? (yes/no)");
-            if (!getAnother()) {
-                break;
-            }
-        }
-        return accommodations;
+        } while (getAnother());
+        return itineraryBean;
     }
 
-    public List<Double> getFlight() {
-        String inDepartureTime_str, inArrivalTime_str, outDepartureTime_str, outArrivalTime_str;
+    public ItineraryBean getFlight(ItineraryBean itineraryBean) {
+        String inDepartureTimeStr, inArrivalTimeStr, outDepartureTimeStr, outArrivalTimeStr;
         double inDepartureTime, inArrivalTime, outDepartureTime, outArrivalTime ;
-        List<Double> times = new ArrayList<>();
 
         Scanner input = new Scanner(System.in);
 
         while (true){
             System.out.print("Please enter inbound departure time: ");
-            inDepartureTime_str = input.nextLine();
-            if (!inDepartureTime_str.isEmpty() && inDepartureTime_str.matches("^([0-9]|1[0-9]|2[0-3])(\\.[0-5][0-9])?$")) {
-                inDepartureTime = Double.parseDouble(inDepartureTime_str);
+            inDepartureTimeStr = input.nextLine();
+            try {
+                inDepartureTime = Double.parseDouble(inDepartureTimeStr);
+                itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
                 break;
+            } catch (NumberFormatException | IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
         while (true){
             System.out.print("Please enter inbound arrival time: ");
-            inArrivalTime_str = input.nextLine();
-            if (!inArrivalTime_str.isEmpty() && inArrivalTime_str.matches("^([0-9]|1[0-9]|2[0-3])(\\.[0-5][0-9])?$")) {
-                inArrivalTime = Double.parseDouble(inArrivalTime_str);
+            inArrivalTimeStr = input.nextLine();
+            try {
+                inArrivalTime = Double.parseDouble(inArrivalTimeStr);
+                itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
                 break;
+            } catch (NumberFormatException | IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
         while (true){
             System.out.print("Please enter outbound departure time: ");
-            outDepartureTime_str = input.nextLine();
-            if (!outDepartureTime_str.isEmpty() && outDepartureTime_str.matches("^([0-9]|1[0-9]|2[0-3])(\\.[0-5][0-9])?$")) {
-                outDepartureTime = Double.parseDouble(outDepartureTime_str);
+            outDepartureTimeStr = input.nextLine();
+            try {
+                outDepartureTime = Double.parseDouble(outDepartureTimeStr);
+                itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
                 break;
+            } catch (NumberFormatException | IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
         while (true){
             System.out.print("Please enter outbound arrival time: ");
-            outArrivalTime_str = input.nextLine();
-            if (!outArrivalTime_str.isEmpty() && outArrivalTime_str.matches("^([0-9]|1[0-9]|2[0-3])(\\.[0-5][0-9])?$")) {
-                outArrivalTime = Double.parseDouble(outArrivalTime_str);
+            outArrivalTimeStr = input.nextLine();
+            try {
+                outArrivalTime = Double.parseDouble(outArrivalTimeStr);
+                itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
                 break;
+            } catch (NumberFormatException | IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
             }
-            System.out.println(CHOICE_ERROR);
         }
-        times.add(inDepartureTime);
-        times.add(inArrivalTime);
-        times.add(outDepartureTime);
-        times.add(outArrivalTime);
 
-        return times;
+        return itineraryBean;
     }
 
     public boolean getAnother() {
