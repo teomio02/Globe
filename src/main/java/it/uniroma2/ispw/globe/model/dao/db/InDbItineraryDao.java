@@ -261,14 +261,13 @@ public class InDbItineraryDao extends ItineraryDao {
         PreparedStatement typesStmt = null;
 
         try {
+            typesStmt = connection.prepareStatement(typesQuery);
             for (String type : itinerary.getTypes()) {
-
-                typesStmt = connection.prepareStatement(typesQuery);
-
                 typesStmt.setString(1, itinerary.getItineraryID());
                 typesStmt.setString(2, type);
-                typesStmt.execute();
+                typesStmt.addBatch();
             }
+            typesStmt.executeBatch();
         } catch (SQLException e) {
             throw new DaoException("addTypes: " + e.getMessage(), GENERAL);
         } finally {

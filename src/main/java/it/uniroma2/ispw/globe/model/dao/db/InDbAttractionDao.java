@@ -89,10 +89,6 @@ public class InDbAttractionDao extends AttractionDao {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }
 
-        if (attraction == null) {
-            attraction = createAttraction(attractionID);
-        }
-
         return attraction;
     }
 }

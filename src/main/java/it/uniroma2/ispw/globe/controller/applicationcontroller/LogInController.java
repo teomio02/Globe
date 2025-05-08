@@ -26,7 +26,10 @@ public class LogInController{
             }
             Account account = accountDao.authenticate(credentials.getUsername(), credentials.getPassword());
 
-            return SessionManager.getInstance().addSession(account);
+            if (account != null) {
+                return SessionManager.getInstance().addSession(account);
+            }
+            return null;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             if (e.getType() == DUPLICATE) {
@@ -73,6 +76,9 @@ public class LogInController{
 
     public String getUserType(String sessionID) {
         Account account = SessionManager.getInstance().getSession(sessionID).getAccount();
-        return account.getType();
+        if (account != null) {
+            return account.getType();
+        }
+        return null;
     }
 }

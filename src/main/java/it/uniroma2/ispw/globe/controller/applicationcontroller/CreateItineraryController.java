@@ -75,7 +75,6 @@ public class CreateItineraryController {
                 List<Accommodation> accommodations = new ArrayList<>();
                 for (Pair<String,String> a : itineraryBean.getAccommodations()) {
                     Accommodation accommodation = accommodationDao.createAccommodation(a.getKey(), a.getValue());
-                    accommodationDao.addAccommodation(accommodation);
                     accommodations.add(accommodation);
                 }
                 AccommodationDecorator accommodationItinerary = new AccommodationDecorator(itinerary);
@@ -88,8 +87,6 @@ public class CreateItineraryController {
 
                 Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
                 Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
-                flightDao.addFlight(inFlight);
-                flightDao.addFlight(outFlight);
 
                 FlightDecorator flightItinerary = new FlightDecorator(itinerary);
                 flightItinerary.setInFlight(inFlight);
@@ -115,6 +112,7 @@ public class CreateItineraryController {
             Account account = session.getAccount();
 
             Itinerary itinerary = session.getPendingItinerary();
+            itinerary.getDays().removeIf(day -> day.getDayNum() == 0);
             itineraryDao.addItinerary(itinerary, account);
 
             session.setPendingItinerary(null);

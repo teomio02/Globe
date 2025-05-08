@@ -43,8 +43,8 @@ public class InDbDayDao extends DayDao {
                 InDbAttractionDao attractionDao = new InDbAttractionDao();
                 attractionDao.addAttraction(attraction);
 
-                attractionStmt.setString(2, day.getId());
                 attractionStmt.setInt(1, day.getDayNum());
+                attractionStmt.setString(2, day.getId());
                 attractionStmt.setString(3, attraction.getPlaceID());
                 attractionStmt.addBatch();
             }

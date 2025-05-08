@@ -1,0 +1,156 @@
+package it.uniroma2.ispw.globe.controller.clicontroller;
+
+import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+
+import java.util.List;
+import java.util.Scanner;
+
+public class ManageItineraryCLIController {
+    private String sessionId;
+
+    private static final String CHOICE_ERROR = "ERROR: Invalid option\n";
+    private static final String ERROR = "ERROR: ";
+
+    public ManageItineraryCLIController(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+
+    public void start() {
+        System.out.println("# MANAGE ITINERARY #");
+
+        while(true) {
+            int choice;
+            choice = showMenu();
+
+            switch(choice) {
+                case 1 -> showItineraries();
+                case 2 -> showProposals();
+                case 3 -> createItinerary();
+                case 4 -> System.exit(0);
+                default -> System.out.println(CHOICE_ERROR);
+            }
+        }
+    }
+
+    public int showMenu() {
+        System.out.println("What do you want do?\n");
+        System.out.println("1 -> Show Itineraries");
+        System.out.println("2 -> Show Proposals");
+        System.out.println("3 -> Create new Itinerary");
+        System.out.println("4 -> Quit");
+
+        Scanner input = new Scanner(System.in);
+        String str_choice;
+        int choice;
+        while (true) {
+            System.out.print("Please enter your choice: ");
+            str_choice = input.nextLine();
+            if (!str_choice.isEmpty() && str_choice.matches("[1-4]")) {
+                choice = Integer.parseInt(str_choice);
+                break;
+            }
+            System.out.println(CHOICE_ERROR);
+        }
+
+        return choice;
+    }
+
+    public void showItineraries() {
+        List<ItineraryBean> itineraries;
+        try {
+            itineraries = new ManageItineraryController().getUserItineraries(sessionId);
+
+            System.out.println("Itineraries:");
+            for(ItineraryBean itinerary : itineraries) {
+                System.out.println("> ID: " + itinerary.getId());
+                System.out.println("    > Name: " + itinerary.getName());
+                System.out.println("    > Days: " + itinerary.getDuration());
+                System.out.println("    > Description: " + itinerary.getDescription());
+            }
+
+            System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+
+            Scanner input = new Scanner(System.in);
+            String choice, itineraryID = "";
+            while (true) {
+                System.out.print("Please enter your choice: ");
+                choice = input.nextLine();
+                if (!choice.isEmpty()) {
+                    if (choice.equalsIgnoreCase("back")) {
+                        return;
+                    } else {
+                        for (ItineraryBean itinerary : itineraries) {
+                            if (itinerary.getId().equals(choice)) {
+                                itineraryID = itinerary.getId();
+                            }
+                        }
+                        System.out.println(CHOICE_ERROR);
+                    }
+                    if (!itineraryID.isEmpty()){
+                        break;
+                    }
+                }
+                System.out.println(CHOICE_ERROR);
+            }
+
+            DisplayItineraryCLIController controller = new DisplayItineraryCLIController(sessionId,choice,null,null);
+            controller.start();
+        } catch (IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+
+        }
+    }
+
+    public void showProposals() {
+        List<ProposalBean> proposals;
+        try {
+            proposals = new ManageItineraryController().getUserProposals(sessionId);
+            System.out.println("Proposals:");
+            for(ProposalBean proposal : proposals) {
+                System.out.println("> ID: " + proposal.getID());
+                System.out.println("    > Agency: " + proposal.getAgency());
+            }
+            System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+
+            Scanner input = new Scanner(System.in);
+            String choice, proposalID = "";
+            while (true) {
+                System.out.print("Please enter your choice: ");
+                choice = input.nextLine();
+                if (!choice.isEmpty()) {
+                    if (choice.equalsIgnoreCase("back")) {
+                        return;
+                    } else {
+                        for (ProposalBean proposal : proposals) {
+                            if (proposal.getID().equals(choice)) {
+                                proposalID = proposal.getID();
+                            }
+                        }
+                        System.out.println(CHOICE_ERROR);
+                    }
+                    if (!proposalID.isEmpty()){
+                        break;
+                    }
+                }
+                System.out.println(CHOICE_ERROR);
+            }
+
+            DisplayProposalCLIController controller = new DisplayProposalCLIController(sessionId, null, choice);
+            controller.start();
+
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
+    }
+
+    public void createItinerary() {
+        CreateItineraryCLIController controller = new CreateItineraryCLIController(sessionId,null);
+        controller.start();
+    }
+}

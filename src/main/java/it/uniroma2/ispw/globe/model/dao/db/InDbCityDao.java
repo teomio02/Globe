@@ -89,9 +89,6 @@ public class InDbCityDao extends CityDao {
         } finally {
             DBConnection.getInstance().closeConnection(stmt, rs);
         }
-        if (city == null) {
-            city = createCity(cityID);
-        }
 
         return city;
     }
