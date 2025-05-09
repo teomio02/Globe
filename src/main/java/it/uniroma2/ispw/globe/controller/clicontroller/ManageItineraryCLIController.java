@@ -87,7 +87,6 @@ public class ManageItineraryCLIController {
             }
         } catch (IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
-
         }
     }
 

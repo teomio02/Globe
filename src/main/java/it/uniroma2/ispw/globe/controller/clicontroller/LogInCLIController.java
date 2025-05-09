@@ -21,8 +21,8 @@ public class LogInCLIController {
     private static final String PASSWORD_REQUEST = "Please enter Password: ";
 
     public void start() {
-        System.out.println("# LOG IN #");
         while(true) {
+            System.out.println("# LOG IN #");
             int choice;
             choice = showMenu();
 
