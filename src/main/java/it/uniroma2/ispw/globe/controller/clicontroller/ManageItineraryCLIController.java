@@ -99,17 +99,15 @@ public class ManageItineraryCLIController {
         while (true) {
             System.out.print(ENTER_CHOICE);
             choice = input.nextLine();
-            if (!choice.isEmpty()) {
-                if (choice.equalsIgnoreCase("back")) {
-                    return choice;
-                } else {
-                    for (ItineraryBean itinerary : itineraries) {
-                        if (itinerary.getId().equals(choice)) {
-                            return itinerary.getId();
-                        }
+            if (choice.equalsIgnoreCase("back")) {
+                return choice;
+            } else {
+                for (ItineraryBean itinerary : itineraries) {
+                    if (itinerary.getId().equals(choice)) {
+                        return itinerary.getId();
                     }
-                    System.out.println(CHOICE_ERROR);
                 }
+                System.out.println(CHOICE_ERROR);
             }
         }
     }
@@ -143,17 +141,15 @@ public class ManageItineraryCLIController {
         while (true) {
             System.out.print(ENTER_CHOICE);
             choice = input.nextLine();
-            if (!choice.isEmpty()) {
-                if (choice.equalsIgnoreCase("back")) {
-                    return choice;
-                } else {
-                    for (ProposalBean proposal : proposals) {
-                        if (proposal.getID().equals(choice)) {
-                            return proposal.getID();
-                        }
+            if (choice.equalsIgnoreCase("back")) {
+                return choice;
+            } else {
+                for (ProposalBean proposal : proposals) {
+                    if (proposal.getID().equals(choice)) {
+                        return proposal.getID();
                     }
-                    System.out.println(CHOICE_ERROR);
                 }
+                System.out.println(CHOICE_ERROR);
             }
         }
     }
