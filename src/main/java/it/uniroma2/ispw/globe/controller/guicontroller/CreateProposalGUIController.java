@@ -46,8 +46,8 @@ public class CreateProposalGUIController {
         this.requestId = data.getRequestID();
         this.prev = data.getPrev();
 
-        AgencyRequestBean request = null;
-        ProposalBean proposal = null;
+        AgencyRequestBean request;
+        ProposalBean proposal;
         try {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             proposal = new ResponseRequestController().getProposal(null,sessionId);
@@ -81,7 +81,6 @@ public class CreateProposalGUIController {
             count ++;
         }
         if (count>0) {
-            // errore
             return;
         }
 
