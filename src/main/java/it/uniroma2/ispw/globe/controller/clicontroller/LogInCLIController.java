@@ -18,6 +18,8 @@ public class LogInCLIController {
     private static final String CHOICE_ERROR = "ERROR: Invalid option\n";
     private static final String ERROR = "ERROR: ";
 
+    private final static String PASSWORD_REQUEST = "Please enter Password: ";
+
     public void start() {
         System.out.println("# LOG IN #");
         while(true) {
@@ -28,7 +30,10 @@ public class LogInCLIController {
                 case 1 -> logIn();
                 case 2 -> signIn();
                 case 3 -> logInAsGuest();
-                case 4 -> System.exit(0);
+                case 4 -> {
+                    System.exit(0);
+                    return;
+                }
                 default -> System.out.println(CHOICE_ERROR);
             }
         }
@@ -42,13 +47,13 @@ public class LogInCLIController {
         System.out.println("4 -> Quit");
 
         Scanner input = new Scanner(System.in);
-        String str_choice;
+        String strChoice;
         int choice;
         while (true) {
             System.out.print("Please enter your choice: ");
-            str_choice = input.nextLine();
-            if (!str_choice.isEmpty() && str_choice.matches("[1-4]")) {
-                choice = Integer.parseInt(str_choice);
+            strChoice = input.nextLine();
+            if (!strChoice.isEmpty() && strChoice.matches("[1-4]")) {
+                choice = Integer.parseInt(strChoice);
                 break;
             }
             System.out.println(CHOICE_ERROR);
@@ -79,7 +84,9 @@ public class LogInCLIController {
     }
 
     public void userSignIn() {
-        String username,password, paymentCredentials;
+        String username;
+        String password;
+        String paymentCredentials;
 
         Scanner input = new Scanner(System.in);
 
@@ -93,7 +100,7 @@ public class LogInCLIController {
         }
 
         while (true){
-            System.out.print("Please enter Password: ");
+            System.out.print(PASSWORD_REQUEST);
             password = input.nextLine();
             if (!password.isEmpty()) {
                 break;
@@ -125,8 +132,11 @@ public class LogInCLIController {
     }
 
     public void agencySignIn() {
-        String username,password,description,paymentCredentials;
-        List<String> preferences = new ArrayList<>();
+        String username;
+        String password;
+        String description;
+        String paymentCredentials;
+        List<String> preferences;
 
         Scanner input = new Scanner(System.in);
 
@@ -140,7 +150,7 @@ public class LogInCLIController {
         }
 
         while (true){
-            System.out.print("Please enter Password: ");
+            System.out.print(PASSWORD_REQUEST);
             password = input.nextLine();
             if (!password.isEmpty()) {
                 break;
@@ -157,38 +167,7 @@ public class LogInCLIController {
             System.out.println(CHOICE_ERROR);
         }
 
-        System.out.println("-> Select tour preferences? (select stop to terminate)\n");
-        System.out.println("1 -> "+ON_THE_ROAD);
-        System.out.println("2 -> "+NATURE);
-        System.out.println("3 -> "+CULTURE);
-        System.out.println("4 -> "+RELAX);
-        System.out.println("5 -> "+CITY);
-        System.out.println("6 -> stop");
-
-        String str_choice;
-        int choice;
-        boolean stop = false;
-        while (!stop) {
-            while (true) {
-                System.out.print("Please enter your choice: ");
-                str_choice = input.nextLine();
-                if (!str_choice.isEmpty() && str_choice.matches("[1-6]")) {
-                    System.out.println("*********************************");
-                    choice = Integer.parseInt(str_choice);
-                    break;
-                }
-                System.out.println(CHOICE_ERROR);
-            }
-            switch(choice) {
-                case 1 -> preferences.add(ON_THE_ROAD);
-                case 2 -> preferences.add(NATURE);
-                case 3 -> preferences.add(CULTURE);
-                case 4 -> preferences.add(RELAX);
-                case 5 -> preferences.add(CITY);
-                case 6 -> stop = true;
-                default -> System.out.println(CHOICE_ERROR);
-            }
-        }
+        preferences = getAgencyPreferences();
 
         while (true){
             System.out.print("Please enter a description for your agency: ");
@@ -216,9 +195,51 @@ public class LogInCLIController {
         }
     }
 
+    public List<String> getAgencyPreferences() {
+        List<String> preferences = new ArrayList<>();
+
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("-> Select tour preferences? (select stop to terminate)\n");
+        System.out.println("1 -> "+ON_THE_ROAD);
+        System.out.println("2 -> "+NATURE);
+        System.out.println("3 -> "+CULTURE);
+        System.out.println("4 -> "+RELAX);
+        System.out.println("5 -> "+CITY);
+        System.out.println("6 -> stop");
+
+        String strChoice;
+        int choice;
+        boolean stop = false;
+        while (!stop) {
+            while (true) {
+                System.out.print("Please enter your choice: ");
+                strChoice = input.nextLine();
+                if (!strChoice.isEmpty() && strChoice.matches("[1-6]")) {
+                    System.out.println("*********************************");
+                    choice = Integer.parseInt(strChoice);
+                    break;
+                }
+                System.out.println(CHOICE_ERROR);
+            }
+            switch(choice) {
+                case 1 -> preferences.add(ON_THE_ROAD);
+                case 2 -> preferences.add(NATURE);
+                case 3 -> preferences.add(CULTURE);
+                case 4 -> preferences.add(RELAX);
+                case 5 -> preferences.add(CITY);
+                case 6 -> stop = true;
+                default -> System.out.println(CHOICE_ERROR);
+            }
+        }
+
+        return preferences;
+    }
+
     public void logIn() {
 
-        String username,password;
+        String username;
+        String password;
 
         Scanner input = new Scanner(System.in);
 
@@ -232,7 +253,7 @@ public class LogInCLIController {
         }
 
         while (true){
-            System.out.print("Please enter Password: ");
+            System.out.print(PASSWORD_REQUEST);
             password = input.nextLine();
             if (!password.isEmpty()) {
                 break;

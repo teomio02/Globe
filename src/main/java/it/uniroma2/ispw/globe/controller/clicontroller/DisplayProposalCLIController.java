@@ -64,6 +64,10 @@ public class DisplayProposalCLIController {
                         rejectProposal();
                     }
                 }
+                case 4 -> {
+                    // go back action
+                }
+                default -> System.out.println(CHOICE_ERROR);
             }
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
