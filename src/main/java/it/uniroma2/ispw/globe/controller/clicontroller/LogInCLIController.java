@@ -18,7 +18,7 @@ public class LogInCLIController {
     private static final String CHOICE_ERROR = "ERROR: Invalid option\n";
     private static final String ERROR = "ERROR: ";
 
-    private final static String PASSWORD_REQUEST = "Please enter Password: ";
+    private static final String PASSWORD_REQUEST = "Please enter Password: ";
 
     public void start() {
         System.out.println("# LOG IN #");

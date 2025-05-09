@@ -16,6 +16,8 @@ public class ManageItineraryCLIController {
     private static final String CHOICE_ERROR = "ERROR: Invalid option\n";
     private static final String ERROR = "ERROR: ";
 
+    private static final String ENTER_CHOICE = "Please enter your choice: ";
+
     public ManageItineraryCLIController(String sessionId) {
         this.sessionId = sessionId;
     }
@@ -32,7 +34,10 @@ public class ManageItineraryCLIController {
                 case 1 -> showItineraries();
                 case 2 -> showProposals();
                 case 3 -> createItinerary();
-                case 4 -> System.exit(0);
+                case 4 -> {
+                    System.exit(0);
+                    return;
+                }
                 default -> System.out.println(CHOICE_ERROR);
             }
         }
@@ -46,13 +51,13 @@ public class ManageItineraryCLIController {
         System.out.println("4 -> Quit");
 
         Scanner input = new Scanner(System.in);
-        String str_choice;
+        String strChoice;
         int choice;
         while (true) {
-            System.out.print("Please enter your choice: ");
-            str_choice = input.nextLine();
-            if (!str_choice.isEmpty() && str_choice.matches("[1-4]")) {
-                choice = Integer.parseInt(str_choice);
+            System.out.print(ENTER_CHOICE);
+            strChoice = input.nextLine();
+            if (!strChoice.isEmpty() && strChoice.matches("[1-4]")) {
+                choice = Integer.parseInt(strChoice);
                 break;
             }
             System.out.println(CHOICE_ERROR);
@@ -74,36 +79,38 @@ public class ManageItineraryCLIController {
                 System.out.println("    > Description: " + itinerary.getDescription());
             }
 
-            System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+            String choice = getItineraryID(itineraries);
 
-            Scanner input = new Scanner(System.in);
-            String choice, itineraryID = "";
-            while (true) {
-                System.out.print("Please enter your choice: ");
-                choice = input.nextLine();
-                if (!choice.isEmpty()) {
-                    if (choice.equalsIgnoreCase("back")) {
-                        return;
-                    } else {
-                        for (ItineraryBean itinerary : itineraries) {
-                            if (itinerary.getId().equals(choice)) {
-                                itineraryID = itinerary.getId();
-                            }
-                        }
-                        System.out.println(CHOICE_ERROR);
-                    }
-                    if (!itineraryID.isEmpty()){
-                        break;
-                    }
-                }
-                System.out.println(CHOICE_ERROR);
+            if (!choice.equalsIgnoreCase("back")) {
+                DisplayItineraryCLIController controller = new DisplayItineraryCLIController(sessionId,choice,null,null);
+                controller.start();
             }
-
-            DisplayItineraryCLIController controller = new DisplayItineraryCLIController(sessionId,choice,null,null);
-            controller.start();
         } catch (IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
 
+        }
+    }
+
+    public String getItineraryID(List<ItineraryBean> itineraries) {
+        System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+
+        Scanner input = new Scanner(System.in);
+        String choice;
+        while (true) {
+            System.out.print(ENTER_CHOICE);
+            choice = input.nextLine();
+            if (!choice.isEmpty()) {
+                if (choice.equalsIgnoreCase("back")) {
+                    return choice;
+                } else {
+                    for (ItineraryBean itinerary : itineraries) {
+                        if (itinerary.getId().equals(choice)) {
+                            return itinerary.getId();
+                        }
+                    }
+                    System.out.println(CHOICE_ERROR);
+                }
+            }
         }
     }
 
@@ -116,36 +123,38 @@ public class ManageItineraryCLIController {
                 System.out.println("> ID: " + proposal.getID());
                 System.out.println("    > Agency: " + proposal.getAgency());
             }
-            System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+            String choice = getProposalID(proposals);
 
-            Scanner input = new Scanner(System.in);
-            String choice, proposalID = "";
-            while (true) {
-                System.out.print("Please enter your choice: ");
-                choice = input.nextLine();
-                if (!choice.isEmpty()) {
-                    if (choice.equalsIgnoreCase("back")) {
-                        return;
-                    } else {
-                        for (ProposalBean proposal : proposals) {
-                            if (proposal.getID().equals(choice)) {
-                                proposalID = proposal.getID();
-                            }
-                        }
-                        System.out.println(CHOICE_ERROR);
-                    }
-                    if (!proposalID.isEmpty()){
-                        break;
-                    }
-                }
-                System.out.println(CHOICE_ERROR);
+            if (!choice.equalsIgnoreCase("back")) {
+                DisplayProposalCLIController controller = new DisplayProposalCLIController(sessionId, null, choice);
+                controller.start();
             }
-
-            DisplayProposalCLIController controller = new DisplayProposalCLIController(sessionId, null, choice);
-            controller.start();
 
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
+        }
+    }
+
+    public String getProposalID(List<ProposalBean> proposals) {
+        System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+
+        Scanner input = new Scanner(System.in);
+        String choice;
+        while (true) {
+            System.out.print(ENTER_CHOICE);
+            choice = input.nextLine();
+            if (!choice.isEmpty()) {
+                if (choice.equalsIgnoreCase("back")) {
+                    return choice;
+                } else {
+                    for (ProposalBean proposal : proposals) {
+                        if (proposal.getID().equals(choice)) {
+                            return proposal.getID();
+                        }
+                    }
+                    System.out.println(CHOICE_ERROR);
+                }
+            }
         }
     }
 
