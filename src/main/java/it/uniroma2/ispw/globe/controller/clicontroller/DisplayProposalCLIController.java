@@ -47,36 +47,29 @@ public class DisplayProposalCLIController {
             System.out.println("    > Status: " + proposal.getAccepted());
             System.out.println();
 
-            while(true) {
-                int choice;
-                choice = showMenu(proposal.getAccepted());
+            int choice;
+            choice = showMenu(proposal.getAccepted());
 
-                switch(choice) {
-                    case 1 -> showItinerary();
-                    case 2 -> {
-                        if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
-                            acceptProposal();
-                        } else if (requestId != null) {
-                            saveProposal();
-                        } else {
-                            return;
-                        }
+            switch(choice) {
+                case 1 -> showItinerary();
+                case 2 -> {
+                    if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
+                        acceptProposal();
+                    } else if (requestId != null) {
+                        saveProposal();
                     }
-                    case 3 -> {
-                        if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
-                            rejectProposal();
-                        } else {
-                            return;
-                        }
-                    }
-                    case 4 -> {
-                        return;
-                    }
-                    default -> System.out.println(CHOICE_ERROR);
                 }
+                case 3 -> {
+                    if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
+                        rejectProposal();
+                    }
+                }
+                case 4 -> {
+                }
+                default -> System.out.println(CHOICE_ERROR);
             }
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-            throw new RuntimeException(e);
+            System.out.println(ERROR + e.getMessage());
         }
     }
 
@@ -104,13 +97,13 @@ public class DisplayProposalCLIController {
 
 
         Scanner input = new Scanner(System.in);
-        String str_choice;
+        String strChoice;
         int choice;
         while (true) {
             System.out.print("Please enter your choice: ");
-            str_choice = input.nextLine();
-            if (!str_choice.isEmpty() && str_choice.matches("[1-" + maxChoice + "]")) {
-                choice = Integer.parseInt(str_choice);
+            strChoice = input.nextLine();
+            if (!strChoice.isEmpty() && strChoice.matches("[1-" + maxChoice + "]")) {
+                choice = Integer.parseInt(strChoice);
                 break;
             }
             System.out.println(CHOICE_ERROR);
