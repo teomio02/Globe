@@ -102,12 +102,7 @@ public class ManageRequestCLIController {
             String choice = getRequestID(requests);
 
             if (!choice.equalsIgnoreCase("back")) {
-                try {
-                    new ResponseRequestController().setPendingRequest(sessionId,choice);
-                } catch (FailedOperationException | DuplicateItemException e) {
-                    System.out.println(ERROR + e.getMessage());
-                    return;
-                }
+                new ResponseRequestController().setPendingRequest(sessionId,choice);
 //                DisplayRequestCLIController controller = new DisplayRequestCLIController(sessionId,choice);
 //                controller.start();
             }
