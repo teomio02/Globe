@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.controller.guicontroller.ErrorPopUpGUIController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -58,6 +57,77 @@ public class DisplayItineraryCLIController {
                 System.out.println("    > Outbound Flight: " + itinerary.getOutboundFlightDepartureTime() + " - " + itinerary.getOutboundFlightArrivalTime());
             }
 
+            showSteps(steps);
+
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
+
+        boolean proposalExist = false;
+        try {
+            proposalExist = (new ResponseRequestController().getProposal(null, sessionId) == null);
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
+
+        int choice;
+        if (!(proposalId != null || requestId != null || itineraryId != null)) {
+            choice = showUserMenu();
+            if (choice == 1) {
+                saveItinerary();
+            }
+        } else if (requestId != null && proposalExist) {
+            choice = showAgencyMenu();
+            if (choice == 1) {
+                createProposal();
+            }
+        }
+    }
+
+    public int showUserMenu() {
+        System.out.println("What do you want do?\n");
+
+        System.out.println("1 -> Save Itinerary");
+        System.out.println("2 -> Go Back");
+
+        Scanner input = new Scanner(System.in);
+        String strChoice;
+        int choice;
+        while (true) {
+            System.out.print("Please enter your choice: ");
+            strChoice = input.nextLine();
+            if (!strChoice.isEmpty() && strChoice.matches("[1-2]")) {
+                choice = Integer.parseInt(strChoice);
+                break;
+            }
+            System.out.println(CHOICE_ERROR);
+        }
+        return choice;
+    }
+
+    public int showAgencyMenu() {
+        System.out.println("What do you want do?\n");
+
+        System.out.println("1 -> Create Proposal");
+        System.out.println("2 -> Go Back");
+
+        Scanner input = new Scanner(System.in);
+        String strChoice;
+        int choice;
+        while (true) {
+            System.out.print("Please enter your choice: ");
+            strChoice = input.nextLine();
+            if (!strChoice.isEmpty() && strChoice.matches("[1-2]")) {
+                choice = Integer.parseInt(strChoice);
+                break;
+            }
+            System.out.println(CHOICE_ERROR);
+        }
+        return choice;
+    }
+
+    public void showSteps(List<StepBean> steps) {
+        try {
             System.out.println("    > Steps: ");
             for (StepBean step : steps) {
                 CityBean city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
@@ -69,91 +139,17 @@ public class DisplayItineraryCLIController {
                     System.out.println("                -" + attraction.getName() + ", " + attraction.getAddress());
                 }
             }
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-            throw new RuntimeException(e);
-        }
-
-        boolean proposalExist = false;
-        try {
-            proposalExist = (new ResponseRequestController().getProposal(null, sessionId) == null);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
         }
-
-        int choice;
-        choice = showMenu();
-
-        if (!(proposalId != null || requestId != null || itineraryId != null)) {
-            while(true) {
-                switch(choice) {
-                    case 1 -> {
-                        saveItinerary();
-                        return;
-                    }
-                    case 2 -> {
-                        return;
-                    }
-                    default -> System.out.println(CHOICE_ERROR);
-                }
-            }
-        } else if (requestId != null && proposalExist) {
-           while(true) {
-               switch(choice) {
-                   case 1 -> {
-                       createProposal();
-                       return;
-                   }
-                   case 2 -> {
-                       return;
-                   }
-                   default -> System.out.println(CHOICE_ERROR);
-               }
-           }
-        }
     }
-
-    public int showMenu() {
-        boolean proposalExist = false;
-        try {
-            proposalExist = (new ResponseRequestController().getProposal(null, sessionId) == null);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-            System.out.println(ERROR + e.getMessage());
-        }
-
-        if (!(proposalId != null || requestId != null || itineraryId != null) || (requestId != null && proposalExist)) {
-            System.out.println("What do you want do?\n");
-            if (!(proposalId != null || requestId != null || itineraryId != null)) {
-                System.out.println("1 -> Save Itinerary");
-            } else if (requestId != null && proposalExist) {
-                System.out.println("1 -> Create Proposal");
-            }
-            System.out.println("2 -> Go Back");
-
-            Scanner input = new Scanner(System.in);
-            String str_choice;
-            int choice;
-            while (true) {
-                System.out.print("Please enter your choice: ");
-                str_choice = input.nextLine();
-                if (!str_choice.isEmpty() && str_choice.matches("[1-2]")) {
-                    choice = Integer.parseInt(str_choice);
-                    break;
-                }
-                System.out.println(CHOICE_ERROR);
-            }
-            return choice;
-        }
-        return 0;
-    }
-
-
 
     public void saveItinerary() {
         if (itineraryId == null) {
             try {
                 new CreateItineraryController().saveItinerary(sessionId);
             } catch (FailedOperationException | DuplicateItemException e) {
-                new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                System.out.println(ERROR + e.getMessage());
             }
         }
     }
