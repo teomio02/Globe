@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
@@ -144,10 +145,45 @@ public class InDbAccountDao extends AccountDao {
 
     @Override
     public List<Agency> getAgenciesByType(List<String> types) throws DaoException {
-        // da implementare
+        DBConnection connect = DBConnection.getInstance();
         List<Agency> agencies = new ArrayList<>();
-        agencies.add((Agency) getAccount("SiVola"));
-        return agencies;
+        List<Agency> correctAgencies = new ArrayList<>();
+
+        String query = "select accountProposal.account from agencyType where type = ?";
+
+
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            if (types != null || !types.isEmpty()) {
+                Connection connection = connect.getConnection();
+                stmt = connection.prepareStatement(query);
+
+                stmt.setString(1, types.get(0));
+                resultSet = stmt.executeQuery();
+
+                while (resultSet.next()) {
+                    Account account = getAccountPrimaryData(resultSet.getString(ACCOUNT));
+                    if (account instanceof Agency agency) {
+                        agencies.add(agency);
+                    }
+                }
+
+                for (Agency agency : agencies) {
+                    if (new HashSet<>(agency.getPreferences()).containsAll(types)) {
+                        correctAgencies.add(agency);
+                    }
+                }
+
+                return correctAgencies;
+            }
+        } catch (SQLException e) {
+            throw new DaoException("getAgencyByProposal: "+ e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
+        }
+        return null;
     }
 
     @Override
