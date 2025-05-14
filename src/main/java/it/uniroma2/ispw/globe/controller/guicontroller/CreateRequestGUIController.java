@@ -89,9 +89,6 @@ public class CreateRequestGUIController extends AbstractGUIController {
     }
 
     //HANDLER
-    public void userTripHandler (ActionEvent event) {}
-    public void userProfileHandler (ActionEvent event) {}
-    public void userHomeHandler (ActionEvent event) {}
     public void backHandler (ActionEvent event) {}
     public void minusHandler (ActionEvent event) {
         int dayNum = Integer.valueOf(dayLabel.getText());
