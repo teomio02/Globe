@@ -28,11 +28,13 @@ public class InMemoryRequestDao extends RequestDao {
     }
 
     @Override
-    public void addAgencyRequest(Request request, User user, Agency agency) throws DaoException {
+    public void addAgencyRequest(Request request, User user, List<Agency> agencies) throws DaoException {
         if (getRequest(request.getId()) == null) {
             requests.add(request);
             user.getRequests().add(request);
-            agency.getRequests().add(request);
+            for (Agency agency : agencies) {
+                agency.getRequests().add(request);
+            }
         } else {
             throw new DaoException("addAgencyRequest", DUPLICATE);
         }

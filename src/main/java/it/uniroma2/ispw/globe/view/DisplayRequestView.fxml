@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.text.Font?>
@@ -120,18 +121,34 @@
                   </VBox>
                </children>
             </HBox>
-            <Button alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Create" textFill="#314c1c">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="saveRequestButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#saveRequest" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Save" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="createItineraryButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Create" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </StackPane>
          </children>
       </VBox>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">

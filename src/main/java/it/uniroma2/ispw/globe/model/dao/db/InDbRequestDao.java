@@ -20,7 +20,7 @@ import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 public class InDbRequestDao extends RequestDao {
 
     @Override
-    public void addAgencyRequest(Request request, User user, Agency agency) throws DaoException {
+    public void addAgencyRequest(Request request, User user, List<Agency> agencies) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "insert into Request (id,user,agency,accepted,description,days) values (?,?,?,?,?,?)";
@@ -35,43 +35,44 @@ public class InDbRequestDao extends RequestDao {
         PreparedStatement attrStmt = null;
 
         try {
-            Connection connection = connect.getConnection();
-            stmt = connection.prepareStatement(query);
+            for (Agency agency : agencies) {
+                Connection connection = connect.getConnection();
+                stmt = connection.prepareStatement(query);
 
-            stmt.setString(1, request.getId());
-            stmt.setString(2, user.getUsername());
-            stmt.setString(3, agency.getUsername());
-            stmt.setString(4, request.getAccepted());
-            stmt.setString(5, request.getOtherRequest());
-            stmt.setInt(6, request.getDayNum());
-            stmt.execute();
+                stmt.setString(1, request.getId());
+                stmt.setString(2, user.getUsername());
+                stmt.setString(3, agency.getUsername());
+                stmt.setString(4, request.getAccepted());
+                stmt.setString(5, request.getOtherRequest());
+                stmt.setInt(6, request.getDayNum());
+                stmt.execute();
 
-            firstAccountStmt = connection.prepareStatement(accountQuery);
-            firstAccountStmt.setString(1, agency.getUsername());
-            firstAccountStmt.setString(2, request.getId());
-            firstAccountStmt.execute();
+                firstAccountStmt = connection.prepareStatement(accountQuery);
+                firstAccountStmt.setString(1, agency.getUsername());
+                firstAccountStmt.setString(2, request.getId());
+                firstAccountStmt.execute();
 
-            secondAccountStmt = connection.prepareStatement(accountQuery);
-            secondAccountStmt.setString(1, user.getUsername());
-            secondAccountStmt.setString(2, request.getId());
-            secondAccountStmt.execute();
+                secondAccountStmt = connection.prepareStatement(accountQuery);
+                secondAccountStmt.setString(1, user.getUsername());
+                secondAccountStmt.setString(2, request.getId());
+                secondAccountStmt.execute();
 
-            cityStmt = connection.prepareStatement(cityQuery);
-            for (City city : request.getCities()) {
-                cityStmt.setString(1, request.getId());
-                cityStmt.setString(2, city.getPlaceID());
-                cityStmt.addBatch();
+                cityStmt = connection.prepareStatement(cityQuery);
+                for (City city : request.getCities()) {
+                    cityStmt.setString(1, request.getId());
+                    cityStmt.setString(2, city.getPlaceID());
+                    cityStmt.addBatch();
+                }
+                cityStmt.executeBatch();
+
+                attrStmt = connection.prepareStatement(attractionQuery);
+                for (Attraction attraction : request.getAttractions()) {
+                    attrStmt.setString(1, request.getId());
+                    attrStmt.setString(2, attraction.getPlaceID());
+                    attrStmt.addBatch();
+                }
+                attrStmt.executeBatch();
             }
-            cityStmt.executeBatch();
-
-            attrStmt = connection.prepareStatement(attractionQuery);
-            for (Attraction attraction : request.getAttractions()) {
-                attrStmt.setString(1, request.getId());
-                attrStmt.setString(2, attraction.getPlaceID());
-                attrStmt.addBatch();
-            }
-            attrStmt.executeBatch();
-
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DaoException("addAgencyRequest: "+ e.getMessage(), DUPLICATE);

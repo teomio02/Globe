@@ -11,9 +11,12 @@ import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+
+import java.util.List;
 
 public class DisplayRequestGUIController extends AbstractGUIController {
     @FXML
@@ -24,6 +27,10 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     private Label descriptionLabel;
     @FXML
     private HBox typesHBox;
+    @FXML
+    private Button saveRequestButton;
+    @FXML
+    private Button createItineraryButton;
 
 
     private String sessionId;
@@ -39,7 +46,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
         // popola con use case simo (create request use case)
 
         if (requestId != null) {
-
+            createItineraryButton.setVisible(true);
+            saveRequestButton.setVisible(false);
             //create proposal use case
             AgencyRequestBean request = null;
             try {
@@ -55,18 +63,24 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             for (String type: request.getTypes()) {
                 typesHBox.getChildren().add(new Label(type));
             }
+
         } else {
+            createItineraryButton.setVisible(false);
+            saveRequestButton.setVisible(true);
             RequestBean request;
-            AgencyBean agency;
+            List<AgencyBean> agencies;
             try {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
-                agency = new RequestItineraryController().getAgency(null,sessionId);
+                agencies = new RequestItineraryController().getAgencies(sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
             }
-            userLabel.setText(agency.getName());
+            userLabel.setText("");
+            for (AgencyBean agency : agencies) {
+                userLabel.setText(userLabel.getText() + ", " + agency.getName());
+            }
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
             for (String type: request.getItineraryType()) {
@@ -82,6 +96,19 @@ public class DisplayRequestGUIController extends AbstractGUIController {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();
         viewManager.goToCreateItineraryGUI(sessionId,requestId,root);
+    }
+    public void saveRequest(ActionEvent event) {
+        try {
+            new RequestItineraryController().saveRequest(sessionId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            goBack();
+            return;
+        }
+
+        BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToManageItineraryGUI(sessionId,root);
     }
 
     public void goBack() {

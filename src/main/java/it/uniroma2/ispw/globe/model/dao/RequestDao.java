@@ -27,7 +27,7 @@ public abstract class RequestDao {
         return request;
     }
 
-    public abstract void addAgencyRequest(Request request, User user, Agency agency) throws DaoException;
+    public abstract void addAgencyRequest(Request request, User user, List<Agency> agency) throws DaoException;
     public abstract void addUserRequest(RequestBean requestBean, User user, Agency agency) throws DaoException;
     public abstract Request getRequest(String requestId) throws DaoException;
     public abstract void updateRequest(Request request) throws DaoException;

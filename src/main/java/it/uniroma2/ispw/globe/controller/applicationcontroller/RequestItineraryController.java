@@ -6,11 +6,11 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
+import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
 import it.uniroma2.ispw.globe.util.decorator.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -161,21 +161,19 @@ public class RequestItineraryController {
         return requestBean;
     }
 
-    public AgencyBean getAgency(String username, String sessionID) throws FailedOperationException, DuplicateItemException {
-        try {
-            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-            Account account = accountDao.getAccount(username);
+    public List<AgencyBean> getAgencies(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+        List<Agency> agencies = SessionManager.getInstance().getSession(sessionID).getPendingAgencies();
+        List<AgencyBean> agencyBeans = new ArrayList<>();
 
-//popola AgencyBean
-
-            return null;
-        } catch (DaoException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
-            throw new FailedOperationException("Get agency");
+        for (Agency agency: agencies) {
+            AgencyBean agencyBean = new AgencyBean();
+            agencyBean.setName(agency.getUsername());
+            agencyBean.setRating(agency.getRating());
+            agencyBean.setItineraryTypes(agency.getPreferences());
+            agencyBeans.add(agencyBean);
         }
+
+        return agencyBeans;
     }
 
 
@@ -234,6 +232,27 @@ public class RequestItineraryController {
                 throw new DuplicateItemException();
             }
             throw new FailedOperationException("Create request");
+        }
+    }
+
+    public void saveRequest(String sessionID) throws FailedOperationException, DuplicateItemException {
+        try {
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            Account account = session.getAccount();
+
+            Request request = session.getPendingRequest();
+            List<Agency> agencies = session.getPendingAgencies();
+            requestDao.addAgencyRequest(request, (User) account, agencies);
+
+            session.setPendingRequest(null);
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            if (e.getType() == DUPLICATE) {
+                throw new DuplicateItemException();
+            }
+            throw new FailedOperationException("Save request");
         }
     }
 }
