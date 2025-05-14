@@ -149,7 +149,7 @@ public class InDbAccountDao extends AccountDao {
         List<Agency> agencies = new ArrayList<>();
         List<Agency> correctAgencies = new ArrayList<>();
 
-        String query = "select accountProposal.account from agencyType where type = ?";
+        String query = "select agencyType.agency from agencyType where type = ?";
 
 
         PreparedStatement stmt = null;
@@ -164,7 +164,7 @@ public class InDbAccountDao extends AccountDao {
                 resultSet = stmt.executeQuery();
 
                 while (resultSet.next()) {
-                    Account account = getAccountPrimaryData(resultSet.getString(ACCOUNT));
+                    Account account = getAccountPrimaryData(resultSet.getString("agency"));
                     if (account instanceof Agency agency) {
                         agencies.add(agency);
                     }

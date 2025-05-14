@@ -106,9 +106,6 @@ public class RequestItineraryController {
 
     public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException {
         Request request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
-        if (requestID == null) {
-            return null;
-        }
 
         String travelMode = null;
         String drivingHours = null;
@@ -216,6 +213,9 @@ public class RequestItineraryController {
                 natureRequest.setTrekkingDifficulty(natureBean.getDifficulty());
                 request = natureRequest;
             }
+
+
+
 
             SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
 

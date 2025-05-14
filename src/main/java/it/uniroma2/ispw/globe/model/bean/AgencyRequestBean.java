@@ -96,6 +96,7 @@ public class AgencyRequestBean {
     public void setAccepted(String accepted) throws IncorrectDataException {
         if (accepted.equals(ACCEPTED) || accepted.equals(REJECTED) || accepted.equals(PENDING)) {
             this.accepted = accepted;
+            return;
         }
         throw new IncorrectDataException("Request accepted not valid");
     }

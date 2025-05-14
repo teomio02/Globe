@@ -65,8 +65,10 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
 
         } else {
+            if (requestId == null) {
+                saveRequestButton.setVisible(true);
+            }
             createItineraryButton.setVisible(false);
-            saveRequestButton.setVisible(true);
             RequestBean request;
             List<AgencyBean> agencies;
             try {

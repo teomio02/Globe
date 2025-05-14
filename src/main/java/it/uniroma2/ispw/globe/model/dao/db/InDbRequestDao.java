@@ -72,6 +72,8 @@ public class InDbRequestDao extends RequestDao {
                     attrStmt.addBatch();
                 }
                 attrStmt.executeBatch();
+
+                addTypes(request);
             }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
@@ -189,6 +191,28 @@ public class InDbRequestDao extends RequestDao {
             throw new DaoException("updateRequest: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
+        }
+    }
+
+    public void addTypes(Request request) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+        Connection connection = connect.getConnection();
+
+        String typesQuery = "insert into requestType (requestID,type) values (?,?)";
+        PreparedStatement typesStmt = null;
+
+        try {
+            typesStmt = connection.prepareStatement(typesQuery);
+            for (String type : request.getItineraryType()) {
+                typesStmt.setString(1, request.getId());
+                typesStmt.setString(2, type);
+                typesStmt.addBatch();
+            }
+            typesStmt.executeBatch();
+        } catch (SQLException e) {
+            throw new DaoException("addTypes: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(typesStmt, null);
         }
     }
 }
