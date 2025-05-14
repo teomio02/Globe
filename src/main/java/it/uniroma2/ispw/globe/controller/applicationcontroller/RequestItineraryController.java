@@ -166,6 +166,8 @@ public class RequestItineraryController {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
             Account account = accountDao.getAccount(username);
 
+//popola AgencyBean
+
             return null;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
@@ -203,6 +205,19 @@ public class RequestItineraryController {
 
             request.setAttractions(attractions);
             request.setCities(cities);
+
+            if (onTheRoadBean != null) {
+                OnTheRoadRequestDecorator onTheRoadRequest = new OnTheRoadRequestDecorator(request);
+                onTheRoadRequest.setDayDrivingHours(onTheRoadRequest.getDayDrivingHours());
+                onTheRoadRequest.setTravelMode(onTheRoadRequest.getTravelMode());
+                request = onTheRoadRequest;
+            }
+            if (natureBean != null) {
+                NatureRequestDecorator natureRequest = new NatureRequestDecorator(request);
+                natureRequest.setTrekkingDistance(natureBean.getTrekkingDistance());
+                natureRequest.setTrekkingDifficulty(natureBean.getDifficulty());
+                request = natureRequest;
+            }
 
             SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
 
