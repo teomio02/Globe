@@ -1,18 +1,11 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
-import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.controller.guicontroller.ErrorPopUpGUIController;
-import it.uniroma2.ispw.globe.controller.guicontroller.ViewManager;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 
 import java.util.Scanner;
 

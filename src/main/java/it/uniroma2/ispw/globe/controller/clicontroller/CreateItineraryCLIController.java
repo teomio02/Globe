@@ -97,8 +97,8 @@ public class CreateItineraryCLIController {
 
         try {
             itineraryBean.setTypes(getTypes());
-            itineraryBean.setCities(getCities());
-            itineraryBean.setAttractions(getAttractions());
+            itineraryBean.setCities(searchCities());
+            itineraryBean.setAttractions(searchAttractions());
         } catch (IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
@@ -168,7 +168,7 @@ public class CreateItineraryCLIController {
         return type;
     }
 
-    public List<String> getCities() {
+    public List<String> searchCities() {
         String city;
         List<String> cities = new ArrayList<>();
 
@@ -237,7 +237,7 @@ public class CreateItineraryCLIController {
         return cities.get(choice-1).getId();
     }
 
-    public List<String> getAttractions() {
+    public List<String> searchAttractions() {
         String attraction;
         List<String> attractions = new ArrayList<>();
 
