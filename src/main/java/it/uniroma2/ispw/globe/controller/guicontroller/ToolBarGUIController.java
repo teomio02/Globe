@@ -2,16 +2,27 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
 import static it.uniroma2.ispw.globe.other.UserType.GUEST;
 import static it.uniroma2.ispw.globe.other.UserType.USER;
 
@@ -22,6 +33,20 @@ public class ToolBarGUIController {
 
     @FXML
     private Button logOutButton;
+    @FXML
+    private Button requestButton;
+    @FXML
+    private Button agencyButton;
+    @FXML
+    private Button tripButton;
+    @FXML
+    private Button yesButton;
+    @FXML
+    private Button noButton;
+
+    private static final String DEFAULT_BUTTON = "button-default";
+    private static final String PRESSED_BUTTON = "button-pressed";
+
 
     public ToolBarGUIController(String sessionId, String userType, BorderPane root) {
         this.sessionId = sessionId;
@@ -33,49 +58,79 @@ public class ToolBarGUIController {
         if (userType.equals(GUEST)) {
             logOutButton.setText("Log In");
         }
+
+        if (userType.equals(USER) || userType.equals(GUEST)) {
+            agencyButton.setVisible(false);
+        } else {
+            tripButton.setVisible(false);
+            requestButton.setVisible(false);
+        }
+
+
     }
 
     public void requestItinerary()  {
+        tripButton.getStyleClass().clear();
+        requestButton.getStyleClass().clear();
+        tripButton.getStyleClass().add(DEFAULT_BUTTON);
+        requestButton.getStyleClass().add(PRESSED_BUTTON);
         ViewManager viewManager = new ViewManager();
         viewManager.goToRequestItineraryGUI(sessionId,root);
+
     }
 
 
     public void manageItinerary(){
+        tripButton.getStyleClass().clear();
+        requestButton.getStyleClass().clear();
+        tripButton.getStyleClass().add(PRESSED_BUTTON);
+        requestButton.getStyleClass().add(DEFAULT_BUTTON);
         ViewManager viewManager = new ViewManager();
-        if (userType.equals(USER) || userType.equals(GUEST)) {
-            viewManager.goToManageItineraryGUI(sessionId,root);
-        } else {
-           viewManager.goToManageRequestGUI(sessionId,root);
-        }
+        viewManager.goToManageItineraryGUI(sessionId,root);
     }
-    public void manageProfile(){}
+
+    public void manageRequest(){
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToManageRequestGUI(sessionId,root);
+    }
+
     public void logOut(ActionEvent event) {
-        Button yesButton = new Button("Yes");
-        Button noButton = new Button("no");
         if (userType.equals(GUEST)) {
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            yesButton.setOnAction(e -> {
-                popupStage.close();
-                yesButton.setUserData(true);
-            });
-            noButton.setOnAction(e -> {
-                popupStage.close();
-                yesButton.setUserData(false);
-            });
+            try {
+                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/LogOutPopUp.fxml").toURI().toURL();
+                FXMLLoader loader = new FXMLLoader(url);
+                loader.setController(this);
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
 
-            Label label = new Label("if you want to login, you will lose everything\nare you sure you want to login?");
-            VBox popupContent = new VBox(label, new HBox(yesButton, noButton));
-            Scene popupScene = new Scene(popupContent, 200, 100);
+                Stage popupStage = new Stage();
+                popupStage.setScene(scene);
 
-            popupStage.setScene(popupScene);
-            popupStage.showAndWait();
+                popupStage.initStyle(StageStyle.TRANSPARENT);
+                popupStage.initModality(Modality.APPLICATION_MODAL);
+
+                yesButton.setOnAction(e -> {
+                    popupStage.close();
+                    yesButton.setUserData(true);
+                });
+                noButton.setOnAction(e -> {
+                    popupStage.close();
+                    yesButton.setUserData(false);
+                });
+
+                popupStage.setScene(scene);
+                popupStage.showAndWait();
+            } catch (IOException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO, e);
+            }
         }
+
         if (!userType.equals(GUEST) || (boolean) yesButton.getUserData()) {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             ViewManager viewManager = new ViewManager();
             viewManager.goToLogInGUI(stage);
         }
+
     }
 }
