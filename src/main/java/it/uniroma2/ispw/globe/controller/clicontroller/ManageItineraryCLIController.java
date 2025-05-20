@@ -34,7 +34,8 @@ public class ManageItineraryCLIController {
                 case 1 -> showItineraries();
                 case 2 -> showProposals();
                 case 3 -> createItinerary();
-                case 4 -> {
+                case 4 -> createRequest();
+                case 5 -> {
                     System.exit(0);
                     return;
                 }
@@ -48,7 +49,8 @@ public class ManageItineraryCLIController {
         System.out.println("1 -> Show Itineraries");
         System.out.println("2 -> Show Proposals");
         System.out.println("3 -> Create new Itinerary");
-        System.out.println("4 -> Quit");
+        System.out.println("4 -> Create new Request");
+        System.out.println("5 -> Quit");
 
         Scanner input = new Scanner(System.in);
         String strChoice;
@@ -56,7 +58,7 @@ public class ManageItineraryCLIController {
         while (true) {
             System.out.print(ENTER_CHOICE);
             strChoice = input.nextLine();
-            if (!strChoice.isEmpty() && strChoice.matches("[1-4]")) {
+            if (!strChoice.isEmpty() && strChoice.matches("[1-5]")) {
                 choice = Integer.parseInt(strChoice);
                 break;
             }
@@ -155,6 +157,11 @@ public class ManageItineraryCLIController {
 
     public void createItinerary() {
         CreateItineraryCLIController controller = new CreateItineraryCLIController(sessionId,null);
+        controller.start();
+    }
+
+    public void createRequest() {
+        CreateRequestCLIController controller = new CreateRequestCLIController(sessionId);
         controller.start();
     }
 }
