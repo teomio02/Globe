@@ -133,7 +133,7 @@ public class ResponseRequestController {
         }
     }
 
-    public AgencyRequestBean getAgencyRequest(String requestID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public RequestBean getAgencyRequest(String requestID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             Request request;
             Agency agency;
@@ -168,14 +168,14 @@ public class ResponseRequestController {
                 attractions.add(attraction.getPlaceID());
             }
 
-            AgencyRequestBean requestBean = new AgencyRequestBean();
+            RequestBean requestBean = new RequestBean();
             requestBean.setUser(user.getUsername());
             requestBean.setAgency(agency.getUsername());
             requestBean.setCities(cities);
             requestBean.setAttractions(attractions);
-            requestBean.setDescription(request.getOtherRequest());
+            requestBean.setOtherRequests(request.getOtherRequest());
             requestBean.setAccepted(request.getAccepted());
-            requestBean.setDays(request.getDayNum());
+            requestBean.setDayNum(request.getDayNum());
             requestBean.setTypes(request.getItineraryType());
 
             return requestBean;
@@ -218,23 +218,23 @@ public class ResponseRequestController {
         }
     }
 
-    public List<AgencyRequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<RequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
             Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
             List<Request> requests = agency.getRequests();
-            List<AgencyRequestBean> requestBeans = new ArrayList<>();
+            List<RequestBean> requestBeans = new ArrayList<>();
             for (Request request : requests) {
                 User user = accountDao.getUserByRequest(request.getId());
 
-                AgencyRequestBean requestBean = new AgencyRequestBean();
+                RequestBean requestBean = new RequestBean();
                 requestBean.setID(request.getId());
                 requestBean.setUser(user.getUsername());
                 requestBean.setAgency(agency.getUsername());
-                requestBean.setDescription(request.getOtherRequest());
+                requestBean.setOtherRequests(request.getOtherRequest());
                 requestBean.setAccepted(request.getAccepted());
-                requestBean.setDays(request.getDayNum());
+                requestBean.setDayNum(request.getDayNum());
                 requestBean.setTypes(request.getItineraryType());
 
                 requestBeans.add(requestBean);

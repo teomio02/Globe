@@ -11,7 +11,6 @@ public class BaseRequest extends Request {
     private Boolean flightRequest;
     private Boolean accommodationRequest;
     private int dayNum;
-    private String description;
     private List<City> cities;
     private List<Attraction> attractions;
     private List<String> itineraryType;
@@ -64,16 +63,6 @@ public class BaseRequest extends Request {
     @Override
     public void setAccommodationRequest(Boolean accommodationRequest) {
         this.accommodationRequest = accommodationRequest;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

@@ -26,6 +26,7 @@ public class GlobeApplicationGUI extends Application {
         Scene scene = new Scene(fxmlLoader.load());
 
         stage.setTitle("GLOBE");
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

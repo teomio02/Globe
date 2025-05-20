@@ -4,7 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,12 +37,15 @@ public class ManageRequestGUIController extends AbstractGUIController {
         this.sessionId = sessionId;
 
         List<ProposalBean> proposals = null;
-        List<AgencyRequestBean> requests = null;
+        List<RequestBean> requests = null;
         try {
             proposals = new ResponseRequestController().getAgencyProposals(sessionId);
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            Stage stage = (Stage) proposalsVBox.getScene().getWindow();
+            ViewManager viewManager = new ViewManager();
+            viewManager.goToLogInGUI(stage);
             return;
         }
 
@@ -70,10 +74,14 @@ public class ManageRequestGUIController extends AbstractGUIController {
                 proposalsVBox.getChildren().add(proposalBox);
             } catch (IOException e) {
                 new ErrorPopUpGUIController().createPopUp("'Manage Request' page loading failed");
+                Stage stage = (Stage) proposalsVBox.getScene().getWindow();
+                ViewManager viewManager = new ViewManager();
+                viewManager.goToLogInGUI(stage);
+                return;
             }
         }
 
-        for (AgencyRequestBean request : requests) {
+        for (RequestBean request : requests) {
             if (request.getAccepted().equals(PENDING)) {
                 try {
                     URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/requestElement.fxml").toURI().toURL();
@@ -84,14 +92,18 @@ public class ManageRequestGUIController extends AbstractGUIController {
                     Label nameLabel = (Label) requestsBox.getGraphic().lookup("#nameLabel");
                     nameLabel.setText(request.getUser());
                     Label descriptionLabel = (Label) requestsBox.getGraphic().lookup("#descriptionLabel");
-                    descriptionLabel.setText(request.getDescription());
+                    descriptionLabel.setText(request.getOtherRequests());
                     Label daysLabel = (Label) requestsBox.getGraphic().lookup("#daysLabel");
-                    daysLabel.setText(String.valueOf(request.getDays()));
+                    daysLabel.setText(String.valueOf(request.getDayNum()));
 
                     requestsVBox.getChildren().add(requestsBox);
 
                 } catch (IOException e) {
                     new ErrorPopUpGUIController().createPopUp("'Manage Request' page loading failed");
+                    Stage stage = (Stage) proposalsVBox.getScene().getWindow();
+                    ViewManager viewManager = new ViewManager();
+                    viewManager.goToLogInGUI(stage);
+                    return;
                 }
             }
         }
@@ -107,12 +119,6 @@ public class ManageRequestGUIController extends AbstractGUIController {
 
     public void viewRequest(ActionEvent event) {
         String requestID = (String) ((Button)event.getSource()).getUserData();
-        try {
-            new ResponseRequestController().setPendingRequest(sessionId,requestID);
-        } catch (FailedOperationException | DuplicateItemException e) {
-            new ErrorPopUpGUIController().createPopUp(e.getMessage());
-            return;
-        }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();

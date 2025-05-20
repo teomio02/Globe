@@ -4,39 +4,48 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 
 import java.util.List;
 
+import static it.uniroma2.ispw.globe.other.ProposalState.*;
+
 public class RequestBean {
     private String id;
-    private String name;
-    private List<String> cities;
-    private List<String> attractions;
+    private String user;
+    private String agency;
     private String otherRequests;
     private int dayNum;
+    private List<String> types;
+    private List<String> cities;
+    private List<String> attractions;
+    private String accepted;
     private boolean flight;
     private boolean accommodation;
-    private List<String> itineraryType;
     private List<String> agencies;
-    private String trekkingDistance;
-    private String trekkingDifficulty;
-    private String travelMode;
-    private String drivingHours;
 
-    public String getId() {
+    public String getID() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setID(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUser() {
+        return user;
     }
 
-    public void setName(String name) throws IncorrectDataException {
-        if (name == null || name.isEmpty()) {
-            throw new IncorrectDataException("Proposal name not valid");
+    public void setUser(String user) throws IncorrectDataException {
+        if (user == null || user.isEmpty()) {
+            throw new IncorrectDataException("Request user not valid");
         }
-        this.name = name;
+        this.user = user;
+    }
+
+    public String getAgency() { return agency; }
+
+    public void setAgency(String agency) throws IncorrectDataException{
+        if (agency == null || agency.isEmpty()) {
+            throw new IncorrectDataException("Request agency not valid");
+        }
+        this.agency = agency;
     }
 
     public List<String> getCities() {
@@ -45,7 +54,7 @@ public class RequestBean {
 
     public void setCities(List<String> cities) throws IncorrectDataException {
         if (cities == null || cities.isEmpty()) {
-            throw new IncorrectDataException("Proposal cities not valid");
+            throw new IncorrectDataException("Request cities not valid");
         }
         this.cities = cities;
     }
@@ -56,7 +65,7 @@ public class RequestBean {
 
     public void setAttractions(List<String> attractions) throws IncorrectDataException {
         if (attractions == null || attractions.isEmpty()) {
-            throw new IncorrectDataException("Proposal attractions not valid");
+            throw new IncorrectDataException("Request attractions not valid");
         }
         this.attractions = attractions;
     }
@@ -78,7 +87,7 @@ public class RequestBean {
 
     public void setDayNum(int dayNum) throws IncorrectDataException {
         if (dayNum < 1 || dayNum > 99) {
-            throw new IncorrectDataException("Proposal dayNum not valid");
+            throw new IncorrectDataException("Request dayNum not valid");
         }
         this.dayNum = dayNum;
     }
@@ -99,15 +108,27 @@ public class RequestBean {
         this.accommodation = accommodation;
     }
 
-    public List<String> getItineraryType() {
-        return itineraryType;
+    public List<String> getTypes() {
+        return types;
     }
 
-    public void setItineraryType(List<String> itineraryType) throws IncorrectDataException {
-        if (itineraryType == null || itineraryType.isEmpty()) {
-            throw new IncorrectDataException("Proposal itineraryType not valid");
+    public void setTypes(List<String> types) throws IncorrectDataException {
+        if (types == null || types.isEmpty()) {
+            throw new IncorrectDataException("Request itineraryType not valid");
         }
-        this.itineraryType = itineraryType;
+        this.types = types;
+    }
+
+    public String getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(String accepted) throws IncorrectDataException {
+        if (accepted.equals(ACCEPTED) || accepted.equals(REJECTED) || accepted.equals(PENDING)) {
+            this.accepted = accepted;
+            return;
+        }
+        throw new IncorrectDataException("Request accepted not valid");
     }
 
     public List<String> getAgencies() {
@@ -116,25 +137,9 @@ public class RequestBean {
 
     public void setAgencies(List<String> agencies) throws IncorrectDataException {
         if (agencies == null || agencies.isEmpty()) {
-            throw new IncorrectDataException("Proposal agencies not valid");
+            throw new IncorrectDataException("Request agencies not valid");
         }
         this.agencies = agencies;
     }
-
-    public String getTrekkingDifficulty() { return this.trekkingDifficulty; }
-
-    public void setTrekkingDifficulty(String trekkingDifficulty) { this.trekkingDifficulty = trekkingDifficulty; }
-
-    public String getTrekkingDistance() { return this.trekkingDistance; }
-
-    public void setTrekkingDistance(String trekkingDistance) { this.trekkingDistance = trekkingDistance; }
-
-    public String getTravelMode() { return this.travelMode; }
-
-    public void setTravelMode(String travelMode) { this.travelMode = travelMode; }
-
-    public String getDrivingHours() { return this.drivingHours; }
-
-    public void setDrivingHours(String drivingHours) { this.drivingHours = drivingHours; }
 }
 

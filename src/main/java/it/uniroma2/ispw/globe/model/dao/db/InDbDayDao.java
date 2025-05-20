@@ -136,7 +136,7 @@ public class InDbDayDao extends DayDao {
                 day.setCities(cities);
             }
         } catch (SQLException e) {
-            throw new DaoException("getDay: " + e.getMessage(), GENERAL);
+            throw new DaoException("getDayNum: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
             DBConnection.getInstance().closeConnection(attractionStmt,null);

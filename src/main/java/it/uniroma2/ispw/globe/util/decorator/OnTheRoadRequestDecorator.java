@@ -9,7 +9,7 @@ import java.util.List;
 
 public class OnTheRoadRequestDecorator extends RequestDecorator {
     private String travelMode;
-    private String dayDrivingHours;
+    private double dayDrivingHours;
     // attributi
 
     public OnTheRoadRequestDecorator(Request request) {
@@ -25,10 +25,10 @@ public class OnTheRoadRequestDecorator extends RequestDecorator {
         this.travelMode = travelMode;
     }
 
-    public String getDayDrivingHours() {
+    public double getDayDrivingHours() {
         return dayDrivingHours;
     }
-    public void setDayDrivingHours(String dayDrivingHours) {
+    public void setDayDrivingHours(double dayDrivingHours) {
         this.dayDrivingHours = dayDrivingHours;
     }
 }

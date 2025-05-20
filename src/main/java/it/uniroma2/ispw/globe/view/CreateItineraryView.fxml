@@ -58,19 +58,7 @@
                         </Text>
                      </children>
                   </HBox>
-                  <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
-                           <image>
-                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <VBox spacing="10.0">
+                  <VBox prefHeight="367.0" prefWidth="640.0" spacing="7.0">
                      <children>
                         <HBox alignment="CENTER" spacing="10.0">
                            <children>
@@ -113,7 +101,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                        <TextField fx:id="descriptionField" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="431.0" promptText="Description" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
+                        <TextField fx:id="descriptionField" alignment="TOP_CENTER" prefHeight="0.0" prefWidth="640.0" promptText="Description" style="-fx-background-color: #314c1c; -fx-background-radius: 40; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3; -fx-text-fill: #ffffff;">
                            <font>
                               <Font name="Arial" size="14.0" />
                            </font>
@@ -190,7 +178,7 @@
                               </AnchorPane>
                            </content>
                         </ScrollPane>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="120.0" prefWidth="640.0" spacing="2.0">
                            <children>
                               <VBox prefHeight="100.0" prefWidth="400.0">
                                  <children>
@@ -199,7 +187,7 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </TextField>
-                                    <VBox fx:id="cityResultVBox" prefHeight="200.0" prefWidth="100.0" spacing="2.0" />
+                                    <VBox fx:id="cityResultVBox" prefHeight="85.0" prefWidth="100.0" spacing="1.0" />
                                  </children>
                               </VBox>
                               <Button fx:id="addCityButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchCity" prefHeight="33.0" prefWidth="38.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
@@ -217,7 +205,7 @@
                               <VBox fx:id="cityVBox" prefHeight="100.0" prefWidth="400.0" />
                            </children>
                         </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="120.0" prefWidth="200.0" spacing="2.0">
                            <children>
                               <VBox prefHeight="100.0" prefWidth="400.0">
                                  <children>
@@ -226,7 +214,7 @@
                                           <Font name="Arial" size="14.0" />
                                        </font>
                                     </TextField>
-                                    <VBox fx:id="attractionResultVBox" prefHeight="200.0" prefWidth="100.0" spacing="2.0" />
+                                    <VBox fx:id="attractionResultVBox" prefHeight="85.0" prefWidth="298.0" spacing="1.0" />
                                  </children>
                               </VBox>
                               <Button fx:id="addAttractionButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAttraction" prefHeight="33.0" prefWidth="38.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
@@ -246,7 +234,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <HBox prefHeight="49.0" prefWidth="640.0" spacing="30.0">
+                  <HBox alignment="CENTER" prefHeight="0.0" prefWidth="640.0" spacing="200.0">
                      <children>
                         <Button fx:id="accommodationButton" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#addAccommodation" prefHeight="22.0" prefWidth="180.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Accommodation" textFill="#314c1c">
                            <font>
@@ -274,9 +262,9 @@
                         </Button>
                      </children>
                   </HBox>
-                  <HBox prefHeight="185.0" prefWidth="640.0" spacing="10.0">
+                  <HBox prefHeight="83.0" prefWidth="640.0" spacing="10.0">
                      <children>
-                        <VBox fx:id="accommodationVBox" prefHeight="185.0" prefWidth="315.0" spacing="10.0">
+                        <VBox fx:id="accommodationVBox" prefHeight="185.0" prefWidth="315.0" spacing="5.0">
                            <children>
                               <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Accommodation:">
                                  <font>
@@ -312,7 +300,7 @@
                               <VBox fx:id="accommodationResultVBox" prefHeight="200.0" prefWidth="100.0" />
                            </children>
                         </VBox>
-                        <VBox fx:id="flightVBox" prefHeight="185.0" prefWidth="315.0" spacing="10.0">
+                        <VBox fx:id="flightVBox" prefHeight="139.0" prefWidth="315.0" spacing="5.0">
                            <children>
                               <Text fill="#97c093" strokeType="OUTSIDE" strokeWidth="0.0" text="Flight:">
                                  <font>
@@ -369,21 +357,37 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Button fx:id="userButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#generateItinerary" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                     <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets left="548.0" />
-                     </VBox.margin>
-                  </Button>
+                  <HBox prefHeight="0.0" prefWidth="640.0">
+                     <children>
+                        <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                                 <image>
+                                    <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="userButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#generateItinerary" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
+                           <font>
+                              <Font name="Arial Bold" size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets left="456.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <VBox fx:id="requestVBox" prefHeight="648.0" prefWidth="491.0">

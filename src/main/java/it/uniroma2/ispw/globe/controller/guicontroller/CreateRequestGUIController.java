@@ -8,17 +8,15 @@ import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.other.ItineraryType.NATURE;
-import static it.uniroma2.ispw.globe.other.ItineraryType.ON_THE_ROAD;
+import static it.uniroma2.ispw.globe.other.ItineraryType.*;
+import static it.uniroma2.ispw.globe.other.requestOptional.*;
 
 public class CreateRequestGUIController extends AbstractGUIController {
     @FXML
@@ -60,6 +58,12 @@ public class CreateRequestGUIController extends AbstractGUIController {
     @FXML
     private Button natureButton;
     @FXML
+    private Button relaxButton;
+    @FXML
+    private Button cultureButton;
+    @FXML
+    private Button cityButton;
+    @FXML
     private Button normalDifficulty;
     @FXML
     private Button mediumDifficulty;
@@ -71,49 +75,68 @@ public class CreateRequestGUIController extends AbstractGUIController {
     private Button lateAfternoonMode;
     @FXML
     private Button nightMode;
+    @FXML
+    private Tab onTheRoadTab;
+    @FXML
+    private Tab natureTab;
+    @FXML
+    private Tab relaxTab;
+    @FXML
+    private Tab cultureTab;
+    @FXML
+    private Tab cityTab;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private TabPane typeTabPane;
 
+    private static final String SEARCH_BUTTON = "button-search";
+    private static final String DEFAULT_BUTTON = "button-default";
+    private static final String PRESSED_BUTTON = "button-pressed";
 
     private String sessionId;
 
     public void initialize(String sessionId) {
-
         this.sessionId = sessionId;
 
         onTheRoadButton.setUserData(false);
+        natureButton.setUserData(false);
+        relaxButton.setUserData(false);
+        cultureButton.setUserData(false);
+        cityButton.setUserData(false);
+
         flightButton.setUserData(false);
         accommodationButton.setUserData(false);
-        natureButton.setUserData(false);
-        natureVBox.setVisible(false);
-        onTheRoadVBox.setVisible(false);
-
     }
 
-    //HANDLER
-    public void backHandler (ActionEvent event) {}
-    public void minusHandler (ActionEvent event) {
+    public void removeDay() {
         int dayNum = Integer.valueOf(dayLabel.getText());
         if(dayNum>0){
             dayLabel.setText(String.valueOf(dayNum-1));}
     }
-    public void plusHandler (ActionEvent event) {
+
+    public void addDay() {
         int dayNum = Integer.valueOf(dayLabel.getText());
         if (dayNum < 99) {
             dayLabel.setText(String.valueOf(dayNum + 1));
         }
 
     }
-    public void searchCityHandler () {
+
+    public void searchCity() {
         List<CityBean> cities;
         cityResultVBox.getChildren().clear();
         String city = citiesField.getText();
         cities = new RequestItineraryController().getCities(city);
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
-                Button cityButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
-                cityButton.setOnAction(event -> {
+                Button cityResultButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
+                cityResultButton.getStyleClass().add(SEARCH_BUTTON);
+                cityResultButton.setOnAction(event -> {
                     int count=0;
                     if(cityVBox.getChildren().isEmpty()){
                         Label cityLabel = new Label(cityResult.getName());
+                        cityLabel.getStyleClass().add("label-light");
                         cityLabel.setUserData(cityResult.getId());
                         cityVBox.getChildren().add(cityLabel);
                     } else {
@@ -125,12 +148,18 @@ public class CreateRequestGUIController extends AbstractGUIController {
                         }
                         if (count==0){
                             Label cityLabel = new Label(cityResult.getName());
+                            cityLabel.getStyleClass().add("label-light");
                             cityLabel.setUserData(cityResult.getId());
                             cityVBox.getChildren().add(cityLabel);
                         }
                     }
+                    citiesField.clear();
+                    cityResultVBox.getChildren().clear();
                 });
-                cityResultVBox.getChildren().add(cityButton);
+                cityResultVBox.getChildren().add(cityResultButton);
+                if (cityResultVBox.getChildren().size() == 3) {
+                    break;
+                }
             }
         } else {
             Label errorLabel = new Label("Error: no place");
@@ -138,7 +167,8 @@ public class CreateRequestGUIController extends AbstractGUIController {
         }
 
     }
-    public void searchAttractionHandler () {
+
+    public void searchAttraction() {
         List<AttractionBean> attractions;
         attractionResultVBox.getChildren().clear();
 
@@ -148,12 +178,14 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
-                Button attractionButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
-                attractionButton.setOnAction(event -> {
+                Button attractionResultButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
+                attractionResultButton.getStyleClass().add(SEARCH_BUTTON);
+                attractionResultButton.setOnAction(event -> {
                     int count=0;
                     if(attractionVBox.getChildren().isEmpty()){
                         Label attractionLabel = new Label(attractionResult.getName());
                         attractionLabel.setUserData(attractionResult.getId());
+                        attractionLabel.getStyleClass().add("label-light");
                         attractionVBox.getChildren().add(attractionLabel);
                     } else {
                         for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
@@ -166,28 +198,35 @@ public class CreateRequestGUIController extends AbstractGUIController {
                         if (count==0){
                             Label attractionLabel = new Label(attractionResult.getName());
                             attractionLabel.setUserData(attractionResult.getId());
+                            attractionLabel.getStyleClass().add("label-light");
                             attractionVBox.getChildren().add(attractionLabel);
                         }
                     }
+                    attractionsField.clear();
+                    attractionResultVBox.getChildren().clear();
                 });
-                attractionResultVBox.getChildren().add(attractionButton);
+                attractionResultVBox.getChildren().add(attractionResultButton);
+                if (attractionResultVBox.getChildren().size() == 3) {
+                    break;
+                }
             }
         } else {
             Label errorLabel = new Label("Error: no place");
             cityResultVBox.getChildren().add(errorLabel);
         }
     }
-    public void flightHandler (ActionEvent event) {
-        flightButton.setUserData(true);
-    }
-    public void accommodationHandler (ActionEvent event) {
-        accommodationButton.setUserData(true);
 
+    public void addOptional(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        button.setUserData(!((boolean)button.getUserData()));
+        button.getStyleClass().removeAll(PRESSED_BUTTON, DEFAULT_BUTTON);
+        if ((boolean)button.getUserData()) {
+            button.getStyleClass().add(PRESSED_BUTTON);
+        } else {
+            button.getStyleClass().add(DEFAULT_BUTTON);
+        }
     }
-    public void onTheRoadHandler (ActionEvent event) {
-        onTheRoadButton.setUserData(true);
-        onTheRoadVBox.setVisible(true);
-    }
+
     public void chooseMode (ActionEvent event) {
         morningMode.setUserData(false);
         lateAfternoonMode.setUserData(false);
@@ -196,10 +235,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
         mode.setUserData(true);
 
     }
-    public void natureHandler (ActionEvent event) {
-        natureButton.setUserData(true);
-        natureVBox.setVisible(true);
-    }
+
     public void chooseDifficulty (ActionEvent event) {
         normalDifficulty.setUserData(false);
         mediumDifficulty.setUserData(false);
@@ -207,14 +243,67 @@ public class CreateRequestGUIController extends AbstractGUIController {
         Button difficulty = (Button) event.getSource();
         difficulty.setUserData(true);
     }
-    public void searchAgencyHandler () {
+
+    public void setType(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        button.setUserData(!((boolean)button.getUserData()));
+
+        button.getStyleClass().removeAll(PRESSED_BUTTON, DEFAULT_BUTTON);
+        if ((boolean)button.getUserData()) {
+            button.getStyleClass().add(PRESSED_BUTTON);
+            if (button.equals(onTheRoadButton)) {
+                onTheRoadTab.setDisable(false);
+                typeTabPane.getSelectionModel().select(onTheRoadTab);
+            } else if (button.equals(natureButton)) {
+                natureTab.setDisable(false);
+                typeTabPane.getSelectionModel().select(natureTab);
+            } else if (button.equals(relaxButton)) {
+                relaxTab.setDisable(false);
+                typeTabPane.getSelectionModel().select(relaxTab);
+            } else if (button.equals(cultureButton)) {
+                cultureTab.setDisable(false);
+                typeTabPane.getSelectionModel().select(cultureTab);
+            } else if (button.equals(cityButton)) {
+                cityTab.setDisable(false);
+                typeTabPane.getSelectionModel().select(cityTab);
+            }
+        } else {
+            button.getStyleClass().add(DEFAULT_BUTTON);
+            if (button.equals(onTheRoadButton)) {
+                onTheRoadTab.setDisable(true);
+            } else if (button.equals(natureButton)) {
+                natureTab.setDisable(true);
+            } else if (button.equals(relaxButton)) {
+                relaxTab.setDisable(true);
+            } else if (button.equals(cultureButton)) {
+                cultureTab.setDisable(true);
+            } else if (button.equals(cityButton)) {
+                cityTab.setDisable(true);
+            }
+        }
+    }
+
+    public void searchAgency() {
         List<AgencyBean> agencies;
         List<String> types = new ArrayList<>();
+
+        agencyVBox.getChildren().clear();
+        agencyResultVBox.getChildren().clear();
+
         if ((boolean) onTheRoadButton.getUserData()) {
             types.add(ON_THE_ROAD);
         }
         if ((boolean) natureButton.getUserData()) {
             types.add(NATURE);
+        }
+        if ((boolean) relaxButton.getUserData()) {
+            types.add(RELAX);
+        }
+        if ((boolean) cultureButton.getUserData()) {
+            types.add(CULTURE);
+        }
+        if ((boolean) cityButton.getUserData()) {
+            types.add(CITY);
         }
 
         try {
@@ -225,8 +314,10 @@ public class CreateRequestGUIController extends AbstractGUIController {
         }
 
         if (!agencies.isEmpty()) {
+            errorLabel.setVisible(false);
             for (AgencyBean agencyResult : agencies) {
-                Button agencyButton = new Button(agencyResult.getName()+"-"+agencyResult.getRating());
+                Button agencyButton = new Button(agencyResult.getName()+" - "+agencyResult.getRating());
+                agencyButton.getStyleClass().add(SEARCH_BUTTON);
                 agencyButton.setOnAction(event -> {
                     int count=0;
                     if(agencyVBox.getChildren().isEmpty()){
@@ -242,6 +333,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
                         }
                         if (count==0){
                             Label agencyLabel = new Label(agencyResult.getName());
+                            agencyLabel.getStyleClass().add("label-light");
                             agencyLabel.setUserData(agencyResult.getName());
                             agencyVBox.getChildren().add(agencyLabel);
                         }
@@ -250,14 +342,13 @@ public class CreateRequestGUIController extends AbstractGUIController {
                 agencyResultVBox.getChildren().add(agencyButton);
             }
         } else {
-            Label errorLabel = new Label("Error: no agency");
-            agencyResultVBox.getChildren().add(errorLabel);
+            errorLabel.setVisible(true);
         }
 
 
     }
-    public void sendRequestHandler (ActionEvent event) {
 
+    public void createRequest(ActionEvent event) {
         int count=0;
         String city;
         String attraction;
@@ -276,27 +367,50 @@ public class CreateRequestGUIController extends AbstractGUIController {
         String difficulty = null;
 
         if ((boolean) onTheRoadButton.getUserData()) {
-            itineraryType.add("onTheRoad");
+            itineraryType.add(ON_THE_ROAD);
             if((boolean) morningMode.getUserData()) {
-                mode = "morningMode";
+                mode = MORNING_MODE;
             } else if ((boolean) lateAfternoonMode.getUserData()) {
-                mode = "lateAfternoonMode";
+                mode = AFTERNOON_MODE;
             } else if ((boolean) natureButton.getUserData()) {
-                mode = "nightMode";
+                mode = NIGHT_MODE;
             }
-            onTheRoadBean = new OnTheRoadBean( mode, Integer.parseInt(dayDrivingHoursField.getText()));
+            try {
+                onTheRoadBean = new OnTheRoadBean();
+                onTheRoadBean.setMode(mode);
+                onTheRoadBean.setDayDrivingHours(Double.parseDouble(dayDrivingHoursField.getText()));
+            } catch (IncorrectDataException | NumberFormatException e) {
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                return;
+            }
         }
 
         if ((boolean) natureButton.getUserData()) {
-            itineraryType.add("nature");
+            itineraryType.add(NATURE);
             if((boolean) normalDifficulty.getUserData()) {
-                difficulty = "normalDifficulty";
+                difficulty = NORMAL_DIFFICULT;
             } else if ((boolean) mediumDifficulty.getUserData()) {
-                difficulty = "mediumDifficulty";
+                difficulty = MEDIUM_DIFFICULT;
             } else if ((boolean) hardDifficulty.getUserData()) {
-                difficulty = "hardDifficulty";
+                difficulty = HARD_DIFFICULT;
             }
-            natureBean = new NatureBean( difficulty, Integer.parseInt(trekkingDistanceField.getText()));
+            try {
+                natureBean = new NatureBean();
+                natureBean.setDifficulty(difficulty);
+                natureBean.setTrekkingDistance(Double.parseDouble(trekkingDistanceField.getText()));
+            } catch (IncorrectDataException | NumberFormatException e) {
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                return;
+            }
+        }
+        if ((boolean) relaxButton.getUserData()) {
+            itineraryType.add(RELAX);
+        }
+        if ((boolean) cultureButton.getUserData()) {
+            itineraryType.add(CULTURE);
+        }
+        if ((boolean) cityButton.getUserData()) {
+            itineraryType.add(CITY);
         }
 
         for (int i = 0; i < cityVBox.getChildren().size(); i++) {
@@ -314,40 +428,27 @@ public class CreateRequestGUIController extends AbstractGUIController {
             agencies.add(agency);
         }
 
-        if(attractions.isEmpty()){
-           // this.descriptionErrorLabel.setVisible(true);
-            count ++;
-        }else{
-           // this.descriptionErrorLabel.setVisible(false);
-        }
-        if(dayNum==0){
-          //  this.dayErrorLabel.setVisible(true);
-            count ++;
-        }else{
-           // this.dayErrorLabel.setVisible(false);
-            if (count == 0 ){
-                try {
-                    RequestBean requestBean = new RequestBean();
+        try {
+            RequestBean requestBean = new RequestBean();
 
-                    requestBean.setCities(cities);
-                    requestBean.setAttractions(attractions);
-                    requestBean.setOtherRequests(otherRequests);
-                    requestBean.setDayNum(dayNum);
-                    requestBean.setAgencies(agencies);
-                    requestBean.setFlight(flight);
-                    requestBean.setAccommodation(accommodation);
-                    requestBean.setItineraryType(itineraryType);
+            requestBean.setCities(cities);
+            requestBean.setAttractions(attractions);
+            requestBean.setOtherRequests(otherRequests);
+            requestBean.setDayNum(dayNum);
+            requestBean.setAgencies(agencies);
+            requestBean.setFlight(flight);
+            requestBean.setAccommodation(accommodation);
+            requestBean.setTypes(itineraryType);
 
-                    new RequestItineraryController().createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
-                } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-                    new ErrorPopUpGUIController().createPopUp(e.getMessage());
-                    return;
-                }
-            }
+            new RequestItineraryController().createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();
         viewManager.goToDisplayRequestGUI(sessionId,null, root);
     }
+
 }

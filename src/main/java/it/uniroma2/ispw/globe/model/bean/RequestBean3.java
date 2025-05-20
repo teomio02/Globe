@@ -6,7 +6,7 @@ import java.util.List;
 
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 
-public class AgencyRequestBean {
+public class RequestBean3 {
     private String id;
     private String user;
     private String agency;

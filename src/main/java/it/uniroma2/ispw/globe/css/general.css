@@ -62,6 +62,19 @@
     -fx-content-display: TEXT_ONLY;
 }
 
+.button-search {
+    -fx-background-color: #314c1c;
+    -fx-text-fill:  #97c093;
+    -fx-background-radius: 40;
+    -fx-border-color: #97c093;
+    -fx-border-width: 1;
+    -fx-border-radius: 40;
+    -fx-pref-height: 25;
+    -fx-pref-width: 301;
+    -fx-content-display: TEXT_ONLY;
+
+}
+
 .rounded-label {
     -fx-background-color: #314c1c;
     -fx-padding: 2px 12px;

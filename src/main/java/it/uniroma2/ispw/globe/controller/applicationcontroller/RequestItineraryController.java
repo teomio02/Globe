@@ -104,25 +104,40 @@ public class RequestItineraryController {
         }
     }
 
-    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException {
-        Request request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+        Request request;
+        Agency agency;
+        User user;
 
-        String travelMode = null;
-        String drivingHours = null;
-        String trekkingDifficulty = null;
-        String trekkingDistance = null;
+        if (requestID != null) {
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
-        Request current = request;
-        while (current instanceof RequestDecorator) {
-            if (current instanceof OnTheRoadRequestDecorator) {
-                travelMode = ((OnTheRoadRequestDecorator) current).getTravelMode();
-                drivingHours = ((OnTheRoadRequestDecorator) current).getDayDrivingHours();
+            try {
+                request = requestDao.getRequest(requestID);
+                agency = accountDao.getAgencyByRequest(requestID);
+                user = accountDao.getUserByRequest(requestID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Get proposal");
             }
-            if (current instanceof NatureRequestDecorator) {
-                trekkingDifficulty = ((NatureRequestDecorator) current).getTrekkingDifficulty();
-                trekkingDistance = ((NatureRequestDecorator) current).getTrekkingDistance();
+        } else {
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            request = session.getPendingRequest();
+            if (session.getAccount() instanceof Agency account) {
+                agency = account;
+                user = (User) session.getPendingAccount();
+            } else {
+                user = (User) session.getAccount();
+                agency = (Agency) session.getPendingAccount();
             }
-            current = ((RequestDecorator) current).getRequest();
+        }
+
+        if (request == null) {
+            throw new FailedOperationException("Get Request");
         }
 
         List<String> citiesID = new ArrayList<>();
@@ -136,26 +151,64 @@ public class RequestItineraryController {
         }
 
         List<String> agencies = new ArrayList<>();
-        for (Agency agency: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
-            agencies.add(agency.getUsername());
+        for (Agency a: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
+            agencies.add(a.getUsername());
         }
 
         RequestBean requestBean = new RequestBean();
-        requestBean.setId(request.getId());
-        requestBean.setCities(citiesID);
-        requestBean.setAttractions(attractionsID);
+        requestBean.setID(request.getId());
+        requestBean.setUser(user.getUsername());
+        requestBean.setAgency(agency.getUsername());
         requestBean.setOtherRequests(request.getOtherRequest());
         requestBean.setDayNum(request.getDayNum());
-        requestBean.setAgencies(agencies);
+        requestBean.setTypes(request.getItineraryType());
+        requestBean.setCities(citiesID);
+        requestBean.setAttractions(attractionsID);
+        requestBean.setAccepted(request.getAccepted());
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());
-        requestBean.setItineraryType(request.getItineraryType());
-        requestBean.setTrekkingDifficulty(trekkingDifficulty);
-        requestBean.setTrekkingDistance(trekkingDistance);
-        requestBean.setTravelMode(travelMode);
-        requestBean.setDrivingHours(drivingHours);
+        requestBean.setAgencies(agencies);
 
         return requestBean;
+    }
+
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
+        Request request = null;
+        List<Object> optionals = new ArrayList<>();
+        if (requestID != null) {
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+
+            try {
+                request = requestDao.getRequest(requestID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Get proposal");
+            }
+        } else {
+            request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+        }
+
+        Request current = request;
+        while (current instanceof RequestDecorator) {
+            if (current instanceof OnTheRoadRequestDecorator) {
+                OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
+                onTheRoadBean.setMode(((OnTheRoadRequestDecorator) current).getTravelMode());
+                onTheRoadBean.setDayDrivingHours(((OnTheRoadRequestDecorator) current).getDayDrivingHours());
+                optionals.add(onTheRoadBean);
+            }
+            if (current instanceof NatureRequestDecorator) {
+                NatureBean natureBean = new NatureBean();
+                natureBean.setDifficulty(((NatureRequestDecorator) current).getTrekkingDifficulty());
+                natureBean.setTrekkingDistance(((NatureRequestDecorator) current).getTrekkingDistance());
+                optionals.add(natureBean);
+            }
+            current = ((RequestDecorator) current).getRequest();
+        }
+
+        return optionals;
     }
 
     public List<AgencyBean> getAgencies(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
@@ -183,7 +236,7 @@ public class RequestItineraryController {
             AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
 
-            Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+            Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getTypes());
 
             List<City> cities = new ArrayList<>();
             List<Attraction> attractions = new ArrayList<>();
@@ -203,8 +256,8 @@ public class RequestItineraryController {
 
             if (onTheRoadBean != null) {
                 OnTheRoadRequestDecorator onTheRoadRequest = new OnTheRoadRequestDecorator(request);
-                onTheRoadRequest.setDayDrivingHours(onTheRoadRequest.getDayDrivingHours());
-                onTheRoadRequest.setTravelMode(onTheRoadRequest.getTravelMode());
+                onTheRoadRequest.setDayDrivingHours(onTheRoadBean.getDayDrivingHours());
+                onTheRoadRequest.setTravelMode(onTheRoadBean.getMode());
                 request = onTheRoadRequest;
             }
             if (natureBean != null) {
@@ -213,9 +266,6 @@ public class RequestItineraryController {
                 natureRequest.setTrekkingDifficulty(natureBean.getDifficulty());
                 request = natureRequest;
             }
-
-
-
 
             SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
 

@@ -5,7 +5,7 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.util.DBConnection;
-import it.uniroma2.ispw.globe.util.decorator.Request;
+import it.uniroma2.ispw.globe.util.decorator.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +23,9 @@ public class InDbRequestDao extends RequestDao {
     public void addAgencyRequest(Request request, User user, List<Agency> agencies) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "insert into Request (id,user,agency,accepted,description,days) values (?,?,?,?,?,?)";
+        String query = "insert into Request (id,accepted,description,days,flight,accommodation) values (?,?,?,?,?,?)";
+        String natureQuery = "update Request set trekkingDistance = ?, trekkingDifficulty = ? where id = ?";
+        String onTheRoadQuery = "update Request set travelMode = ?, dayDrivingHours = ? where id = ?";
         String accountQuery= "insert into accountRequest (account,requestID) values (?,?)";
         String cityQuery = "insert into requestCity (requestID,cityID) values (?,?)";
         String attractionQuery = "insert into requestAttraction (requestID,attractionID) values (?,?)";
@@ -40,12 +42,14 @@ public class InDbRequestDao extends RequestDao {
                 stmt = connection.prepareStatement(query);
 
                 stmt.setString(1, request.getId());
-                stmt.setString(2, user.getUsername());
-                stmt.setString(3, agency.getUsername());
-                stmt.setString(4, request.getAccepted());
-                stmt.setString(5, request.getOtherRequest());
-                stmt.setInt(6, request.getDayNum());
+                stmt.setString(2, request.getAccepted());
+                stmt.setString(3, request.getOtherRequest());
+                stmt.setInt(4, request.getDayNum());
+                stmt.setBoolean(5,request.getFlightRequest());
+                stmt.setBoolean(6,request.getAccommodationRequest());
                 stmt.execute();
+
+                addDecorationsData(request);
 
                 firstAccountStmt = connection.prepareStatement(accountQuery);
                 firstAccountStmt.setString(1, agency.getUsername());
@@ -98,7 +102,7 @@ public class InDbRequestDao extends RequestDao {
     public Request getRequest(String requestId) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select Request.id, Request.accepted, Request.description, Request.days from Request where id = ?";
+        String query = "select Request.id, Request.accepted, Request.description, Request.days, Request.flight, Request.accommodation, Request.trekkingDifficulty, Request.trekkingDistance, Request.travelMode, Request.dayDrivingHours from Request where id = ?";
         String cityQuery = "select requestCity.cityID from requestCity where requestID = ?";
         String attractionQuery = "select requestAttraction.attractionID from requestAttraction where requestID = ?";
         String typeQuery = "select requestType.type from requestType where requestID = ?";
@@ -126,8 +130,22 @@ public class InDbRequestDao extends RequestDao {
                 request.setId(resultSet.getString("id"));
                 request.setAccepted(resultSet.getString("accepted"));
                 request.setOtherRequest(resultSet.getString("description"));
-                request.setDescription(resultSet.getString("description"));
                 request.setDayNum(resultSet.getInt("days"));
+                request.setFlightRequest(resultSet.getBoolean("flight"));
+                request.setAccommodationRequest(resultSet.getBoolean("accommodation"));
+
+                if (resultSet.getString("trekkingDifficulty") != null) {
+                    NatureRequestDecorator decorator = new NatureRequestDecorator(request);
+                    decorator.setTrekkingDistance(resultSet.getDouble("trekkingDistance"));
+                    decorator.setTrekkingDifficulty(resultSet.getString("trekkingDifficulty"));
+                    request = decorator;
+                }
+                if (resultSet.getString("travelMode") != null) {
+                    OnTheRoadRequestDecorator decorator = new OnTheRoadRequestDecorator(request);
+                    decorator.setTravelMode(resultSet.getString("travelMode"));
+                    decorator.setDayDrivingHours(resultSet.getDouble("dayDrivingHours"));
+                    request = decorator;
+                }
 
                 List<String> types = new ArrayList<>();
                 typeStmt = connection.prepareStatement(typeQuery);
@@ -191,6 +209,50 @@ public class InDbRequestDao extends RequestDao {
             throw new DaoException("updateRequest: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
+        }
+    }
+
+    public void addDecorationsData(Request request) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+
+        String natureQuery = "update Request set trekkingDistance = ?, trekkingDifficulty = ? where id = ?";
+        String onTheRoadQuery = "update Request set travelMode = ?, dayDrivingHours = ? where id = ?";
+
+        PreparedStatement natureStmt = null;
+        PreparedStatement onTheRoadStmt = null;
+
+        try {
+            Request current = request;
+
+            while (current instanceof RequestDecorator requestDecorator) {
+                if (current instanceof NatureRequestDecorator natureRequestDecorator) {
+                    Connection connection = connect.getConnection();
+                    natureStmt = connection.prepareStatement(natureQuery);
+
+                    natureStmt.setDouble(1, natureRequestDecorator.getTrekkingDistance());
+                    natureStmt.setString(2, natureRequestDecorator.getTrekkingDifficulty());
+                    natureStmt.setString(3, natureRequestDecorator.getId());
+                    natureStmt.execute();
+                }
+                if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
+                    Connection connection = connect.getConnection();
+                    onTheRoadStmt = connection.prepareStatement(onTheRoadQuery);
+
+                    onTheRoadStmt.setString(1, onTheRoadRequestDecorator.getTravelMode());
+                    onTheRoadStmt.setDouble(2, onTheRoadRequestDecorator.getDayDrivingHours());
+                    onTheRoadStmt.setString(3, onTheRoadRequestDecorator.getId());
+                    onTheRoadStmt.execute();
+                }
+                current = requestDecorator.getRequest();
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(natureStmt,null);
+            DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
         }
     }
 

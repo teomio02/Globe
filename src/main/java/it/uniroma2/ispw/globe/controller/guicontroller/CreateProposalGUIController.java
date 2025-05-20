@@ -46,7 +46,7 @@ public class CreateProposalGUIController {
         this.requestId = data.getRequestID();
         this.prev = data.getPrev();
 
-        AgencyRequestBean request;
+        RequestBean request;
         ProposalBean proposal;
         try {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
@@ -58,8 +58,8 @@ public class CreateProposalGUIController {
         }
 
         userLabel.setText(request.getUser());
-        requestLabel.setText(request.getDescription());
-        daysLabel.setText(String.valueOf(request.getDays()));
+        requestLabel.setText(request.getOtherRequests());
+        daysLabel.setText(String.valueOf(request.getDayNum()));
         for (String type : request.getTypes()){
             typesHBox.getChildren().add(new Label(type));
         }
@@ -90,7 +90,7 @@ public class CreateProposalGUIController {
             proposalBean.setDescription(descriptionField.getText());
 
             new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | DuplicateItemException | NumberFormatException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

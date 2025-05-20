@@ -5,7 +5,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -31,6 +33,26 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     private Button saveRequestButton;
     @FXML
     private Button createItineraryButton;
+    @FXML
+    private Label drivingHoursLabel;
+    @FXML
+    private Label modeLabel;
+    @FXML
+    private Label difficultLabel;
+    @FXML
+    private Label distanceLabel;
+    @FXML
+    private TabPane typeTabPane;
+    @FXML
+    private Tab onTheRoadTab;
+    @FXML
+    private Tab natureTab;
+    @FXML
+    private Tab relaxTab;
+    @FXML
+    private Tab cultureTab;
+    @FXML
+    private Tab cityTab;
 
 
     private String sessionId;
@@ -43,13 +65,11 @@ public class DisplayRequestGUIController extends AbstractGUIController {
         this.requestId = data.getRequestID();
         this.prev = data.getPrev();
 
-        // popola con use case simo (create request use case)
-
         if (requestId != null) {
             createItineraryButton.setVisible(true);
             saveRequestButton.setVisible(false);
             //create proposal use case
-            AgencyRequestBean request = null;
+            RequestBean request;
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
@@ -58,8 +78,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 return;
             }
             userLabel.setText(request.getUser());
-            descriptionLabel.setText(request.getDescription());
-            daysLabel.setText(String.valueOf(request.getDays()));
+            descriptionLabel.setText(request.getOtherRequests());
+            daysLabel.setText(String.valueOf(request.getDayNum()));
             for (String type: request.getTypes()) {
                 typesHBox.getChildren().add(new Label(type));
             }
@@ -70,31 +90,56 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
             createItineraryButton.setVisible(false);
             RequestBean request;
+            List<Object> optionals;
             List<AgencyBean> agencies;
+            NatureBean nature = null;
+            OnTheRoadBean onTheRoad = null;
             try {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
+                optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
             }
+
+            for (Object optional: optionals) {
+                if (optional instanceof OnTheRoadBean) {
+                    onTheRoad = (OnTheRoadBean) optional;
+                    onTheRoadTab.setDisable(false);
+                    typeTabPane.getSelectionModel().select(onTheRoadTab);
+                    drivingHoursLabel.setText(String.valueOf((onTheRoad).getDayDrivingHours()));
+                    modeLabel.setText(onTheRoad.getMode());
+                } else if (optional instanceof NatureBean) {
+                    nature = (NatureBean) optional;
+                    natureTab.setDisable(false);
+                    typeTabPane.getSelectionModel().select(natureTab);
+                    difficultLabel.setText(nature.getDifficulty());
+                    distanceLabel.setText(String.valueOf(nature.getTrekkingDistance()));
+                }
+            }
+
             userLabel.setText("");
             for (AgencyBean agency : agencies) {
                 userLabel.setText(userLabel.getText() + ", " + agency.getName());
             }
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
-            for (String type: request.getItineraryType()) {
+            for (String type: request.getTypes()) {
                 typesHBox.getChildren().add(new Label(type));
             }
-
-
         }
     }
 
-
     public void createItinerary(ActionEvent event) {
+        try {
+            new ResponseRequestController().setPendingRequest(sessionId,requestId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
+
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();
         viewManager.goToCreateItineraryGUI(sessionId,requestId,root);

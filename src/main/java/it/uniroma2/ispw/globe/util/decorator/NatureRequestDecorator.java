@@ -8,7 +8,7 @@ import it.uniroma2.ispw.globe.model.User;
 import java.util.List;
 
 public class NatureRequestDecorator extends RequestDecorator {
-    private String trekkingDistance;
+    private double trekkingDistance;
     private String trekkingDifficulty;
     //attributi
 
@@ -17,10 +17,10 @@ public class NatureRequestDecorator extends RequestDecorator {
     }
     //get set attributi
 
-    public String getTrekkingDistance() {
+    public double getTrekkingDistance() {
         return this.trekkingDistance;
     }
-    public void setTrekkingDistance(String trekkingDistance) {
+    public void setTrekkingDistance(double trekkingDistance) {
         this.trekkingDistance = trekkingDistance;
     }
 
