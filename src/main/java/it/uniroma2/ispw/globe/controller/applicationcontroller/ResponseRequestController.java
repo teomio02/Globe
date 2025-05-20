@@ -10,8 +10,7 @@ import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.other.Persistence;
 import it.uniroma2.ispw.globe.other.session.Session;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
-import it.uniroma2.ispw.globe.util.decorator.Request;
+import it.uniroma2.ispw.globe.util.decorator.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,59 +132,104 @@ public class ResponseRequestController {
         }
     }
 
-    public RequestBean getAgencyRequest(String requestID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
-        try {
-            Request request;
-            Agency agency;
-            User user;
+    public RequestBean getAgencyRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+        Request request;
+        Agency agency;
+        User user;
 
-            if (requestID == null) {
-                Session session = SessionManager.getInstance().getSession(sessionID);
-                request = session.getPendingRequest();
+        if (requestID != null) {
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
-                if (session.getAccount() instanceof Agency account) {
-                    agency = account;
-                    user = (User) session.getPendingAccount();
-                } else {
-                    user = (User) session.getAccount();
-                    agency = (Agency) session.getPendingAccount();
-                }
-            } else {
-                RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
-                AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-
+            try {
                 request = requestDao.getRequest(requestID);
                 agency = accountDao.getAgencyByRequest(requestID);
                 user = accountDao.getUserByRequest(requestID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Get proposal");
             }
-
-            List<String> cities = new ArrayList<>();
-            for (City city : request.getCities()) {
-                cities.add(city.getPlaceID());
+        } else {
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            request = session.getPendingRequest();
+            if (session.getAccount() instanceof Agency account) {
+                agency = account;
+                user = (User) session.getPendingAccount();
+            } else {
+                user = (User) session.getAccount();
+                agency = (Agency) session.getPendingAccount();
             }
-            List<String> attractions = new ArrayList<>();
-            for (Attraction attraction : request.getAttractions()) {
-                attractions.add(attraction.getPlaceID());
-            }
-
-            RequestBean requestBean = new RequestBean();
-            requestBean.setUser(user.getUsername());
-            requestBean.setAgency(agency.getUsername());
-            requestBean.setCities(cities);
-            requestBean.setAttractions(attractions);
-            requestBean.setOtherRequests(request.getOtherRequest());
-            requestBean.setAccepted(request.getAccepted());
-            requestBean.setDayNum(request.getDayNum());
-            requestBean.setTypes(request.getItineraryType());
-
-            return requestBean;
-        } catch (DaoException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
-            throw new FailedOperationException("Get agency's request");
         }
+
+        if (request == null) {
+            throw new FailedOperationException("Get Request");
+        }
+
+        List<String> citiesID = new ArrayList<>();
+        for (City city : request.getCities()) {
+            citiesID.add(city.getPlaceID());
+        }
+
+        List<String> attractionsID = new ArrayList<>();
+        for (Attraction attraction : request.getAttractions()) {
+            attractionsID.add(attraction.getPlaceID());
+        }
+
+        RequestBean requestBean = new RequestBean();
+        requestBean.setID(request.getId());
+        requestBean.setUser(user.getUsername());
+        requestBean.setAgency(agency.getUsername());
+        requestBean.setOtherRequests(request.getOtherRequest());
+        requestBean.setDayNum(request.getDayNum());
+        requestBean.setTypes(request.getItineraryType());
+        requestBean.setCities(citiesID);
+        requestBean.setAttractions(attractionsID);
+        requestBean.setAccepted(request.getAccepted());
+        requestBean.setFlight(request.getFlightRequest());
+        requestBean.setAccommodation(request.getAccommodationRequest());
+
+        return requestBean;
+    }
+
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
+        Request request = null;
+        List<Object> optionals = new ArrayList<>();
+        if (requestID != null) {
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            try {
+                request = requestDao.getRequest(requestID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Get proposal");
+            }
+        } else {
+            request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+        }
+
+        Request current = request;
+        while (current instanceof RequestDecorator) {
+            if (current instanceof OnTheRoadRequestDecorator) {
+                OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
+                onTheRoadBean.setMode(((OnTheRoadRequestDecorator) current).getTravelMode());
+                onTheRoadBean.setDayDrivingHours(((OnTheRoadRequestDecorator) current).getDayDrivingHours());
+                optionals.add(onTheRoadBean);
+            }
+            if (current instanceof NatureRequestDecorator) {
+                NatureBean natureBean = new NatureBean();
+                natureBean.setDifficulty(((NatureRequestDecorator) current).getTrekkingDifficulty());
+                natureBean.setTrekkingDistance(((NatureRequestDecorator) current).getTrekkingDistance());
+                optionals.add(natureBean);
+            }
+            current = ((RequestDecorator) current).getRequest();
+        }
+
+        return optionals;
     }
 
     public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {

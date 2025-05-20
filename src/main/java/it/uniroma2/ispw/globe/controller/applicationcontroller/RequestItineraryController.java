@@ -106,7 +106,7 @@ public class RequestItineraryController {
 
     public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
         Request request;
-        Agency agency;
+        Agency agency = null;
         User user;
 
         if (requestID != null) {
@@ -132,7 +132,6 @@ public class RequestItineraryController {
                 user = (User) session.getPendingAccount();
             } else {
                 user = (User) session.getAccount();
-                agency = (Agency) session.getPendingAccount();
             }
         }
 
@@ -158,7 +157,11 @@ public class RequestItineraryController {
         RequestBean requestBean = new RequestBean();
         requestBean.setID(request.getId());
         requestBean.setUser(user.getUsername());
-        requestBean.setAgency(agency.getUsername());
+        if (requestID != null) {
+            requestBean.setAgency(agency.getUsername());
+        } else {
+            requestBean.setAgencies(agencies);
+        }
         requestBean.setOtherRequests(request.getOtherRequest());
         requestBean.setDayNum(request.getDayNum());
         requestBean.setTypes(request.getItineraryType());
@@ -167,17 +170,15 @@ public class RequestItineraryController {
         requestBean.setAccepted(request.getAccepted());
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());
-        requestBean.setAgencies(agencies);
 
         return requestBean;
     }
 
     public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
-        Request request = null;
+        Request request;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
             RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
-
             try {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {
