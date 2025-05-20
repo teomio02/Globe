@@ -64,7 +64,7 @@ CREATE TABLE `Account` (
 
 LOCK TABLES `Account` WRITE;
 /*!40000 ALTER TABLE `Account` DISABLE KEYS */;
-INSERT INTO `Account` VALUES ('0944c662-545','xxxxxxxx',NULL,0,NULL,'guest'),('0dfb93a6-0df','xxxxxxxx',NULL,0,NULL,'guest'),('0e57f0fc-003','xxxxxxxx',NULL,0,NULL,'guest'),('1036738a-7fd','xxxxxxxx',NULL,0,NULL,'guest'),('123','123',NULL,0,NULL,'user'),('1431ebfb-43d','xxxxxxxx',NULL,0,NULL,'guest'),('159429f6-686','xxxxxxxx',NULL,0,NULL,'guest'),('17b338df-59c','xxxxxxxx',NULL,0,NULL,'guest'),('29a98478-0d6','xxxxxxxx',NULL,0,NULL,'guest'),('31a84d07-480','xxxxxxxx',NULL,0,NULL,'guest'),('3264182a-085','xxxxxxxx',NULL,0,NULL,'guest'),('358e0450-e23','xxxxxxxx',NULL,0,NULL,'guest'),('3892193f-389','',NULL,0,NULL,'guest'),('39218384-1d1','xxxxxxxx',NULL,0,NULL,'guest'),('3b0864be-261','xxxxxxxx',NULL,0,NULL,'guest'),('3ff6ad81-2b1','xxxxxxxx',NULL,0,NULL,'guest'),('43694d00','b68d2965',NULL,0,NULL,'guest'),('4a6f829c','c646859c',NULL,0,NULL,'guest'),('55eaca59-ecf','xxxxxxxx',NULL,0,NULL,'guest'),('56c816bf-a22','xxxxxxxx',NULL,0,NULL,'guest'),('597d352c-a32','xxxxxxxx',NULL,0,NULL,'guest'),('5ff7b466-3f2','',NULL,0,NULL,'guest'),('628f7435-b7e','xxxxxxxx',NULL,0,NULL,'guest'),('673d53e1-a23','xxxxxxxx',NULL,0,NULL,'guest'),('6d42e8d2-1c4','xxxxxxxx',NULL,0,NULL,'guest'),('75ff27cc-a78','xxxxxxxx',NULL,0,NULL,'guest'),('82b8a8c1-70f','xxxxxxxx',NULL,0,NULL,'guest'),('84a743a1-afb','',NULL,0,NULL,'guest'),('939e4c5a-d79','',NULL,0,NULL,'guest'),('955c7d5f-a72','xxxxxxxx',NULL,0,NULL,'guest'),('972ea180-221','',NULL,0,NULL,'guest'),('9ce15b4a-9ca','xxxxxxxx',NULL,0,NULL,'guest'),('a','aaaaaaaa','1234567890123456',0,NULL,'user'),('a1','a1',NULL,0,'description1','agency'),('a2','a2',NULL,0,'description2','agency'),('a3','a3',NULL,0,'description3','agency'),('aa07fb3f-6ef','xxxxxxxx',NULL,0,NULL,'guest'),('aa6ce8d9-bd5','xxxxxxxx',NULL,0,NULL,'guest'),('ac0c32f3-f07','xxxxxxxx',NULL,0,NULL,'guest'),('asd','aaaaaaaa',NULL,0,NULL,'user'),('asdf','1124','143241414132532',0,'adsfasfasfsafgggaagssga','agency'),('asfnjfsa','saf',NULL,0,NULL,'user'),('be9c0832-37c','xxxxxxxx',NULL,0,NULL,'guest'),('c468dbff-1ee','xxxxxxxx',NULL,0,NULL,'guest'),('d544e672-9f1','xxxxxxxx',NULL,0,NULL,'guest'),('d8f3cc0a-900','xxxxxxxx',NULL,0,NULL,'guest'),('dd143b15-241','xxxxxxxx',NULL,0,NULL,'guest'),('dd34a3db-775','xxxxxxxx',NULL,0,NULL,'guest'),('e81aaf66-076','xxxxxxxx',NULL,0,NULL,'guest'),('ecf7ea2b-253','',NULL,0,NULL,'guest'),('f72a13ef-057','xxxxxxxx',NULL,0,NULL,'guest'),('prova','prova',NULL,0,NULL,'user'),('prova2','2',NULL,0,NULL,'user'),('saddas','das',NULL,0,NULL,'user'),('SiVola','12345678','128456087412543',0,'Siamo la migliore agenzia di viaggi mai esistita, gestita da Human Safari','agency'),('t','TeoMio02',NULL,0,NULL,'user'),('teo','12345678','1234567890123456',0,NULL,'user'),('TeoMio','1234',NULL,0,NULL,'user'),('try','try',NULL,0,NULL,'user'),('tt','tt',NULL,0,NULL,'user');
+INSERT INTO `Account` VALUES ('0944c662-545','xxxxxxxx',NULL,0,NULL,'guest'),('0dfb93a6-0df','xxxxxxxx',NULL,0,NULL,'guest'),('0e57f0fc-003','xxxxxxxx',NULL,0,NULL,'guest'),('1036738a-7fd','xxxxxxxx',NULL,0,NULL,'guest'),('123','123',NULL,0,NULL,'user'),('1431ebfb-43d','xxxxxxxx',NULL,0,NULL,'guest'),('159429f6-686','xxxxxxxx',NULL,0,NULL,'guest'),('15e512f1-bd1','xxxxxxxx',NULL,0,NULL,'guest'),('17b338df-59c','xxxxxxxx',NULL,0,NULL,'guest'),('19fec310-2f4','xxxxxxxx',NULL,0,NULL,'guest'),('29a98478-0d6','xxxxxxxx',NULL,0,NULL,'guest'),('31a84d07-480','xxxxxxxx',NULL,0,NULL,'guest'),('3264182a-085','xxxxxxxx',NULL,0,NULL,'guest'),('358e0450-e23','xxxxxxxx',NULL,0,NULL,'guest'),('35f3319b-7c0','xxxxxxxx',NULL,0,NULL,'guest'),('3892193f-389','',NULL,0,NULL,'guest'),('39218384-1d1','xxxxxxxx',NULL,0,NULL,'guest'),('3a239739-656','xxxxxxxx',NULL,0,NULL,'guest'),('3b0864be-261','xxxxxxxx',NULL,0,NULL,'guest'),('3ff6ad81-2b1','xxxxxxxx',NULL,0,NULL,'guest'),('43694d00','b68d2965',NULL,0,NULL,'guest'),('4a6f829c','c646859c',NULL,0,NULL,'guest'),('4f4d9da7-f48','xxxxxxxx',NULL,0,NULL,'guest'),('55eaca59-ecf','xxxxxxxx',NULL,0,NULL,'guest'),('56c816bf-a22','xxxxxxxx',NULL,0,NULL,'guest'),('597d352c-a32','xxxxxxxx',NULL,0,NULL,'guest'),('5ff7b466-3f2','',NULL,0,NULL,'guest'),('628f7435-b7e','xxxxxxxx',NULL,0,NULL,'guest'),('673d53e1-a23','xxxxxxxx',NULL,0,NULL,'guest'),('6d42e8d2-1c4','xxxxxxxx',NULL,0,NULL,'guest'),('75ff27cc-a78','xxxxxxxx',NULL,0,NULL,'guest'),('82b8a8c1-70f','xxxxxxxx',NULL,0,NULL,'guest'),('84a743a1-afb','',NULL,0,NULL,'guest'),('857b43a0-078','xxxxxxxx',NULL,0,NULL,'guest'),('8849f365-69c','xxxxxxxx',NULL,0,NULL,'guest'),('8a485f10-6b5','xxxxxxxx',NULL,0,NULL,'guest'),('939e4c5a-d79','',NULL,0,NULL,'guest'),('955c7d5f-a72','xxxxxxxx',NULL,0,NULL,'guest'),('972ea180-221','',NULL,0,NULL,'guest'),('9ce15b4a-9ca','xxxxxxxx',NULL,0,NULL,'guest'),('9e0838d2-885','xxxxxxxx',NULL,0,NULL,'guest'),('a','aaaaaaaa','1234567890123456',0,NULL,'user'),('a1','a1',NULL,0,'description1','agency'),('a2','a2',NULL,0,'description2','agency'),('a3','a3',NULL,0,'description3','agency'),('aa07fb3f-6ef','xxxxxxxx',NULL,0,NULL,'guest'),('aa6ce8d9-bd5','xxxxxxxx',NULL,0,NULL,'guest'),('ac0c32f3-f07','xxxxxxxx',NULL,0,NULL,'guest'),('af28cc31-bc0','xxxxxxxx',NULL,0,NULL,'guest'),('asd','aaaaaaaa',NULL,0,NULL,'user'),('asdf','12345678','143241414132532',0,'adsfasfasfsafgggaagssga','agency'),('asfnjfsa','saf',NULL,0,NULL,'user'),('be9c0832-37c','xxxxxxxx',NULL,0,NULL,'guest'),('c468dbff-1ee','xxxxxxxx',NULL,0,NULL,'guest'),('d544e672-9f1','xxxxxxxx',NULL,0,NULL,'guest'),('d8f3cc0a-900','xxxxxxxx',NULL,0,NULL,'guest'),('dd143b15-241','xxxxxxxx',NULL,0,NULL,'guest'),('dd34a3db-775','xxxxxxxx',NULL,0,NULL,'guest'),('e1bd7dba-e8d','xxxxxxxx',NULL,0,NULL,'guest'),('e81aaf66-076','xxxxxxxx',NULL,0,NULL,'guest'),('ecf7ea2b-253','',NULL,0,NULL,'guest'),('f19b2793-f89','xxxxxxxx',NULL,0,NULL,'guest'),('f72a13ef-057','xxxxxxxx',NULL,0,NULL,'guest'),('f9ad59f8-4d6','xxxxxxxx',NULL,0,NULL,'guest'),('prova','prova',NULL,0,NULL,'user'),('prova2','2',NULL,0,NULL,'user'),('saddas','das',NULL,0,NULL,'user'),('SiVola','12345678','128456087412543',0,'Siamo la migliore agenzia di viaggi mai esistita, gestita da Human Safari','agency'),('t','TeoMio02',NULL,0,NULL,'user'),('teo','12345678','1234567890123456',0,NULL,'user'),('TeoMio','1234',NULL,0,NULL,'user'),('try','try',NULL,0,NULL,'user'),('tt','tt',NULL,0,NULL,'user');
 /*!40000 ALTER TABLE `Account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `accountRequest` (
 
 LOCK TABLES `accountRequest` WRITE;
 /*!40000 ALTER TABLE `accountRequest` DISABLE KEYS */;
-INSERT INTO `accountRequest` VALUES ('a3','39421e5c-2dc3-4e24-ab95-4cc3f87250cb'),('t','39421e5c-2dc3-4e24-ab95-4cc3f87250cb'),('a1','7e3ae615-403c-46be-85c3-7d4f7c6a20d4'),('t','7e3ae615-403c-46be-85c3-7d4f7c6a20d4'),('asdf','98aee8fe-e0a9-4543-95f3-b73a06b2118a'),('t','98aee8fe-e0a9-4543-95f3-b73a06b2118a'),('SiVola','cb9d9be1-3bf7-4a58-9225-512fc6d8dff2'),('t','cb9d9be1-3bf7-4a58-9225-512fc6d8dff2');
+INSERT INTO `accountRequest` VALUES ('SiVola','1f2cdcaa-e852-43c8-a0c4-b766ff6eb10b'),('t','1f2cdcaa-e852-43c8-a0c4-b766ff6eb10b'),('a3','39421e5c-2dc3-4e24-ab95-4cc3f87250cb'),('t','39421e5c-2dc3-4e24-ab95-4cc3f87250cb'),('a1','7e3ae615-403c-46be-85c3-7d4f7c6a20d4'),('t','7e3ae615-403c-46be-85c3-7d4f7c6a20d4'),('asdf','98aee8fe-e0a9-4543-95f3-b73a06b2118a'),('t','98aee8fe-e0a9-4543-95f3-b73a06b2118a'),('SiVola','cb9d9be1-3bf7-4a58-9225-512fc6d8dff2'),('t','cb9d9be1-3bf7-4a58-9225-512fc6d8dff2'),('SiVola','d42cf56a-3ec8-4293-80bc-c5d394a61ae2'),('t','d42cf56a-3ec8-4293-80bc-c5d394a61ae2'),('SiVola','eb82abf4-c5e7-4260-b137-56919bc9d8d7'),('t','eb82abf4-c5e7-4260-b137-56919bc9d8d7'),('SiVola','ff591483-b3f2-4a72-bdf0-166bd4be85ae'),('t','ff591483-b3f2-4a72-bdf0-166bd4be85ae');
 /*!40000 ALTER TABLE `accountRequest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,6 +172,7 @@ CREATE TABLE `agencyType` (
 
 LOCK TABLES `agencyType` WRITE;
 /*!40000 ALTER TABLE `agencyType` DISABLE KEYS */;
+INSERT INTO `agencyType` VALUES ('SiVola','City'),('SiVola','On The Road');
 /*!40000 ALTER TABLE `agencyType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -472,6 +473,12 @@ CREATE TABLE `Request` (
   `accepted` varchar(45) DEFAULT NULL,
   `description` varchar(120) DEFAULT NULL,
   `days` int DEFAULT NULL,
+  `flight` tinyint DEFAULT NULL,
+  `accommodation` tinyint DEFAULT NULL,
+  `trekkingDistance` double DEFAULT NULL,
+  `trekkingDifficulty` varchar(45) DEFAULT NULL,
+  `travelMode` varchar(45) DEFAULT NULL,
+  `dayDrivingHours` double DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_req_idx` (`user`),
   KEY `fk_agency_req_idx` (`agency`),
@@ -486,7 +493,7 @@ CREATE TABLE `Request` (
 
 LOCK TABLES `Request` WRITE;
 /*!40000 ALTER TABLE `Request` DISABLE KEYS */;
-INSERT INTO `Request` VALUES ('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','t','a3','pending','description',3),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','t','a1','pending','description',3),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','t','asdf','pending','description',3),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','t','SiVola','accepted','description',3);
+INSERT INTO `Request` VALUES ('1f2cdcaa-e852-43c8-a0c4-b766ff6eb10b','t','SiVola','pending','saf.ksa nfklòsaf',1,NULL,NULL,NULL,NULL,NULL,NULL),('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','t','a3','pending','description',3,NULL,NULL,NULL,NULL,NULL,NULL),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','t','a1','pending','description',3,NULL,NULL,NULL,NULL,NULL,NULL),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','t','asdf','pending','description',3,NULL,NULL,NULL,NULL,NULL,NULL),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','t','SiVola','accepted','description',3,NULL,NULL,NULL,NULL,NULL,NULL),('d42cf56a-3ec8-4293-80bc-c5d394a61ae2','t','SiVola','pending','aklfnsajbfcnsa',1,NULL,NULL,NULL,NULL,NULL,NULL),('eb82abf4-c5e7-4260-b137-56919bc9d8d7',NULL,NULL,'pending','prova finale',1,1,1,NULL,NULL,'Morning Mode',3.4),('ff591483-b3f2-4a72-bdf0-166bd4be85ae','t','SiVola','pending','safaslkfnsaknfa',1,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `Request` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -513,7 +520,7 @@ CREATE TABLE `requestAttraction` (
 
 LOCK TABLES `requestAttraction` WRITE;
 /*!40000 ALTER TABLE `requestAttraction` DISABLE KEYS */;
-INSERT INTO `requestAttraction` VALUES ('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','r1849830'),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','r1849830'),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','r1849830'),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','r1849830'),('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','w215801333'),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','w215801333'),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','w215801333'),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','w215801333');
+INSERT INTO `requestAttraction` VALUES ('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','r1849830'),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','r1849830'),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','r1849830'),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','r1849830'),('1f2cdcaa-e852-43c8-a0c4-b766ff6eb10b','w215801333'),('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','w215801333'),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','w215801333'),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','w215801333'),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','w215801333'),('d42cf56a-3ec8-4293-80bc-c5d394a61ae2','w215801333'),('eb82abf4-c5e7-4260-b137-56919bc9d8d7','w215801333'),('ff591483-b3f2-4a72-bdf0-166bd4be85ae','w215801333');
 /*!40000 ALTER TABLE `requestAttraction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -540,7 +547,7 @@ CREATE TABLE `requestCity` (
 
 LOCK TABLES `requestCity` WRITE;
 /*!40000 ALTER TABLE `requestCity` DISABLE KEYS */;
-INSERT INTO `requestCity` VALUES ('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','r41485'),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','r41485'),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','r41485'),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','r41485');
+INSERT INTO `requestCity` VALUES ('1f2cdcaa-e852-43c8-a0c4-b766ff6eb10b','r41485'),('39421e5c-2dc3-4e24-ab95-4cc3f87250cb','r41485'),('7e3ae615-403c-46be-85c3-7d4f7c6a20d4','r41485'),('98aee8fe-e0a9-4543-95f3-b73a06b2118a','r41485'),('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','r41485'),('d42cf56a-3ec8-4293-80bc-c5d394a61ae2','r41485'),('eb82abf4-c5e7-4260-b137-56919bc9d8d7','r41485'),('ff591483-b3f2-4a72-bdf0-166bd4be85ae','r41485');
 /*!40000 ALTER TABLE `requestCity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -567,6 +574,7 @@ CREATE TABLE `requestType` (
 
 LOCK TABLES `requestType` WRITE;
 /*!40000 ALTER TABLE `requestType` DISABLE KEYS */;
+INSERT INTO `requestType` VALUES ('cb9d9be1-3bf7-4a58-9225-512fc6d8dff2','City'),('d42cf56a-3ec8-4293-80bc-c5d394a61ae2','City'),('1f2cdcaa-e852-43c8-a0c4-b766ff6eb10b','On The Road'),('eb82abf4-c5e7-4260-b137-56919bc9d8d7','On The Road'),('ff591483-b3f2-4a72-bdf0-166bd4be85ae','On The Road');
 /*!40000 ALTER TABLE `requestType` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -602,4 +610,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-14 12:29:26
+-- Dump completed on 2025-05-20 11:26:27
