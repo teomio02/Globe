@@ -60,13 +60,13 @@ public class CreateRequestCLIController {
         request = getOtherData(request);
 
         try {
-            request.setItineraryType(getTypes());
+            request.setTypes(getTypes());
         } catch (IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
         OnTheRoadBean onTheRoadBean = null;
         NatureBean natureBean = null;
-        for (String type : request.getItineraryType()) {
+        for (String type : request.getTypes()) {
             switch (type) {
                 case ON_THE_ROAD -> onTheRoadBean = getOnTheRoadData();
                 case NATURE -> natureBean = getNatureData() ;
@@ -281,10 +281,10 @@ public class CreateRequestCLIController {
     }
 
     public OnTheRoadBean getOnTheRoadData() {
-        OnTheRoadBean onTheRoadBean;
         String mode;
         String strDuration;
         int duration;
+        OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
 
         System.out.println("travel mode?\n");
         System.out.println("1 -> Morning");
@@ -310,28 +310,32 @@ public class CreateRequestCLIController {
             case 3 -> mode = "night";
             default -> mode = null;
         }
-
+        try {
+            onTheRoadBean.setMode(mode);
+        } catch (IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
         while (true) {
             System.out.print("Please enter itinerary duration (1-99): ");
             strDuration = input.nextLine();
             try {
                 duration = Integer.parseInt(strDuration);
+                onTheRoadBean.setDayDrivingHours(duration);
                 break;
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
             }
         }
 
-
-        return new OnTheRoadBean(mode, duration);
+        return onTheRoadBean;
     }
 
     public NatureBean getNatureData() {
-        NatureBean natureBean;
         String trekkingDifficulty;
         String strDistance;
         int distance;
 
+        NatureBean natureBean = new NatureBean();
         System.out.println("trekking difficulty?\n");
         System.out.println("1 -> Normal");
         System.out.println("2 -> Medium");
@@ -355,18 +359,25 @@ public class CreateRequestCLIController {
             case 3 -> trekkingDifficulty = "Hard";
             default -> trekkingDifficulty = null;
         }
+        try {
+            natureBean.setDifficulty(trekkingDifficulty);
+        } catch (IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
+
         while (true) {
             System.out.print("Please enter trekking distance (1-99): ");
             strDistance = input.nextLine();
             try {
                 distance = Integer.parseInt(strDistance);
+                natureBean.setTrekkingDistance(distance);
                 break;
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
             }
         }
 
-        return new NatureBean(trekkingDifficulty, distance );
+        return natureBean;
 
     }
 
