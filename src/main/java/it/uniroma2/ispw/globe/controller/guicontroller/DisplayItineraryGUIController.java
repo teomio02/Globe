@@ -12,10 +12,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -43,6 +48,8 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
     private VBox flightVBox;
     @FXML
     private HBox typesHBox;
+    @FXML
+    private ImageView itineraryPhoto;
 
     private String sessionId;
     private String itineraryId;
@@ -76,6 +83,12 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         nameLabel.setText(itinerary.getName());
         descriptionLabel.setText(itinerary.getDescription());
         dayLabel.setText(String.valueOf(itinerary.getDuration()));
+        if (itinerary.getPhoto() != null) {
+            Image image = new Image(itinerary.getPhoto().toURI().toString());
+            itineraryPhoto.setImage(image);
+            Circle clip = new Circle(55, 55, 55);
+            itineraryPhoto.setClip(clip);
+        }
 
         for (String type : itinerary.getTypes()) {
             Label typeLabel = new Label(type);
@@ -184,6 +197,29 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();
         viewManager.goToCreateProposalGUI(sessionId, requestId, root);
+    }
+
+    public void addPhoto(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleziona una foto");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Immagini", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(new Stage());
+
+        if (file != null) {
+            Image image = new Image(file.toURI().toString());
+            itineraryPhoto.setImage(image);
+            Circle clip = new Circle(55, 55, 55);
+            itineraryPhoto.setClip(clip);
+        }
+        try {
+            new CreateItineraryController().setItineraryPhoto(file, itineraryId, sessionId);
+        } catch (DuplicateItemException | FailedOperationException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+        }
     }
 
     public void goBack() {

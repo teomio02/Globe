@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.util.decorator;
 
 import it.uniroma2.ispw.globe.model.Day;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class ItineraryDecorator extends Itinerary {
@@ -77,6 +78,16 @@ public abstract class ItineraryDecorator extends Itinerary {
     @Override
     public void setTypes(List<String> types) {
         this.itinerary.setTypes(types);
+    }
+
+    @Override
+    public File getPhotoFile() {
+        return this.itinerary.getPhotoFile();
+    }
+
+    @Override
+    public void setPhotoFile(File photoFile) {
+        this.itinerary.setPhotoFile(photoFile);
     }
 
 }

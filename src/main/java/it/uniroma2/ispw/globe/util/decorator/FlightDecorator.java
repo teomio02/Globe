@@ -2,6 +2,8 @@ package it.uniroma2.ispw.globe.util.decorator;
 
 import it.uniroma2.ispw.globe.model.Flight;
 
+import java.io.File;
+
 public class FlightDecorator extends ItineraryDecorator {
 
     private Flight inFlight;
@@ -26,5 +28,4 @@ public class FlightDecorator extends ItineraryDecorator {
     public void setOutFlight(Flight outFlight) {
         this.outFlight = outFlight;
     }
-
 }

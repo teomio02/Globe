@@ -70,6 +70,11 @@ public class ToolBarGUIController {
     }
 
     public void requestItinerary()  {
+        if (userType.equals(GUEST)) {
+            new ErrorPopUpGUIController().createPopUp("You are not allowed to request itineraries.\nPlease Log In");
+            return;
+        }
+
         tripButton.getStyleClass().clear();
         requestButton.getStyleClass().clear();
         tripButton.getStyleClass().add(DEFAULT_BUTTON);

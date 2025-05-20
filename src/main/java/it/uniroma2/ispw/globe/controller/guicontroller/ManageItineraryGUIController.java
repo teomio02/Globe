@@ -12,9 +12,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -62,6 +64,13 @@ public class ManageItineraryGUIController extends AbstractGUIController {
                 descriptionLabel.setText(itinerary.getDescription());
                 Label daysLabel = (Label) itineraryBox.getGraphic().lookup("#daysLabel");
                 daysLabel.setText(String.valueOf(itinerary.getDuration()));
+                File photoFile = itinerary.getPhoto();
+                if (photoFile != null) {
+                    ImageView imageView = (ImageView) itineraryBox.getGraphic().lookup("#imageView");
+                    imageView.setImage(new Image(photoFile.toURI().toString()));
+                    Circle clip = new Circle(50, 50, 50);
+                    imageView.setClip(clip);
+                }
 
                 itinerariesVBox.getChildren().add(itineraryBox);
             } catch (IOException e) {

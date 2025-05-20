@@ -27,7 +27,7 @@
             <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
          </image>
       </ImageView>
-      <VBox layoutX="10.0" layoutY="10.0" prefHeight="630.0" prefWidth="662.0" spacing="30.0">
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="691.0" prefWidth="662.0" spacing="30.0">
          <children>
             <HBox prefHeight="63.0" prefWidth="279.0">
                <children>
@@ -66,11 +66,11 @@
                   </Text>
                </children>
             </HBox>
-            <TabPane focusTraversable="false" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/ManageTabPane.css" tabClosingPolicy="UNAVAILABLE">
+            <TabPane focusTraversable="false" prefWidth="642.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/ManageTabPane.css" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab closable="false" text="My Itinerary">
                      <content>
-                        <VBox maxHeight="1000.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
+                        <VBox maxHeight="568.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
                            <children>
                               <Button fx:id="addButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createItinerary" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #97c093; -fx-background-radius: 30;" textFill="#314c1c">
                                  <font>
@@ -89,7 +89,7 @@
                               </Button>
                               <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1000.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="itinerariesVBox" alignment="TOP_RIGHT" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;">
+                                    <VBox fx:id="itinerariesVBox" alignment="TOP_CENTER" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;">
                                        <padding>
                                           <Insets bottom="20.0" />
                                        </padding>
@@ -105,11 +105,11 @@
                   </Tab>
                   <Tab closable="false" text="Agency Proposal">
                      <content>
-                        <VBox maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
+                        <VBox maxHeight="568.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
                            <children>
                               <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="proposalsVBox" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
+                                    <VBox fx:id="proposalsVBox" alignment="TOP_CENTER" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
                                  </content>
                               </ScrollPane>
                            </children>
@@ -124,8 +124,6 @@
                   <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </TabPane>
-            <VBox alignment="CENTER" prefWidth="100.0" style="-fx-background-color: #97c093; -fx-background-radius: 30;" />
-            <HBox alignment="CENTER_RIGHT" spacing="30.0" />
          </children>
       </VBox>
    </children>

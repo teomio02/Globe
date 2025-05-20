@@ -64,12 +64,12 @@
             </Button>
             <HBox alignment="CENTER_LEFT" spacing="30.0">
                <children>
-                  <Button fx:id="imageButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" style="-fx-background-color: #314c1c;" text="Copertina" textFill="#97c093">
+                  <Button fx:id="imageButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addPhoto" style="-fx-background-color: #314c1c;" text="Photo" textFill="#97c093">
                      <graphic>
                         <Pane prefHeight="120.0" prefWidth="120.0">
                            <children>
                               <Arc fill="#98bf9300" layoutX="60.0" layoutY="60.0" length="345.0" radiusX="60.0" radiusY="60.0" startAngle="146.3" stroke="#97c093" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="7.0" />
-                              <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="20.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="itineraryPhoto" fitHeight="110.0" fitWidth="110.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true">
                                  <image>
                                     <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/lplus.png" />
                                  </image>

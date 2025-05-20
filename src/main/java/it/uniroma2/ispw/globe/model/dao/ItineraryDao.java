@@ -5,6 +5,7 @@ import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.BaseItinerary;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class ItineraryDao {
@@ -22,4 +23,5 @@ public abstract class ItineraryDao {
     public abstract void addItinerary(Itinerary itinerary, Account account) throws DaoException;
     public abstract Itinerary getItinerary(String itineraryName) throws DaoException;
     public abstract void removeItinerary(String itineraryID) throws DaoException;
+    public abstract void addPhotoFile(File file, String itineraryID) throws DaoException;
 }
