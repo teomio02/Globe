@@ -121,13 +121,13 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if (requestId != null) {
             try {
                 //create proposal use case
-                AgencyRequestBean requestBean;
+                RequestBean requestBean;
                 requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
 
                 if (requestBean != null) {
                     requestVBox.setVisible(true);
                     userLabel.setText(requestBean.getUser());
-                    descriptionLabel.setText(requestBean.getDescription());
+                    descriptionLabel.setText(requestBean.getOtherRequests());
                     for (String type : requestBean.getTypes()) {
                         typesHBox.getChildren().add(new Label(type));
                     }
@@ -138,6 +138,24 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                     for (String attraction : requestBean.getAttractions()) {
                         AttractionBean attractionBean = new CreateItineraryController().getAttraction(0,attraction,null);
                         requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
+                    }
+                    if (requestBean.isFlight()) {
+                        flightVBox.setVisible(true);
+                        flightButton.setUserData(true);
+                        flightButton.setVisible(false);
+                    } else {
+                        flightVBox.setVisible(false);
+                        flightButton.setUserData(false);
+                        flightButton.setVisible(false);
+                    }
+                    if (requestBean.isAccommodation()) {
+                        accommodationVBox.setVisible(true);
+                        accommodationButton.setUserData(true);
+                        accommodationButton.setVisible(false);
+                    } else {
+                        accommodationVBox.setVisible(false);
+                        accommodationButton.setUserData(false);
+                        accommodationButton.setVisible(false);
                     }
                 }
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {

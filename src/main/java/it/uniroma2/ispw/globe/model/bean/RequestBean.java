@@ -4,23 +4,48 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 
 import java.util.List;
 
+import static it.uniroma2.ispw.globe.other.ProposalState.*;
+
 public class RequestBean {
     private String id;
-    private List<String> cities;
-    private List<String> attractions;
+    private String user;
+    private String agency;
     private String otherRequests;
     private int dayNum;
+    private List<String> types;
+    private List<String> cities;
+    private List<String> attractions;
+    private String accepted;
     private boolean flight;
     private boolean accommodation;
-    private List<String> itineraryType;
     private List<String> agencies;
 
-    public String getId() {
+    public String getID() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setID(String id) {
         this.id = id;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) throws IncorrectDataException {
+        if (user == null || user.isEmpty()) {
+            throw new IncorrectDataException("Request user not valid");
+        }
+        this.user = user;
+    }
+
+    public String getAgency() { return agency; }
+
+    public void setAgency(String agency) throws IncorrectDataException{
+        if (agency == null || agency.isEmpty()) {
+            throw new IncorrectDataException("Request agency not valid");
+        }
+        this.agency = agency;
     }
 
     public List<String> getCities() {
@@ -80,15 +105,27 @@ public class RequestBean {
         this.accommodation = accommodation;
     }
 
-    public List<String> getItineraryType() {
-        return itineraryType;
+    public List<String> getTypes() {
+        return types;
     }
 
-    public void setItineraryType(List<String> itineraryType) throws IncorrectDataException {
-        if (itineraryType == null || itineraryType.isEmpty()) {
+    public void setTypes(List<String> types) throws IncorrectDataException {
+        if (types == null || types.isEmpty()) {
             throw new IncorrectDataException("Request itineraryType not valid");
         }
-        this.itineraryType = itineraryType;
+        this.types = types;
+    }
+
+    public String getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(String accepted) throws IncorrectDataException {
+        if (accepted.equals(ACCEPTED) || accepted.equals(REJECTED) || accepted.equals(PENDING)) {
+            this.accepted = accepted;
+            return;
+        }
+        throw new IncorrectDataException("Request accepted not valid");
     }
 
     public List<String> getAgencies() {

@@ -4,7 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 
 import java.util.List;
@@ -87,16 +87,16 @@ public class ManageRequestCLIController {
     }
 
     public void showRequests() {
-        List<AgencyRequestBean> requests;
+        List<RequestBean> requests;
         try {
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
 
             System.out.println("Itineraries:");
-            for(AgencyRequestBean request : requests) {
+            for(RequestBean request : requests) {
                 System.out.println("> ID: " + request.getID());
                 System.out.println("    > User: " + request.getUser());
-                System.out.println("    > Description: " + request.getDescription());
-                System.out.println("    > Duration: " + request.getDays());
+                System.out.println("    > Description: " + request.getOtherRequests());
+                System.out.println("    > Duration: " + request.getDayNum());
             }
 
             String choice = getRequestID(requests);
@@ -133,7 +133,7 @@ public class ManageRequestCLIController {
         }
     }
 
-    public String getRequestID(List<AgencyRequestBean> requests) {
+    public String getRequestID(List<RequestBean> requests) {
         System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
 
         Scanner input = new Scanner(System.in);
@@ -144,7 +144,7 @@ public class ManageRequestCLIController {
             if (choice.equalsIgnoreCase("back")) {
                 return choice;
             } else {
-                for (AgencyRequestBean request : requests) {
+                for (RequestBean request : requests) {
                     if (request.getID().equals(choice)) {
                         return request.getID();
                     }

@@ -32,12 +32,12 @@ public class CreateItineraryCLIController {
         if (requestId != null) {
             try {
                 //create proposal use case
-                AgencyRequestBean requestBean;
+                RequestBean requestBean;
                 requestBean = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
 
                 if (requestBean != null) {
                     System.out.println("> User " + requestBean.getUser() + " request:");
-                    System.out.println("    > Description: " + requestBean.getDescription());
+                    System.out.println("    > Description: " + requestBean.getOtherRequests());
                     System.out.println("    > Types: " + requestBean.getTypes());
                     System.out.println("    > Cities: " + requestBean.getCities());
                     System.out.println("    > Attractions: " + requestBean.getAttractions());

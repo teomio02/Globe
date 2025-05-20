@@ -5,7 +5,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
@@ -69,7 +69,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             createItineraryButton.setVisible(true);
             saveRequestButton.setVisible(false);
             //create proposal use case
-            AgencyRequestBean request;
+            RequestBean request;
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
@@ -78,8 +78,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 return;
             }
             userLabel.setText(request.getUser());
-            descriptionLabel.setText(request.getDescription());
-            daysLabel.setText(String.valueOf(request.getDays()));
+            descriptionLabel.setText(request.getOtherRequests());
+            daysLabel.setText(String.valueOf(request.getDayNum()));
             for (String type: request.getTypes()) {
                 typesHBox.getChildren().add(new Label(type));
             }
@@ -126,13 +126,20 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
-            for (String type: request.getItineraryType()) {
+            for (String type: request.getTypes()) {
                 typesHBox.getChildren().add(new Label(type));
             }
         }
     }
 
     public void createItinerary(ActionEvent event) {
+        try {
+            new ResponseRequestController().setPendingRequest(sessionId,requestId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
+
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
         ViewManager viewManager = new ViewManager();
         viewManager.goToCreateItineraryGUI(sessionId,requestId,root);

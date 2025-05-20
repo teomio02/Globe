@@ -4,7 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.AgencyRequestBean;
+import it.uniroma2.ispw.globe.model.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.bean.ProposalBean;
 
 import java.util.Scanner;
@@ -25,14 +25,14 @@ public class CreateProposalCLIController {
         System.out.println("# CREATE PROPOSAL #");
 
         try {
-            AgencyRequestBean request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
+            RequestBean request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             ProposalBean proposal = new ResponseRequestController().getProposal(null,sessionId);
 
             if (request != null) {
                 System.out.println("> User " + request.getUser() + " request:");
-                System.out.println("    > Description: " + request.getDescription());
+                System.out.println("    > Description: " + request.getOtherRequests());
                 System.out.println("    > Types: " + request.getTypes());
-                System.out.println("    > Duration: " + request.getDays());
+                System.out.println("    > Duration: " + request.getDayNum());
 
                 getProposalData(request.getUser());
             } else {

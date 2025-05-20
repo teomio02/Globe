@@ -24,9 +24,6 @@ public abstract class Request {
     public abstract Boolean getAccommodationRequest();
     public abstract void setAccommodationRequest(Boolean accommodationRequest);
 
-    public abstract String getDescription();
-    public abstract void setDescription(String description);
-
     public abstract int getDayNum();
     public abstract void setDayNum(int dayNum);
 

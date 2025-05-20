@@ -13,7 +13,6 @@ import it.uniroma2.ispw.globe.util.decorator.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -105,12 +104,36 @@ public class RequestItineraryController {
         }
     }
 
-    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException {
-        Request request = null;
+    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+        Request request;
+        Agency agency;
+        User user;
+
         if (requestID != null) {
-            // prendi da dao
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+
+            try {
+                request = requestDao.getRequest(requestID);
+                agency = accountDao.getAgencyByRequest(requestID);
+                user = accountDao.getUserByRequest(requestID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Get proposal");
+            }
         } else {
-            request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+            Session session = SessionManager.getInstance().getSession(sessionID);
+            request = session.getPendingRequest();
+            if (session.getAccount() instanceof Agency account) {
+                agency = account;
+                user = (User) session.getPendingAccount();
+            } else {
+                user = (User) session.getAccount();
+                agency = (Agency) session.getPendingAccount();
+            }
         }
 
         if (request == null) {
@@ -128,29 +151,42 @@ public class RequestItineraryController {
         }
 
         List<String> agencies = new ArrayList<>();
-        for (Agency agency: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
-            agencies.add(agency.getUsername());
+        for (Agency a: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
+            agencies.add(a.getUsername());
         }
 
         RequestBean requestBean = new RequestBean();
-        requestBean.setId(request.getId());
-        requestBean.setCities(citiesID);
-        requestBean.setAttractions(attractionsID);
+        requestBean.setID(request.getId());
+        requestBean.setUser(user.getUsername());
+        requestBean.setAgency(agency.getUsername());
         requestBean.setOtherRequests(request.getOtherRequest());
         requestBean.setDayNum(request.getDayNum());
-        requestBean.setAgencies(agencies);
+        requestBean.setTypes(request.getItineraryType());
+        requestBean.setCities(citiesID);
+        requestBean.setAttractions(attractionsID);
+        requestBean.setAccepted(request.getAccepted());
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());
-        requestBean.setItineraryType(request.getItineraryType());
+        requestBean.setAgencies(agencies);
 
         return requestBean;
     }
 
-    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException {
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
         Request request = null;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
-            // prendi da dao
+            RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+
+            try {
+                request = requestDao.getRequest(requestID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Get proposal");
+            }
         } else {
             request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
         }
@@ -200,7 +236,7 @@ public class RequestItineraryController {
             AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
 
 
-            Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getItineraryType());
+            Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getTypes());
 
             List<City> cities = new ArrayList<>();
             List<Attraction> attractions = new ArrayList<>();

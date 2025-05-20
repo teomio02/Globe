@@ -438,7 +438,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             requestBean.setAgencies(agencies);
             requestBean.setFlight(flight);
             requestBean.setAccommodation(accommodation);
-            requestBean.setItineraryType(itineraryType);
+            requestBean.setTypes(itineraryType);
 
             new RequestItineraryController().createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
