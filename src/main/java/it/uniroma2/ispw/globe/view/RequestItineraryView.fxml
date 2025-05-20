@@ -81,7 +81,7 @@
                                     <VBox fx:id="cityResultVBox" prefHeight="86.0" prefWidth="301.0" spacing="1.0" />
                                  </children>
                               </VBox>
-                              <Button fx:id="nextButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchCityHandler" prefHeight="33.0" prefWidth="38.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                              <Button fx:id="nextButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchCity" prefHeight="33.0" prefWidth="38.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
@@ -111,7 +111,7 @@
                                     <VBox fx:id="attractionResultVBox" prefHeight="86.0" prefWidth="301.0" spacing="1.0" />
                                  </children>
                               </VBox>
-                              <Button fx:id="nextButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAttractionHandler" prefHeight="33.0" prefWidth="38.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
+                              <Button fx:id="nextButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAttraction" prefHeight="33.0" prefWidth="38.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" textFill="#314c1c">
                                  <font>
                                     <Font name="Arial Bold" size="14.0" />
                                  </font>
@@ -267,7 +267,7 @@
                                     </Text>
                                     <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="35.0" prefWidth="130.0" style="-fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 3;">
                                        <children>
-                                          <Button fx:id="minusButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#minusHandler" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
+                                          <Button fx:id="minusButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#removeDay" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
                                              <graphic>
                                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -281,7 +281,7 @@
                                                 <Font size="14.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="plusButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#plusHandler" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
+                                          <Button fx:id="plusButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#addDay" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Button">
                                              <graphic>
                                                 <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -301,18 +301,26 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="127.0" prefWidth="640.0" spacing="10.0">
                            <children>
-                              <Button alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAgencyHandler" prefHeight="31.0" prefWidth="174.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Get Agencies" textFill="#314c1c">
-                                 <font>
-                                    <Font name="Arial Bold" size="14.0" />
-                                 </font>
-                                 <graphic>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="360.0">
-                                       <image>
-                                          <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                 <children>
+                                    <Button alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#searchAgency" prefHeight="31.0" prefWidth="174.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Get Agencies" textFill="#314c1c">
+                                       <font>
+                                          <Font name="Arial Bold" size="14.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="360.0">
+                                             <image>
+                                                <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Label fx:id="errorLabel" styleClass="label-light" text="No agency available" textFill="#97c093" visible="false" />
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets top="27.0" />
+                                 </HBox.margin>
+                              </VBox>
                               <VBox fx:id="agencyResultVBox" alignment="CENTER_LEFT" prefHeight="90.0" prefWidth="226.0">
                                  <HBox.margin>
                                     <Insets />
@@ -327,7 +335,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <Button fx:id="sendRequestButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendRequestHandler" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
+                  <Button fx:id="sendRequestButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#createRequest" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Next" textFill="#314c1c">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
@@ -346,7 +354,7 @@
             </VBox>
             <VBox alignment="CENTER" maxHeight="290.0" prefHeight="290.0" prefWidth="512.0" style="-fx-background-color: #97c093; -fx-background-radius: 25;">
                <children>
-                  <TabPane prefHeight="260.0" prefWidth="489.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/DayTabPane.css" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane fx:id="typeTabPane" prefHeight="260.0" prefWidth="489.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/DayTabPane.css" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="onTheRoadTab" disable="true" text="On The Road">
                         <content>

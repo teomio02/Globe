@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,9 @@ public class ManageItineraryGUIController extends AbstractGUIController {
             proposals = new ManageItineraryController().getUserProposals(sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            Stage stage = (Stage) itinerariesVBox.getScene().getWindow();
+            ViewManager viewManager = new ViewManager();
+            viewManager.goToLogInGUI(stage);
             return;
         }
         for (ItineraryBean itinerary : itineraries) {
@@ -62,6 +66,9 @@ public class ManageItineraryGUIController extends AbstractGUIController {
                 itinerariesVBox.getChildren().add(itineraryBox);
             } catch (IOException e) {
                 new ErrorPopUpGUIController().createPopUp("'Manage Itinerary' page loading failed");
+                Stage stage = (Stage) itinerariesVBox.getScene().getWindow();
+                ViewManager viewManager = new ViewManager();
+                viewManager.goToLogInGUI(stage);
                 return;
             }
         }
@@ -90,6 +97,9 @@ public class ManageItineraryGUIController extends AbstractGUIController {
                 proposalsVBox.getChildren().add(proposalBox);
             } catch (IOException e) {
                 new ErrorPopUpGUIController().createPopUp("'Manage Itinerary' page loading failed");
+                Stage stage = (Stage) itinerariesVBox.getScene().getWindow();
+                ViewManager viewManager = new ViewManager();
+                viewManager.goToLogInGUI(stage);
                 return;
             }
         }

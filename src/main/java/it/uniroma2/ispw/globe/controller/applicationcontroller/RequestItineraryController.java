@@ -13,6 +13,7 @@ import it.uniroma2.ispw.globe.util.decorator.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,25 +105,16 @@ public class RequestItineraryController {
         }
     }
 
-    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException {
-        Request request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException {
+        Request request = null;
+        if (requestID != null) {
+            // prendi da dao
+        } else {
+            request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+        }
 
-        String travelMode = null;
-        String drivingHours = null;
-        String trekkingDifficulty = null;
-        String trekkingDistance = null;
-
-        Request current = request;
-        while (current instanceof RequestDecorator) {
-            if (current instanceof OnTheRoadRequestDecorator) {
-                travelMode = ((OnTheRoadRequestDecorator) current).getTravelMode();
-                drivingHours = ((OnTheRoadRequestDecorator) current).getDayDrivingHours();
-            }
-            if (current instanceof NatureRequestDecorator) {
-                trekkingDifficulty = ((NatureRequestDecorator) current).getTrekkingDifficulty();
-                trekkingDistance = ((NatureRequestDecorator) current).getTrekkingDistance();
-            }
-            current = ((RequestDecorator) current).getRequest();
+        if (request == null) {
+            throw new FailedOperationException("Get Request");
         }
 
         List<String> citiesID = new ArrayList<>();
@@ -150,12 +142,37 @@ public class RequestItineraryController {
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());
         requestBean.setItineraryType(request.getItineraryType());
-        requestBean.setTrekkingDifficulty(trekkingDifficulty);
-        requestBean.setTrekkingDistance(trekkingDistance);
-        requestBean.setTravelMode(travelMode);
-        requestBean.setDrivingHours(drivingHours);
 
         return requestBean;
+    }
+
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException {
+        Request request = null;
+        List<Object> optionals = new ArrayList<>();
+        if (requestID != null) {
+            // prendi da dao
+        } else {
+            request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
+        }
+
+        Request current = request;
+        while (current instanceof RequestDecorator) {
+            if (current instanceof OnTheRoadRequestDecorator) {
+                OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
+                onTheRoadBean.setMode(((OnTheRoadRequestDecorator) current).getTravelMode());
+                onTheRoadBean.setDayDrivingHours(((OnTheRoadRequestDecorator) current).getDayDrivingHours());
+                optionals.add(onTheRoadBean);
+            }
+            if (current instanceof NatureRequestDecorator) {
+                NatureBean natureBean = new NatureBean();
+                natureBean.setDifficulty(((NatureRequestDecorator) current).getTrekkingDifficulty());
+                natureBean.setTrekkingDistance(((NatureRequestDecorator) current).getTrekkingDistance());
+                optionals.add(natureBean);
+            }
+            current = ((RequestDecorator) current).getRequest();
+        }
+
+        return optionals;
     }
 
     public List<AgencyBean> getAgencies(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
@@ -203,8 +220,8 @@ public class RequestItineraryController {
 
             if (onTheRoadBean != null) {
                 OnTheRoadRequestDecorator onTheRoadRequest = new OnTheRoadRequestDecorator(request);
-                onTheRoadRequest.setDayDrivingHours(onTheRoadRequest.getDayDrivingHours());
-                onTheRoadRequest.setTravelMode(onTheRoadRequest.getTravelMode());
+                onTheRoadRequest.setDayDrivingHours(onTheRoadBean.getDayDrivingHours());
+                onTheRoadRequest.setTravelMode(onTheRoadBean.getMode());
                 request = onTheRoadRequest;
             }
             if (natureBean != null) {
@@ -213,9 +230,6 @@ public class RequestItineraryController {
                 natureRequest.setTrekkingDifficulty(natureBean.getDifficulty());
                 request = natureRequest;
             }
-
-
-
 
             SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
 

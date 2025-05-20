@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -31,6 +33,26 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     private Button saveRequestButton;
     @FXML
     private Button createItineraryButton;
+    @FXML
+    private Label drivingHoursLabel;
+    @FXML
+    private Label modeLabel;
+    @FXML
+    private Label difficultLabel;
+    @FXML
+    private Label distanceLabel;
+    @FXML
+    private TabPane typeTabPane;
+    @FXML
+    private Tab onTheRoadTab;
+    @FXML
+    private Tab natureTab;
+    @FXML
+    private Tab relaxTab;
+    @FXML
+    private Tab cultureTab;
+    @FXML
+    private Tab cityTab;
 
 
     private String sessionId;
@@ -43,13 +65,11 @@ public class DisplayRequestGUIController extends AbstractGUIController {
         this.requestId = data.getRequestID();
         this.prev = data.getPrev();
 
-        // popola con use case simo (create request use case)
-
         if (requestId != null) {
             createItineraryButton.setVisible(true);
             saveRequestButton.setVisible(false);
             //create proposal use case
-            AgencyRequestBean request = null;
+            AgencyRequestBean request;
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
@@ -70,15 +90,36 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
             createItineraryButton.setVisible(false);
             RequestBean request;
+            List<Object> optionals;
             List<AgencyBean> agencies;
+            NatureBean nature = null;
+            OnTheRoadBean onTheRoad = null;
             try {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
+                optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
             }
+
+            for (Object optional: optionals) {
+                if (optional instanceof OnTheRoadBean) {
+                    onTheRoad = (OnTheRoadBean) optional;
+                    onTheRoadTab.setDisable(false);
+                    typeTabPane.getSelectionModel().select(onTheRoadTab);
+                    drivingHoursLabel.setText(String.valueOf((onTheRoad).getDayDrivingHours()));
+                    modeLabel.setText(onTheRoad.getMode());
+                } else if (optional instanceof NatureBean) {
+                    nature = (NatureBean) optional;
+                    natureTab.setDisable(false);
+                    typeTabPane.getSelectionModel().select(natureTab);
+                    difficultLabel.setText(nature.getDifficulty());
+                    distanceLabel.setText(String.valueOf(nature.getTrekkingDistance()));
+                }
+            }
+
             userLabel.setText("");
             for (AgencyBean agency : agencies) {
                 userLabel.setText(userLabel.getText() + ", " + agency.getName());
@@ -88,11 +129,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             for (String type: request.getItineraryType()) {
                 typesHBox.getChildren().add(new Label(type));
             }
-
-
         }
     }
-
 
     public void createItinerary(ActionEvent event) {
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();

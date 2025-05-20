@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,9 @@ public class ManageRequestGUIController extends AbstractGUIController {
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            Stage stage = (Stage) proposalsVBox.getScene().getWindow();
+            ViewManager viewManager = new ViewManager();
+            viewManager.goToLogInGUI(stage);
             return;
         }
 
@@ -70,6 +74,10 @@ public class ManageRequestGUIController extends AbstractGUIController {
                 proposalsVBox.getChildren().add(proposalBox);
             } catch (IOException e) {
                 new ErrorPopUpGUIController().createPopUp("'Manage Request' page loading failed");
+                Stage stage = (Stage) proposalsVBox.getScene().getWindow();
+                ViewManager viewManager = new ViewManager();
+                viewManager.goToLogInGUI(stage);
+                return;
             }
         }
 
@@ -92,6 +100,10 @@ public class ManageRequestGUIController extends AbstractGUIController {
 
                 } catch (IOException e) {
                     new ErrorPopUpGUIController().createPopUp("'Manage Request' page loading failed");
+                    Stage stage = (Stage) proposalsVBox.getScene().getWindow();
+                    ViewManager viewManager = new ViewManager();
+                    viewManager.goToLogInGUI(stage);
+                    return;
                 }
             }
         }

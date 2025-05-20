@@ -1,27 +1,30 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 public class OnTheRoadBean {
     private String mode;
-    private String dayDrivingHours;
-
-    public OnTheRoadBean(String mode, String dayDrivingHours) {
-        this.mode = mode;
-        this.dayDrivingHours = dayDrivingHours;
-    }
+    private double dayDrivingHours;
 
     public String getMode() {
         return mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(String mode) throws IncorrectDataException {
+        if (mode == null || mode.isEmpty()) {
+            throw new IncorrectDataException("On the road mode not valid");
+        }
         this.mode = mode;
     }
 
-    public String getDayDrivingHours() {
+    public double getDayDrivingHours() {
         return dayDrivingHours;
     }
 
-    public void setDayDrivingHours(String dayDrivingHours) {
+    public void setDayDrivingHours(double dayDrivingHours) throws IncorrectDataException {
+        if (dayDrivingHours < 0) {
+            throw new IncorrectDataException("On the road day driving hours not valid");
+        }
         this.dayDrivingHours = dayDrivingHours;
     }
 }

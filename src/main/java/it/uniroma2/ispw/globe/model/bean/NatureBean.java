@@ -1,19 +1,19 @@
 package it.uniroma2.ispw.globe.model.bean;
 
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+
 public class NatureBean {
     private String difficulty;
-    private String trekkingDistance;
+    private double trekkingDistance;
 
-    public NatureBean(String difficulty, String trekkingDistance) {
-        this.difficulty = difficulty;
-        this.trekkingDistance = trekkingDistance;
-    }
-
-    public String getTrekkingDistance() {
+    public double getTrekkingDistance() {
         return trekkingDistance;
     }
 
-    public void setTrekkingDistance(String trekkingDistance) {
+    public void setTrekkingDistance(double trekkingDistance) throws IncorrectDataException {
+        if (trekkingDistance < 0) {
+            throw new IncorrectDataException("Nature trekking distance not valid");
+        }
         this.trekkingDistance = trekkingDistance;
     }
 
@@ -21,7 +21,10 @@ public class NatureBean {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(String difficulty) throws IncorrectDataException {
+        if (difficulty == null || difficulty.isEmpty()) {
+            throw new IncorrectDataException("Nature difficulty not valid");
+        }
         this.difficulty = difficulty;
     }
 }

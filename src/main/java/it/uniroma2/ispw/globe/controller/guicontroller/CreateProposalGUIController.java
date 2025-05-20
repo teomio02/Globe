@@ -90,7 +90,7 @@ public class CreateProposalGUIController {
             proposalBean.setDescription(descriptionField.getText());
 
             new ResponseRequestController().createProposal(proposalBean,userLabel.getText(),requestId,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | DuplicateItemException | NumberFormatException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

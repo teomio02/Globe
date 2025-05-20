@@ -149,14 +149,17 @@ public class InDbAccountDao extends AccountDao {
         List<Agency> agencies = new ArrayList<>();
         List<Agency> correctAgencies = new ArrayList<>();
 
-        String query = "select agencyType.agency from agencyType where type = ?";
+        if (types.isEmpty()) {
+            return getAgencies();
+        }
 
+        String query = "select agencyType.agency from agencyType where type = ?";
 
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
 
         try {
-            if (types != null || !types.isEmpty()) {
+            if (!(types == null || types.isEmpty())) {
                 Connection connection = connect.getConnection();
                 stmt = connection.prepareStatement(query);
 
@@ -489,5 +492,33 @@ public class InDbAccountDao extends AccountDao {
         }
 
         return types;
+    }
+
+    public List<Agency> getAgencies() throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+        List<Agency> agencies = new ArrayList<>();
+
+        String query = "select Account.username from Account where type = 'agency'";
+
+        PreparedStatement stmt = null;
+        ResultSet resultSet = null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                Account account = getAccountPrimaryData(resultSet.getString("username"));
+                agencies.add((Agency) account);
+            }
+
+            return agencies;
+        } catch (SQLException e) {
+            throw new DaoException("getAgencyByProposal: "+ e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,resultSet);
+        }
     }
 }

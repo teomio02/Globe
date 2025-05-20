@@ -121,7 +121,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if (requestId != null) {
             try {
                 //create proposal use case
-                AgencyRequestBean requestBean = null;
+                AgencyRequestBean requestBean;
                 requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
 
                 if (requestBean != null) {
