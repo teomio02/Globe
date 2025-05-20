@@ -284,7 +284,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             } else if ((boolean) natureButton.getUserData()) {
                 mode = "nightMode";
             }
-            onTheRoadBean = new OnTheRoadBean( mode, dayDrivingHoursField.getText());
+            onTheRoadBean = new OnTheRoadBean( mode, Integer.parseInt(dayDrivingHoursField.getText()));
         }
 
         if ((boolean) natureButton.getUserData()) {
@@ -296,7 +296,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             } else if ((boolean) hardDifficulty.getUserData()) {
                 difficulty = "hardDifficulty";
             }
-            natureBean = new NatureBean( difficulty, trekkingDistanceField.getText());
+            natureBean = new NatureBean( difficulty, Integer.parseInt(trekkingDistanceField.getText()));
         }
 
         for (int i = 0; i < cityVBox.getChildren().size(); i++) {

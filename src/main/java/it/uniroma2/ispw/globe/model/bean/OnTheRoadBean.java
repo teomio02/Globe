@@ -2,9 +2,9 @@ package it.uniroma2.ispw.globe.model.bean;
 
 public class OnTheRoadBean {
     private String mode;
-    private String dayDrivingHours;
+    private int dayDrivingHours;
 
-    public OnTheRoadBean(String mode, String dayDrivingHours) {
+    public OnTheRoadBean(String mode, int dayDrivingHours) {
         this.mode = mode;
         this.dayDrivingHours = dayDrivingHours;
     }
@@ -17,11 +17,11 @@ public class OnTheRoadBean {
         this.mode = mode;
     }
 
-    public String getDayDrivingHours() {
+    public int getDayDrivingHours() {
         return dayDrivingHours;
     }
 
-    public void setDayDrivingHours(String dayDrivingHours) {
+    public void setDayDrivingHours(int dayDrivingHours) {
         this.dayDrivingHours = dayDrivingHours;
     }
 }

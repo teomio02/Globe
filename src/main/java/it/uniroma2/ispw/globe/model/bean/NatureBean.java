@@ -2,18 +2,18 @@ package it.uniroma2.ispw.globe.model.bean;
 
 public class NatureBean {
     private String difficulty;
-    private String trekkingDistance;
+    private int trekkingDistance;
 
-    public NatureBean(String difficulty, String trekkingDistance) {
+    public NatureBean(String difficulty, int trekkingDistance) {
         this.difficulty = difficulty;
         this.trekkingDistance = trekkingDistance;
     }
 
-    public String getTrekkingDistance() {
+    public int getTrekkingDistance() {
         return trekkingDistance;
     }
 
-    public void setTrekkingDistance(String trekkingDistance) {
+    public void setTrekkingDistance(int trekkingDistance) {
         this.trekkingDistance = trekkingDistance;
     }
 
