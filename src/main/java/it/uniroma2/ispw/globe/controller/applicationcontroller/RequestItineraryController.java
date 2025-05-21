@@ -158,7 +158,11 @@ public class RequestItineraryController {
         RequestBean requestBean = new RequestBean();
         requestBean.setID(request.getId());
         requestBean.setUser(user.getUsername());
-        requestBean.setAgency(agency.getUsername());
+        if (requestID != null) {
+            requestBean.setAgency(agency.getUsername());
+        } else {
+            requestBean.setAgencies(agencies);
+        }
         requestBean.setOtherRequests(request.getOtherRequest());
         requestBean.setDayNum(request.getDayNum());
         requestBean.setTypes(request.getItineraryType());
@@ -167,7 +171,6 @@ public class RequestItineraryController {
         requestBean.setAccepted(request.getAccepted());
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());
-        requestBean.setAgencies(agencies);
 
         return requestBean;
     }
@@ -225,8 +228,6 @@ public class RequestItineraryController {
 
         return agencyBeans;
     }
-
-
 
     public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
@@ -302,6 +303,44 @@ public class RequestItineraryController {
             if (e.getType() == DUPLICATE) {
                 throw new DuplicateItemException();
             }
+            throw new FailedOperationException("Save request");
+        }
+    }
+
+    public CityBean getCity(String cityId) throws FailedOperationException {
+        try {
+            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+            City city = cityDao.getCity(cityId);
+
+            CityBean cityBean = new CityBean();
+            cityBean.setName(city.getName());
+            cityBean.setId(city.getPlaceID());
+            cityBean.setCountry(city.getCountry());
+
+
+            return cityBean;
+
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            throw new FailedOperationException("Save request");
+        }
+    }
+
+    public AttractionBean getAttraction(String attractionId) throws FailedOperationException {
+        try {
+            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+            Attraction attraction = attractionDao.getAttraction(attractionId);
+
+            AttractionBean attractionBean = new AttractionBean();
+            attractionBean.setName(attraction.getName());
+            attractionBean.setId(attraction.getPlaceID());
+            attractionBean.setCity(attraction.getCity());
+            attractionBean.setAddress(attraction.getAddress());
+
+            return attractionBean;
+
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             throw new FailedOperationException("Save request");
         }
     }

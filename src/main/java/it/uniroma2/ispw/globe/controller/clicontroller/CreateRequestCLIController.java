@@ -1,6 +1,8 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
@@ -90,9 +92,19 @@ public class CreateRequestCLIController {
                 System.out.println(ERROR + e.getMessage());
             }
         }
+        try {
+            request.setAgencies(getAgencies(request.getTypes()));
+        } catch (IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
 
-
-
+        try {
+            new RequestItineraryController().createRequest(request, onTheRoadBean, natureBean, sessionId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
+        DisplayRequestCLIController controller = new DisplayRequestCLIController(sessionId,null);
+        controller.start();
     }
 
     public List<String> searchCities() {
@@ -171,7 +183,7 @@ public class CreateRequestCLIController {
         Scanner input = new Scanner(System.in);
 
         while (true){
-            System.out.print("Please enter Attraction (enter stop to termiante): ");
+            System.out.print("Please enter Attraction (enter stop to terminate): ");
             attraction = input.nextLine();
             if (!attraction.isEmpty()) {
                 if (attraction.equalsIgnoreCase("stop")) {
@@ -316,7 +328,7 @@ public class CreateRequestCLIController {
             System.out.println(ERROR + e.getMessage());
         }
         while (true) {
-            System.out.print("Please enter itinerary duration (1-99): ");
+            System.out.print("Please enter day driving hours (1-99): ");
             strDuration = input.nextLine();
             try {
                 duration = Integer.parseInt(strDuration);
@@ -381,6 +393,7 @@ public class CreateRequestCLIController {
 
     }
 
+
     public RequestBean getOtherData(RequestBean requestBean) {
 
         System.out.println("Do you want to add an accommodation? (yes/no)");
@@ -405,5 +418,50 @@ public class CreateRequestCLIController {
         }
 
         return !response.equalsIgnoreCase("no");
+    }
+
+    public List<String> getAgencies(List<String> types) {
+        List<AgencyBean> agencies;
+        String agency;
+        List<String> agenciesSelected = new ArrayList<>();
+
+        try {
+            agencies = new RequestItineraryController().getAgenciesByType(types);
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+            return null;
+        }
+        if (agencies != null && !agencies.isEmpty()) {
+            for (AgencyBean agencyResult : agencies) {
+                System.out.println(agencyResult.getName() + " - " + agencyResult.getRating());
+            }
+        } else {
+            System.out.println(ERROR + "No agencies found");
+            return null;
+        }
+
+        Scanner input = new Scanner(System.in);
+
+        while (true){
+            System.out.print("Please enter Agency (enter stop to terminate): ");
+            agency = input.nextLine();
+            if (!agency.isEmpty()) {
+                if (agency.equalsIgnoreCase("stop")) {
+                    break;
+                }
+                for (AgencyBean agencyResult : agencies) {
+                    if (agencyResult.getName().equals(agency)) {
+                        agenciesSelected.add(agencyResult.getName());
+                    } else {
+                        System.out.println(ERROR + "Agency " + agency + " does not exist");
+                    }
+                }
+            }else {
+                System.out.println(CHOICE_ERROR);
+            }
+        }
+
+        return agenciesSelected;
+
     }
 }
