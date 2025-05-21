@@ -5,6 +5,7 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,5 +55,14 @@ public class InMemoryItineraryDao extends ItineraryDao {
     @Override
     public void removeItinerary(String itineraryID) {
         // rimuovi day
+    }
+
+    @Override
+    public void addPhotoFile(File file, String itineraryID) throws DaoException {
+        for (Itinerary itinerary : itineraries) {
+            if (itinerary.getItineraryID().equals(itineraryID)) {
+                itinerary.setPhotoFile(file);
+            }
+        }
     }
 }

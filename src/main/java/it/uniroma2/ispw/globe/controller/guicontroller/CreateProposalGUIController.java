@@ -15,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class CreateProposalGUIController {
+public class CreateProposalGUIController extends AbstractGUIController{
     @FXML
     private Label userLabel;
     @FXML
@@ -27,11 +27,7 @@ public class CreateProposalGUIController {
     @FXML
     private TextField descriptionField;
     @FXML
-    private VBox selectVBox;
-    @FXML
     private VBox createVBox;
-    @FXML
-    private VBox requestsVBox;
     @FXML
     private HBox typesHBox;
 
@@ -61,7 +57,9 @@ public class CreateProposalGUIController {
         requestLabel.setText(request.getOtherRequests());
         daysLabel.setText(String.valueOf(request.getDayNum()));
         for (String type : request.getTypes()){
-            typesHBox.getChildren().add(new Label(type));
+            Label typeLabel = new Label(type);
+            typeLabel.getStyleClass().add("rounded-label");
+            typesHBox.getChildren().add(typeLabel);
         }
 
         if (proposal != null){

@@ -28,8 +28,6 @@ public class InMemoryAttractionDao extends AttractionDao {
     public void addAttraction(Attraction attraction) throws DaoException {
         if (getAttraction(attraction.getPlaceID()) == null) {
             attractions.add(attraction);
-        } else {
-            throw new DaoException("addAttraction", DUPLICATE);
         }
     }
 
@@ -43,7 +41,7 @@ public class InMemoryAttractionDao extends AttractionDao {
         }
         if (attractionResult == null) {
             attractionResult = createAttraction(attractionID);
-            addAttraction(attractionResult);
+            attractions.add(attractionResult);
         }
         return attractionResult;
     }

@@ -65,13 +65,20 @@ public class DisplayRequestGUIController extends AbstractGUIController {
         this.requestId = data.getRequestID();
         this.prev = data.getPrev();
 
+        RequestBean request;
+        List<Object> optionals;
+        NatureBean nature;
+        OnTheRoadBean onTheRoad;
+
+
         if (requestId != null) {
             createItineraryButton.setVisible(true);
             saveRequestButton.setVisible(false);
             //create proposal use case
-            RequestBean request;
+
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
+                optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
             } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
@@ -89,11 +96,8 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 saveRequestButton.setVisible(true);
             }
             createItineraryButton.setVisible(false);
-            RequestBean request;
-            List<Object> optionals;
+
             List<AgencyBean> agencies;
-            NatureBean nature = null;
-            OnTheRoadBean onTheRoad = null;
             try {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
@@ -104,6 +108,17 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 return;
             }
 
+            userLabel.setText("");
+            for (AgencyBean agency : agencies) {
+                userLabel.setText(userLabel.getText() + ", " + agency.getName());
+            }
+            descriptionLabel.setText(request.getOtherRequests());
+            daysLabel.setText(String.valueOf(request.getDayNum()));
+            for (String type: request.getTypes()) {
+                typesHBox.getChildren().add(new Label(type));
+            }
+        }
+        if (optionals != null && !optionals.isEmpty()) {
             for (Object optional: optionals) {
                 if (optional instanceof OnTheRoadBean) {
                     onTheRoad = (OnTheRoadBean) optional;
@@ -118,16 +133,6 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                     difficultLabel.setText(nature.getDifficulty());
                     distanceLabel.setText(String.valueOf(nature.getTrekkingDistance()));
                 }
-            }
-
-            userLabel.setText("");
-            for (AgencyBean agency : agencies) {
-                userLabel.setText(userLabel.getText() + ", " + agency.getName());
-            }
-            descriptionLabel.setText(request.getOtherRequests());
-            daysLabel.setText(String.valueOf(request.getDayNum()));
-            for (String type: request.getTypes()) {
-                typesHBox.getChildren().add(new Label(type));
             }
         }
     }

@@ -9,6 +9,7 @@ import it.uniroma2.ispw.globe.util.decorator.FlightDecorator;
 import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.ItineraryDecorator;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class InDbItineraryDao extends ItineraryDao {
         if (account != null) {
             DBConnection connect = DBConnection.getInstance();
 
-            String query = "insert into Itinerary (itineraryID,name,description,daysNumber) values (?,?,?,?)";
+            String query = "insert into Itinerary (itineraryID,name,description,daysNumber,photo) values (?,?,?,?,?)";
             String finalQuery = "insert into accountItinerary (account,itineraryID) values (?,?)";
 
             PreparedStatement stmt = null;
@@ -40,6 +41,13 @@ public class InDbItineraryDao extends ItineraryDao {
                 stmt.setString(2, itinerary.getName());
                 stmt.setString(3, itinerary.getDescription());
                 stmt.setInt(4, itinerary.getDaysNumber());
+
+                File photoFile = itinerary.getPhotoFile();
+                if (photoFile != null) {
+                    stmt.setString(5, photoFile.getAbsolutePath());
+                } else {
+                    stmt.setString(5, null);
+                }
 
                 stmt.execute();
 
@@ -73,7 +81,7 @@ public class InDbItineraryDao extends ItineraryDao {
     public Itinerary getItinerary(String id) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select Itinerary.itineraryID, Itinerary.name, Itinerary.description, Itinerary.daysNumber, Itinerary.inFlight, Itinerary.outFlight from Itinerary where itineraryID = ?";
+        String query = "select Itinerary.itineraryID, Itinerary.name, Itinerary.description, Itinerary.daysNumber, Itinerary.inFlight, Itinerary.outFlight, Itinerary.photo from Itinerary where itineraryID = ?";
         String dayQuery = "select Day.itineraryID, Day.dayNum from Day where itineraryID = ?";
         String accommodationQuery = "select itineraryAccommodation.accommodationID from itineraryAccommodation where itineraryID = ?";
         String typeQuery = "select itineraryType.type from itineraryType where itineraryID = ?";
@@ -142,6 +150,11 @@ public class InDbItineraryDao extends ItineraryDao {
                 itinerary.setDays(days);
                 itinerary.setTypes(types);
 
+                String photoUrl = resultSet.getString("photo");
+                if (photoUrl != null) {
+                    itinerary.setPhotoFile(new File(photoUrl));
+                }
+
                 if (!accommodations.isEmpty()) {
                     AccommodationDecorator accommodationItinerary = new AccommodationDecorator(itinerary);
                     accommodationItinerary.setAccommodations(accommodations);
@@ -174,6 +187,32 @@ public class InDbItineraryDao extends ItineraryDao {
     @Override
     public void removeItinerary(String itineraryID) {
         
+    }
+
+    @Override
+    public void addPhotoFile(File file, String itineraryID) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+
+        String query = "update Itinerary set photo = ? where itineraryID = ?";
+
+        PreparedStatement stmt = null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, file.getAbsolutePath());
+            stmt.setString(2, itineraryID);
+
+            stmt.execute();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addPhotoFile: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addPhotoFile: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+        }
     }
 
     public void addDecorationsData(Itinerary itinerary) throws DaoException {

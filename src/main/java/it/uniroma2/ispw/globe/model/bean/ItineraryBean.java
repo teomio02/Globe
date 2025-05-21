@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.model.bean;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.util.List;
 
 public class ItineraryBean {
@@ -18,6 +19,7 @@ public class ItineraryBean {
     private double inboundFlightDepartureTime;
     private double inboundFlightArrivalTime;
     private List<Pair<String, String>> accommodations;
+    private File photo;
 
     public String getId() { return id; }
 
@@ -156,5 +158,13 @@ public class ItineraryBean {
             }
         }
         this.accommodations = accommodations;
+    }
+
+    public File getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(File photo) {
+        this.photo = photo;
     }
 }

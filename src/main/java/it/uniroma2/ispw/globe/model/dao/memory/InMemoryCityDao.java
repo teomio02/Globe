@@ -28,8 +28,6 @@ public class InMemoryCityDao extends CityDao {
     public void addCity(City city) throws DaoException {
         if (getCity(city.getPlaceID()) == null) {
             cities.add(city);
-        } else {
-            throw new DaoException("addCity", DUPLICATE);
         }
     }
 
@@ -43,7 +41,7 @@ public class InMemoryCityDao extends CityDao {
         }
         if (cityResult == null) {
             cityResult = createCity(cityID);
-            addCity(cityResult);
+            cities.add(cityResult);
         }
         return cityResult;
     }

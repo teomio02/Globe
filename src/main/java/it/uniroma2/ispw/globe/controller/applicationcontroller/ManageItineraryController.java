@@ -74,6 +74,7 @@ public class ManageItineraryController {
             itineraryBean.setDescription(itinerary.getDescription());
             itineraryBean.setTypes(itinerary.getTypes());
             itineraryBean.setDuration(itinerary.getDaysNumber());
+            itineraryBean.setPhoto(itinerary.getPhotoFile());
 
             itineraryBeans.add(itineraryBean);
         }

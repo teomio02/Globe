@@ -82,6 +82,7 @@ public class AcceptItineraryController {
             itineraryBean.setDescription(itinerary.getDescription());
             itineraryBean.setTypes(itinerary.getTypes());
             itineraryBean.setDuration(itinerary.getDaysNumber());
+            itineraryBean.setPhoto(itinerary.getPhotoFile());
 
             return itineraryBean;
 

@@ -106,7 +106,7 @@ public class RequestItineraryController {
 
     public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
         Request request;
-        Agency agency;
+        Agency agency = null;
         User user;
 
         if (requestID != null) {
@@ -132,7 +132,6 @@ public class RequestItineraryController {
                 user = (User) session.getPendingAccount();
             } else {
                 user = (User) session.getAccount();
-                agency = (Agency) session.getPendingAccount();
             }
         }
 
@@ -176,11 +175,10 @@ public class RequestItineraryController {
     }
 
     public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
-        Request request = null;
+        Request request;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
             RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
-
             try {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {

@@ -15,6 +15,7 @@ import it.uniroma2.ispw.globe.util.decorator.Itinerary;
 import it.uniroma2.ispw.globe.util.decorator.ItineraryDecorator;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -346,6 +347,7 @@ public class CreateItineraryController {
             itineraryBean.setDescription(itinerary.getDescription());
             itineraryBean.setTypes(itinerary.getTypes());
             itineraryBean.setDuration(itinerary.getDaysNumber());
+            itineraryBean.setPhoto(itinerary.getPhotoFile());
 
             itineraryBean.setInboundFlightDepartureTime(-1);
             itineraryBean.setInboundFlightArrivalTime(-1);
@@ -459,5 +461,24 @@ public class CreateItineraryController {
             }
             throw new FailedOperationException("Get attraction");
         }
+    }
+
+    public void setItineraryPhoto (File file, String itineraryID, String sessionID) throws DuplicateItemException, FailedOperationException {
+        if (itineraryID == null) {
+            Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
+            itinerary.setPhotoFile(file);
+        } else {
+            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+            try {
+                itineraryDao.addPhotoFile(file, itineraryID);
+            } catch (DaoException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+                if (e.getType() == DUPLICATE) {
+                    throw new DuplicateItemException();
+                }
+                throw new FailedOperationException("Set Photo");
+            }
+        }
+
     }
 }

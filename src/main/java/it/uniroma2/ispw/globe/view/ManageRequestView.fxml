@@ -14,7 +14,7 @@
             <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
          </image>
       </ImageView>
-      <VBox layoutX="10.0" layoutY="10.0" prefHeight="630.0" prefWidth="662.0" spacing="30.0">
+      <VBox layoutX="10.0" layoutY="10.0" prefHeight="690.0" prefWidth="662.0" spacing="30.0">
          <children>
             <HBox prefHeight="63.0" prefWidth="279.0">
                <children>
@@ -57,11 +57,11 @@
               <tabs>
                 <Tab text="User Request">
                      <content>
-                        <VBox maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
+                        <VBox maxHeight="567.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
                            <children>
                               <ScrollPane hbarPolicy="NEVER" maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="requestsVBox" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
+                                    <VBox fx:id="requestsVBox" alignment="TOP_CENTER" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
                                  </content>
                               </ScrollPane>
                            </children>
@@ -73,11 +73,11 @@
                   </Tab>
                 <Tab text="My Proposal">
                      <content>
-                        <VBox maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
+                        <VBox maxHeight="567.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;">
                            <children>
                               <ScrollPane hbarPolicy="NEVER" maxHeight="500.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="proposalsVBox" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
+                                    <VBox fx:id="proposalsVBox" alignment="TOP_CENTER" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;" />
                                  </content>
                               </ScrollPane>
                            </children>
@@ -92,7 +92,6 @@
                   <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
             </TabPane>
-            <HBox alignment="CENTER_RIGHT" spacing="30.0" />
          </children>
       </VBox>
    </children>

@@ -323,6 +323,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
                     if(agencyVBox.getChildren().isEmpty()){
                         Label agencyLabel = new Label(agencyResult.getName());
                         agencyLabel.setUserData(agencyResult.getName());
+                        agencyLabel.getStyleClass().add("label-light");
                         agencyVBox.getChildren().add(agencyLabel);
                     } else {
                         for (int i = 0; i < agencyVBox.getChildren().size(); i++) {
