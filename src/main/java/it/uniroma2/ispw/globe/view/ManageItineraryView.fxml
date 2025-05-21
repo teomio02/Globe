@@ -89,7 +89,7 @@
                               </Button>
                               <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1000.0" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;" vbarPolicy="NEVER">
                                  <content>
-                                    <VBox fx:id="itinerariesVBox" alignment="TOP_CENTER" minHeight="0.0" prefWidth="640.0" spacing="5.0" style="-fx-background-color: #314c1c;">
+                                    <VBox fx:id="itinerariesVBox" alignment="TOP_CENTER" minHeight="0.0" prefWidth="640.0" style="-fx-background-color: #314c1c;">
                                        <padding>
                                           <Insets bottom="20.0" />
                                        </padding>

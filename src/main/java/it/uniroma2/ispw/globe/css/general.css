@@ -89,3 +89,24 @@
     -fx-font-style: normal;
     -fx-text-fill: #97c093;
 }
+
+.rating-slider {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 30px;
+    -fx-control-inner-background: #314c1c;
+    -fx-background-color: transparent;
+}
+
+.rating-slider .track {
+    -fx-background-color: #314c1c;
+    -fx-background-insets: 0;
+    -fx-pref-height: 6px;
+    -fx-background-radius: 3px;
+}
+
+.rating-slider .thumb {
+    -fx-background-color: #314c1c;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 16px;
+    -fx-pref-height: 16px;
+}

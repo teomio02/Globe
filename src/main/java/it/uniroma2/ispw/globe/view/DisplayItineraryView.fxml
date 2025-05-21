@@ -50,26 +50,14 @@
                   </Text>
                </children>
             </HBox>
-            <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
-                     <image>
-                        <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <HBox alignment="CENTER_LEFT" spacing="30.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="190.0" spacing="30.0">
                <children>
-                  <Button fx:id="imageButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addPhoto" style="-fx-background-color: #314c1c;" text="Photo" textFill="#97c093">
+                  <Button fx:id="imageButton" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#addPhoto" prefHeight="190.0" prefWidth="160.0" style="-fx-background-color: #314c1c;" text="Photo" textFill="#97c093">
                      <graphic>
-                        <Pane prefHeight="120.0" prefWidth="120.0">
+                        <Pane prefHeight="160.0" prefWidth="160.0">
                            <children>
-                              <Arc fill="#98bf9300" layoutX="60.0" layoutY="60.0" length="345.0" radiusX="60.0" radiusY="60.0" startAngle="146.3" stroke="#97c093" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="7.0" />
-                              <ImageView fx:id="itineraryPhoto" fitHeight="110.0" fitWidth="110.0" layoutX="5.0" layoutY="5.0" pickOnBounds="true">
+                              <Arc fill="#98bf9300" layoutX="80.0" layoutY="80.0" length="345.0" radiusX="80.0" radiusY="80.0" startAngle="146.3" stroke="#97c093" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="10.0" />
+                              <ImageView fx:id="itineraryPhoto" fitHeight="140.0" fitWidth="140.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
                                  <image>
                                     <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/lplus.png" />
                                  </image>
@@ -104,7 +92,7 @@
                         </HBox>
                         <VBox>
                            <children>
-                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefHeight="113.0" prefWidth="431.0" styleClass="label-light" textFill="#97c093">
+                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefHeight="160.0" prefWidth="431.0" styleClass="label-light" textFill="#97c093">
                                  <font>
                                     <Font name="Apple SD Gothic Neo Light" size="12.0" />
                                  </font>
@@ -153,6 +141,21 @@
                            </image>
                         </ImageView>
                      </graphic>
+                  </Button>
+                  <Button fx:id="backButton" alignment="CENTER" graphicTextGap="8.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="92.0" style="-fx-background-color: #97c093; -fx-background-radius: 40;" text="Back" textFill="#314c1c">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                           <image>
+                              <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/dnext.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <StackPane.margin>
+                        <Insets right="548.0" />
+                     </StackPane.margin>
                   </Button>
                </children>
             </StackPane>

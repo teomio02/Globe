@@ -15,8 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -67,9 +71,30 @@ public class ManageItineraryGUIController extends AbstractGUIController {
                 File photoFile = itinerary.getPhoto();
                 if (photoFile != null) {
                     ImageView imageView = (ImageView) itineraryBox.getGraphic().lookup("#imageView");
-                    imageView.setImage(new Image(photoFile.toURI().toString()));
-                    Circle clip = new Circle(50, 50, 50);
-                    imageView.setClip(clip);
+                    HBox photoHbox = (HBox) itineraryBox.getGraphic().lookup("#photoHbox");
+                    photoHbox.getChildren().clear();
+                    ImageView photo = new ImageView(photoFile.toURI().toString());
+                    double totalWidth = 120;
+                    double height = 100;
+                    double circleRadius = height / 2; // 60
+
+                    // Imposta dimensioni dell'immagine
+                    photo.setFitWidth(totalWidth);
+                    photo.setFitHeight(height);
+                    photo.setPreserveRatio(false);
+
+                    // Semicerchio a sinistra
+                    Circle circle = new Circle(circleRadius, circleRadius, circleRadius);
+
+                    // Rettangolo a destra
+                    Rectangle rect = new Rectangle(circleRadius, 0, totalWidth - circleRadius, height);
+
+                    // Unione delle due forme
+                    Shape clipShape = Shape.union(circle, rect);
+
+                    // Applica la maschera all'immagine
+                    photo.setClip(clipShape);
+                    photoHbox.getChildren().add(photo);
                 }
 
                 itinerariesVBox.getChildren().add(itineraryBox);

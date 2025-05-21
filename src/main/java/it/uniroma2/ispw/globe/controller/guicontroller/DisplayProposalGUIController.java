@@ -10,16 +10,29 @@ import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
 import static it.uniroma2.ispw.globe.other.ProposalState.*;
 import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
 
@@ -36,6 +49,10 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     private HBox responseHBox;
     @FXML
     private Button saveButton;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Slider ratingSlider;
 
 
     private String sessionId;
@@ -104,21 +121,33 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         }
 
         if (paymentResult != null) {
-            responseHBox.getChildren().clear();
+            try {
+                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/PaymentPopUp.fxml").toURI().toURL();
+                FXMLLoader loader = new FXMLLoader(url);
+                loader.setController(this);
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                scene.setFill(Color.TRANSPARENT);
 
-            //popup da sistemare grafica
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setTitle("Payment Result");
+                Stage popupStage = new Stage();
+                popupStage.setScene(scene);
 
-            Button closeButton = new Button("Chiudi");
-            closeButton.setOnAction(e -> popupStage.close());
-            Label label = new Label("Proposal accepted:\n" + paymentResult);
-            VBox popupContent = new VBox(label, closeButton);
-            Scene popupScene = new Scene(popupContent, 200, 100);
+                popupStage.initStyle(StageStyle.TRANSPARENT);
+                popupStage.initModality(Modality.APPLICATION_MODAL);
 
-            popupStage.setScene(popupScene);
-            popupStage.showAndWait();
+                closeButton.setOnAction(e -> {
+                    popupStage.close();
+                    //rating.set(ratingSlider.getValue());
+                });
+
+                popupStage.setScene(scene);
+                popupStage.showAndWait();
+                
+                responseHBox.getChildren().clear();
+
+            } catch (IOException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO, e);
+            }
         }
     }
 

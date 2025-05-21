@@ -86,7 +86,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         if (itinerary.getPhoto() != null) {
             Image image = new Image(itinerary.getPhoto().toURI().toString());
             itineraryPhoto.setImage(image);
-            Circle clip = new Circle(55, 55, 55);
+            Circle clip = new Circle(70, 70, 70);
             itineraryPhoto.setClip(clip);
         }
 

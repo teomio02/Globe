@@ -7,18 +7,18 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<Button fx:id="itineraryButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="620.0" style="-fx-background-color: #97c093; -fx-background-radius: 50; -fx-border-radius: 50;" stylesheets="@../css/general.css" text="Button" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Button fx:id="itineraryButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="620.0" style="-fx-background-color: #97c093; -fx-background-radius: 50; -fx-border-radius: 50;" stylesheets="@../css/general.css" text="Button" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <graphic>
-      <HBox fx:id="itineraryHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="600.0">
+      <HBox fx:id="itineraryHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="600.0">
          <children>
             <VBox prefHeight="80.0" prefWidth="547.0">
                <children>
-                  <Label fx:id="nameLabel" prefHeight="20.0" prefWidth="434.0" styleClass="label-title-dark" text="Nome Utente" textFill="#314c1c">
+                  <Label fx:id="nameLabel" prefHeight="20.0" prefWidth="485.0" styleClass="label-title-dark" text="Nome Utente" textFill="#314c1c">
                      <font>
                         <Font name="Arial Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="descriptionLabel" prefHeight="60.0" prefWidth="498.0" styleClass="label-dark" text="Descrizione Richiesta aa asd fafas fa f ns h asfh sfh h ash fhs saf jhas fh fjha hsf ajhf shja fhjs ahjf ashf ash fsh asjh sfahjf ajsfh ajhsfasfh asfh ajfh asjhf afhjs fah fsaha fsjha sfj asfh ashfbhfsahjf hsaf fhhfas jhafs hf asjhfa sjhsf hsahfas fsha fjhafs hf ajhf fajhsf ahf fjshaf ahjsf hjf ajhfs" textFill="#314c1c" wrapText="true">
+                  <Label fx:id="descriptionLabel" prefHeight="94.0" prefWidth="494.0" styleClass="label-dark" text="Descrizione Richiesta aa asd fafas fa f ns h asfh sfh h ash fhs saf jhas fh fjha hsf ajhf shja fhjs ahjf ashf ash fsh asjh sfahjf ajsfh ajhsfasfh asfh ajfh asjhf afhjs fah fsaha fsjha sfj asfh ashfbhfsahjf hsaf fhhfas jhafs hf asjhfa sjhsf hsahfas fsha fjhafs hf ajhf fajhsf ahf fjshaf ahjsf hjf ajhfs" textFill="#314c1c" wrapText="true">
                      <font>
                         <Font name="Arial" size="13.0" />
                      </font>
