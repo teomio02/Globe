@@ -156,6 +156,7 @@ public class DisplayItineraryCLIController {
     }
 
     public void createProposal() {
-
+        CreateProposalCLIController controller = new CreateProposalCLIController(sessionId,requestId);
+        controller.start();
     }
 }

@@ -2,10 +2,12 @@ package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,13 +26,14 @@ public class DisplayRequestCLIController {
     public void start() {
         System.out.println("# DISPLAY REQUEST #");
 
+        RequestBean request = null;
+        List<Object> optionals = new ArrayList<>();
+        NatureBean nature;
+        OnTheRoadBean onTheRoad;
+        List<AgencyBean> agencies = new ArrayList<>();
 
         if (requestId == null) {
-            RequestBean request;
-            List<Object> optionals;
-            List<AgencyBean> agencies;
-            NatureBean nature;
-            OnTheRoadBean onTheRoad;
+            // requestItinerary use case
             try {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
@@ -39,59 +42,83 @@ public class DisplayRequestCLIController {
                 System.out.println(ERROR + e.getMessage());
                 return;
             }
+        } else {
+            // createProposal use case
+            try {
+                request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
+                optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
+            } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
+            }
+        }
 
+        System.out.println("> ID: " + request.getID());
 
-            System.out.println("> ID: " + request.getID());
+        if (requestId == null) {
             System.out.println("    > Agencies: ");
             for (AgencyBean agency : agencies) {
                 System.out.println("        - " + agency.getName() + ", " + agency.getRating());
             }
-            System.out.println("    > Days: " + request.getDayNum());
-            System.out.println("    > Requests: " + request.getOtherRequests());
-            System.out.println("    > Types: " + request.getTypes());
+        } else {
+            System.out.println("    > User: "+ request.getUser());
+        }
 
-            for (Object optional: optionals) {
-                if (optional instanceof OnTheRoadBean) {
-                    onTheRoad = (OnTheRoadBean) optional;
-                    System.out.println("    > Travel mode: " + onTheRoad.getMode());
-                    System.out.println("    > Day driving hours: " + onTheRoad.getDayDrivingHours());
+        System.out.println("    > Days: " + request.getDayNum());
+        System.out.println("    > Requests: " + request.getOtherRequests());
+        System.out.println("    > Types: " + request.getTypes());
 
-                } else if (optional instanceof NatureBean) {
-                    nature = (NatureBean) optional;
-                    System.out.println("    > Trekking difficulty: " + nature.getDifficulty());
-                    System.out.println("    > Trekking distance:   " + nature.getTrekkingDistance());
-                }
+        for (Object optional: optionals) {
+            if (optional instanceof OnTheRoadBean) {
+                onTheRoad = (OnTheRoadBean) optional;
+                System.out.println("    > Travel mode: " + onTheRoad.getMode());
+                System.out.println("    > Day driving hours: " + onTheRoad.getDayDrivingHours());
+
+            } else if (optional instanceof NatureBean) {
+                nature = (NatureBean) optional;
+                System.out.println("    > Trekking difficulty: " + nature.getDifficulty());
+                System.out.println("    > Trekking distance:   " + nature.getTrekkingDistance());
             }
+        }
 
 
-            List<String> citiesID = request.getCities();
-            List<String> attractionsID = request.getAttractions();
+        List<String> citiesID = request.getCities();
+        List<String> attractionsID = request.getAttractions();
 
-            System.out.println("    > Cities: ");
-            for (String cityID: citiesID) {
-                try {
-                    CityBean city =  new RequestItineraryController().getCity(cityID);
-                    System.out.println("        - " + city.getName() + ", " + city.getCountry());
-                } catch (FailedOperationException e) {
-                    System.out.println(ERROR + e.getMessage());
-                    return;
-                }
+        System.out.println("    > Cities: ");
+        for (String cityID: citiesID) {
+            try {
+                CityBean city =  new RequestItineraryController().getCity(cityID);
+                System.out.println("        - " + city.getName() + ", " + city.getCountry());
+            } catch (FailedOperationException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
             }
+        }
 
-            System.out.println("    > Attractions: ");
-            for (String attractionID: attractionsID) {
-                try {
-                    AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
-                    System.out.println("        - " + attraction.getName() + ", " + attraction.getAddress());
-                } catch (FailedOperationException e) {
-                    System.out.println(ERROR + e.getMessage());
-                    return;
-                }
+        System.out.println("    > Attractions: ");
+        for (String attractionID: attractionsID) {
+            try {
+                AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
+                System.out.println("        - " + attraction.getName() + ", " + attraction.getAddress());
+            } catch (FailedOperationException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
             }
+        }
 
+        if (requestId == null) {
             int choice = showUserMenu();
             switch (choice) {
                 case 1 -> saveRequest();
+                case 2 -> {
+                    // go back
+                }
+            }
+        } else {
+            int choice = showAgencyMenu();
+            switch (choice) {
+                case 1 -> createItinerary();
                 case 2 -> {
                     // go back
                 }
@@ -123,7 +150,7 @@ public class DisplayRequestCLIController {
     public int showAgencyMenu() {
         System.out.println("What do you want do?\n");
 
-        System.out.println("1 -> Create Proposal");
+        System.out.println("1 -> Create Itinerary");
         System.out.println("2 -> Go Back");
 
         Scanner input = new Scanner(System.in);
@@ -140,14 +167,21 @@ public class DisplayRequestCLIController {
         }
         return choice;
     }
+    public void createItinerary() {
+        try {
+            new ResponseRequestController().setPendingRequest(sessionId, requestId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            System.out.println(ERROR + e.getMessage());
+        }
+        CreateItineraryCLIController controller = new CreateItineraryCLIController(sessionId,requestId);
+        controller.start();
+    }
 
     public void saveRequest() {
-        if (requestId == null) {
-            try {
-                new RequestItineraryController().saveRequest(sessionId);
-            } catch (FailedOperationException | DuplicateItemException e) {
-                System.out.println(ERROR + e.getMessage());
-            }
+        try {
+            new RequestItineraryController().saveRequest(sessionId);
+        } catch (FailedOperationException | DuplicateItemException e) {
+            System.out.println(ERROR + e.getMessage());
         }
     }
 }

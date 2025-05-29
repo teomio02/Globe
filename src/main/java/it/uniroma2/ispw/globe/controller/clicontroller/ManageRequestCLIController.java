@@ -10,6 +10,8 @@ import it.uniroma2.ispw.globe.bean.ProposalBean;
 import java.util.List;
 import java.util.Scanner;
 
+import static it.uniroma2.ispw.globe.constants.ProposalState.PENDING;
+
 public class ManageRequestCLIController {
     private String sessionId;
 
@@ -88,23 +90,30 @@ public class ManageRequestCLIController {
 
     public void showRequests() {
         List<RequestBean> requests;
+        int flag = 0;
         try {
             requests = new ResponseRequestController().getAgencyRequests(sessionId);
 
-            System.out.println("Itineraries:");
+            System.out.println("Requests:");
             for(RequestBean request : requests) {
-                System.out.println("> ID: " + request.getID());
-                System.out.println("    > User: " + request.getUser());
-                System.out.println("    > Description: " + request.getOtherRequests());
-                System.out.println("    > Duration: " + request.getDayNum());
+                if (request.getAccepted().equals(PENDING)) {
+                    flag = 1;
+                    System.out.println("> ID: " + request.getID());
+                    System.out.println("    > User: " + request.getUser());
+                    System.out.println("    > Description: " + request.getOtherRequests());
+                    System.out.println("    > Duration: " + request.getDayNum());
+                }
+            }
+            if (flag == 0) {
+                System.out.println("No requests found");
             }
 
             String choice = getRequestID(requests);
 
             if (!choice.equalsIgnoreCase("back")) {
                 new ResponseRequestController().setPendingRequest(sessionId,choice);
-//                DisplayRequestCLIController controller = new DisplayRequestCLIController(sessionId,choice);
-//                controller.start();
+                DisplayRequestCLIController controller = new DisplayRequestCLIController(sessionId,choice);
+                controller.start();
             }
         } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
