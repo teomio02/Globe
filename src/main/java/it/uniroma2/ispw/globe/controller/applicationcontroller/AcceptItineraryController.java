@@ -8,18 +8,18 @@ import it.uniroma2.ispw.globe.model.Account;
 import it.uniroma2.ispw.globe.model.Agency;
 import it.uniroma2.ispw.globe.model.Proposal;
 import it.uniroma2.ispw.globe.model.User;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.model.dao.AccountDao;
-import it.uniroma2.ispw.globe.model.dao.ProposalDao;
-import it.uniroma2.ispw.globe.other.Persistence;
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
+import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.dao.AccountDao;
+import it.uniroma2.ispw.globe.dao.ProposalDao;
+import it.uniroma2.ispw.globe.engineering.Persistence;
+import it.uniroma2.ispw.globe.model.Itinerary;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
-import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
+import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
 
 
 public class AcceptItineraryController {

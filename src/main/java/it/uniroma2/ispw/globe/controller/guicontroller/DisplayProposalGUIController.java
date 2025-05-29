@@ -1,13 +1,14 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -28,13 +28,12 @@ import javafx.stage.StageStyle;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
-import static it.uniroma2.ispw.globe.other.ProposalState.*;
-import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
+import static it.uniroma2.ispw.globe.constants.ProposalState.*;
+import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
 
 public class DisplayProposalGUIController extends AbstractGUIController {
     @FXML

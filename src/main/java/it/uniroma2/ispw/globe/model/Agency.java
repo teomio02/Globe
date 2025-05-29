@@ -1,18 +1,11 @@
 package it.uniroma2.ispw.globe.model;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-
 import java.util.List;
 
 public class Agency extends Account{
     private double rating;
     private String description;
     private List<String> preferences;
-
-    @FXML
-    private CheckBox ratingCheckBox;
-
 
     public double getRating() {
         return rating;
@@ -37,4 +30,5 @@ public class Agency extends Account{
     public void setPreferences(List<String> preferences) {
         this.preferences = preferences;
     }
+    
 }

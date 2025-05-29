@@ -1,10 +1,10 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -15,8 +15,8 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.other.ItineraryType.*;
-import static it.uniroma2.ispw.globe.other.requestOptional.*;
+import static it.uniroma2.ispw.globe.constants.ItineraryType.*;
+import static it.uniroma2.ispw.globe.constants.requestOptional.*;
 
 public class CreateRequestGUIController extends AbstractGUIController {
     @FXML

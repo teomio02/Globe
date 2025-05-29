@@ -24,8 +24,8 @@ public class NominatimAPIClient {
         this.httpClient = new OkHttpClient();
     }
 
-    public List<JsonObject> getPlaces(String query, String type) throws PlaceApiException {
-        String url = String.format("%ssearch?q=%s&format=json&addressdetails=1", BASE_URL, query.replace(" ", "+"));
+    public List<JsonObject> getPlaces(String name, String type) throws PlaceApiException {
+        String url = String.format("%ssearch?q=%s&format=json&addressdetails=1", BASE_URL, name.replace(" ", "+"));
         return getPlace(url, type);
     }
 

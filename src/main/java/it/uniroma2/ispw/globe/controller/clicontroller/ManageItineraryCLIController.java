@@ -4,8 +4,8 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 
 import java.util.List;
 import java.util.Scanner;

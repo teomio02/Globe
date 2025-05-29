@@ -2,17 +2,28 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.exception.*;
-import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
-import it.uniroma2.ispw.globe.other.session.Session;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
-import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
-import it.uniroma2.ispw.globe.util.decorator.AccommodationDecorator;
-import it.uniroma2.ispw.globe.util.decorator.FlightDecorator;
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
-import it.uniroma2.ispw.globe.util.decorator.ItineraryDecorator;
+import it.uniroma2.ispw.globe.model.Day;
+import it.uniroma2.ispw.globe.model.City;
+import it.uniroma2.ispw.globe.model.Attraction;
+import it.uniroma2.ispw.globe.model.Accommodation;
+import it.uniroma2.ispw.globe.model.Flight;
+import it.uniroma2.ispw.globe.model.Account;
+import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.AttractionBean;
+import it.uniroma2.ispw.globe.bean.CityBean;
+import it.uniroma2.ispw.globe.dao.ItineraryDao;
+import it.uniroma2.ispw.globe.dao.DayDao;
+import it.uniroma2.ispw.globe.dao.CityDao;
+import it.uniroma2.ispw.globe.dao.AttractionDao;
+import it.uniroma2.ispw.globe.dao.AccommodationDao;
+import it.uniroma2.ispw.globe.dao.FlightDao;
+import it.uniroma2.ispw.globe.engineering.Persistence;
+import it.uniroma2.ispw.globe.engineering.session.Session;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
+import it.uniroma2.ispw.globe.engineering.adapter.PlaceAdapter;
+import it.uniroma2.ispw.globe.engineering.decorator.AccommodationDecorator;
+import it.uniroma2.ispw.globe.engineering.decorator.FlightDecorator;
+import it.uniroma2.ispw.globe.model.Itinerary;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -232,44 +243,6 @@ public class CreateItineraryController {
         return path;
     }
 
-    public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
-        try {
-            List<StepBean> steps = new ArrayList<>();
-            Itinerary itinerary;
-
-            if (itineraryId == null) {
-                itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
-            } else {
-                ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-                itinerary = itineraryDao.getItinerary(itineraryId);
-            }
-
-            List<Day> days = itinerary.getDays();
-            for (Day day : days) {
-                List<String> attractions = new ArrayList<>();
-                for (Attraction attraction : day.getAttractions()) {
-                    attractions.add(attraction.getPlaceID());
-                }
-                List<String> cities = new ArrayList<>();
-                for (City city : day.getCities()) {
-                    cities.add(city.getPlaceID());
-                }
-                StepBean stepBean = new StepBean();
-                stepBean.setNum(day.getDayNum()-1);
-                stepBean.setAttractions(attractions);
-                stepBean.setCity(cities);
-                steps.add(stepBean);
-            }
-            return steps;
-        } catch (DaoException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
-            throw new FailedOperationException("Get steps");
-        }
-    }
-
     public List<JsonObject> getPlaces(String name, String type) throws FailedOperationException {
         NominatimAPIClient api = new NominatimAPIClient();
         List<JsonObject> apiPlaces;
@@ -325,66 +298,6 @@ public class CreateItineraryController {
             citiesBeans.add(cityBean);
         }
         return citiesBeans;
-    }
-
-    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
-        try {
-            Itinerary itinerary;
-
-            if (itineraryId == null) {
-                itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
-                if (itinerary == null) {
-                    return null;
-                }
-            } else {
-                ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-                itinerary = itineraryDao.getItinerary(itineraryId);
-            }
-
-            ItineraryBean itineraryBean = new ItineraryBean();
-            itineraryBean.setId(itinerary.getItineraryID());
-            itineraryBean.setName(itinerary.getName());
-            itineraryBean.setDescription(itinerary.getDescription());
-            itineraryBean.setTypes(itinerary.getTypes());
-            itineraryBean.setDuration(itinerary.getDaysNumber());
-            itineraryBean.setPhoto(itinerary.getPhotoFile());
-
-            itineraryBean.setInboundFlightDepartureTime(-1);
-            itineraryBean.setInboundFlightArrivalTime(-1);
-            itineraryBean.setOutboundFlightDepartureTime(-1);
-            itineraryBean.setOutboundFlightArrivalTime(-1);
-
-            Itinerary current = itinerary;
-            while (current instanceof ItineraryDecorator itineraryDecorator) {
-                if (current instanceof AccommodationDecorator accommodationDecorator) {
-                    List<Pair<String,String>> accommodations = new ArrayList<>();
-                    for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
-                        accommodations.add(new Pair<>(accommodation.getName(), accommodation.getAddress()));
-                    }
-                    itineraryBean.setAccommodations(accommodations);
-                }
-                if (current instanceof FlightDecorator flightDecorator) {
-                    double inDepartureTime = flightDecorator.getInFlight().getDepartureTime();
-                    double inArrivalTime = flightDecorator.getInFlight().getArrivalTime();
-                    double outDepartureTime = flightDecorator.getOutFlight().getDepartureTime();
-                    double outArrivalTime = flightDecorator.getOutFlight().getArrivalTime();
-
-                    itineraryBean.setInboundFlightDepartureTime(inDepartureTime);
-                    itineraryBean.setInboundFlightArrivalTime(inArrivalTime);
-                    itineraryBean.setOutboundFlightDepartureTime(outDepartureTime);
-                    itineraryBean.setOutboundFlightArrivalTime(outArrivalTime);
-                }
-                current = itineraryDecorator.getItinerary();
-            }
-
-            return itineraryBean;
-        } catch (DaoException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
-            throw new FailedOperationException("Get itinerary");
-        }
     }
 
     public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException, DuplicateItemException {

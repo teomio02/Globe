@@ -1,11 +1,9 @@
 package it.uniroma2.ispw.globe.model;
 
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
-
 import java.io.File;
 import java.util.List;
 
-public class BaseItinerary extends Itinerary {
+public class BaseItinerary implements Itinerary {
     private String itineraryID;
     private String name;
     private String description;

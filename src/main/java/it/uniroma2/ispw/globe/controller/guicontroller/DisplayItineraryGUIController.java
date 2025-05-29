@@ -1,12 +1,13 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -72,8 +73,8 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         ItineraryBean itinerary;
         List<StepBean> steps;
         try {
-            itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
-            steps = new CreateItineraryController().getSteps(itineraryId,sessionId);
+            itinerary = new ManageItineraryController().getItinerary(itineraryId,sessionId);
+            steps = new ManageItineraryController().getSteps(itineraryId,sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
@@ -151,10 +152,10 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             ScrollPane scrollPane = (ScrollPane) dayVBox.lookup("#scrollPane");
             VBox attractionVBox = (VBox) scrollPane.getContent();
             Label cityLabel = (Label) dayVBox.lookup("#cityLabel");
-            CityBean city = new CreateItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
+            CityBean city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
             cityLabel.setText(city.getName()+", "+city.getCountry());
             for (String attractionID : step.getAttractions()) {
-                AttractionBean attraction = new CreateItineraryController().getAttraction(step.getNum(),attractionID,null);
+                AttractionBean attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,null);
                 Label attractionLabel = new Label(attraction.getName());
                 Label addressLabel = new Label(attraction.getCity()+", "+attraction.getAddress());
                 attractionLabel.setMaxWidth(Double.MAX_VALUE);
@@ -199,7 +200,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         viewManager.goToCreateProposalGUI(sessionId, requestId, root);
     }
 
-    public void addPhoto(ActionEvent event) {
+    public void addPhoto() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleziona una foto");
 

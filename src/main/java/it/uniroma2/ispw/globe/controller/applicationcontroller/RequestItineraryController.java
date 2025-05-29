@@ -1,15 +1,18 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import com.google.gson.JsonObject;
+import it.uniroma2.ispw.globe.bean.*;
+import it.uniroma2.ispw.globe.dao.AccountDao;
+import it.uniroma2.ispw.globe.dao.AttractionDao;
+import it.uniroma2.ispw.globe.dao.CityDao;
+import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.*;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
-import it.uniroma2.ispw.globe.other.session.Session;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
-import it.uniroma2.ispw.globe.util.adapter.PlaceAdapter;
-import it.uniroma2.ispw.globe.util.decorator.*;
+import it.uniroma2.ispw.globe.engineering.Persistence;
+import it.uniroma2.ispw.globe.engineering.session.Session;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
+import it.uniroma2.ispw.globe.engineering.adapter.PlaceAdapter;
+import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +22,14 @@ import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
-import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
+import static it.uniroma2.ispw.globe.constants.ProposalState.PENDING;
 
 public class RequestItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
+
+    // da risistemare in teoria dovrebbe fare dao
     public List<JsonObject> getPlaces(String name, String type) {
         NominatimAPIClient api = new NominatimAPIClient();
         List<JsonObject> apiPlaces;
