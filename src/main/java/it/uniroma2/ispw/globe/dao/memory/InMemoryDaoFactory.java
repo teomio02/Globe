@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.dao.memory;
 
 import it.uniroma2.ispw.globe.dao.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 
 
 public class InMemoryDaoFactory extends DaoFactory {

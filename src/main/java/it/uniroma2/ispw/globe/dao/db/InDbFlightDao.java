@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.dao.db;
 import it.uniroma2.ispw.globe.dao.FlightDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

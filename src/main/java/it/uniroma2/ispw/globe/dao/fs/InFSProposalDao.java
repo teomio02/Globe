@@ -9,7 +9,6 @@ import it.uniroma2.ispw.globe.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.dao.ProposalDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 
 import java.io.FileReader;

@@ -4,7 +4,6 @@ import it.uniroma2.ispw.globe.dao.AccountDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.Request;
 

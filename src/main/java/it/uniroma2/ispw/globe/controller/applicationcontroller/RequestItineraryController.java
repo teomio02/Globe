@@ -8,8 +8,6 @@ import it.uniroma2.ispw.globe.dao.CityDao;
 import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.*;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.session.Session;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;

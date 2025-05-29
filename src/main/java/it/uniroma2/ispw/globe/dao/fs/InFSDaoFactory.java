@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.dao.fs;
 
 import it.uniroma2.ispw.globe.dao.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 
 
 public class InFSDaoFactory extends DaoFactory {

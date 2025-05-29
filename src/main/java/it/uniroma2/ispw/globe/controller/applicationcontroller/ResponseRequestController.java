@@ -13,8 +13,6 @@ import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.session.Session;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;

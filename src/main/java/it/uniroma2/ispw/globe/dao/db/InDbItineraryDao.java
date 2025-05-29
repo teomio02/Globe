@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.dao.db;
 import it.uniroma2.ispw.globe.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.model.dao.*;
 import it.uniroma2.ispw.globe.engineering.decorator.AccommodationDecorator;
 import it.uniroma2.ispw.globe.engineering.decorator.FlightDecorator;
 import it.uniroma2.ispw.globe.model.Itinerary;
