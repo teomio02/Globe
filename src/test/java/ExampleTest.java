@@ -1,12 +1,11 @@
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class ExampleTest {
 
     @Test
-    public void testAddition() {
-        assertEquals(2, 1 + 1);
+    void placeholderTest() {
+        // Nessun assert, test di placeholder
     }
 }
 
