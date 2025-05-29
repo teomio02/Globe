@@ -1,18 +1,21 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
+import it.uniroma2.ispw.globe.bean.AttractionBean;
+import it.uniroma2.ispw.globe.bean.CityBean;
+import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.*;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static it.uniroma2.ispw.globe.other.ItineraryType.*;
+import static it.uniroma2.ispw.globe.constants.ItineraryType.*;
 
 public class CreateItineraryCLIController {
     private String sessionId;

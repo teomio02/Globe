@@ -1,5 +1,13 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
+import it.uniroma2.ispw.globe.bean.NatureBean;
+import it.uniroma2.ispw.globe.bean.OnTheRoadBean;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
+import it.uniroma2.ispw.globe.bean.RequestBean;
+import it.uniroma2.ispw.globe.dao.AccountDao;
+import it.uniroma2.ispw.globe.dao.ItineraryDao;
+import it.uniroma2.ispw.globe.dao.ProposalDao;
+import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
@@ -7,10 +15,10 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.model.bean.*;
 import it.uniroma2.ispw.globe.model.dao.*;
-import it.uniroma2.ispw.globe.other.Persistence;
-import it.uniroma2.ispw.globe.other.session.Session;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
-import it.uniroma2.ispw.globe.util.decorator.*;
+import it.uniroma2.ispw.globe.engineering.Persistence;
+import it.uniroma2.ispw.globe.engineering.session.Session;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
+import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +28,7 @@ import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
-import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
+import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
 
 public class ResponseRequestController {
 

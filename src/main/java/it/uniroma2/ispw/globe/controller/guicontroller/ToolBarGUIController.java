@@ -7,10 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,8 +20,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
-import static it.uniroma2.ispw.globe.other.UserType.GUEST;
-import static it.uniroma2.ispw.globe.other.UserType.USER;
+import static it.uniroma2.ispw.globe.constants.UserType.GUEST;
+import static it.uniroma2.ispw.globe.constants.UserType.USER;
 
 public class ToolBarGUIController {
     private String sessionId;

@@ -4,21 +4,19 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.ItineraryBean;
-import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
@@ -28,8 +26,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.other.ProposalState.ACCEPTED;
-import static it.uniroma2.ispw.globe.other.ProposalState.REJECTED;
+import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
+import static it.uniroma2.ispw.globe.constants.ProposalState.REJECTED;
 
 public class ManageItineraryGUIController extends AbstractGUIController {
     @FXML

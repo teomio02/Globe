@@ -6,12 +6,12 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.*;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 
 import java.util.Scanner;
 
-import static it.uniroma2.ispw.globe.other.ProposalState.*;
-import static it.uniroma2.ispw.globe.other.UserType.AGENCY;
+import static it.uniroma2.ispw.globe.constants.ProposalState.*;
+import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
 
 public class DisplayProposalCLIController {
     private String sessionId;

@@ -4,8 +4,8 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestCo
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.RequestBean;
-import it.uniroma2.ispw.globe.model.bean.ProposalBean;
+import it.uniroma2.ispw.globe.bean.RequestBean;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static it.uniroma2.ispw.globe.other.ProposalState.*;
+import static it.uniroma2.ispw.globe.constants.ProposalState.*;
 
 public class ManageRequestGUIController extends AbstractGUIController {
 

@@ -1,11 +1,14 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
+import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.bean.*;
-import it.uniroma2.ispw.globe.other.session.SessionManager;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

@@ -1,8 +1,5 @@
 package it.uniroma2.ispw.globe.model;
 
-import it.uniroma2.ispw.globe.util.decorator.Itinerary;
-import it.uniroma2.ispw.globe.util.decorator.Request;
-
 import java.util.List;
 
 public abstract class Account {
@@ -49,6 +46,7 @@ public abstract class Account {
     public List<Itinerary> getItineraries() {
         return itineraries;
     }
+
     public void setItineraries(List<Itinerary> itineraries) {
         this.itineraries = itineraries;
     }
@@ -68,5 +66,4 @@ public abstract class Account {
     public void setRequests(List<Request> requests) {
         this.requests = requests;
     }
-
 }

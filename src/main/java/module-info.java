@@ -6,6 +6,7 @@ module it.uniroma2.ispw.globe {
     requires okhttp3;
     requires java.sql;
     requires kotlin.stdlib;
+    requires com.opencsv;
 
 
     opens it.uniroma2.ispw.globe to javafx.fxml;

@@ -4,7 +4,7 @@ import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
-import it.uniroma2.ispw.globe.model.bean.CredentialsBean;
+import it.uniroma2.ispw.globe.bean.CredentialsBean;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_VIEW;
-import static it.uniroma2.ispw.globe.other.UserType.*;
+import static it.uniroma2.ispw.globe.constants.UserType.*;
 
 
 public class LogInGUIController {
