@@ -13,7 +13,6 @@ public class CreateProposalCLIController {
     private String sessionId;
     private String requestId;
 
-    private static final String CHOICE_ERROR = "ERROR: Invalid option\n";
     private static final String ERROR = "ERROR: ";
 
     CreateProposalCLIController(String sessionId, String requestId) {
@@ -26,7 +25,6 @@ public class CreateProposalCLIController {
 
         try {
             RequestBean request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
-            ProposalBean proposal = new ResponseRequestController().getProposal(null,sessionId);
 
             if (request != null) {
                 System.out.println("> User " + request.getUser() + " request:");

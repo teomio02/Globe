@@ -1,8 +1,8 @@
 package it.uniroma2.ispw.globe.constants;
 
-public class requestOptional {
+public class RequestOptional {
 
-    private requestOptional() {}
+    private RequestOptional() {}
 
     public static final String MORNING_MODE = "Morning Mode";
     public static final String AFTERNOON_MODE = "Late Afternoon Mode";

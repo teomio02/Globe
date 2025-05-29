@@ -219,20 +219,20 @@ public class ResponseRequestController {
         }
 
         Request current = request;
-        while (current instanceof RequestDecorator) {
-            if (current instanceof OnTheRoadRequestDecorator) {
+        while (current instanceof RequestDecorator requestDecorator) {
+            if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
                 OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
-                onTheRoadBean.setMode(((OnTheRoadRequestDecorator) current).getTravelMode());
-                onTheRoadBean.setDayDrivingHours(((OnTheRoadRequestDecorator) current).getDayDrivingHours());
+                onTheRoadBean.setMode(onTheRoadRequestDecorator.getTravelMode());
+                onTheRoadBean.setDayDrivingHours(onTheRoadRequestDecorator.getDayDrivingHours());
                 optionals.add(onTheRoadBean);
             }
-            if (current instanceof NatureRequestDecorator) {
+            if (current instanceof NatureRequestDecorator natureRequestDecorator) {
                 NatureBean natureBean = new NatureBean();
-                natureBean.setDifficulty(((NatureRequestDecorator) current).getTrekkingDifficulty());
-                natureBean.setTrekkingDistance(((NatureRequestDecorator) current).getTrekkingDistance());
+                natureBean.setDifficulty(natureRequestDecorator.getTrekkingDifficulty());
+                natureBean.setTrekkingDistance(natureRequestDecorator.getTrekkingDistance());
                 optionals.add(natureBean);
             }
-            current = ((RequestDecorator) current).getRequest();
+            current = requestDecorator.getRequest();
         }
 
         return optionals;

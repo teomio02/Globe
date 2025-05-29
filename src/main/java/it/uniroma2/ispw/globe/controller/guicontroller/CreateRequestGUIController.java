@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.uniroma2.ispw.globe.constants.ItineraryType.*;
-import static it.uniroma2.ispw.globe.constants.requestOptional.*;
+import static it.uniroma2.ispw.globe.constants.RequestOptional.*;
 
 public class CreateRequestGUIController extends AbstractGUIController {
     @FXML
