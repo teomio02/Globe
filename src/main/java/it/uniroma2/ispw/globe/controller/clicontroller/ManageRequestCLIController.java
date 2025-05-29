@@ -10,7 +10,7 @@ import it.uniroma2.ispw.globe.bean.ProposalBean;
 import java.util.List;
 import java.util.Scanner;
 
-import static it.uniroma2.ispw.globe.other.ProposalState.PENDING;
+import static it.uniroma2.ispw.globe.constants.ProposalState.PENDING;
 
 public class ManageRequestCLIController {
     private String sessionId;
