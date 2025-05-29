@@ -26,7 +26,6 @@ public class CreateProposalCLIController {
 
         try {
             RequestBean request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
-            ProposalBean proposal = new ResponseRequestController().getProposal(null,sessionId);
 
             if (request != null) {
                 System.out.println("> User " + request.getUser() + " request:");

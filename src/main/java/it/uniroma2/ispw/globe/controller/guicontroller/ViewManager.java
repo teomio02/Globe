@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.model.bean.NavigationData;
 import it.uniroma2.ispw.globe.other.session.SessionManager;
 import javafx.fxml.FXMLLoader;
@@ -37,7 +38,11 @@ public class ViewManager {
             root.setCenter(loader.load());
             SessionManager.getInstance().getSession(data.getSessionID()).setNavigationData(data);
             AbstractGUIController controller = loader.getController();
-            controller.initialize(data.getSessionID());
+            try {
+                controller.initialize(data.getSessionID());
+            } catch (FailedOperationException e) {
+                throw new RuntimeException(e);
+            }
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
             new ErrorPopUpGUIController().createPopUp(ERROR_MESSAGE);

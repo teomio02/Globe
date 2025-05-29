@@ -28,7 +28,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     @FXML
     private Label descriptionLabel;
     @FXML
-    private HBox typesHBox;
+    private Label typesLabel;
     @FXML
     private Button saveRequestButton;
     @FXML
@@ -53,6 +53,12 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     private Tab cultureTab;
     @FXML
     private Tab cityTab;
+    @FXML
+    private Label cityLabel;
+    @FXML
+    private Label attractionLabel;
+
+
 
 
     private String sessionId;
@@ -84,11 +90,12 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 goBack();
                 return;
             }
+
             userLabel.setText(request.getUser());
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
             for (String type: request.getTypes()) {
-                typesHBox.getChildren().add(new Label(type));
+                typesLabel.setText(typesLabel.getText() + ", ");
             }
 
         } else {
@@ -110,12 +117,34 @@ public class DisplayRequestGUIController extends AbstractGUIController {
 
             userLabel.setText("");
             for (AgencyBean agency : agencies) {
-                userLabel.setText(userLabel.getText() + ", " + agency.getName());
+                userLabel.setText(userLabel.getText() + agency.getName() + ", ");
             }
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
+            typesLabel.setText("");
             for (String type: request.getTypes()) {
-                typesHBox.getChildren().add(new Label(type));
+                typesLabel.setText(typesLabel.getText() + type + ", ");
+            }
+
+            cityLabel.setText("");
+            for (String cityID : request.getCities()) {
+                CityBean city = null;
+                try {
+                    city = new RequestItineraryController().getCity(cityID);
+                } catch (FailedOperationException e) {
+                    throw new RuntimeException(e);
+                }
+                cityLabel.setText(cityLabel.getText() +  city.getName() + ", ");
+            }
+            attractionLabel.setText("");
+            for (String attractionID: request.getAttractions()) {
+                AttractionBean attraction = null;
+                try {
+                    attraction = new RequestItineraryController().getAttraction(attractionID);
+                } catch (FailedOperationException e) {
+                    throw new RuntimeException(e);
+                }
+                attractionLabel.setText(attractionLabel.getText() +  attraction.getName() + ", ");
             }
         }
         if (optionals != null && !optionals.isEmpty()) {

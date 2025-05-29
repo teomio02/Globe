@@ -287,12 +287,21 @@ public class RequestItineraryController {
     public void saveRequest(String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
             RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
 
             Session session = SessionManager.getInstance().getSession(sessionID);
             Account account = session.getAccount();
 
             Request request = session.getPendingRequest();
             List<Agency> agencies = session.getPendingAgencies();
+
+            for (City city : request.getCities()) {
+                cityDao.addCity(city);
+            }
+            for (Attraction attraction : request.getAttractions()) {
+                attractionDao.addAttraction(attraction);
+            }
             requestDao.addAgencyRequest(request, (User) account, agencies);
 
             session.setPendingRequest(null);
@@ -309,6 +318,10 @@ public class RequestItineraryController {
         try {
             CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
             City city = cityDao.getCity(cityId);
+
+            if (city == null) {
+                city = cityDao.createCity(cityId);
+            }
 
             CityBean cityBean = new CityBean();
             cityBean.setName(city.getName());
@@ -328,6 +341,10 @@ public class RequestItineraryController {
         try {
             AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
             Attraction attraction = attractionDao.getAttraction(attractionId);
+
+            if (attraction == null) {
+                attraction = attractionDao.createAttraction(attractionId);
+            }
 
             AttractionBean attractionBean = new AttractionBean();
             attractionBean.setName(attraction.getName());
