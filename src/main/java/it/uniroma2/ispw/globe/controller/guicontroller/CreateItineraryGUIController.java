@@ -100,6 +100,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
 
     private static final String DEFAULT_BUTTON = "button-default";
     private static final String SEARCH_BUTTON = "button-search";
+    private static final String LABEL_LIGHT = "label-light";
 
     public void initialize(String sessionId) {
 
@@ -118,52 +119,53 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         relaxButton.setUserData(false);
         cityButton.setUserData(false);
 
-        if (requestId != null) {
-            try {
-                //create proposal use case
-                RequestBean requestBean;
-                requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
-
-                if (requestBean != null) {
-                    requestVBox.setVisible(true);
-                    userLabel.setText(requestBean.getUser());
-                    descriptionLabel.setText(requestBean.getOtherRequests());
-                    for (String type : requestBean.getTypes()) {
-                        typesHBox.getChildren().add(new Label(type));
-                    }
-                    for (String city : requestBean.getCities()) {
-                        CityBean cityBean = new CreateItineraryController().getCity(0,city,null);
-                        requestCityVBox.getChildren().add(new Label(cityBean.getName()+" - "+cityBean.getCountry()));
-                    }
-                    for (String attraction : requestBean.getAttractions()) {
-                        AttractionBean attractionBean = new CreateItineraryController().getAttraction(0,attraction,null);
-                        requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
-                    }
-                    if (requestBean.isFlight()) {
-                        flightVBox.setVisible(true);
-                        flightButton.setUserData(true);
-                        flightButton.setVisible(false);
-                    } else {
-                        flightVBox.setVisible(false);
-                        flightButton.setUserData(false);
-                        flightButton.setVisible(false);
-                    }
-                    if (requestBean.isAccommodation()) {
-                        accommodationVBox.setVisible(true);
-                        accommodationButton.setUserData(true);
-                        accommodationButton.setVisible(false);
-                    } else {
-                        accommodationVBox.setVisible(false);
-                        accommodationButton.setUserData(false);
-                        accommodationButton.setVisible(false);
-                    }
-                }
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-                new ErrorPopUpGUIController().createPopUp(e.getMessage());
-                goBack();
-            }
-        } else {
+        if (requestId == null) {
             requestVBox.setVisible(false);
+            return;
+        }
+
+        try {
+            //create proposal use case
+            RequestBean requestBean;
+            requestBean = new ResponseRequestController().getAgencyRequest(requestId,sessionId);
+
+            if (requestBean != null) {
+                requestVBox.setVisible(true);
+                userLabel.setText(requestBean.getUser());
+                descriptionLabel.setText(requestBean.getOtherRequests());
+                for (String type : requestBean.getTypes()) {
+                    typesHBox.getChildren().add(new Label(type));
+                }
+                for (String city : requestBean.getCities()) {
+                    CityBean cityBean = new CreateItineraryController().getCity(0,city,null);
+                    requestCityVBox.getChildren().add(new Label(cityBean.getName()+" - "+cityBean.getCountry()));
+                }
+                for (String attraction : requestBean.getAttractions()) {
+                    AttractionBean attractionBean = new CreateItineraryController().getAttraction(0,attraction,null);
+                    requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
+                }
+                if (requestBean.isFlight()) {
+                    flightVBox.setVisible(true);
+                    flightButton.setUserData(true);
+                    flightButton.setVisible(false);
+                } else {
+                    flightVBox.setVisible(false);
+                    flightButton.setUserData(false);
+                    flightButton.setVisible(false);
+                }
+                if (requestBean.isAccommodation()) {
+                    accommodationVBox.setVisible(true);
+                    accommodationButton.setUserData(true);
+                    accommodationButton.setVisible(false);
+                } else {
+                    accommodationVBox.setVisible(false);
+                    accommodationButton.setUserData(false);
+                    accommodationButton.setVisible(false);
+                }
+            }
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            goBack();
         }
     }
 
@@ -269,7 +271,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if(cityVBox.getChildren().isEmpty()){
             Label cityLabel = new Label(city.getName());
             cityLabel.setUserData(city.getId());
-            cityLabel.getStyleClass().add("label-light");
+            cityLabel.getStyleClass().add(LABEL_LIGHT);
             cityVBox.getChildren().add(cityLabel);
         } else {
             for (int i = 0; i < cityVBox.getChildren().size(); i++) {
@@ -281,7 +283,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
             if (count==0){
                 Label cityLabel = new Label(city.getName());
                 cityLabel.setUserData(city.getId());
-                cityLabel.getStyleClass().add("label-light");
+                cityLabel.getStyleClass().add(LABEL_LIGHT);
                 cityVBox.getChildren().add(cityLabel);
             }
         }
@@ -323,7 +325,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         if(attractionVBox.getChildren().isEmpty()){
             Label attractionLabel = new Label(attraction.getName());
             attractionLabel.setUserData(attraction.getId());
-            attractionLabel.getStyleClass().add("label-light");
+            attractionLabel.getStyleClass().add(LABEL_LIGHT);
             attractionVBox.getChildren().add(attractionLabel);
         } else {
             for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
@@ -336,7 +338,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
             if (count==0){
                 Label attractionLabel = new Label(attraction.getName());
                 attractionLabel.setUserData(attraction.getId());
-                attractionLabel.getStyleClass().add("label-light");
+                attractionLabel.getStyleClass().add(LABEL_LIGHT);
                 attractionVBox.getChildren().add(attractionLabel);
             }
         }
