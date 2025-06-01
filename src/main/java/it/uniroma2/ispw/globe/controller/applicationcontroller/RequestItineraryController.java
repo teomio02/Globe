@@ -109,7 +109,7 @@ public class RequestItineraryController {
         }
     }
 
-    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+    public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException {
         Request request;
         Agency agency = null;
         User user;

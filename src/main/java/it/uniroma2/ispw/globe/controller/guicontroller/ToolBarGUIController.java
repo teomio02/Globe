@@ -102,8 +102,8 @@ public class ToolBarGUIController {
                 URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/LogOutPopUp.fxml").toURI().toURL();
                 FXMLLoader loader = new FXMLLoader(url);
                 loader.setController(this);
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
+                Parent popUpRoot = loader.load();
+                Scene scene = new Scene(popUpRoot);
                 scene.setFill(Color.TRANSPARENT);
 
                 Stage popupStage = new Stage();

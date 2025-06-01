@@ -94,6 +94,8 @@ public class CreateRequestGUIController extends AbstractGUIController {
     private static final String DEFAULT_BUTTON = "button-default";
     private static final String PRESSED_BUTTON = "button-pressed";
 
+    private static final String LABEL_LIGHT = "label-light";
+
     private String sessionId;
 
     public void initialize(String sessionId) {
@@ -132,30 +134,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             for (CityBean cityResult : cities) {
                 Button cityResultButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
                 cityResultButton.getStyleClass().add(SEARCH_BUTTON);
-                cityResultButton.setOnAction(event -> {
-                    int count=0;
-                    if(cityVBox.getChildren().isEmpty()){
-                        Label cityLabel = new Label(cityResult.getName());
-                        cityLabel.getStyleClass().add("label-light");
-                        cityLabel.setUserData(cityResult.getId());
-                        cityVBox.getChildren().add(cityLabel);
-                    } else {
-                        for (int i = 0; i < cityVBox.getChildren().size(); i++) {
-                            Label otherCity = (Label) cityVBox.getChildren().get(i);
-                            if(cityResult.getName().equals(otherCity.getText())){
-                                count++;
-                            }
-                        }
-                        if (count==0){
-                            Label cityLabel = new Label(cityResult.getName());
-                            cityLabel.getStyleClass().add("label-light");
-                            cityLabel.setUserData(cityResult.getId());
-                            cityVBox.getChildren().add(cityLabel);
-                        }
-                    }
-                    citiesField.clear();
-                    cityResultVBox.getChildren().clear();
-                });
+                cityResultButton.setOnAction(event -> addCity(cityResult));
                 cityResultVBox.getChildren().add(cityResultButton);
                 if (cityResultVBox.getChildren().size() == 3) {
                     break;
@@ -166,6 +145,31 @@ public class CreateRequestGUIController extends AbstractGUIController {
             cityResultVBox.getChildren().add(errorLabel);
         }
 
+    }
+
+    public void addCity(CityBean cityResult) {
+        int count=0;
+        if(cityVBox.getChildren().isEmpty()){
+            Label cityLabel = new Label(cityResult.getName());
+            cityLabel.getStyleClass().add(LABEL_LIGHT);
+            cityLabel.setUserData(cityResult.getId());
+            cityVBox.getChildren().add(cityLabel);
+        } else {
+            for (int i = 0; i < cityVBox.getChildren().size(); i++) {
+                Label otherCity = (Label) cityVBox.getChildren().get(i);
+                if(cityResult.getName().equals(otherCity.getText())){
+                    count++;
+                }
+            }
+            if (count==0){
+                Label cityLabel = new Label(cityResult.getName());
+                cityLabel.getStyleClass().add(LABEL_LIGHT);
+                cityLabel.setUserData(cityResult.getId());
+                cityVBox.getChildren().add(cityLabel);
+            }
+        }
+        citiesField.clear();
+        cityResultVBox.getChildren().clear();
     }
 
     public void searchAttraction() {
@@ -180,31 +184,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             for (AttractionBean attractionResult : attractions) {
                 Button attractionResultButton = new Button(attractionResult.getName()+" - "+attractionResult.getCity());
                 attractionResultButton.getStyleClass().add(SEARCH_BUTTON);
-                attractionResultButton.setOnAction(event -> {
-                    int count=0;
-                    if(attractionVBox.getChildren().isEmpty()){
-                        Label attractionLabel = new Label(attractionResult.getName());
-                        attractionLabel.setUserData(attractionResult.getId());
-                        attractionLabel.getStyleClass().add("label-light");
-                        attractionVBox.getChildren().add(attractionLabel);
-                    } else {
-                        for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
-                            Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
-                            if(attractionResult.getName().equals(otherAttraction.getText())){
-                                count++;
-
-                            }
-                        }
-                        if (count==0){
-                            Label attractionLabel = new Label(attractionResult.getName());
-                            attractionLabel.setUserData(attractionResult.getId());
-                            attractionLabel.getStyleClass().add("label-light");
-                            attractionVBox.getChildren().add(attractionLabel);
-                        }
-                    }
-                    attractionsField.clear();
-                    attractionResultVBox.getChildren().clear();
-                });
+                attractionResultButton.setOnAction(event -> addAttraction(attractionResult));
                 attractionResultVBox.getChildren().add(attractionResultButton);
                 if (attractionResultVBox.getChildren().size() == 3) {
                     break;
@@ -214,6 +194,33 @@ public class CreateRequestGUIController extends AbstractGUIController {
             Label errorLabel = new Label("Error: no place");
             cityResultVBox.getChildren().add(errorLabel);
         }
+    }
+
+    public void addAttraction(AttractionBean attractionResult) {
+
+        int count=0;
+        if(attractionVBox.getChildren().isEmpty()){
+            Label attractionLabel = new Label(attractionResult.getName());
+            attractionLabel.setUserData(attractionResult.getId());
+            attractionLabel.getStyleClass().add(LABEL_LIGHT);
+            attractionVBox.getChildren().add(attractionLabel);
+        } else {
+            for (int i = 0; i < attractionVBox.getChildren().size(); i++) {
+                Label otherAttraction = (Label) attractionVBox.getChildren().get(i);
+                if(attractionResult.getName().equals(otherAttraction.getText())){
+                    count++;
+
+                }
+            }
+            if (count==0){
+                Label attractionLabel = new Label(attractionResult.getName());
+                attractionLabel.setUserData(attractionResult.getId());
+                attractionLabel.getStyleClass().add(LABEL_LIGHT);
+                attractionVBox.getChildren().add(attractionLabel);
+            }
+        }
+        attractionsField.clear();
+        attractionResultVBox.getChildren().clear();
     }
 
     public void addOptional(ActionEvent event) {
@@ -318,28 +325,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             for (AgencyBean agencyResult : agencies) {
                 Button agencyButton = new Button(agencyResult.getName()+" - "+agencyResult.getRating());
                 agencyButton.getStyleClass().add(SEARCH_BUTTON);
-                agencyButton.setOnAction(event -> {
-                    int count=0;
-                    if(agencyVBox.getChildren().isEmpty()){
-                        Label agencyLabel = new Label(agencyResult.getName());
-                        agencyLabel.setUserData(agencyResult.getName());
-                        agencyLabel.getStyleClass().add("label-light");
-                        agencyVBox.getChildren().add(agencyLabel);
-                    } else {
-                        for (int i = 0; i < agencyVBox.getChildren().size(); i++) {
-                            Label otherAgency = (Label) agencyVBox.getChildren().get(i);
-                            if(agencyResult.getName().equals(otherAgency.getText())){
-                                count++;
-                            }
-                        }
-                        if (count==0){
-                            Label agencyLabel = new Label(agencyResult.getName());
-                            agencyLabel.getStyleClass().add("label-light");
-                            agencyLabel.setUserData(agencyResult.getName());
-                            agencyVBox.getChildren().add(agencyLabel);
-                        }
-                    }
-                });
+                agencyButton.setOnAction(event -> addAgency(agencyResult));
                 agencyResultVBox.getChildren().add(agencyButton);
             }
         } else {
@@ -349,8 +335,31 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
     }
 
-    public void createRequest(ActionEvent event) {
+    public void addAgency(AgencyBean agencyResult) {
         int count=0;
+        if(agencyVBox.getChildren().isEmpty()){
+            Label agencyLabel = new Label(agencyResult.getName());
+            agencyLabel.setUserData(agencyResult.getName());
+            agencyLabel.getStyleClass().add(LABEL_LIGHT);
+            agencyVBox.getChildren().add(agencyLabel);
+        } else {
+            for (int i = 0; i < agencyVBox.getChildren().size(); i++) {
+                Label otherAgency = (Label) agencyVBox.getChildren().get(i);
+                if(agencyResult.getName().equals(otherAgency.getText())){
+                    count++;
+                }
+            }
+            if (count==0){
+                Label agencyLabel = new Label(agencyResult.getName());
+                agencyLabel.getStyleClass().add(LABEL_LIGHT);
+                agencyLabel.setUserData(agencyResult.getName());
+                agencyVBox.getChildren().add(agencyLabel);
+            }
+        }
+    }
+
+    public void createRequest(ActionEvent event) {
+
         String city;
         String attraction;
         String agency;
@@ -362,47 +371,15 @@ public class CreateRequestGUIController extends AbstractGUIController {
         int dayNum =  Integer.parseInt(dayLabel.getText());
         boolean flight = (boolean) flightButton.getUserData();
         boolean accommodation = (boolean) accommodationButton.getUserData();
-        OnTheRoadBean onTheRoadBean = null;
-        NatureBean natureBean = null;
-        String mode = null;
-        String difficulty = null;
+        OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
+        NatureBean natureBean = new NatureBean();
 
         if ((boolean) onTheRoadButton.getUserData()) {
             itineraryType.add(ON_THE_ROAD);
-            if((boolean) morningMode.getUserData()) {
-                mode = MORNING_MODE;
-            } else if ((boolean) lateAfternoonMode.getUserData()) {
-                mode = AFTERNOON_MODE;
-            } else if ((boolean) natureButton.getUserData()) {
-                mode = NIGHT_MODE;
-            }
-            try {
-                onTheRoadBean = new OnTheRoadBean();
-                onTheRoadBean.setMode(mode);
-                onTheRoadBean.setDayDrivingHours(Double.parseDouble(dayDrivingHoursField.getText()));
-            } catch (IncorrectDataException | NumberFormatException e) {
-                new ErrorPopUpGUIController().createPopUp(e.getMessage());
-                return;
-            }
         }
 
         if ((boolean) natureButton.getUserData()) {
             itineraryType.add(NATURE);
-            if((boolean) normalDifficulty.getUserData()) {
-                difficulty = NORMAL_DIFFICULT;
-            } else if ((boolean) mediumDifficulty.getUserData()) {
-                difficulty = MEDIUM_DIFFICULT;
-            } else if ((boolean) hardDifficulty.getUserData()) {
-                difficulty = HARD_DIFFICULT;
-            }
-            try {
-                natureBean = new NatureBean();
-                natureBean.setDifficulty(difficulty);
-                natureBean.setTrekkingDistance(Double.parseDouble(trekkingDistanceField.getText()));
-            } catch (IncorrectDataException | NumberFormatException e) {
-                new ErrorPopUpGUIController().createPopUp(e.getMessage());
-                return;
-            }
         }
         if ((boolean) relaxButton.getUserData()) {
             itineraryType.add(RELAX);
@@ -441,6 +418,9 @@ public class CreateRequestGUIController extends AbstractGUIController {
             requestBean.setAccommodation(accommodation);
             requestBean.setTypes(itineraryType);
 
+            onTheRoadBean = (OnTheRoadBean) addTypesDetails(onTheRoadBean);
+            natureBean = (NatureBean) addTypesDetails(natureBean);
+
             new RequestItineraryController().createRequest(requestBean, onTheRoadBean, natureBean, sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
@@ -452,4 +432,42 @@ public class CreateRequestGUIController extends AbstractGUIController {
         viewManager.goToDisplayRequestGUI(sessionId,null, root);
     }
 
+    public Object addTypesDetails(Object type) throws IncorrectDataException {
+
+        if (type instanceof OnTheRoadBean onTheRoadBean && (boolean) onTheRoadButton.getUserData()) {
+
+            String mode = null;
+            if((boolean) morningMode.getUserData()) {
+                mode = MORNING_MODE;
+            } else if ((boolean) lateAfternoonMode.getUserData()) {
+                mode = AFTERNOON_MODE;
+            } else if ((boolean) natureButton.getUserData()) {
+                mode = NIGHT_MODE;
+            }
+
+            onTheRoadBean.setMode(mode);
+            onTheRoadBean.setDayDrivingHours(Double.parseDouble(dayDrivingHoursField.getText()));
+
+            return onTheRoadBean;
+
+        } else if (type instanceof NatureBean natureBean && (boolean) natureButton.getUserData()) {
+
+            String difficulty = null;
+            if((boolean) normalDifficulty.getUserData()) {
+                difficulty = NORMAL_DIFFICULT;
+            } else if ((boolean) mediumDifficulty.getUserData()) {
+                difficulty = MEDIUM_DIFFICULT;
+            } else if ((boolean) hardDifficulty.getUserData()) {
+                difficulty = HARD_DIFFICULT;
+            }
+
+            natureBean.setDifficulty(difficulty);
+            natureBean.setTrekkingDistance(Double.parseDouble(trekkingDistanceField.getText()));
+
+            return natureBean;
+
+        } else {
+            return null;
+        }
+    }
 }

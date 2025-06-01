@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
 import java.util.List;
 
@@ -72,9 +71,6 @@ public class DisplayRequestGUIController extends AbstractGUIController {
 
         RequestBean request;
         List<Object> optionals;
-        NatureBean nature;
-        OnTheRoadBean onTheRoad;
-
 
         if (requestId != null) {
             createItineraryButton.setVisible(true);
@@ -93,9 +89,12 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             userLabel.setText(request.getUser());
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
+            StringBuilder types = new StringBuilder();
             for (String type: request.getTypes()) {
-                typesLabel.setText(typesLabel.getText() + ", ");
+                types.append(type).append(", ");
             }
+            types.setLength(types.length() - 2);
+            typesLabel.setText(types.toString());
 
         } else {
             if (requestId == null) {
@@ -115,9 +114,13 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
 
             userLabel.setText("");
+            StringBuilder agenciesString = new StringBuilder();
             for (AgencyBean agency : agencies) {
-                userLabel.setText(userLabel.getText() + agency.getName() + ", ");
+                agenciesString.append(agency.getName()).append(", ");
             }
+            agenciesString.setLength(agenciesString.length() - 2);
+            userLabel.setText(agenciesString.toString());
+
             descriptionLabel.setText(request.getOtherRequests());
             daysLabel.setText(String.valueOf(request.getDayNum()));
             typesLabel.setText("");
@@ -125,37 +128,49 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 typesLabel.setText(typesLabel.getText() + type + ", ");
             }
 
-            cityLabel.setText("");
-            for (String cityID : request.getCities()) {
-                CityBean city = null;
-                try {
-                    city = new RequestItineraryController().getCity(cityID);
-                } catch (FailedOperationException e) {
-                    throw new RuntimeException(e);
-                }
-                cityLabel.setText(cityLabel.getText() +  city.getName() + ", ");
-            }
-            attractionLabel.setText("");
-            for (String attractionID: request.getAttractions()) {
-                AttractionBean attraction = null;
-                try {
-                    attraction = new RequestItineraryController().getAttraction(attractionID);
-                } catch (FailedOperationException e) {
-                    throw new RuntimeException(e);
-                }
-                attractionLabel.setText(attractionLabel.getText() +  attraction.getName() + ", ");
-            }
+            displayCities(request);
+
+            displayAttractions(request);
         }
+
+        displayOptinal(optionals);
+    }
+
+    public void displayCities(RequestBean request) {
+        cityLabel.setText("");
+        for (String cityID : request.getCities()) {
+            CityBean city;
+            try {
+                city = new RequestItineraryController().getCity(cityID);
+            } catch (FailedOperationException e) {
+                throw new RuntimeException(e);
+            }
+            cityLabel.setText(cityLabel.getText() +  city.getName() + ", ");
+        }
+    }
+
+    public void displayAttractions(RequestBean request) {
+        attractionLabel.setText("");
+        for (String attractionID: request.getAttractions()) {
+            AttractionBean attraction;
+            try {
+                attraction = new RequestItineraryController().getAttraction(attractionID);
+            } catch (FailedOperationException e) {
+                throw new RuntimeException(e);
+            }
+            attractionLabel.setText(attractionLabel.getText() +  attraction.getName() + ", ");
+        }
+    }
+
+    public void displayOptinal(List<Object> optionals) {
         if (optionals != null && !optionals.isEmpty()) {
             for (Object optional: optionals) {
-                if (optional instanceof OnTheRoadBean) {
-                    onTheRoad = (OnTheRoadBean) optional;
+                if (optional instanceof OnTheRoadBean onTheRoad) {
                     onTheRoadTab.setDisable(false);
                     typeTabPane.getSelectionModel().select(onTheRoadTab);
                     drivingHoursLabel.setText(String.valueOf((onTheRoad).getDayDrivingHours()));
                     modeLabel.setText(onTheRoad.getMode());
-                } else if (optional instanceof NatureBean) {
-                    nature = (NatureBean) optional;
+                } else if (optional instanceof NatureBean nature) {
                     natureTab.setDisable(false);
                     typeTabPane.getSelectionModel().select(natureTab);
                     difficultLabel.setText(nature.getDifficulty());

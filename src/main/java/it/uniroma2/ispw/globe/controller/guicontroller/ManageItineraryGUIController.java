@@ -68,7 +68,7 @@ public class ManageItineraryGUIController extends AbstractGUIController {
                 daysLabel.setText(String.valueOf(itinerary.getDuration()));
                 File photoFile = itinerary.getPhoto();
                 if (photoFile != null) {
-                    ImageView imageView = (ImageView) itineraryBox.getGraphic().lookup("#imageView");
+                    itineraryBox.getGraphic().lookup("#imageView");
                     HBox photoHbox = (HBox) itineraryBox.getGraphic().lookup("#photoHbox");
                     photoHbox.getChildren().clear();
                     ImageView photo = new ImageView(photoFile.toURI().toString());
