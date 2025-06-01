@@ -23,61 +23,61 @@ public class InDbRequestDao extends RequestDao {
         DBConnection connect = DBConnection.getInstance();
 
         String query = "insert into Request (id,accepted,description,days,flight,accommodation) values (?,?,?,?,?,?)";
-        String natureQuery = "update Request set trekkingDistance = ?, trekkingDifficulty = ? where id = ?";
-        String onTheRoadQuery = "update Request set travelMode = ?, dayDrivingHours = ? where id = ?";
         String accountQuery= "insert into accountRequest (account,requestID) values (?,?)";
         String cityQuery = "insert into requestCity (requestID,cityID) values (?,?)";
         String attractionQuery = "insert into requestAttraction (requestID,attractionID) values (?,?)";
 
         PreparedStatement stmt = null;
-        PreparedStatement firstAccountStmt = null;
-        PreparedStatement secondAccountStmt = null;
+        PreparedStatement agencyStmt = null;
+        PreparedStatement userStmt = null;
         PreparedStatement cityStmt = null;
         PreparedStatement attrStmt = null;
 
         try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setString(1, request.getId());
+            stmt.setString(2, request.getAccepted());
+            stmt.setString(3, request.getOtherRequest());
+            stmt.setInt(4, request.getDayNum());
+            stmt.setBoolean(5,request.getFlightRequest());
+            stmt.setBoolean(6,request.getAccommodationRequest());
+            stmt.execute();
+
+            addDecorationsData(request);
+
+            userStmt = connection.prepareStatement(accountQuery);
+            userStmt.setString(1, user.getUsername());
+            userStmt.setString(2, request.getId());
+            userStmt.execute();
+
+            agencyStmt = connection.prepareStatement(accountQuery);
             for (Agency agency : agencies) {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
-
-                stmt.setString(1, request.getId());
-                stmt.setString(2, request.getAccepted());
-                stmt.setString(3, request.getOtherRequest());
-                stmt.setInt(4, request.getDayNum());
-                stmt.setBoolean(5,request.getFlightRequest());
-                stmt.setBoolean(6,request.getAccommodationRequest());
-                stmt.execute();
-
-                addDecorationsData(request);
-
-                firstAccountStmt = connection.prepareStatement(accountQuery);
-                firstAccountStmt.setString(1, agency.getUsername());
-                firstAccountStmt.setString(2, request.getId());
-                firstAccountStmt.execute();
-
-                secondAccountStmt = connection.prepareStatement(accountQuery);
-                secondAccountStmt.setString(1, user.getUsername());
-                secondAccountStmt.setString(2, request.getId());
-                secondAccountStmt.execute();
-
-                cityStmt = connection.prepareStatement(cityQuery);
-                for (City city : request.getCities()) {
-                    cityStmt.setString(1, request.getId());
-                    cityStmt.setString(2, city.getPlaceID());
-                    cityStmt.addBatch();
-                }
-                cityStmt.executeBatch();
-
-                attrStmt = connection.prepareStatement(attractionQuery);
-                for (Attraction attraction : request.getAttractions()) {
-                    attrStmt.setString(1, request.getId());
-                    attrStmt.setString(2, attraction.getPlaceID());
-                    attrStmt.addBatch();
-                }
-                attrStmt.executeBatch();
-
-                addTypes(request);
+                agencyStmt.setString(1, agency.getUsername());
+                agencyStmt.setString(2, request.getId());
+                agencyStmt.addBatch();
             }
+            agencyStmt.executeBatch();
+
+            cityStmt = connection.prepareStatement(cityQuery);
+            for (City city : request.getCities()) {
+                cityStmt.setString(1, request.getId());
+                cityStmt.setString(2, city.getPlaceID());
+                cityStmt.addBatch();
+            }
+            cityStmt.executeBatch();
+
+            attrStmt = connection.prepareStatement(attractionQuery);
+            for (Attraction attraction : request.getAttractions()) {
+                attrStmt.setString(1, request.getId());
+                attrStmt.setString(2, attraction.getPlaceID());
+                attrStmt.addBatch();
+            }
+            attrStmt.executeBatch();
+
+            addTypes(request);
+
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DaoException("addAgencyRequest: "+ e.getMessage(), DUPLICATE);
@@ -85,8 +85,8 @@ public class InDbRequestDao extends RequestDao {
             throw new DaoException("addAgencyRequest: " + e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,null);
-            DBConnection.getInstance().closeConnection(firstAccountStmt,null);
-            DBConnection.getInstance().closeConnection(secondAccountStmt,null);
+            DBConnection.getInstance().closeConnection(agencyStmt,null);
+            DBConnection.getInstance().closeConnection(userStmt,null);
             DBConnection.getInstance().closeConnection(cityStmt,null);
             DBConnection.getInstance().closeConnection(attrStmt,null);
         }
@@ -220,38 +220,48 @@ public class InDbRequestDao extends RequestDao {
         PreparedStatement natureStmt = null;
         PreparedStatement onTheRoadStmt = null;
 
-        try {
-            Request current = request;
 
-            while (current instanceof RequestDecorator requestDecorator) {
-                if (current instanceof NatureRequestDecorator natureRequestDecorator) {
-                    Connection connection = connect.getConnection();
+        Request current = request;
+
+        while (current instanceof RequestDecorator requestDecorator) {
+            if (current instanceof NatureRequestDecorator natureRequestDecorator) {
+                Connection connection = connect.getConnection();
+                try {
                     natureStmt = connection.prepareStatement(natureQuery);
 
                     natureStmt.setDouble(1, natureRequestDecorator.getTrekkingDistance());
                     natureStmt.setString(2, natureRequestDecorator.getTrekkingDifficulty());
                     natureStmt.setString(3, natureRequestDecorator.getId());
                     natureStmt.execute();
+                } catch (SQLException e) {
+                    if (e.getErrorCode() == 1062) {
+                        throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
+                    }
+                    throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
+                } finally {
+                    DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
                 }
-                if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
-                    Connection connection = connect.getConnection();
+
+            }
+            if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
+                Connection connection = connect.getConnection();
+                try {
                     onTheRoadStmt = connection.prepareStatement(onTheRoadQuery);
 
                     onTheRoadStmt.setString(1, onTheRoadRequestDecorator.getTravelMode());
                     onTheRoadStmt.setDouble(2, onTheRoadRequestDecorator.getDayDrivingHours());
                     onTheRoadStmt.setString(3, onTheRoadRequestDecorator.getId());
                     onTheRoadStmt.execute();
+                } catch (SQLException e) {
+                    if (e.getErrorCode() == 1062) {
+                        throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
+                    }
+                    throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
+                } finally {
+                    DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
                 }
-                current = requestDecorator.getRequest();
             }
-        } catch (SQLException e) {
-            if (e.getErrorCode() == 1062) {
-                throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
-            }
-            throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
-        } finally {
-            DBConnection.getInstance().closeConnection(natureStmt,null);
-            DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
+            current = requestDecorator.getRequest();
         }
     }
 

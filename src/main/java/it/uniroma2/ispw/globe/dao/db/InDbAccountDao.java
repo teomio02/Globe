@@ -158,34 +158,31 @@ public class InDbAccountDao extends AccountDao {
         ResultSet resultSet = null;
 
         try {
-            if (!(types == null || types.isEmpty())) {
-                Connection connection = connect.getConnection();
-                stmt = connection.prepareStatement(query);
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
 
-                stmt.setString(1, types.get(0));
-                resultSet = stmt.executeQuery();
+            stmt.setString(1, types.get(0));
+            resultSet = stmt.executeQuery();
 
-                while (resultSet.next()) {
-                    Account account = getAccountPrimaryData(resultSet.getString("agency"));
-                    if (account instanceof Agency agency) {
-                        agencies.add(agency);
-                    }
+            while (resultSet.next()) {
+                Account account = getAccountPrimaryData(resultSet.getString("agency"));
+                if (account instanceof Agency agency) {
+                    agencies.add(agency);
                 }
-
-                for (Agency agency : agencies) {
-                    if (new HashSet<>(agency.getPreferences()).containsAll(types)) {
-                        correctAgencies.add(agency);
-                    }
-                }
-
-                return correctAgencies;
             }
+
+            for (Agency agency : agencies) {
+                if (new HashSet<>(agency.getPreferences()).containsAll(types)) {
+                    correctAgencies.add(agency);
+                }
+            }
+
+            return correctAgencies;
         } catch (SQLException e) {
             throw new DaoException("getAgencyByProposal: "+ e.getMessage(), GENERAL);
         } finally {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
-        return null;
     }
 
     @Override
@@ -514,7 +511,7 @@ public class InDbAccountDao extends AccountDao {
             resultSet = stmt.executeQuery();
 
             while (resultSet.next()) {
-                Account account = getAccountPrimaryData(resultSet.getString("username"));
+                Account account = getAccountPrimaryData(resultSet.getString(USERNAME));
                 agencies.add((Agency) account);
             }
 
