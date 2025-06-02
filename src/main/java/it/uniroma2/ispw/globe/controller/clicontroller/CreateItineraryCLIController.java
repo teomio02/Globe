@@ -115,13 +115,13 @@ public class CreateItineraryCLIController {
             return;
         }
 
-        DisplayItineraryCLIController controller;
         if (requestId != null) {
-            controller = new DisplayItineraryCLIController(sessionId,null,requestId,null);
+            CreateProposalCLIController controller = new CreateProposalCLIController(sessionId,requestId);
+            controller.start();
         } else {
-            controller = new DisplayItineraryCLIController(sessionId,null,null,null);
+            DisplayItineraryCLIController controller = new DisplayItineraryCLIController(sessionId,null,null,null);
+            controller.start();
         }
-        controller.start();
     }
 
     public List<String> getTypes() {

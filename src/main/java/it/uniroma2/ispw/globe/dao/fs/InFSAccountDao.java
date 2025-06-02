@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.dao.fs;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 import it.uniroma2.ispw.globe.dao.AccountDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
