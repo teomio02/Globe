@@ -77,11 +77,6 @@ public class DisplayItineraryCLIController {
             if (choice == 1) {
                 saveItinerary();
             }
-        } else if (requestId != null && proposalExist) {
-            choice = showAgencyMenu();
-            if (choice == 1) {
-                createProposal();
-            }
         }
     }
 
@@ -89,27 +84,6 @@ public class DisplayItineraryCLIController {
         System.out.println("What do you want do?\n");
 
         System.out.println("1 -> Save Itinerary");
-        System.out.println("2 -> Go Back");
-
-        Scanner input = new Scanner(System.in);
-        String strChoice;
-        int choice;
-        while (true) {
-            System.out.print("Please enter your choice: ");
-            strChoice = input.nextLine();
-            if (!strChoice.isEmpty() && strChoice.matches("[1-2]")) {
-                choice = Integer.parseInt(strChoice);
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-        return choice;
-    }
-
-    public int showAgencyMenu() {
-        System.out.println("What do you want do?\n");
-
-        System.out.println("1 -> Create Proposal");
         System.out.println("2 -> Go Back");
 
         Scanner input = new Scanner(System.in);
@@ -153,10 +127,5 @@ public class DisplayItineraryCLIController {
                 System.out.println(ERROR + e.getMessage());
             }
         }
-    }
-
-    public void createProposal() {
-        CreateProposalCLIController controller = new CreateProposalCLIController(sessionId,requestId);
-        controller.start();
     }
 }

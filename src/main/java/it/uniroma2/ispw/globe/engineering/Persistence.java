@@ -12,7 +12,7 @@ public class Persistence {
     private static final String IN_DATABASE = "DB";
     private static final String IN_FILESYSTEM = "FS";
 
-    private String type = IN_FILESYSTEM;
+    private String type = IN_DATABASE;
 
     private Persistence() {}
 
