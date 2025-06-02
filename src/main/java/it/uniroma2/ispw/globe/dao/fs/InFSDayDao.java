@@ -3,14 +3,11 @@ package it.uniroma2.ispw.globe.dao.fs;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import it.uniroma2.ispw.globe.dao.AttractionDao;
-import it.uniroma2.ispw.globe.dao.CityDao;
 import it.uniroma2.ispw.globe.dao.DayDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Attraction;
 import it.uniroma2.ispw.globe.model.City;
 import it.uniroma2.ispw.globe.model.Day;
-import it.uniroma2.ispw.globe.engineering.Persistence;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -26,8 +23,8 @@ public class InFSDayDao extends DayDao {
 
     @Override
     public void addDay(Day day) throws DaoException {
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        InFSCityDao cityDao = new InFSCityDao();
+        InFSAttractionDao attractionDao = new InFSAttractionDao();
 
         if (getDay(day.getId(),day.getDayNum()) != null ) {
             throw new DaoException("addDay: ", DUPLICATE);
@@ -83,8 +80,8 @@ public class InFSDayDao extends DayDao {
     }
 
     public Day fromCsv(String[] dayCsv) throws DaoException {
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        InFSCityDao cityDao = new InFSCityDao();
+        InFSAttractionDao attractionDao = new InFSAttractionDao();
 
         List<City> cities = new ArrayList<>();
         List<Attraction> attractions = new ArrayList<>();

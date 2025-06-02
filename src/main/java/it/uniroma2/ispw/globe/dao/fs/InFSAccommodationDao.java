@@ -50,7 +50,7 @@ public class InFSAccommodationDao extends AccommodationDao {
         return new String[] {accommodation.getId(),accommodation.getName(),accommodation.getAddress()};
     }
 
-    public Accommodation fromCsv(String[] accommodationCsv) throws DaoException {
+    public Accommodation fromCsv(String[] accommodationCsv) {
         Accommodation accommodation = new Accommodation();
         accommodation.setId(accommodationCsv[0]);
         accommodation.setName(accommodationCsv[1]);

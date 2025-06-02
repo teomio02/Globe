@@ -4,12 +4,9 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
-import it.uniroma2.ispw.globe.dao.AccountDao;
-import it.uniroma2.ispw.globe.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.dao.ProposalDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.engineering.Persistence;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,7 +22,7 @@ public class InFSProposalDao extends ProposalDao {
 
     @Override
     public void addProposal(Proposal proposal, User user, Agency agency) throws DaoException {
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        InFSAccountDao accountDao = new InFSAccountDao();
 
         if (getProposal(proposal.getId()) != null) {
             throw new DaoException("addProposal", DUPLICATE);
@@ -90,7 +87,7 @@ public class InFSProposalDao extends ProposalDao {
     }
 
     public Proposal fromCsv(String[] requestCsv) throws DaoException {
-        ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+        InFSItineraryDao itineraryDao = new InFSItineraryDao();
 
         Proposal proposal = new Proposal();
 

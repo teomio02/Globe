@@ -212,56 +212,62 @@ public class InDbRequestDao extends RequestDao {
     }
 
     public void addDecorationsData(Request request) throws DaoException {
-        DBConnection connect = DBConnection.getInstance();
-
-        String natureQuery = "update Request set trekkingDistance = ?, trekkingDifficulty = ? where id = ?";
-        String onTheRoadQuery = "update Request set travelMode = ?, dayDrivingHours = ? where id = ?";
-
-        PreparedStatement natureStmt = null;
-        PreparedStatement onTheRoadStmt = null;
-
-
         Request current = request;
 
         while (current instanceof RequestDecorator requestDecorator) {
             if (current instanceof NatureRequestDecorator natureRequestDecorator) {
-                Connection connection = connect.getConnection();
-                try {
-                    natureStmt = connection.prepareStatement(natureQuery);
-
-                    natureStmt.setDouble(1, natureRequestDecorator.getTrekkingDistance());
-                    natureStmt.setString(2, natureRequestDecorator.getTrekkingDifficulty());
-                    natureStmt.setString(3, natureRequestDecorator.getId());
-                    natureStmt.execute();
-                } catch (SQLException e) {
-                    if (e.getErrorCode() == 1062) {
-                        throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
-                    }
-                    throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
-                } finally {
-                    DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
-                }
-
+                addNatureData(natureRequestDecorator);
             }
             if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
-                Connection connection = connect.getConnection();
-                try {
-                    onTheRoadStmt = connection.prepareStatement(onTheRoadQuery);
-
-                    onTheRoadStmt.setString(1, onTheRoadRequestDecorator.getTravelMode());
-                    onTheRoadStmt.setDouble(2, onTheRoadRequestDecorator.getDayDrivingHours());
-                    onTheRoadStmt.setString(3, onTheRoadRequestDecorator.getId());
-                    onTheRoadStmt.execute();
-                } catch (SQLException e) {
-                    if (e.getErrorCode() == 1062) {
-                        throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
-                    }
-                    throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
-                } finally {
-                    DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
-                }
+                addOnTheRoadData(onTheRoadRequestDecorator);
             }
             current = requestDecorator.getRequest();
+        }
+    }
+
+    public void addNatureData(NatureRequestDecorator natureRequestDecorator) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+        String natureQuery = "update Request set trekkingDistance = ?, trekkingDifficulty = ? where id = ?";
+        PreparedStatement natureStmt = null;
+
+        Connection connection = connect.getConnection();
+        try {
+            natureStmt = connection.prepareStatement(natureQuery);
+
+            natureStmt.setDouble(1, natureRequestDecorator.getTrekkingDistance());
+            natureStmt.setString(2, natureRequestDecorator.getTrekkingDifficulty());
+            natureStmt.setString(3, natureRequestDecorator.getId());
+            natureStmt.execute();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(natureStmt,null);
+        }
+    }
+
+    public void addOnTheRoadData(OnTheRoadRequestDecorator onTheRoadRequestDecorator) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+        String onTheRoadQuery = "update Request set travelMode = ?, dayDrivingHours = ? where id = ?";
+        PreparedStatement onTheRoadStmt = null;
+
+        Connection connection = connect.getConnection();
+        try {
+            onTheRoadStmt = connection.prepareStatement(onTheRoadQuery);
+
+            onTheRoadStmt.setString(1, onTheRoadRequestDecorator.getTravelMode());
+            onTheRoadStmt.setDouble(2, onTheRoadRequestDecorator.getDayDrivingHours());
+            onTheRoadStmt.setString(3, onTheRoadRequestDecorator.getId());
+            onTheRoadStmt.execute();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addDecorationData: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addDecorationData: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(onTheRoadStmt,null);
         }
     }
 

@@ -52,7 +52,7 @@ public class InFSCityDao extends CityDao {
         return new String[] {city.getPlaceID(),city.getName(),city.getCountry(), String.valueOf(city.getLatitude()), String.valueOf(city.getLongitude())};
     }
 
-    public City fromCsv(String[] cityCsv) throws DaoException {
+    public City fromCsv(String[] cityCsv) {
 
         JsonObject json = new JsonObject();
 

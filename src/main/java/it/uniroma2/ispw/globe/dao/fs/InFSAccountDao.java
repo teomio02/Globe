@@ -5,13 +5,9 @@ import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 import it.uniroma2.ispw.globe.dao.AccountDao;
-import it.uniroma2.ispw.globe.dao.ItineraryDao;
-import it.uniroma2.ispw.globe.dao.ProposalDao;
-import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.Request;
 
@@ -253,7 +249,6 @@ public class InFSAccountDao extends AccountDao {
         StringBuilder itineraryCsv = new StringBuilder();
         StringBuilder proposalCsv = new StringBuilder();
         StringBuilder requestCsv = new StringBuilder();
-        StringBuilder preferencesCsv = new StringBuilder();
 
         if (account.getItineraries() != null && !account.getItineraries().isEmpty()) {
             for (Itinerary itinerary : account.getItineraries()) {
@@ -275,22 +270,28 @@ public class InFSAccountDao extends AccountDao {
         }
 
         if (account instanceof Agency agency) {
-            if (agency.getPreferences() != null && !agency.getPreferences().isEmpty()) {
-                for (String preferences : agency.getPreferences()) {
-                    preferencesCsv.append(preferences).append(";");
-                }
-                preferencesCsv.setLength(preferencesCsv.length() - 1);
-            }
-            return new String[] {agency.getUsername(), agency.getPassword(), agency.getPaymentCredential(), agency.getType(), itineraryCsv.toString(), proposalCsv.toString(), requestCsv.toString(), String.valueOf(agency.getRating()), agency.getDescription(), preferencesCsv.toString()};
+            return agencyToCsv(agency, itineraryCsv, proposalCsv, requestCsv);
         } else {
             return new String[] {account.getUsername(), account.getPassword(), account.getPaymentCredential(), account.getType(), itineraryCsv.toString(), proposalCsv.toString(), requestCsv.toString()};
         }
     }
 
+    public String[] agencyToCsv(Agency agency, StringBuilder itineraryCsv, StringBuilder proposalCsv, StringBuilder requestCsv) {
+        StringBuilder preferencesCsv = new StringBuilder();
+        if (agency.getPreferences() != null && !agency.getPreferences().isEmpty()) {
+            for (String preferences : agency.getPreferences()) {
+                preferencesCsv.append(preferences).append(";");
+            }
+            preferencesCsv.setLength(preferencesCsv.length() - 1);
+        }
+        return new String[] {agency.getUsername(), agency.getPassword(), agency.getPaymentCredential(), agency.getType(), itineraryCsv.toString(), proposalCsv.toString(), requestCsv.toString(), String.valueOf(agency.getRating()), agency.getDescription(), preferencesCsv.toString()};
+
+    }
+
     public Account fromCsv(String[] accountCsv) throws DaoException {
-        ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
-        RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+        InFSItineraryDao itineraryDao = new InFSItineraryDao();
+        InFSProposalDao proposalDao = new InFSProposalDao();
+        InFSRequestDao requestDao = new InFSRequestDao();
 
         List<Itinerary> itineraries = new ArrayList<>();
         List<Proposal> proposals = new ArrayList<>();

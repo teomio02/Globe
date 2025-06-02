@@ -51,7 +51,7 @@ public class InFSAttractionDao extends AttractionDao {
         return new String[] {attraction.getPlaceID(),attraction.getName(),attraction.getCity(),attraction.getAddress(), String.valueOf(attraction.getLatitude()), String.valueOf(attraction.getLongitude())};
     }
 
-    public Attraction fromCsv(String[] attractionCsv) throws DaoException {
+    public Attraction fromCsv(String[] attractionCsv) {
 
         JsonObject json = new JsonObject();
 

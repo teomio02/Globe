@@ -4,14 +4,10 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
-import it.uniroma2.ispw.globe.dao.AccountDao;
-import it.uniroma2.ispw.globe.dao.AttractionDao;
-import it.uniroma2.ispw.globe.dao.CityDao;
 import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.bean.RequestBean;
-import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.io.FileReader;
@@ -30,9 +26,9 @@ public class InFSRequestDao extends RequestDao {
 
     @Override
     public void addAgencyRequest(Request request, User user, List<Agency> agencies) throws DaoException {
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        InFSCityDao cityDao = new InFSCityDao();
+        InFSAttractionDao attractionDao = new InFSAttractionDao();
+        InFSAccountDao accountDao = new InFSAccountDao();
 
         if (getRequest(request.getId()) != null) {
             throw new DaoException("addAgencyRequest", DUPLICATE);
@@ -116,10 +112,7 @@ public class InFSRequestDao extends RequestDao {
         double travelHours = 0;
 
         if (request.getItineraryType() != null && !request.getItineraryType().isEmpty()) {
-            for (String type : request.getItineraryType()) {
-                typesCsv.append(type).append(";");
-            }
-            typesCsv.setLength(typesCsv.length() - 1);
+            typesCsv = typesToCsv(request.getItineraryType());
         }
         if (request.getCities() != null && !request.getCities().isEmpty()) {
             for (City city : request.getCities()) {
@@ -137,6 +130,7 @@ public class InFSRequestDao extends RequestDao {
         Request current = request;
 
         while (current instanceof RequestDecorator requestDecorator) {
+
             if (current instanceof NatureRequestDecorator natureRequestDecorator) {
                 trekkingDifficulty = natureRequestDecorator.getTrekkingDifficulty();
                 trekkingDistance = natureRequestDecorator.getTrekkingDistance();
@@ -152,8 +146,9 @@ public class InFSRequestDao extends RequestDao {
     }
 
     public Request fromCsv(String[] requestCsv) throws DaoException {
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        InFSCityDao cityDao = new InFSCityDao();
+        InFSAttractionDao attractionDao = new InFSAttractionDao();
+
         Request request = new BaseRequest();
 
         request.setId(requestCsv[0]);
@@ -192,5 +187,14 @@ public class InFSRequestDao extends RequestDao {
         }
 
         return request;
+    }
+
+    public StringBuilder typesToCsv(List<String> types) {
+        StringBuilder typesCsv = new StringBuilder();
+        for (String type : types) {
+            typesCsv.append(type).append(";");
+        }
+        typesCsv.setLength(typesCsv.length() - 1);
+        return typesCsv;
     }
 }

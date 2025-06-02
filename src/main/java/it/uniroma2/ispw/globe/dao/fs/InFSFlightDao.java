@@ -50,7 +50,7 @@ public class InFSFlightDao extends FlightDao {
         return new String[] {flight.getId(), String.valueOf(flight.getDepartureTime()), String.valueOf(flight.getArrivalTime())};
     }
 
-    public Flight fromCsv(String[] flightCsv) throws DaoException {
+    public Flight fromCsv(String[] flightCsv) {
         Flight flight = new Flight();
         flight.setId(flightCsv[0]);
         flight.setDepartureTime(Double.parseDouble(flightCsv[1]));

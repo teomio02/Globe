@@ -4,10 +4,9 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
-import it.uniroma2.ispw.globe.dao.*;
+import it.uniroma2.ispw.globe.dao.ItineraryDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.io.File;
@@ -26,10 +25,10 @@ public class InFSItineraryDao extends ItineraryDao {
 
     @Override
     public void addItinerary(Itinerary itinerary, Account account) throws DaoException {
-        DayDao dayDao = Persistence.getFactory(Persistence.getInstance().getType()).getDayDao();
-        AccommodationDao accommodationDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
-        FlightDao flightDao = Persistence.getFactory(Persistence.getInstance().getType()).getFlightDao();
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        InFSDayDao dayDao = new InFSDayDao();
+        InFSAccommodationDao accommodationDao = new InFSAccommodationDao();
+        InFSFlightDao flightDao = new InFSFlightDao();
+        InFSAccountDao accountDao = new InFSAccountDao();
 
         if (getItinerary(itinerary.getItineraryID()) != null ) {
             throw new DaoException("addItinerary: ", DUPLICATE);
@@ -126,12 +125,10 @@ public class InFSItineraryDao extends ItineraryDao {
 
         while (current instanceof ItineraryDecorator itineraryDecorator) {
             if (current instanceof AccommodationDecorator accommodationDecorator) {
-                if (accommodationDecorator.getAccommodations() != null && !accommodationDecorator.getAccommodations().isEmpty()) {
-                    for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
-                        accommodationsCsv.append(accommodation.getId()).append(";");
-                    }
-                    accommodationsCsv.setLength(accommodationsCsv.length() - 1);
+                for (Accommodation accommodation : accommodationDecorator.getAccommodations()) {
+                    accommodationsCsv.append(accommodation.getId()).append(";");
                 }
+                accommodationsCsv.setLength(accommodationsCsv.length() - 1);
             }
             if (current instanceof FlightDecorator flightDecorator) {
                 inFlight = flightDecorator.getInFlight().getId();
@@ -147,9 +144,10 @@ public class InFSItineraryDao extends ItineraryDao {
     }
 
     public Itinerary fromCsv(String[] itineraryCsv) throws DaoException {
-        DayDao dayDao = Persistence.getFactory(Persistence.getInstance().getType()).getDayDao();
-        AccommodationDao accommodationDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
-        FlightDao flightDao = Persistence.getFactory(Persistence.getInstance().getType()).getFlightDao();
+        InFSDayDao dayDao = new InFSDayDao();
+        InFSAccommodationDao accommodationDao = new InFSAccommodationDao();
+        InFSFlightDao flightDao = new InFSFlightDao();
+
         Itinerary itinerary = new BaseItinerary();
 
         itinerary.setItineraryID(itineraryCsv[0]);
