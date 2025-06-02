@@ -64,13 +64,6 @@ public class DisplayItineraryCLIController {
             System.out.println(ERROR + e.getMessage());
         }
 
-        boolean proposalExist = false;
-        try {
-            proposalExist = (new ResponseRequestController().getProposal(null, sessionId) == null);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
-            System.out.println(ERROR + e.getMessage());
-        }
-
         int choice;
         if (!(proposalId != null || requestId != null || itineraryId != null)) {
             choice = showUserMenu();

@@ -5,7 +5,8 @@ import java.util.UUID;
 public class PaymentApi {
     // classe Mock che simula il comportamento dell'api
     String processPayment(String payer, String payee,double amount){
-        if (amount < 1000) {
+
+        if (amount < 1000 && !payer.isEmpty() && !payee.isEmpty()) {
             return UUID.randomUUID().toString();
         } else {
             return null;

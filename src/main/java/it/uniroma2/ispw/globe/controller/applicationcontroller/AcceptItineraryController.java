@@ -35,7 +35,7 @@ public class AcceptItineraryController {
             String paymentResult = null;
 
             if (response.equals(ACCEPTED)) {
-                paymentResult = executePayment(user.getUsername(),agency.getUsername(),proposal.getPrice());
+                paymentResult = executePayment(user.getUsername(), agency.getUsername(), proposal.getPrice());
             }
 
             proposal.setAccepted(response);
@@ -59,7 +59,7 @@ public class AcceptItineraryController {
 
             PaymentApi api = new PaymentApi();
 
-            return api.processPayment(payer.getPaymentCredential(), payee.getPaymentCredential(),amount);
+            return api.processPayment(payer.getPaymentCredential(), payee.getPaymentCredential(), amount);
 
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
@@ -92,6 +92,20 @@ public class AcceptItineraryController {
                 throw new DuplicateItemException();
             }
             throw new FailedOperationException("Get proposal's itinerary");
+        }
+    }
+
+    public void addRaiting(Double rating, String proposalId) throws FailedOperationException {
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        try {
+            Agency agency = accountDao.getAgencyByProposal(proposalId);
+            agency.setRating(rating);
+
+            // update agency rating
+
+        } catch (DaoException e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
+            throw new FailedOperationException("Send response");
         }
     }
 }

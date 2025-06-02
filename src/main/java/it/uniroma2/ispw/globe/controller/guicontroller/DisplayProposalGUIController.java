@@ -111,7 +111,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     }
 
     public void acceptProposal() {
-        String paymentResult = null;
+        String paymentResult;
         try {
             paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
         } catch (FailedOperationException | DuplicateItemException e) {
@@ -135,8 +135,13 @@ public class DisplayProposalGUIController extends AbstractGUIController {
                 popupStage.initModality(Modality.APPLICATION_MODAL);
 
                 closeButton.setOnAction(e -> {
+                    try {
+                        new AcceptItineraryController().addRaiting(ratingSlider.getValue(), proposalID);
+                    } catch (FailedOperationException ex) {
+                        new ErrorPopUpGUIController().createPopUp(ex.getMessage());
+                        return;
+                    }
                     popupStage.close();
-                    //rating.set(ratingSlider.getValue());
                 });
 
                 popupStage.setScene(scene);
