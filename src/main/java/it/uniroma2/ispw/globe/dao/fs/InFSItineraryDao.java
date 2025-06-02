@@ -59,7 +59,7 @@ public class InFSItineraryDao extends ItineraryDao {
         }
 
         account.getItineraries().add(itinerary);
-        accountDao.updateAccount(account);
+        updateAccount(account);
     }
 
     @Override
@@ -96,6 +96,37 @@ public class InFSItineraryDao extends ItineraryDao {
             String[] row = allRows.get(i);
             if (row[0].equals(itineraryID)) {
                 allRows.set(i, itineraryCsv);
+                break;
+            }
+        }
+
+        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
+            writer.writeAll(allRows);
+        } catch (IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+    }
+
+    public void updateAccount(Account account) throws DaoException {
+        List<String[]> allRows;
+
+        StringBuilder itineraryCsv = new StringBuilder();
+        for (Itinerary accountItinerary : account.getItineraries()) {
+            itineraryCsv.append(accountItinerary.getItineraryID()).append(";");
+        }
+        itineraryCsv.setLength(itineraryCsv.length() - 1);
+
+        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
+            allRows = reader.readAll();
+        } catch (CsvException | IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+
+        for (int i = 0; i < allRows.size(); i++) {
+            String[] row = allRows.get(i);
+            if (row[0].equals(account.getUsername())) {
+                row[4] = itineraryCsv.toString();
+                allRows.set(i, row);
                 break;
             }
         }

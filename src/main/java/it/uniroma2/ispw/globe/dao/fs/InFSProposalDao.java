@@ -35,9 +35,9 @@ public class InFSProposalDao extends ProposalDao {
         }
 
         user.getProposals().add(proposal);
-        accountDao.updateAccount(user);
+        updateAccount(user);
         agency.getProposals().add(proposal);
-        accountDao.updateAccount(agency);
+        updateAccount(agency);
     }
 
     @Override
@@ -71,6 +71,38 @@ public class InFSProposalDao extends ProposalDao {
             String[] row = allRows.get(i);
             if (row[0].equals(proposal.getId())) {
                 allRows.set(i, requestCsv);
+                break;
+            }
+        }
+
+        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
+            writer.writeAll(allRows);
+        } catch (IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+    }
+
+    public void updateAccount(Account account) throws DaoException {
+        List<String[]> allRows;
+
+        StringBuilder proposalCsv = new StringBuilder();
+
+        for (Proposal proposal : account.getProposals()) {
+            proposalCsv.append(proposal.getId()).append(";");
+        }
+        proposalCsv.setLength(proposalCsv.length() - 1);
+
+        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
+            allRows = reader.readAll();
+        } catch (CsvException | IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+
+        for (int i = 0; i < allRows.size(); i++) {
+            String[] row = allRows.get(i);
+            if (row[0].equals(account.getUsername())) {
+                row[5] = proposalCsv.toString();
+                allRows.set(i, row);
                 break;
             }
         }

@@ -48,16 +48,11 @@ public class InFSRequestDao extends RequestDao {
         }
 
         user.getRequests().add(request);
-        accountDao.updateAccount(user);
+        updateAccount(user);
         for (Agency agency : agencies) {
             agency.getRequests().add(request);
-            accountDao.updateAccount(agency);
+            updateAccount(agency);
         }
-    }
-
-    @Override
-    public void addUserRequest(RequestBean requestBean, User user, Agency agency) {
-
     }
 
     @Override
@@ -91,6 +86,38 @@ public class InFSRequestDao extends RequestDao {
             String[] row = allRows.get(i);
             if (row[0].equals(request.getId())) {
                 allRows.set(i, requestCsv);
+                break;
+            }
+        }
+
+        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
+            writer.writeAll(allRows);
+        } catch (IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+    }
+
+    public void updateAccount(Account account) throws DaoException {
+        List<String[]> allRows;
+
+        StringBuilder requestCsv = new StringBuilder();
+
+        for (Request request : account.getRequests()) {
+            requestCsv.append(request.getId()).append(";");
+        }
+        requestCsv.setLength(requestCsv.length() - 1);
+
+        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
+            allRows = reader.readAll();
+        } catch (CsvException | IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+
+        for (int i = 0; i < allRows.size(); i++) {
+            String[] row = allRows.get(i);
+            if (row[0].equals(account.getUsername())) {
+                row[6] = requestCsv.toString();
+                allRows.set(i, row);
                 break;
             }
         }

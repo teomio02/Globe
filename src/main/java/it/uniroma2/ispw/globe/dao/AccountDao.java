@@ -18,6 +18,4 @@ public abstract class AccountDao {
     public abstract User getUserByProposal(String proposalID) throws DaoException;
     public abstract Agency getAgencyByRequest(String requestID) throws DaoException;
     public abstract User getUserByRequest(String requestID) throws DaoException;
-
-    public abstract void updateAccount(Account account) throws DaoException;
 }

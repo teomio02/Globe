@@ -183,32 +183,6 @@ public class InFSAccountDao extends AccountDao {
         return null;
     }
 
-    @Override
-    public void updateAccount(Account account) throws DaoException {
-        String[] accountCsv = toCSV(getAccount(account.getUsername()));
-        List<String[]> allRows;
-
-        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
-            allRows = reader.readAll();
-        } catch (CsvException | IOException e) {
-            throw new DaoException(e.getMessage(),GENERAL);
-        }
-
-        for (int i = 0; i < allRows.size(); i++) {
-            String[] row = allRows.get(i);
-            if (row[0].equals(account.getUsername())) {
-                allRows.set(i, accountCsv);
-                break;
-            }
-        }
-
-        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
-            writer.writeAll(allRows);
-        } catch (IOException e) {
-            throw new DaoException(e.getMessage(),GENERAL);
-        }
-    }
-
     public void addAgency(CredentialsBean credentials) throws DaoException {
         Agency agency = new Agency();
         agency.setUsername(credentials.getUsername());

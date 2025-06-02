@@ -41,11 +41,6 @@ public class InMemoryRequestDao extends RequestDao {
     }
 
     @Override
-    public void addUserRequest(RequestBean requestBean, User user, Agency agency) {
-
-    }
-
-    @Override
     public Request getRequest(String requestId) {
         for (Request request : requests) {
             if (request.getId().equals(requestId)) {
@@ -57,6 +52,6 @@ public class InMemoryRequestDao extends RequestDao {
 
     @Override
     public void updateRequest(Request request) {
-
+        // not necessary InMemory
     }
 }

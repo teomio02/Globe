@@ -93,11 +93,6 @@ public class InDbRequestDao extends RequestDao {
     }
 
     @Override
-    public void addUserRequest(RequestBean requestBean, User user, Agency agency) {
-
-    }
-
-    @Override
     public Request getRequest(String requestId) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 

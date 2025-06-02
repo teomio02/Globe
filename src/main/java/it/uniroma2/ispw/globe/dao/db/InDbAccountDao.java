@@ -313,11 +313,6 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
-    @Override
-    public void updateAccount(Account account) throws DaoException {
-
-    }
-
     public Account getAccountPrimaryData(String username) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 

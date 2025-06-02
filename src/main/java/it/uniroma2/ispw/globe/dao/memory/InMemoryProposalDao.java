@@ -48,6 +48,6 @@ public class InMemoryProposalDao extends ProposalDao {
 
     @Override
     public void updateProposal(Proposal proposal) {
-
+        // not necessary
     }
 }
