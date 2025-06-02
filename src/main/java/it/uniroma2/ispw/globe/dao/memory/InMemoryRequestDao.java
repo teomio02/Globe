@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.dao.memory;
 import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.Agency;
-import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.Request;
 import it.uniroma2.ispw.globe.model.User;
 

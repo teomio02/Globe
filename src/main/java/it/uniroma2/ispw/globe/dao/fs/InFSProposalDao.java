@@ -22,8 +22,6 @@ public class InFSProposalDao extends ProposalDao {
 
     @Override
     public void addProposal(Proposal proposal, User user, Agency agency) throws DaoException {
-        InFSAccountDao accountDao = new InFSAccountDao();
-
         if (getProposal(proposal.getId()) != null) {
             throw new DaoException("addProposal", DUPLICATE);
         }

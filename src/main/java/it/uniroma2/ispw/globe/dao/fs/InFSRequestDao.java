@@ -7,7 +7,6 @@ import com.opencsv.exceptions.CsvValidationException;
 import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.io.FileReader;
@@ -28,7 +27,6 @@ public class InFSRequestDao extends RequestDao {
     public void addAgencyRequest(Request request, User user, List<Agency> agencies) throws DaoException {
         InFSCityDao cityDao = new InFSCityDao();
         InFSAttractionDao attractionDao = new InFSAttractionDao();
-        InFSAccountDao accountDao = new InFSAccountDao();
 
         if (getRequest(request.getId()) != null) {
             throw new DaoException("addAgencyRequest", DUPLICATE);

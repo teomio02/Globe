@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.dao.db;
 import it.uniroma2.ispw.globe.dao.RequestDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.sql.Connection;

@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.dao;
 
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.model.Request;
 
 import java.util.ArrayList;

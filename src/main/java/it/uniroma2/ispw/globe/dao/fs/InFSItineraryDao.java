@@ -28,7 +28,6 @@ public class InFSItineraryDao extends ItineraryDao {
         InFSDayDao dayDao = new InFSDayDao();
         InFSAccommodationDao accommodationDao = new InFSAccommodationDao();
         InFSFlightDao flightDao = new InFSFlightDao();
-        InFSAccountDao accountDao = new InFSAccountDao();
 
         if (getItinerary(itinerary.getItineraryID()) != null ) {
             throw new DaoException("addItinerary: ", DUPLICATE);
