@@ -12,6 +12,7 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -86,8 +87,8 @@ class ManageItineraryControllerTest {
         Assertions.assertEquals(USER, type);
     }
 
-    @BeforeAll
-    static void provideData() throws IncorrectDataException, DaoException {
+    @BeforeEach
+    void provideData() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();

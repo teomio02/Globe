@@ -82,8 +82,8 @@ class AcceptItineraryControllerTest {
         Assertions.assertEquals("Get proposal's itinerary - proposal not found operation failed", errorMess);
     }
 
-    @BeforeAll
-    static void provideProposal() throws IncorrectDataException, DaoException {
+    @BeforeEach
+    void provideProposal() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
