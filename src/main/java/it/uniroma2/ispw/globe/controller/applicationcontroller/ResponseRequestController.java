@@ -46,6 +46,7 @@ public class ResponseRequestController {
 
             Request request = requestDao.getRequest(requestId);
             request.setAccepted(ACCEPTED);
+            requestDao.updateRequest(request);
 
             session.setPendingProposal(proposal);
             session.setPendingRequest(request);

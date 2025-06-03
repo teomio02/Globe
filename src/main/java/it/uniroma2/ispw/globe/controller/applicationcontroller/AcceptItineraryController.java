@@ -54,8 +54,9 @@ public class AcceptItineraryController {
     public String executePayment(String userUsername, String agencyUsername, double amount) throws FailedOperationException, DuplicateItemException {
 
         try {
-            Account payer = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(userUsername);
-            Account payee = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao().getAccount(agencyUsername);
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            Account payer = accountDao.getAccount(userUsername);
+            Account payee = accountDao.getAccount(agencyUsername);
 
             PaymentApi api = new PaymentApi();
 

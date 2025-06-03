@@ -8,11 +8,12 @@ import it.uniroma2.ispw.globe.dao.memory.InMemoryDaoFactory;
 public class Persistence {
     private static Persistence instance = null;
 
-    private static final String IN_MEMORY = "MEMORY";
-    private static final String IN_DATABASE = "DB";
-    private static final String IN_FILESYSTEM = "FS";
+    public static final String IN_MEMORY = "MEMORY";
+    public static final String IN_DATABASE = "DB";
+    public static final String IN_FILESYSTEM = "FS";
 
     private String type = IN_DATABASE;
+    private String defaultType = IN_DATABASE;
 
     private Persistence() {}
 
@@ -36,6 +37,18 @@ public class Persistence {
 
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDefaultType(String defaultType) {
+        this.defaultType = defaultType;
+    }
+
+    public void setDefault() {
+        setType(defaultType);
     }
 }
 

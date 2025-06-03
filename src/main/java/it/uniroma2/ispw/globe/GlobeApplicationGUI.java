@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe;
 
+import it.uniroma2.ispw.globe.engineering.Persistence;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -22,6 +23,8 @@ public class GlobeApplicationGUI extends Application {
             Image icon = new Image(url);
             stage.getIcons().add(icon);
         }
+
+        Persistence.getInstance().setDefaultType(Persistence.IN_DATABASE);
 
         Scene scene = new Scene(fxmlLoader.load());
 

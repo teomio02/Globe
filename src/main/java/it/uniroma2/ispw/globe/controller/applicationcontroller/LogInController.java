@@ -10,6 +10,8 @@ import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static it.uniroma2.ispw.globe.engineering.Persistence.IN_FILESYSTEM;
+import static it.uniroma2.ispw.globe.engineering.Persistence.IN_MEMORY;
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 
@@ -19,6 +21,12 @@ public class LogInController{
 
     public String logIn(CredentialsBean credentials) throws FailedOperationException, DuplicateItemException {
         try {
+            if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
+                Persistence.getInstance().setType(IN_MEMORY);
+            } else {
+                Persistence.getInstance().setDefault();
+            }
+
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
             if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
@@ -40,6 +48,12 @@ public class LogInController{
     }
 
     public void signIn(CredentialsBean credentials) throws FailedOperationException, DuplicateItemException {
+        if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
+            Persistence.getInstance().setType(IN_MEMORY);
+        } else {
+            Persistence.getInstance().setDefault();
+        }
+
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
             accountDao.addAccount(credentials);

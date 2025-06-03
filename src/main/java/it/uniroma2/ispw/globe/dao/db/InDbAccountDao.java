@@ -84,7 +84,7 @@ public class InDbAccountDao extends AccountDao {
     public Account getAccount(String username) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
+        String query = "select Account.username, Account.password, Account.paymentCredential, Account.type, Account.description, Account.rating from Account where username = ?";
 
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
@@ -109,6 +109,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new Agency();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
+                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
                     account.setType(resultSet.getString("type"));
                     account.setProposals(proposals);
                     account.setItineraries(itineraries);
@@ -122,6 +123,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new User();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
+                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
                     account.setType(resultSet.getString("type"));
                     account.setProposals(proposals);
                     account.setItineraries(itineraries);
@@ -316,7 +318,7 @@ public class InDbAccountDao extends AccountDao {
     public Account getAccountPrimaryData(String username) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "select Account.username, Account.password, Account.type, Account.description, Account.rating from Account where username = ?";
+        String query = "select Account.username, Account.password, Account.paymentCredential, Account.type, Account.description, Account.rating from Account where username = ?";
         String agencyTypeQuery = "select agencyType.type from agencyType where agency = ?";
 
 
@@ -352,6 +354,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new Agency();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
+                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
                     account.setType(resultSet.getString("type"));
                     ((Agency) account).setDescription(resultSet.getString("description"));
                     ((Agency) account).setPreferences(types);
@@ -362,6 +365,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new User();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
+                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
                     account.setType(resultSet.getString("type"));
 
                 }
