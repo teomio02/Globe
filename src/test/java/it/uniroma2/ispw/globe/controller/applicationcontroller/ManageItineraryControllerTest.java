@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ManageItineraryControllerTest {
 
     @Test
-    void testGetItineraryCorrectID() throws FailedOperationException, DuplicateItemException, IncorrectDataException, DaoException {
+    void testGetItineraryCorrectID() throws FailedOperationException, IncorrectDataException, DaoException {
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
@@ -37,7 +37,7 @@ class ManageItineraryControllerTest {
     }
 
     @Test
-    void testGetProposalItineraryIncorrectID() throws IncorrectDataException, DuplicateItemException, DaoException {
+    void testGetProposalItineraryIncorrectID() throws IncorrectDataException, DaoException {
         ManageItineraryController controller = new ManageItineraryController();
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));

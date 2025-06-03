@@ -56,7 +56,7 @@ class AcceptItineraryControllerTest {
     }
 
     @Test
-    void testGetProposalItineraryCorrectID() throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+    void testGetProposalItineraryCorrectID() throws IncorrectDataException, FailedOperationException {
         AcceptItineraryController controller = new AcceptItineraryController();
         String proposalID = "id5678";
 
@@ -65,7 +65,7 @@ class AcceptItineraryControllerTest {
     }
 
     @Test
-    void testGetProposalItineraryIncorrectID() throws IncorrectDataException, DuplicateItemException {
+    void testGetProposalItineraryIncorrectID() throws IncorrectDataException {
         AcceptItineraryController controller = new AcceptItineraryController();
         String proposalID = "id0000";
         String errorMess = "";

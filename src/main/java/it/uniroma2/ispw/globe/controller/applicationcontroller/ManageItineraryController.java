@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 
 public class ManageItineraryController {
