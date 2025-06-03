@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.bean.ItineraryBean;
@@ -46,7 +45,7 @@ public class ManageItineraryGUIController extends AbstractGUIController {
         try {
             itineraries = new ManageItineraryController().getUserItineraries(sessionId);
             proposals = new ManageItineraryController().getUserProposals(sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             Stage stage = (Stage) itinerariesVBox.getScene().getWindow();
             ViewManager viewManager = new ViewManager();

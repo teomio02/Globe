@@ -59,7 +59,7 @@ public class DisplayItineraryCLIController {
 
             showSteps(steps);
 
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
 
@@ -106,7 +106,7 @@ public class DisplayItineraryCLIController {
                     System.out.println("                -" + attraction.getName() + ", " + attraction.getAddress());
                 }
             }
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }

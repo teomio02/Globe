@@ -71,7 +71,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         ProposalBean proposal;
         try {
             proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
             return;
@@ -97,7 +97,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         if (proposalID != null) {
             try {
                 itineraryId = new AcceptItineraryController().getProposalItinerary(proposalID).getId();
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 return;
             }
@@ -141,7 +141,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
                         new ErrorPopUpGUIController().createPopUp(ex.getMessage());
                         return;
                     }
-                    
+
                     BorderPane rootVM = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
                     ViewManager viewManager = new ViewManager();
                     viewManager.goToManageItineraryGUI(sessionId, rootVM);

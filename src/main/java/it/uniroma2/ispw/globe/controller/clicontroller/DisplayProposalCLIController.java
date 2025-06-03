@@ -69,7 +69,7 @@ public class DisplayProposalCLIController {
                 }
                 default -> System.out.println(CHOICE_ERROR);
             }
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }
@@ -119,7 +119,7 @@ public class DisplayProposalCLIController {
         if (proposalId != null) {
             try {
                 itineraryId = new AcceptItineraryController().getProposalItinerary(proposalId).getId();
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
             }

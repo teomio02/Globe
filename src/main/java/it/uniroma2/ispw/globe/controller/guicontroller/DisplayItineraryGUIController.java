@@ -74,7 +74,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         try {
             itinerary = new ManageItineraryController().getItinerary(itineraryId,sessionId);
             steps = new ManageItineraryController().getSteps(itineraryId,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
             return;
@@ -172,7 +172,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         } catch (IOException e) {
             new ErrorPopUpGUIController().createPopUp("page loading failed");
             goBack();
-        } catch ( FailedOperationException | DuplicateItemException e) {
+        } catch ( FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
         }
