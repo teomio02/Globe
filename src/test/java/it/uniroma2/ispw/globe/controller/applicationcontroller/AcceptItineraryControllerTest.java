@@ -82,8 +82,8 @@ class AcceptItineraryControllerTest {
         Assertions.assertEquals("Get proposal's itinerary - proposal not found operation failed", errorMess);
     }
 
-    @BeforeEach
-    void provideProposal() throws IncorrectDataException, DaoException {
+    @BeforeAll
+    static void provideProposal() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
@@ -98,20 +98,29 @@ class AcceptItineraryControllerTest {
         agencyCredentialsBean.setDescription("agency description");
         agencyCredentialsBean.setPaymentCredentials("1234567890123456");
         agencyCredentialsBean.setPreferences(List.of(CULTURE));
-        accountDao.addAccount(agencyCredentialsBean);
+        if (accountDao.getAccount("agencyTest") == null) {
+            accountDao.addAccount(agencyCredentialsBean);
+        }
 
         CredentialsBean userCredentialsBean = new CredentialsBean();
         userCredentialsBean.setUsername("userTest");
         userCredentialsBean.setPassword("passwordU");
         userCredentialsBean.setType(USER);
         userCredentialsBean.setPaymentCredentials("1234567890123456");
-        accountDao.addAccount(userCredentialsBean);
+        if (accountDao.getAccount("userTest") == null) {
+            accountDao.addAccount(userCredentialsBean);
+        }
 
         City city = cityDao.createCity("r41485");
-        cityDao.addCity(city);
+        if (cityDao.getCity("r41485") == null) {
+            cityDao.addCity(city);
+        }
 
         Attraction attraction = attractionDao.createAttraction("r1849830");
-        attractionDao.addAttraction(attraction);
+        if (attractionDao.getAttraction("r1849830") == null) {
+            attractionDao.addAttraction(attraction);
+        }
+
 
         Day day = new Day();
         day.setDayNum(1);
@@ -127,7 +136,9 @@ class AcceptItineraryControllerTest {
         itinerary.setDays(List.of(day));
         itinerary.setTypes(List.of(CULTURE));
         itinerary.setPhotoFile(null);
-        itineraryDao.addItinerary(itinerary,accountDao.getAccount("agencyTest"));
+        if (itineraryDao.getItinerary("id1234") == null) {
+            itineraryDao.addItinerary(itinerary,accountDao.getAccount("agencyTest"));
+        }
 
         Proposal proposal = new Proposal();
         proposal.setId("id5678");
@@ -135,6 +146,8 @@ class AcceptItineraryControllerTest {
         proposal.setDescription("proposal description");
         proposal.setPrice(113.5);
         proposal.setAccepted(PENDING);
-        proposalDao.addProposal(proposal, (User) accountDao.getAccount("userTest"), (Agency) accountDao.getAccount("agencyTest"));
+        if (proposalDao.getProposal("id5678") == null) {
+            proposalDao.addProposal(proposal, (User) accountDao.getAccount("userTest"), (Agency) accountDao.getAccount("agencyTest"));
+        }
     }
 }

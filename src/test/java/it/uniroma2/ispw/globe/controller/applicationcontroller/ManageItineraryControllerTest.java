@@ -12,7 +12,6 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -87,8 +86,8 @@ class ManageItineraryControllerTest {
         Assertions.assertEquals(USER, type);
     }
 
-    @BeforeEach
-    void provideData() throws IncorrectDataException, DaoException {
+    @BeforeAll
+    static void provideData() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
@@ -103,20 +102,29 @@ class ManageItineraryControllerTest {
         agencyCredentialsBean.setDescription("agency description");
         agencyCredentialsBean.setPaymentCredentials("1234567890123456");
         agencyCredentialsBean.setPreferences(List.of(CULTURE));
-        accountDao.addAccount(agencyCredentialsBean);
+        if (accountDao.getAccount("agencyTest") == null) {
+            accountDao.addAccount(agencyCredentialsBean);
+        }
 
         CredentialsBean userCredentialsBean = new CredentialsBean();
         userCredentialsBean.setUsername("userTest");
         userCredentialsBean.setPassword("passwordU");
         userCredentialsBean.setType(USER);
         userCredentialsBean.setPaymentCredentials("1234567890123456");
-        accountDao.addAccount(userCredentialsBean);
+        if (accountDao.getAccount("userTest") == null) {
+            accountDao.addAccount(userCredentialsBean);
+        }
 
         City city = cityDao.createCity("r41485");
-        cityDao.addCity(city);
+        if (cityDao.getCity("r41485") == null) {
+            cityDao.addCity(city);
+        }
 
         Attraction attraction = attractionDao.createAttraction("r1849830");
-        attractionDao.addAttraction(attraction);
+        if (attractionDao.getAttraction("r1849830") == null) {
+            attractionDao.addAttraction(attraction);
+        }
+
 
         Day day = new Day();
         day.setDayNum(1);
@@ -132,7 +140,9 @@ class ManageItineraryControllerTest {
         itinerary.setDays(List.of(day));
         itinerary.setTypes(List.of(CULTURE));
         itinerary.setPhotoFile(null);
-        itineraryDao.addItinerary(itinerary,accountDao.getAccount("userTest"));
+        if (itineraryDao.getItinerary("id1234") == null) {
+            itineraryDao.addItinerary(itinerary,accountDao.getAccount("userTest"));
+        }
 
         Proposal proposal = new Proposal();
         proposal.setId("id5678");
@@ -140,6 +150,8 @@ class ManageItineraryControllerTest {
         proposal.setDescription("proposal description");
         proposal.setPrice(113.5);
         proposal.setAccepted(PENDING);
-        proposalDao.addProposal(proposal, (User) accountDao.getAccount("userTest"), (Agency) accountDao.getAccount("agencyTest"));
+        if (proposalDao.getProposal("id5678") == null) {
+            proposalDao.addProposal(proposal, (User) accountDao.getAccount("userTest"), (Agency) accountDao.getAccount("agencyTest"));
+        }
     }
 }
