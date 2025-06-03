@@ -72,7 +72,7 @@ public class InDbAccountDao extends AccountDao {
             stmt.setString(6, credentials.getType());
             stmt.execute();
 
-            if (credentials.getType() == AGENCY) {
+            if (credentials.getType().equals(AGENCY)) {
                 addAgencyPreferencese(credentials);
             }
         } catch (SQLException e) {

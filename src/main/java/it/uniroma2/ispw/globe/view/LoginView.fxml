@@ -61,7 +61,7 @@
                         </Button>
                      </children>
                   </VBox>
-                  <Button fx:id="guestButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#logIn" prefHeight="37.0" prefWidth="215.0" style="-fx-background-color: #314c1c;" text="Entra come ospite" textAlignment="CENTER" textFill="#97c093" underline="true">
+                  <Button fx:id="guestButton" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#logIn" prefHeight="37.0" prefWidth="300.0" style="-fx-background-color: #314c1c;" text="Enter as Guest (Demo version)" textAlignment="CENTER" textFill="#97c093" underline="true">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>

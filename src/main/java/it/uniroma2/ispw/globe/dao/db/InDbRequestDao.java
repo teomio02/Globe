@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.dao.db;
 
 import it.uniroma2.ispw.globe.dao.RequestDao;
-import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
