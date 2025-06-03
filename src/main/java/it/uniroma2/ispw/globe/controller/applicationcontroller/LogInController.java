@@ -10,7 +10,6 @@ import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.engineering.Persistence.IN_FILESYSTEM;
 import static it.uniroma2.ispw.globe.engineering.Persistence.IN_MEMORY;
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;

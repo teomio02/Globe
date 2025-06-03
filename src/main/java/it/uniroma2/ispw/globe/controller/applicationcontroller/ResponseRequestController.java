@@ -46,7 +46,6 @@ public class ResponseRequestController {
 
             Request request = requestDao.getRequest(requestId);
             request.setAccepted(ACCEPTED);
-            requestDao.updateRequest(request);
 
             session.setPendingProposal(proposal);
             session.setPendingRequest(request);
@@ -65,6 +64,7 @@ public class ResponseRequestController {
             ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
             ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
             RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
 
             Session session = SessionManager.getInstance().getSession(sessionID);
             Agency agency = (Agency) session.getAccount();
@@ -81,9 +81,12 @@ public class ResponseRequestController {
             request.setAccepted(ACCEPTED);
             requestDao.updateRequest(request);
 
+            session.setAccount(accountDao.getAccount(agency.getUsername()));
+
             session.setPendingItinerary(null);
             session.setPendingProposal(null);
             session.setPendingRequest(null);
+            session.setPendingAccount(null);
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             if (e.getType() == DUPLICATE) {

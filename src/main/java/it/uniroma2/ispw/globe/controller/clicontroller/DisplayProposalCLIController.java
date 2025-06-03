@@ -133,7 +133,7 @@ public class DisplayProposalCLIController {
     public void acceptProposal() {
         String paymentResult;
         try {
-            paymentResult = new AcceptItineraryController().sendResponse(proposalId,ACCEPTED);
+            paymentResult = new AcceptItineraryController().sendResponse(proposalId,ACCEPTED,sessionId);
         } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
             return;
@@ -146,7 +146,7 @@ public class DisplayProposalCLIController {
 
     public void rejectProposal() {
         try {
-            new AcceptItineraryController().sendResponse(proposalId,REJECTED);
+            new AcceptItineraryController().sendResponse(proposalId,REJECTED,sessionId);
         } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
         }

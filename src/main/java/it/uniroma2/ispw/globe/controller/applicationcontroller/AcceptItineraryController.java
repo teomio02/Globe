@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
@@ -24,7 +25,7 @@ import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
 
 public class AcceptItineraryController {
 
-    public String sendResponse(String proposalId, String response) throws FailedOperationException, DuplicateItemException {
+    public String sendResponse(String proposalId, String response, String sessionId) throws FailedOperationException, DuplicateItemException {
         ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
         AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
         try {
@@ -40,6 +41,8 @@ public class AcceptItineraryController {
 
             proposal.setAccepted(response);
             proposalDao.updateProposal(proposal);
+
+            SessionManager.getInstance().getSession(sessionId).setAccount(accountDao.getAccount(user.getUsername()));
 
             return paymentResult;
         } catch (DaoException e) {

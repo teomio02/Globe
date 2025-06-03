@@ -23,6 +23,7 @@ public class InDbAccountDao extends AccountDao {
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String ACCOUNT = "account";
+    public static final String CREDENTIALS = "paymentCredential";
 
     @Override
     public Account authenticate(String username, String password) throws DaoException {
@@ -70,6 +71,10 @@ public class InDbAccountDao extends AccountDao {
             stmt.setString(5, credentials.getDescription());
             stmt.setString(6, credentials.getType());
             stmt.execute();
+
+            if (credentials.getType() == AGENCY) {
+                addAgencyPreferencese(credentials);
+            }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new DaoException("addAccount: "+ e.getMessage(), DUPLICATE);
@@ -109,7 +114,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new Agency();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
-                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
+                    account.setPaymentCredential(resultSet.getString(CREDENTIALS));
                     account.setType(resultSet.getString("type"));
                     account.setProposals(proposals);
                     account.setItineraries(itineraries);
@@ -123,7 +128,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new User();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
-                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
+                    account.setPaymentCredential(resultSet.getString(CREDENTIALS));
                     account.setType(resultSet.getString("type"));
                     account.setProposals(proposals);
                     account.setItineraries(itineraries);
@@ -315,6 +320,31 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
+    public void addAgencyPreferencese(CredentialsBean credentialsBean) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+        String query = "insert into agencyType (agency, type) values (?,?)";
+        PreparedStatement stmt = null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            for (String preference : credentialsBean.getPreferences()) {
+                stmt.setString(1, credentialsBean.getUsername());
+                stmt.setString(2, preference);
+                stmt.addBatch();
+            }
+            stmt.executeBatch();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                throw new DaoException("addAgencyPreferences: "+ e.getMessage(), DUPLICATE);
+            }
+            throw new DaoException("addAgencyPreferences: "+ e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+        }
+    }
+
     public Account getAccountPrimaryData(String username) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
@@ -354,7 +384,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new Agency();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
-                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
+                    account.setPaymentCredential(resultSet.getString(CREDENTIALS));
                     account.setType(resultSet.getString("type"));
                     ((Agency) account).setDescription(resultSet.getString("description"));
                     ((Agency) account).setPreferences(types);
@@ -365,7 +395,7 @@ public class InDbAccountDao extends AccountDao {
                     account = new User();
                     account.setUsername(resultSet.getString(USERNAME));
                     account.setPassword(resultSet.getString(PASSWORD));
-                    account.setPaymentCredential(resultSet.getString("paymentCredential"));
+                    account.setPaymentCredential(resultSet.getString(CREDENTIALS));
                     account.setType(resultSet.getString("type"));
 
                 }

@@ -110,10 +110,10 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         viewManager.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID, root);
     }
 
-    public void acceptProposal() {
+    public void acceptProposal(ActionEvent event) {
         String paymentResult;
         try {
-            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
+            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED,sessionId);
         } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
@@ -141,6 +141,11 @@ public class DisplayProposalGUIController extends AbstractGUIController {
                         new ErrorPopUpGUIController().createPopUp(ex.getMessage());
                         return;
                     }
+                    
+                    BorderPane rootVM = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+                    ViewManager viewManager = new ViewManager();
+                    viewManager.goToManageItineraryGUI(sessionId, rootVM);
+
                     popupStage.close();
                 });
 
@@ -155,14 +160,18 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         }
     }
 
-    public void rejectProposal() {
+    public void rejectProposal(ActionEvent event) {
         try {
-            new AcceptItineraryController().sendResponse(proposalID,REJECTED);
+            new AcceptItineraryController().sendResponse(proposalID,REJECTED,sessionId);
         } catch (FailedOperationException | DuplicateItemException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
         responseHBox.getChildren().clear();
+
+        BorderPane rootVM = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
+        ViewManager viewManager = new ViewManager();
+        viewManager.goToManageItineraryGUI(sessionId, rootVM);
     }
 
     public void saveProposal(ActionEvent event) {

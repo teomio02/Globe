@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.dao.db;
 
 import it.uniroma2.ispw.globe.dao.RequestDao;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
@@ -187,7 +188,7 @@ public class InDbRequestDao extends RequestDao {
     public void updateRequest(Request request) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
 
-        String query = "update Proposal set accepted = ? where id = ?";
+        String query = "update Request set accepted = ? where id = ?";
 
         PreparedStatement stmt = null;
 
@@ -197,6 +198,7 @@ public class InDbRequestDao extends RequestDao {
 
             stmt.setString(1, request.getAccepted());
             stmt.setString(2, request.getId());
+            stmt.execute();
 
         } catch (SQLException e) {
             throw new DaoException("updateRequest: " + e.getMessage(), GENERAL);

@@ -288,6 +288,7 @@ public class RequestItineraryController {
 
     public void saveRequest(String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
+            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
             RequestDao requestDao = Persistence.getFactory(Persistence.getInstance().getType()).getRequestDao();
             AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
             CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
@@ -305,6 +306,8 @@ public class RequestItineraryController {
                 attractionDao.addAttraction(attraction);
             }
             requestDao.addAgencyRequest(request, (User) account, agencies);
+
+            session.setAccount(accountDao.getAccount(account.getUsername()));
 
             session.setPendingRequest(null);
         } catch (DaoException e) {
