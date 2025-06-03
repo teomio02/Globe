@@ -74,7 +74,7 @@ public class AcceptItineraryController {
         }
     }
 
-    public ItineraryBean getProposalItinerary(String proposalId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public ItineraryBean getProposalItinerary(String proposalId) throws FailedOperationException, IncorrectDataException {
         try {
             ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
             Proposal proposal = proposalDao.getProposal(proposalId);

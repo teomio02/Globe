@@ -64,7 +64,7 @@ class ManageItineraryControllerTest {
     }
 
     @Test
-    void testGetUserItinerariesIncorrect() throws DaoException, IncorrectDataException {
+    void testGetUserItinerariesIncorrect() throws IncorrectDataException {
         ManageItineraryController controller = new ManageItineraryController();
         String sessionID = "00000";
         String errorMess = "";

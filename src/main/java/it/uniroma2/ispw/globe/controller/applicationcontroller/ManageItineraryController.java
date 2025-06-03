@@ -3,7 +3,6 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.dao.*;
 import it.uniroma2.ispw.globe.exception.DaoException;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
@@ -25,7 +24,7 @@ import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 
 public class ManageItineraryController {
 
-    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             Proposal proposal;
             User user;
@@ -61,14 +60,11 @@ public class ManageItineraryController {
             return proposalBean;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get proposal");
         }
     }
 
-    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             Itinerary itinerary;
 
@@ -127,14 +123,11 @@ public class ManageItineraryController {
             return itineraryBean;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get itinerary");
         }
     }
 
-    public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             List<StepBean> steps = new ArrayList<>();
             Itinerary itinerary;
@@ -165,14 +158,11 @@ public class ManageItineraryController {
             return steps;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get steps");
         }
     }
 
-    public CityBean getCity(int stepNum, String cityID, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public CityBean getCity(int stepNum, String cityID, String sessionID) throws FailedOperationException {
         try {
             CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
             City city = null;
@@ -202,14 +192,11 @@ public class ManageItineraryController {
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get city");
         }
     }
 
-    public AttractionBean getAttraction(int stepNum, String attractionID, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public AttractionBean getAttraction(int stepNum, String attractionID, String sessionID) throws FailedOperationException {
         try {
             AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
             Attraction attraction = null;
@@ -241,9 +228,6 @@ public class ManageItineraryController {
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get attraction");
         }
     }
@@ -270,7 +254,7 @@ public class ManageItineraryController {
         return itineraryBeans;
     }
 
-    public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
             Session session = SessionManager.getInstance().getSession(sessionId);
@@ -296,9 +280,6 @@ public class ManageItineraryController {
             return proposalBeans;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get user's proposal");
         }
     }
