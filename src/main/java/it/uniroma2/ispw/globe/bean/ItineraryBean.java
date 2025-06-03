@@ -97,12 +97,13 @@ public class ItineraryBean {
 
     public void setOutboundFlightDepartureTime(double outboundFlightDepartureTime) throws IncorrectDataException {
         int hours = (int) outboundFlightDepartureTime;
-        int minutes = (int) (outboundFlightDepartureTime-hours)*100;
-        if (outboundFlightDepartureTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+        int minutes = (int) Math.round((outboundFlightDepartureTime - hours) * 100);
+
+        if (outboundFlightDepartureTime == -1 || (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)) {
             this.outboundFlightDepartureTime = outboundFlightDepartureTime;
-            return;
+        } else {
+            throw new IncorrectDataException("Itinerary outbound departure time not valid");
         }
-        throw new IncorrectDataException("Itinerary outbound departure time not valid");
     }
 
     public double getOutboundFlightArrivalTime() {
@@ -111,12 +112,13 @@ public class ItineraryBean {
 
     public void setOutboundFlightArrivalTime(double outboundFlightArrivalTime) throws IncorrectDataException {
         int hours = (int) outboundFlightArrivalTime;
-        int minutes = (int) (outboundFlightArrivalTime-hours)*100;
-        if (outboundFlightArrivalTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+        int minutes = (int) Math.round((outboundFlightArrivalTime - hours) * 100);
+
+        if (outboundFlightArrivalTime == -1 || (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)) {
             this.outboundFlightArrivalTime = outboundFlightArrivalTime;
-            return;
+        } else {
+            throw new IncorrectDataException("Itinerary outbound arrival time not valid");
         }
-        throw new IncorrectDataException("Itinerary outbound arrival time not valid");
     }
 
     public double getInboundFlightDepartureTime() {
@@ -125,12 +127,13 @@ public class ItineraryBean {
 
     public void setInboundFlightDepartureTime(double inboundFlightDepartureTime) throws IncorrectDataException {
         int hours = (int) inboundFlightDepartureTime;
-        int minutes = (int) (inboundFlightDepartureTime-hours)*100;
-        if (inboundFlightDepartureTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+        int minutes = (int) Math.round((inboundFlightDepartureTime - hours) * 100);
+
+        if (inboundFlightDepartureTime == -1 || (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)) {
             this.inboundFlightDepartureTime = inboundFlightDepartureTime;
-            return;
+        } else {
+            throw new IncorrectDataException("Itinerary inbound departure time not valid");
         }
-        throw new IncorrectDataException("Itinerary inbound departure time not valid");
     }
 
     public double getInboundFlightArrivalTime() {
@@ -139,12 +142,13 @@ public class ItineraryBean {
 
     public void setInboundFlightArrivalTime(double inboundFlightArrivalTime) throws IncorrectDataException {
         int hours = (int) inboundFlightArrivalTime;
-        int minutes = (int) (inboundFlightArrivalTime-hours)*100;
-        if (inboundFlightArrivalTime == -1 || (hours >= 0 && minutes >= 0 && hours <= 23 || minutes <= 59)) {
+        int minutes = (int) Math.round((inboundFlightArrivalTime - hours) * 100);
+
+        if (inboundFlightArrivalTime == -1 || (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)) {
             this.inboundFlightArrivalTime = inboundFlightArrivalTime;
-            return;
+        } else {
+            throw new IncorrectDataException("Itinerary inbound arrival time not valid");
         }
-        throw new IncorrectDataException("Itinerary inbound arrival time not valid");
     }
 
     public  List<Pair<String, String>> getAccommodations() {
@@ -153,7 +157,7 @@ public class ItineraryBean {
 
     public void setAccommodations( List<Pair<String, String>> accommodations) throws IncorrectDataException {
         for (Pair<String,String> accommodation : accommodations) {
-            if (!accommodation.getValue().matches("[A-Za-zÀ-ÿ0-9'’\\.\\,\\-\\s]+") || accommodation.getKey().isEmpty()) {
+            if (!accommodation.getValue().matches("[\\p{L}\\d\\s'\\-]+") || !accommodation.getKey().matches("[\\p{L}\\d\\s,'\\.\\-]+")) {
                 throw new IncorrectDataException("Accommodation not valid");
             }
         }

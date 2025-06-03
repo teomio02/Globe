@@ -1,0 +1,140 @@
+package it.uniroma2.ispw.globe.controller.applicationcontroller;
+
+import it.uniroma2.ispw.globe.bean.CredentialsBean;
+import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.dao.*;
+import it.uniroma2.ispw.globe.engineering.Persistence;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
+import it.uniroma2.ispw.globe.exception.DaoException;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
+import it.uniroma2.ispw.globe.model.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.List;
+
+import static it.uniroma2.ispw.globe.constants.ItineraryType.CULTURE;
+import static it.uniroma2.ispw.globe.constants.ProposalState.*;
+import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
+import static it.uniroma2.ispw.globe.constants.UserType.USER;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+class AcceptItineraryControllerTest {
+
+    @Test
+    void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException {
+
+        AcceptItineraryController controller = new AcceptItineraryController();
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+
+        Proposal proposal = proposalDao.getProposal("id5678");
+        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
+
+        String result = controller.sendResponse(proposal.getId(),ACCEPTED,sessionID);
+        Assertions.assertEquals(ACCEPTED, proposal.getAccepted());
+        assertNotNull(result);
+    }
+
+    @Test
+    void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException {
+
+        AcceptItineraryController controller = new AcceptItineraryController();
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+
+        Proposal proposal = proposalDao.getProposal("id5678");
+        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
+
+        String result = controller.sendResponse(proposal.getId(),REJECTED,sessionID);
+        Assertions.assertEquals(REJECTED, proposal.getAccepted());
+        assertNull(result);
+    }
+
+    @Test
+    void testGetProposalItineraryCorrectID() throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+        AcceptItineraryController controller = new AcceptItineraryController();
+        String proposalID = "id5678";
+
+        ItineraryBean itinerary = controller.getProposalItinerary(proposalID);
+        assertNotNull(itinerary);
+    }
+
+    @Test
+    void testGetProposalItineraryIncorrectID() throws IncorrectDataException, DuplicateItemException {
+        AcceptItineraryController controller = new AcceptItineraryController();
+        String proposalID = "id0000";
+        String errorMess = "";
+
+        try {
+            controller.getProposalItinerary(proposalID);
+        } catch (FailedOperationException e) {
+            errorMess = e.getMessage();
+        }
+
+        Assertions.assertEquals("Get proposal's itinerary - proposal not found operation failed", errorMess);
+    }
+
+    @BeforeAll
+    static void provideProposal() throws IncorrectDataException, DaoException {
+        Persistence.getInstance().setType(Persistence.IN_MEMORY);
+        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+        ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+
+        CredentialsBean agencyCredentialsBean = new CredentialsBean();
+        agencyCredentialsBean.setUsername("agencyTest");
+        agencyCredentialsBean.setPassword("passwordA");
+        agencyCredentialsBean.setType(AGENCY);
+        agencyCredentialsBean.setDescription("agency description");
+        agencyCredentialsBean.setPaymentCredentials("1234567890123456");
+        agencyCredentialsBean.setPreferences(List.of(CULTURE));
+        accountDao.addAccount(agencyCredentialsBean);
+
+        CredentialsBean userCredentialsBean = new CredentialsBean();
+        userCredentialsBean.setUsername("userTest");
+        userCredentialsBean.setPassword("passwordU");
+        userCredentialsBean.setType(USER);
+        userCredentialsBean.setPaymentCredentials("1234567890123456");
+        accountDao.addAccount(userCredentialsBean);
+
+        City city = cityDao.createCity("r41485");
+        cityDao.addCity(city);
+
+        Attraction attraction = attractionDao.createAttraction("r1849830");
+        attractionDao.addAttraction(attraction);
+
+        Day day = new Day();
+        day.setDayNum(1);
+        day.setId("id1234");
+        day.setCities(List.of(city));
+        day.setAttractions(List.of(attraction));
+
+        Itinerary itinerary = new BaseItinerary();
+        itinerary.setItineraryID("id1234");
+        itinerary.setName("itinerary name");
+        itinerary.setDescription("itinerary description");
+        itinerary.setDaysNumber(1);
+        itinerary.setDays(List.of(day));
+        itinerary.setTypes(List.of(CULTURE));
+        itinerary.setPhotoFile(null);
+        itineraryDao.addItinerary(itinerary,accountDao.getAccount("agencyTest"));
+
+        Proposal proposal = new Proposal();
+        proposal.setId("id5678");
+        proposal.setItinerary(itinerary);
+        proposal.setDescription("proposal description");
+        proposal.setPrice(113.5);
+        proposal.setAccepted(PENDING);
+        proposalDao.addProposal(proposal, (User) accountDao.getAccount("userTest"), (Agency) accountDao.getAccount("agencyTest"));
+    }
+}

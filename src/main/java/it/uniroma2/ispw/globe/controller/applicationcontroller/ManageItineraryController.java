@@ -82,6 +82,10 @@ public class ManageItineraryController {
                 itinerary = itineraryDao.getItinerary(itineraryId);
             }
 
+            if (itinerary == null) {
+                throw new FailedOperationException("Get itinerary - itinerary not found");
+            }
+
             ItineraryBean itineraryBean = new ItineraryBean();
             itineraryBean.setId(itinerary.getItineraryID());
             itineraryBean.setName(itinerary.getName());
@@ -244,8 +248,12 @@ public class ManageItineraryController {
         }
     }
 
-    public List<ItineraryBean> getUserItineraries(String sessionId) throws IncorrectDataException {
-        User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
+    public List<ItineraryBean> getUserItineraries(String sessionId) throws IncorrectDataException, FailedOperationException {
+        Session session = SessionManager.getInstance().getSession(sessionId);
+        if (session == null) {
+            throw new FailedOperationException("GetUserItineraries - Session not found");
+        }
+        User user = (User) session.getAccount();
         List<Itinerary> itineraries = user.getItineraries();
         List<ItineraryBean> itineraryBeans = new ArrayList<>();
         for (Itinerary itinerary : itineraries) {
@@ -265,7 +273,11 @@ public class ManageItineraryController {
     public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-            User user = (User) SessionManager.getInstance().getSession(sessionId).getAccount();
+            Session session = SessionManager.getInstance().getSession(sessionId);
+            if (session == null) {
+                throw new FailedOperationException("GetUserProposals - Session not found");
+            }
+            User user = (User) session.getAccount();
             List<Proposal> proposals = user.getProposals();
             List<ProposalBean> proposalBeans = new ArrayList<>();
             for (Proposal proposal : proposals) {

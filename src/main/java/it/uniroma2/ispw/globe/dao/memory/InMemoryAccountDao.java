@@ -162,6 +162,7 @@ public class InMemoryAccountDao extends AccountDao {
         agency.setUsername(credentials.getUsername());
         agency.setPassword(credentials.getPassword());
         agency.setType(credentials.getType());
+        agency.setPaymentCredential(credentials.getPaymentCredentials());
         agency.setProposals(new ArrayList<>());
         agency.setItineraries(new ArrayList<>());
         agency.setRequests(new ArrayList<>());
@@ -182,6 +183,7 @@ public class InMemoryAccountDao extends AccountDao {
         User user = new User();
         user.setUsername(credentials.getUsername());
         user.setPassword(credentials.getPassword());
+        user.setPaymentCredential(credentials.getPaymentCredentials());
         user.setType(credentials.getType());
         user.setItineraries(new ArrayList<>());
         user.setProposals(new ArrayList<>());

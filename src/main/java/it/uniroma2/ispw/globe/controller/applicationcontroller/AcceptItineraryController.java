@@ -78,6 +78,9 @@ public class AcceptItineraryController {
         try {
             ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
             Proposal proposal = proposalDao.getProposal(proposalId);
+            if (proposal == null) {
+                throw new FailedOperationException("Get proposal's itinerary - proposal not found");
+            }
             Itinerary itinerary = proposal.getItinerary();
 
             ItineraryBean itineraryBean = new ItineraryBean();
@@ -92,9 +95,6 @@ public class AcceptItineraryController {
 
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get proposal's itinerary");
         }
     }

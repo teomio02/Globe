@@ -87,7 +87,7 @@ public class ManageItineraryCLIController {
                 DisplayItineraryCLIController controller = new DisplayItineraryCLIController(sessionId,choice,null,null);
                 controller.start();
             }
-        } catch (IncorrectDataException e) {
+        } catch (IncorrectDataException | FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }

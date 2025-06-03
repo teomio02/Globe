@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
+import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InMemoryProposalDao extends ProposalDao {
     private static InMemoryProposalDao instance = null;
@@ -37,7 +38,7 @@ public class InMemoryProposalDao extends ProposalDao {
     }
 
     @Override
-    public Proposal getProposal(String proposalID) {
+    public Proposal getProposal(String proposalID) throws DaoException {
         for (Proposal proposal : proposals) {
             if (proposal.getId().equals(proposalID)){
                 return proposal;
