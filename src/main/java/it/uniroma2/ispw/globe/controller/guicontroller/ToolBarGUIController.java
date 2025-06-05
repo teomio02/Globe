@@ -1,5 +1,9 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
+import it.uniroma2.ispw.globe.controller.applicationcontroller.LogInController;
+import it.uniroma2.ispw.globe.exception.DuplicateItemException;
+import it.uniroma2.ispw.globe.exception.FailedOperationException;
+import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -126,6 +130,13 @@ public class ToolBarGUIController {
             } catch (IOException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO, e);
             }
+        }
+
+        try {
+            new LogInController().logOut(sessionId);
+        } catch (FailedOperationException | IncorrectDataException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
         }
 
         if (!userType.equals(GUEST) || (boolean) yesButton.getUserData()) {

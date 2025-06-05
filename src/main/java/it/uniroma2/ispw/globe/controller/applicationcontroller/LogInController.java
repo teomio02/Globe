@@ -26,7 +26,7 @@ public class LogInController{
                 Persistence.getInstance().setDefault();
             }
 
-            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            AccountDao accountDao = Persistence.getFactory().getAccountDao();
 
             if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
                 accountDao.addAccount(credentials);
@@ -54,7 +54,7 @@ public class LogInController{
         }
 
         try {
-            AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+            AccountDao accountDao = Persistence.getFactory().getAccountDao();
             accountDao.addAccount(credentials);
 
         } catch (DaoException e) {
@@ -66,7 +66,7 @@ public class LogInController{
         }
     }
 
-    public void logOut(String sessionId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public void logOut(String sessionId) throws FailedOperationException, IncorrectDataException {
         try {
             Account account = SessionManager.getInstance().getSession(sessionId).getAccount();
             if (account.getType().equals(GUEST)) {
@@ -75,14 +75,12 @@ public class LogInController{
                 credentialsBean.setPassword(account.getPassword());
                 credentialsBean.setType(account.getType());
 
-                AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
+                AccountDao accountDao = Persistence.getFactory().getAccountDao();
                 accountDao.removeAccount(credentialsBean);
             }
+            SessionManager.getInstance().removeSession(sessionId);
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Log out");
         }
     }
