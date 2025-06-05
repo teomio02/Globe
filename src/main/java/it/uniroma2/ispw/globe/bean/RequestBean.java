@@ -75,7 +75,7 @@ public class RequestBean {
     }
 
     public void setOtherRequests(String otherRequests) throws IncorrectDataException {
-        if (otherRequests == null || otherRequests.isEmpty()) {
+        if (otherRequests == null || otherRequests.isEmpty() || otherRequests.length()>999) {
             throw new IncorrectDataException("Proposal other request not valid");
         }
         this.otherRequests = otherRequests;

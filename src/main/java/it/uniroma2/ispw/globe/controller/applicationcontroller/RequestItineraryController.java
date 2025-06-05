@@ -151,17 +151,16 @@ public class RequestItineraryController {
             attractionsID.add(attraction.getPlaceID());
         }
 
-        List<String> agencies = new ArrayList<>();
-        for (Agency a: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
-            agencies.add(a.getUsername());
-        }
-
         RequestBean requestBean = new RequestBean();
         requestBean.setID(request.getId());
         requestBean.setUser(user.getUsername());
         if (requestID != null) {
             requestBean.setAgency(agency.getUsername());
         } else {
+            List<String> agencies = new ArrayList<>();
+            for (Agency a: SessionManager.getInstance().getSession(sessionID).getPendingAgencies()) {
+                agencies.add(a.getUsername());
+            }
             requestBean.setAgencies(agencies);
         }
         requestBean.setOtherRequests(request.getOtherRequest());
