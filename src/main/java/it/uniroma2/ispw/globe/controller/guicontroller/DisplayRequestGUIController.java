@@ -15,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.List;
 
@@ -24,9 +26,9 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     @FXML
     private Label userLabel;
     @FXML
-    private Label descriptionLabel;
+    private Label otherRequestsLabel;
     @FXML
-    private Label typesLabel;
+    private HBox typesHBox;
     @FXML
     private Button saveRequestButton;
     @FXML
@@ -52,11 +54,11 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     @FXML
     private Tab cityTab;
     @FXML
-    private Label cityLabel;
+    private VBox attractionsVBox;
     @FXML
-    private Label attractionLabel;
+    private VBox citiesVBox;
 
-
+    private static final String LIGHT = "label-light";
 
 
     private String sessionId;
@@ -85,17 +87,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 goBack();
                 return;
             }
-
             userLabel.setText(request.getUser());
-            descriptionLabel.setText(request.getOtherRequests());
-            daysLabel.setText(String.valueOf(request.getDayNum()));
-            StringBuilder types = new StringBuilder();
-            for (String type: request.getTypes()) {
-                types.append(type).append(", ");
-            }
-            types.setLength(types.length() - 2);
-            typesLabel.setText(types.toString());
-
         } else {
             if (requestId == null) {
                 saveRequestButton.setVisible(true);
@@ -120,45 +112,46 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
             agenciesString.setLength(agenciesString.length() - 2);
             userLabel.setText(agenciesString.toString());
+        }
 
-            descriptionLabel.setText(request.getOtherRequests());
-            daysLabel.setText(String.valueOf(request.getDayNum()));
-            typesLabel.setText("");
-            for (String type: request.getTypes()) {
-                typesLabel.setText(typesLabel.getText() + type + ", ");
-            }
+        dispalyPlaces(request);
 
-            displayCities(request);
-
-            displayAttractions(request);
+        otherRequestsLabel.setText(request.getOtherRequests());
+        daysLabel.setText(String.valueOf(request.getDayNum()));
+        for (String type : request.getTypes()) {
+            Label typeLabel = new Label(type);
+            typeLabel.getStyleClass().add("rounded-label");
+            typesHBox.getChildren().add(typeLabel);
         }
 
         displayOptinal(optionals);
     }
 
-    public void displayCities(RequestBean request) {
-        cityLabel.setText("");
-        for (String cityID : request.getCities()) {
-            CityBean city;
+    public void dispalyPlaces(RequestBean request) {
+        for (String city: request.getCities()) {
             try {
-                city = new RequestItineraryController().getCity(cityID);
+                CityBean cityBean = new RequestItineraryController().getCity(city);
+                Label cityLabel = new Label(cityBean.getName()+", "+cityBean.getCountry());
+                cityLabel.getStyleClass().add(LIGHT);
+                citiesVBox.getChildren().add(cityLabel);
             } catch (FailedOperationException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                goBack();
+                return;
             }
-            cityLabel.setText(cityLabel.getText() +  city.getName() + ", ");
         }
-    }
 
-    public void displayAttractions(RequestBean request) {
-        attractionLabel.setText("");
-        for (String attractionID: request.getAttractions()) {
-            AttractionBean attraction;
+        for (String attraction: request.getAttractions()) {
             try {
-                attraction = new RequestItineraryController().getAttraction(attractionID);
+                AttractionBean attractionBean = new RequestItineraryController().getAttraction(attraction);
+                Label attractionLabel = new Label(attractionBean.getName()+", "+attractionBean.getCity());
+                attractionLabel.getStyleClass().add(LIGHT);
+                attractionsVBox.getChildren().add(attractionLabel);
             } catch (FailedOperationException e) {
-                throw new RuntimeException(e);
+                new ErrorPopUpGUIController().createPopUp(e.getMessage());
+                goBack();
+                return;
             }
-            attractionLabel.setText(attractionLabel.getText() +  attraction.getName() + ", ");
         }
     }
 
