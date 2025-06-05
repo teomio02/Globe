@@ -12,7 +12,7 @@ public class Persistence {
     public static final String IN_DATABASE = "DB";
     public static final String IN_FILESYSTEM = "FS";
 
-    private static DaoFactory daoFactory;
+    private DaoFactory daoFactory;
 
     private String type;
     private String defaultType;
@@ -26,7 +26,7 @@ public class Persistence {
         return instance;
     }
 
-    public static DaoFactory getFactory() {
+    public DaoFactory getFactory() {
         return daoFactory;
     }
 

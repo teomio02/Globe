@@ -70,7 +70,7 @@ class LogInControllerTest {
     @Test
     void testSignInCorrect() throws IncorrectDataException, FailedOperationException, DuplicateItemException, DaoException {
         LogInController logInController = new LogInController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
         CredentialsBean credentialsBean = new CredentialsBean();
         credentialsBean.setUsername("userCorrect");
@@ -86,7 +86,7 @@ class LogInControllerTest {
     @Test
     void testUserTypeCorrect() throws DaoException {
         LogInController logInController = new LogInController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
         Account account = accountDao.getAccount("userTest");
         String sessionID = SessionManager.getInstance().addSession(account);
@@ -106,7 +106,7 @@ class LogInControllerTest {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
         Persistence.getInstance().setDefaultType(Persistence.IN_MEMORY);
 
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
         CredentialsBean userCredentialsBean = new CredentialsBean();
         userCredentialsBean.setUsername("userTest");

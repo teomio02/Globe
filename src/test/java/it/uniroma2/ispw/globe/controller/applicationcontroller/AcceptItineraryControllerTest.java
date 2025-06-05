@@ -31,8 +31,8 @@ class AcceptItineraryControllerTest {
     void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
@@ -46,8 +46,8 @@ class AcceptItineraryControllerTest {
     void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
@@ -84,11 +84,11 @@ class AcceptItineraryControllerTest {
     @BeforeAll
     static void provideProposal() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        CityDao cityDao = Persistence.getFactory().getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-        ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+        ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         CredentialsBean agencyCredentialsBean = new CredentialsBean();
         agencyCredentialsBean.setUsername("agencyTest");

@@ -26,8 +26,8 @@ import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
 public class AcceptItineraryController {
 
     public String sendResponse(String proposalId, String response, String sessionId) throws FailedOperationException, DuplicateItemException {
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         try {
             Agency agency = accountDao.getAgencyByProposal(proposalId);
             User user = accountDao.getUserByProposal(proposalId);
@@ -57,7 +57,7 @@ public class AcceptItineraryController {
     public String executePayment(String userUsername, String agencyUsername, double amount) throws FailedOperationException, DuplicateItemException {
 
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
             Account payer = accountDao.getAccount(userUsername);
             Account payee = accountDao.getAccount(agencyUsername);
 
@@ -76,7 +76,7 @@ public class AcceptItineraryController {
 
     public ItineraryBean getProposalItinerary(String proposalId) throws FailedOperationException, IncorrectDataException {
         try {
-            ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+            ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
             Proposal proposal = proposalDao.getProposal(proposalId);
             if (proposal == null) {
                 throw new FailedOperationException("Get proposal's itinerary - proposal not found");
@@ -100,7 +100,7 @@ public class AcceptItineraryController {
     }
 
     public void addRaiting(Double rating, String proposalId) throws FailedOperationException {
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         try {
             Agency agency = accountDao.getAgencyByProposal(proposalId);
             agency.setRating(rating);

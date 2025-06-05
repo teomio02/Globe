@@ -88,7 +88,7 @@ public class RequestItineraryController {
 
     public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
             List<Agency> agencies = accountDao.getAgenciesByType(types);
             List<AgencyBean> agencyBeans = new ArrayList<>();
 
@@ -115,8 +115,8 @@ public class RequestItineraryController {
         User user;
 
         if (requestID != null) {
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             try {
                 request = requestDao.getRequest(requestID);
@@ -179,7 +179,7 @@ public class RequestItineraryController {
         Request request;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
             try {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {
@@ -230,10 +230,10 @@ public class RequestItineraryController {
 
     public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
-            CityDao cityDao = Persistence.getFactory().getCityDao();
-            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
+            CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+            AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
 
 
             Request request = requestDao.createRequest(UUID.randomUUID().toString(),PENDING,requestBean.getOtherRequests(),requestBean.getDayNum(),requestBean.isFlight(),requestBean.isAccommodation(),requestBean.getTypes());
@@ -287,10 +287,10 @@ public class RequestItineraryController {
 
     public void saveRequest(String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
-            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-            CityDao cityDao = Persistence.getFactory().getCityDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
+            AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+            CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
 
             Session session = SessionManager.getInstance().getSession(sessionID);
             Account account = session.getAccount();
@@ -320,7 +320,7 @@ public class RequestItineraryController {
 
     public CityBean getCity(String cityId) throws FailedOperationException {
         try {
-            CityDao cityDao = Persistence.getFactory().getCityDao();
+            CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
             City city = cityDao.getCity(cityId);
 
             if (city == null) {
@@ -343,7 +343,7 @@ public class RequestItineraryController {
 
     public AttractionBean getAttraction(String attractionId) throws FailedOperationException {
         try {
-            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
+            AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
             Attraction attraction = attractionDao.getAttraction(attractionId);
 
             if (attraction == null) {
