@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 class ItineraryBeanTest {
 
+    // Teo Miozzi
+
     @Test
     void testSetDurationCorrect() throws IncorrectDataException {
         ItineraryBean itineraryBean = new ItineraryBean();

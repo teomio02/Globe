@@ -25,6 +25,7 @@ public class GlobeApplicationGUI extends Application {
         }
 
         Persistence.getInstance().setDefaultType(Persistence.IN_DATABASE);
+        Persistence.getInstance().setType(Persistence.IN_DATABASE);
 
         Scene scene = new Scene(fxmlLoader.load());
 

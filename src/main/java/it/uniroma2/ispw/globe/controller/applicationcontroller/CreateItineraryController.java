@@ -41,10 +41,10 @@ public class CreateItineraryController {
 
     public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-            DayDao dayDao = Persistence.getFactory(Persistence.getInstance().getType()).getDayDao();
-            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
+            DayDao dayDao = Persistence.getFactory().getDayDao();
+            CityDao cityDao = Persistence.getFactory().getCityDao();
+            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
 
             String itineraryId = UUID.randomUUID().toString();
             itineraryBean.setId(itineraryId);
@@ -82,7 +82,7 @@ public class CreateItineraryController {
             calculateItinerary(itinerary);
 
             if (itineraryBean.getAccommodations() != null) {
-                AccommodationDao accommodationDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccommodationDao();
+                AccommodationDao accommodationDao = Persistence.getFactory().getAccommodationDao();
 
                 List<Accommodation> accommodations = new ArrayList<>();
                 for (Pair<String,String> a : itineraryBean.getAccommodations()) {
@@ -95,7 +95,7 @@ public class CreateItineraryController {
             }
 
             if (itineraryBean.getInboundFlightArrivalTime() != 0) {
-                FlightDao flightDao = Persistence.getFactory(Persistence.getInstance().getType()).getFlightDao();
+                FlightDao flightDao = Persistence.getFactory().getFlightDao();
 
                 Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
                 Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
@@ -118,7 +118,7 @@ public class CreateItineraryController {
 
     public void saveItinerary(String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
 
             Session session = SessionManager.getInstance().getSession(sessionID);
             Account account = session.getAccount();
@@ -302,7 +302,7 @@ public class CreateItineraryController {
 
     public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
+            CityDao cityDao = Persistence.getFactory().getCityDao();
             City city = null;
 
             if (sessionID != null) {
@@ -339,7 +339,7 @@ public class CreateItineraryController {
 
     public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
+            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
             Attraction attraction = null;
 
             if (sessionID != null) {
@@ -381,7 +381,7 @@ public class CreateItineraryController {
             Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
             itinerary.setPhotoFile(file);
         } else {
-            ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
+            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
             try {
                 itineraryDao.addPhotoFile(file, itineraryID);
             } catch (DaoException e) {

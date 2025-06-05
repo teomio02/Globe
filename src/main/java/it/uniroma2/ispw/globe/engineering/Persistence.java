@@ -12,8 +12,10 @@ public class Persistence {
     public static final String IN_DATABASE = "DB";
     public static final String IN_FILESYSTEM = "FS";
 
-    private String type = IN_DATABASE;
-    private String defaultType = IN_DATABASE;
+    private static DaoFactory daoFactory;
+
+    private String type;
+    private String defaultType;
 
     private Persistence() {}
 
@@ -24,15 +26,8 @@ public class Persistence {
         return instance;
     }
 
-    public static DaoFactory getFactory(String s) {
-        if (s.equals(IN_DATABASE)) {
-            return InDbDaoFactory.getInstance();
-        } else if (s.equals(IN_MEMORY)) {
-            return InMemoryDaoFactory.getInstance();
-        } else if (s.equals(IN_FILESYSTEM)) {
-            return InFSDaoFactory.getInstance();
-        }
-        return null;
+    public static DaoFactory getFactory() {
+        return daoFactory;
     }
 
     public String getType() {
@@ -41,6 +36,13 @@ public class Persistence {
 
     public void setType(String type) {
         this.type = type;
+        if (type.equals(IN_DATABASE)) {
+            daoFactory = InDbDaoFactory.getInstance();
+        } else if (type.equals(IN_MEMORY)) {
+            daoFactory = InMemoryDaoFactory.getInstance();
+        } else if (type.equals(IN_FILESYSTEM)) {
+            daoFactory = InFSDaoFactory.getInstance();
+        }
     }
 
     public void setDefaultType(String defaultType) {

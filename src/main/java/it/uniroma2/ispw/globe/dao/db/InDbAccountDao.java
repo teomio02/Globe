@@ -146,7 +146,7 @@ public class InDbAccountDao extends AccountDao {
 
     @Override
     public void removeAccount(CredentialsBean credentials) throws DaoException {
-        // da implementare
+        // not necessary (only in demo mode - InMemory)
     }
 
     @Override

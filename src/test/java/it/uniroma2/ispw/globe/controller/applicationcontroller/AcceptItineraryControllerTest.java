@@ -25,12 +25,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class AcceptItineraryControllerTest {
 
+    // Teo Miozzi
+
     @Test
     void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
@@ -44,8 +46,8 @@ class AcceptItineraryControllerTest {
     void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
@@ -82,11 +84,11 @@ class AcceptItineraryControllerTest {
     @BeforeAll
     static void provideProposal() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
-        AccountDao accountDao = Persistence.getFactory(Persistence.getInstance().getType()).getAccountDao();
-        CityDao cityDao = Persistence.getFactory(Persistence.getInstance().getType()).getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory(Persistence.getInstance().getType()).getAttractionDao();
-        ItineraryDao itineraryDao = Persistence.getFactory(Persistence.getInstance().getType()).getItineraryDao();
-        ProposalDao proposalDao = Persistence.getFactory(Persistence.getInstance().getType()).getProposalDao();
+        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        CityDao cityDao = Persistence.getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
+        ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
+        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
 
         CredentialsBean agencyCredentialsBean = new CredentialsBean();
         agencyCredentialsBean.setUsername("agencyTest");

@@ -65,7 +65,7 @@ public class InFSAccountDao extends AccountDao {
 
     @Override
     public void removeAccount(CredentialsBean credentials) {
-        // not implemented yet
+        // not necessary (only in demo mode - InMemory)
     }
 
     @Override
