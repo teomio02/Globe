@@ -137,7 +137,7 @@ public class CreateItineraryController {
         }
     }
 
-    public void calculateItinerary(Itinerary itinerary) throws AttractionNotAddedException, FailedOperationException {
+    public void calculateItinerary(Itinerary itinerary) throws AttractionNotAddedException {
         Map<City,List<Attraction>> attractionsByCity = getAttractionsByCity(itinerary);
         itinerary.setDays(distributeAttraction(itinerary,attractionsByCity));
     }
