@@ -92,7 +92,7 @@
                         </HBox>
                         <VBox>
                            <children>
-                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefHeight="160.0" prefWidth="431.0" styleClass="label-light" textFill="#97c093">
+                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefHeight="160.0" prefWidth="431.0" styleClass="label-light" text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" textAlignment="JUSTIFY" textFill="#97c093" wrapText="true">
                                  <font>
                                     <Font name="Apple SD Gothic Neo Light" size="12.0" />
                                  </font>

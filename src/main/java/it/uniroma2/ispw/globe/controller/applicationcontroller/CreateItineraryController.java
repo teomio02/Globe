@@ -137,32 +137,35 @@ public class CreateItineraryController {
         }
     }
 
-    public void calculateItinerary(Itinerary itinerary) throws AttractionNotAddedException {
-        Map<String,List<Attraction>> attractionsByCity = getAttractionsByCity(itinerary);
-        int numAttraction = 0;
-        for (List<Attraction> list : attractionsByCity.values()) {
-            numAttraction += list.size();
-        }
-        itinerary.setDays(distributeAttraction(itinerary,attractionsByCity,numAttraction));
+    public void calculateItinerary(Itinerary itinerary) throws AttractionNotAddedException, FailedOperationException {
+        Map<City,List<Attraction>> attractionsByCity = getAttractionsByCity(itinerary);
+        itinerary.setDays(distributeAttraction(itinerary,attractionsByCity));
     }
 
-    public Map<String, List<Attraction>> getAttractionsByCity(Itinerary itinerary) throws AttractionNotAddedException {
+    public Map<City, List<Attraction>> getAttractionsByCity(Itinerary itinerary) throws AttractionNotAddedException {
         List<City> cities = itinerary.getDays().get(0).getCities();
         List<Attraction> attractions = itinerary.getDays().get(0).getAttractions();
         List<Attraction> otherAttractions = new ArrayList<>();
 
-        Map<String,List<Attraction>> attractionsByCity = new HashMap<>();
+        Map<City,List<Attraction>> attractionsByCity = new HashMap<>();
 
         for (City city : cities) {
-            attractionsByCity.put(city.getName(), new ArrayList<>());
+            attractionsByCity.put(city, new ArrayList<>());
         }
+
+        boolean flag = false;
         for (Attraction attraction : attractions) {
-            if (attractionsByCity.containsKey(attraction.getCity())) {
-                attractionsByCity.get(attraction.getCity()).add(attraction);
-            } else {
+            for (City city : attractionsByCity.keySet()) {
+                if (attraction.getCity().equals(city.getName())) {
+                    attractionsByCity.get(city).add(attraction);
+                    flag = true;
+                }
+            }
+            if (!flag) {
                 otherAttractions.add(attraction);
             }
         }
+
         if (!otherAttractions.isEmpty()) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Attraction attraction : otherAttractions) {
@@ -173,24 +176,29 @@ public class CreateItineraryController {
         return attractionsByCity;
     }
 
-    public List<Day> distributeAttraction(Itinerary itinerary, Map<String, List<Attraction>> attractionsByCity, int attrNum) {
+    public List<Day> distributeAttraction(Itinerary itinerary, Map<City, List<Attraction>> attractionsByCity) throws FailedOperationException {
         List<Day> newDays = new ArrayList<>();
-        int curDay = 1;
+        List<Integer> attrForCity = new ArrayList<>();
 
-        for (Map.Entry<String, List<Attraction>> entry : attractionsByCity.entrySet()) {
+        for (List<Attraction> attractions : attractionsByCity.values()) {
+            attrForCity.add(attractions.size());
+        }
+        List<Integer> daysForCity = assignDays(itinerary.getDaysNumber(),attractionsByCity.keySet().size(),attrForCity);
+
+        int current = 0;
+        int curDay = 1;
+        for (Map.Entry<City, List<Attraction>> entry : attractionsByCity.entrySet()) {
 
             List<Attraction> attractionPath = getShortestPath(entry.getValue());
 
-            int daysForCity = Math.max(1, (int) Math.round((double) entry.getValue().size() / attrNum * itinerary.getDaysNumber()));
-
-            int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);
+            int attrDayNum = (int)Math.ceil((double)attractionPath.size()/daysForCity.get(current));
 
             int curAttr = 0;
 
-            for (int i = 0; i<daysForCity ; i++) {
+            for (int i = 0; i<daysForCity.get(current) ; i++) {
                 Day day = itinerary.getDays().get(curDay);
                 for (City city : itinerary.getDays().get(0).getCities()) {
-                    if (city.getName().equals(entry.getKey())) {
+                    if (city.getName().equals(entry.getKey().getName())) {
                         day.getCities().add(city);
                     }
                 }
@@ -200,8 +208,46 @@ public class CreateItineraryController {
                 newDays.add(day);
                 curDay++;
             }
+            current++;
         }
         return newDays;
+    }
+
+    public List<Integer> assignDays(int numDays, int numCity, List<Integer> attrForCity) { // n k h
+        List<Integer> daysForCity = new ArrayList<>();
+        for (int i = 0; i < numCity; i++) {
+            daysForCity.add(1);
+        }
+
+        int daysLeft = numDays - numCity;
+
+        while (daysLeft > 0) {
+            int bestCity = -1;
+            double bestGain = 0;
+
+            for (int i = 0; i < numCity; i++) {
+                double currentLoad = (double) attrForCity.get(i) / daysForCity.get(i);
+                double projectedLoad = (double) attrForCity.get(i) / (daysForCity.get(i) + 1);
+                double gain = currentLoad - projectedLoad;
+
+                if (gain > bestGain) {
+                    bestGain = gain;
+                    bestCity = i;
+                }
+            }
+
+            if (bestCity != -1) {
+                int current = daysForCity.get(bestCity);
+                daysForCity.set(bestCity, current + 1);
+                daysLeft--;
+            } else {
+                int current = daysForCity.get(0);
+                daysForCity.set(0, current + daysLeft);
+                daysLeft = 0;
+            }
+        }
+
+        return daysForCity;
     }
 
     public List<Attraction> getShortestPath(List<Attraction> attractions) {
