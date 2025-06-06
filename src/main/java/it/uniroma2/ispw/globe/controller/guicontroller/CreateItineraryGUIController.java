@@ -213,14 +213,12 @@ public class CreateItineraryGUIController extends AbstractGUIController {
             }
 
             if (flightVBox.isVisible()) {
-                if (!inArrivalTimeLabel.getText().isEmpty() && !inDepartureTimeLabel.getText().isEmpty()) {
-                    itineraryBean.setInboundFlightDepartureTime(Double.valueOf(inDepartureTimeLabel.getText()));
-                    itineraryBean.setInboundFlightArrivalTime(Double.valueOf(inArrivalTimeLabel.getText()));
-                }
-                if (!outArrivalTimeLabel.getText().isEmpty() && !outDepartureTimeLabel.getText().isEmpty()) {
-                    itineraryBean.setOutboundFlightArrivalTime(Double.valueOf(outArrivalTimeLabel.getText()));
-                    itineraryBean.setOutboundFlightDepartureTime(Double.valueOf(outDepartureTimeLabel.getText()));
-                }
+                itineraryBean.setInboundFlightDepartureTime(Double.parseDouble(inDepartureTimeLabel.getText()));
+                itineraryBean.setInboundFlightArrivalTime(Double.parseDouble(inArrivalTimeLabel.getText()));
+
+                itineraryBean.setOutboundFlightArrivalTime(Double.parseDouble(outArrivalTimeLabel.getText()));
+                itineraryBean.setOutboundFlightDepartureTime(Double.parseDouble(outDepartureTimeLabel.getText()));
+
             }
 
             new CreateItineraryController().createItinerary(itineraryBean,sessionId);

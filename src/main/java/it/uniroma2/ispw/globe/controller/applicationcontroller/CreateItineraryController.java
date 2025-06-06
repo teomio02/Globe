@@ -155,9 +155,9 @@ public class CreateItineraryController {
 
         boolean flag = false;
         for (Attraction attraction : attractions) {
-            for (City city : attractionsByCity.keySet()) {
-                if (attraction.getCity().equals(city.getName())) {
-                    attractionsByCity.get(city).add(attraction);
+            for (Map.Entry<City, List<Attraction>> entry : attractionsByCity.entrySet()) {
+                if (attraction.getCity().equals(entry.getKey().getName())) {
+                    attractionsByCity.get(entry.getKey()).add(attraction);
                     flag = true;
                 }
             }
@@ -176,7 +176,7 @@ public class CreateItineraryController {
         return attractionsByCity;
     }
 
-    public List<Day> distributeAttraction(Itinerary itinerary, Map<City, List<Attraction>> attractionsByCity) throws FailedOperationException {
+    public List<Day> distributeAttraction(Itinerary itinerary, Map<City, List<Attraction>> attractionsByCity) {
         List<Day> newDays = new ArrayList<>();
         List<Integer> attrForCity = new ArrayList<>();
 
