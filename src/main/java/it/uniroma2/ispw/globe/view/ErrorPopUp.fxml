@@ -14,7 +14,18 @@
             <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="100.0" spacing="3.0">
                <children>
                   <Label fx:id="errorLabel" styleClass="label-title-dark" text="Label" />
-                  <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefHeight="78.0" prefWidth="409.0" styleClass="label-center-dark" stylesheets="@../css/general.css" text="Label" wrapText="true" />
+                  <ScrollPane hbarPolicy="NEVER" minHeight="0.0" prefWidth="380.0" style="-fx-background-color: #97c093;" vbarPolicy="NEVER">
+                     <content>
+                        <VBox fx:id="citiesVBox" prefWidth="378.0" style="-fx-background-color: #97c093;">
+                           <padding>
+                              <Insets left="8.0" right="8.0" />
+                           </padding>
+                           <children>
+                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefWidth="362.0" style="-fx-background-color: #97c093;" styleClass="label-center-dark" stylesheets="@../css/general.css" text="asfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkvasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflk" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
                </children>
             </VBox>
             <Button fx:id="okButton" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="10.0" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="60.0" style="-fx-background-color: #314c1c; -fx-background-radius: 40;" text="Ok" textFill="#97c093">

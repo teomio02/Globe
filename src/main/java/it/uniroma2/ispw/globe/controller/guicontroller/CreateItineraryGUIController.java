@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AttractionNotAddedException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -226,6 +227,8 @@ public class CreateItineraryGUIController extends AbstractGUIController {
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
+        } catch (AttractionNotAddedException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();

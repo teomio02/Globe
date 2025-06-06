@@ -39,7 +39,7 @@ public class CreateItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
-    public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws FailedOperationException, DuplicateItemException, AttractionNotAddedException {
         try {
             ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
             DayDao dayDao = Persistence.getInstance().getFactory().getDayDao();
@@ -137,7 +137,7 @@ public class CreateItineraryController {
         }
     }
 
-    public void calculateItinerary(Itinerary itinerary) {
+    public void calculateItinerary(Itinerary itinerary) throws AttractionNotAddedException {
         Map<String,List<Attraction>> attractionsByCity = getAttractionsByCity(itinerary);
         int numAttraction = 0;
         for (List<Attraction> list : attractionsByCity.values()) {
@@ -146,7 +146,7 @@ public class CreateItineraryController {
         itinerary.setDays(distributeAttraction(itinerary,attractionsByCity,numAttraction));
     }
 
-    public Map<String, List<Attraction>> getAttractionsByCity(Itinerary itinerary) {
+    public Map<String, List<Attraction>> getAttractionsByCity(Itinerary itinerary) throws AttractionNotAddedException {
         List<City> cities = itinerary.getDays().get(0).getCities();
         List<Attraction> attractions = itinerary.getDays().get(0).getAttractions();
         List<Attraction> otherAttractions = new ArrayList<>();
@@ -162,6 +162,13 @@ public class CreateItineraryController {
             } else {
                 otherAttractions.add(attraction);
             }
+        }
+        if (!otherAttractions.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Attraction attraction : otherAttractions) {
+                stringBuilder.append("- ").append(attraction.getName()).append(", ").append(attraction.getCity()).append("\n");
+            }
+            throw new AttractionNotAddedException(stringBuilder.toString());
         }
         return attractionsByCity;
     }
