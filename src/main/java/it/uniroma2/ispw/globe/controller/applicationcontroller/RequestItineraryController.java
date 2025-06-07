@@ -86,7 +86,7 @@ public class RequestItineraryController {
         return citiesBeans;
     }
 
-    public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
             List<Agency> agencies = accountDao.getAgenciesByType(types);
@@ -172,7 +172,7 @@ public class RequestItineraryController {
         return requestBean;
     }
 
-    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException {
         Request request;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
@@ -207,7 +207,7 @@ public class RequestItineraryController {
         return optionals;
     }
 
-    public List<AgencyBean> getAgencies(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<AgencyBean> getAgencies(String sessionID) throws FailedOperationException, IncorrectDataException {
         List<Agency> agencies = SessionManager.getInstance().getSession(sessionID).getPendingAgencies();
         List<AgencyBean> agencyBeans = new ArrayList<>();
 

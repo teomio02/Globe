@@ -134,8 +134,8 @@ public class DisplayProposalCLIController {
     public void acceptProposal() {
         PaymentBean paymentResult;
         try {
-            paymentResult = new AcceptItineraryController().sendResponse(proposalId,ACCEPTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            paymentResult = new AcceptItineraryController().sendResponse(proposalId,ACCEPTED);
+        } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
             return;
         }
@@ -149,8 +149,8 @@ public class DisplayProposalCLIController {
 
     public void rejectProposal() {
         try {
-            new AcceptItineraryController().sendResponse(proposalId,REJECTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            new AcceptItineraryController().sendResponse(proposalId,REJECTED);
+        } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }

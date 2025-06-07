@@ -353,7 +353,7 @@ public class CreateItineraryController {
         return citiesBeans;
     }
 
-    public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException, DuplicateItemException {
+    public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException {
         try {
             CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
             City city = null;
@@ -387,7 +387,7 @@ public class CreateItineraryController {
         }
     }
 
-    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws FailedOperationException, DuplicateItemException {
+    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws FailedOperationException {
         try {
             AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
             Attraction attraction = null;
@@ -423,7 +423,7 @@ public class CreateItineraryController {
         }
     }
 
-    public void setItineraryPhoto (File file, String itineraryID, String sessionID) throws DuplicateItemException, FailedOperationException {
+    public void setItineraryPhoto (File file, String itineraryID, String sessionID) throws FailedOperationException {
         if (itineraryID == null) {
             Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
             itinerary.setPhotoFile(file);

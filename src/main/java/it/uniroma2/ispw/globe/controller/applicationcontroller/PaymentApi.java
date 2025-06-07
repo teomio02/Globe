@@ -8,10 +8,6 @@ public class PaymentApi {
     // classe Mock che simula il comportamento dell'api
     public boolean processPayment(double amount, User payer, Agency payee){
 
-        if (amount < 1000 && payer.getPaymentCredential() != null && payee.getPaymentCredential() != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return amount < 1000 && payer.getPaymentCredential() != null && payee.getPaymentCredential() != null;
     }
 }

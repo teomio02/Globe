@@ -83,7 +83,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
                 optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
@@ -100,7 +100,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
@@ -177,7 +177,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     public void createItinerary(ActionEvent event) {
         try {
             new ResponseRequestController().setPendingRequest(sessionId,requestId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

@@ -96,7 +96,7 @@ public class ResponseRequestController {
         }
     }
 
-    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             Proposal proposal;
             User user;
@@ -139,7 +139,7 @@ public class ResponseRequestController {
         }
     }
 
-    public RequestBean getAgencyRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+    public RequestBean getAgencyRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException {
         Request request;
         Agency agency;
         User user;
@@ -198,7 +198,7 @@ public class ResponseRequestController {
         return requestBean;
     }
 
-    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException {
         Request request = null;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
@@ -233,7 +233,7 @@ public class ResponseRequestController {
         return optionals;
     }
 
-    public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
@@ -260,7 +260,7 @@ public class ResponseRequestController {
         }
     }
 
-    public List<RequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<RequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
@@ -288,7 +288,7 @@ public class ResponseRequestController {
         }
     }
 
-    public void setPendingRequest(String sessionID,String requestID) throws FailedOperationException, DuplicateItemException {
+    public void setPendingRequest(String sessionID,String requestID) throws FailedOperationException {
         try {
             RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
             Request request = requestDao.getRequest(requestID);

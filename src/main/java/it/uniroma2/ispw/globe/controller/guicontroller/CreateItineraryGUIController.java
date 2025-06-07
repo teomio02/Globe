@@ -165,7 +165,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                     accommodationButton.setVisible(false);
                 }
             }
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
         }

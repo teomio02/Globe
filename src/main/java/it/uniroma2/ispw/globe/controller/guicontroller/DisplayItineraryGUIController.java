@@ -129,7 +129,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             nextAgencyButton.setVisible(true);
             try {
                 nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
@@ -218,7 +218,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
         try {
             new CreateItineraryController().setItineraryPhoto(file, itineraryId, sessionId);
-        } catch (DuplicateItemException | FailedOperationException e) {
+        } catch (FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }

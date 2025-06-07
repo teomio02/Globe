@@ -1,9 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import it.uniroma2.ispw.globe.bean.PaymentBean;
-import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import it.uniroma2.ispw.globe.exception.DaoException;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
@@ -15,16 +13,14 @@ import it.uniroma2.ispw.globe.engineering.Persistence;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static it.uniroma2.ispw.globe.exception.DaoException.DUPLICATE;
 import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
 
 
 public class AcceptItineraryController {
 
-    public PaymentBean sendResponse(String proposalId, String response, String sessionId) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public PaymentBean sendResponse(String proposalId, String response) throws FailedOperationException, IncorrectDataException {
         ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
-        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         try {
             Proposal proposal = proposalDao.getProposal(proposalId);
             PaymentBean paymentResult = null;
@@ -43,7 +39,7 @@ public class AcceptItineraryController {
         }
     }
 
-    public PaymentBean executePayment(Proposal proposal) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public PaymentBean executePayment(Proposal proposal) throws FailedOperationException, IncorrectDataException {
 
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 

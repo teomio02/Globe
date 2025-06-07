@@ -12,27 +12,12 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
 import static it.uniroma2.ispw.globe.constants.ProposalState.*;
 import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
 
@@ -109,8 +94,8 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     public void acceptProposal(ActionEvent event) {
         PaymentBean paymentResult;
         try {
-            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
@@ -130,8 +115,8 @@ public class DisplayProposalGUIController extends AbstractGUIController {
 
     public void rejectProposal(ActionEvent event) {
         try {
-            new AcceptItineraryController().sendResponse(proposalID,REJECTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            new AcceptItineraryController().sendResponse(proposalID,REJECTED);
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

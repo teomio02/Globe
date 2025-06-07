@@ -29,31 +29,27 @@ class AcceptItineraryControllerTest {
     // Teo Miozzi
 
     @Test
-    void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException, IncorrectDataException {
+    void testSendResponseAccepted() throws FailedOperationException, DaoException, IncorrectDataException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
-        PaymentBean result = controller.sendResponse(proposal.getId(),ACCEPTED,sessionID);
+        PaymentBean result = controller.sendResponse(proposal.getId(),ACCEPTED);
         Assertions.assertEquals(ACCEPTED, proposal.getAccepted());
         assertNotNull(result);
     }
 
     @Test
-    void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException, IncorrectDataException {
+    void testSendResponseRejected() throws FailedOperationException, DaoException, IncorrectDataException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
-        PaymentBean result = controller.sendResponse(proposal.getId(),REJECTED,sessionID);
+        PaymentBean result = controller.sendResponse(proposal.getId(),REJECTED);
         Assertions.assertEquals(REJECTED, proposal.getAccepted());
         assertNull(result);
     }
