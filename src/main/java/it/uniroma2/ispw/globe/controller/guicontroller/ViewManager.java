@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

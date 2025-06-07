@@ -102,9 +102,6 @@ public class RequestItineraryController {
             return agencyBeans;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get agency by type");
         }
     }
@@ -184,9 +181,6 @@ public class RequestItineraryController {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Get proposal");
             }
         } else {

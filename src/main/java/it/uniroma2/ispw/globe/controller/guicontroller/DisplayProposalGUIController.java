@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.bean.PaymentBean;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
@@ -48,11 +49,6 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     private HBox responseHBox;
     @FXML
     private Button saveButton;
-    @FXML
-    private Button closeButton;
-    @FXML
-    private Slider ratingSlider;
-
 
     private String sessionId;
     private String requestID;
@@ -111,59 +107,31 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     }
 
     public void acceptProposal(ActionEvent event) {
-        String paymentResult;
+        PaymentBean paymentResult;
         try {
             paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
 
         if (paymentResult != null) {
-            try {
-                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/PaymentPopUp.fxml").toURI().toURL();
-                FXMLLoader loader = new FXMLLoader(url);
-                loader.setController(this);
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                scene.setFill(Color.TRANSPARENT);
+            responseHBox.getChildren().clear();
 
-                Stage popupStage = new Stage();
-                popupStage.setScene(scene);
+            new PaymentGUIController().createPopUp(paymentResult, proposalID);
 
-                popupStage.initStyle(StageStyle.TRANSPARENT);
-                popupStage.initModality(Modality.APPLICATION_MODAL);
-
-                closeButton.setOnAction(e -> {
-                    try {
-                        new AcceptItineraryController().addRaiting(ratingSlider.getValue(), proposalID);
-                    } catch (FailedOperationException ex) {
-                        new ErrorPopUpGUIController().createPopUp(ex.getMessage());
-                        return;
-                    }
-
-                    BorderPane rootVM = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-                    ViewManager viewManager = new ViewManager();
-                    viewManager.goToManageItineraryGUI(sessionId, rootVM);
-
-                    popupStage.close();
-                });
-
-                popupStage.setScene(scene);
-                popupStage.showAndWait();
-                
-                responseHBox.getChildren().clear();
-
-            } catch (IOException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO, e);
-            }
+            BorderPane rootVM = (BorderPane) priceLabel.getScene().getRoot();
+            ViewManager viewManager = new ViewManager();
+            viewManager.goToManageItineraryGUI(sessionId, rootVM);
+        } else {
+            new ErrorPopUpGUIController().createPopUp("Payment failed");
         }
     }
 
     public void rejectProposal(ActionEvent event) {
         try {
             new AcceptItineraryController().sendResponse(proposalID,REJECTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

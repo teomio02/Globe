@@ -135,9 +135,6 @@ public class ResponseRequestController {
             return proposalBean;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get proposal");
         }
     }
@@ -157,9 +154,6 @@ public class ResponseRequestController {
                 user = accountDao.getUserByRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Get proposal");
             }
         } else {
@@ -213,9 +207,6 @@ public class ResponseRequestController {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Get proposal");
             }
         } else {
@@ -265,9 +256,6 @@ public class ResponseRequestController {
             return proposalBeans;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get agency's proposals");
         }
     }
@@ -296,9 +284,6 @@ public class ResponseRequestController {
             return requestBeans;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get agency's requests");
         }
     }
@@ -311,9 +296,6 @@ public class ResponseRequestController {
             SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get pending request");
         }
     }

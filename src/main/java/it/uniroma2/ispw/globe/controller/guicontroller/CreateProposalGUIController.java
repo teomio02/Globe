@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;

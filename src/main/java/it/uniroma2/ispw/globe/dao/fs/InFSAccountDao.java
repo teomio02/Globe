@@ -182,6 +182,11 @@ public class InFSAccountDao extends AccountDao {
         return null;
     }
 
+    @Override
+    public void updateAgencyRating(Agency agency) throws DaoException {
+
+    }
+
     public void addAgency(CredentialsBean credentials) throws DaoException {
         Agency agency = new Agency();
         agency.setUsername(credentials.getUsername());

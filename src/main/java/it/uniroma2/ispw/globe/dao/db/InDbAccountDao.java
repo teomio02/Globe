@@ -320,6 +320,29 @@ public class InDbAccountDao extends AccountDao {
         }
     }
 
+    @Override
+    public void updateAgencyRating(Agency agency) throws DaoException {
+        DBConnection connect = DBConnection.getInstance();
+
+        String query = "update Account set rating = ? where username = ?";
+
+        PreparedStatement stmt = null;
+
+        try {
+            Connection connection = connect.getConnection();
+            stmt = connection.prepareStatement(query);
+
+            stmt.setDouble(1, agency.getRating());
+            stmt.setString(2, agency.getUsername());
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new DaoException("updateAgencyRating: " + e.getMessage(), GENERAL);
+        } finally {
+            DBConnection.getInstance().closeConnection(stmt,null);
+        }
+    }
+
     public void addAgencyPreferencese(CredentialsBean credentialsBean) throws DaoException {
         DBConnection connect = DBConnection.getInstance();
         String query = "insert into agencyType (agency, type) values (?,?)";
@@ -551,4 +574,6 @@ public class InDbAccountDao extends AccountDao {
             DBConnection.getInstance().closeConnection(stmt,resultSet);
         }
     }
+
+
 }

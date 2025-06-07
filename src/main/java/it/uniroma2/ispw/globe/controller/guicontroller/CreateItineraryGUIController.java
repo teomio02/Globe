@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.exception.AttractionNotAddedException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;

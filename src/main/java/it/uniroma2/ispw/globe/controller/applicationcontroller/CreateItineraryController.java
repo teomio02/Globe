@@ -383,9 +383,6 @@ public class CreateItineraryController {
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get city");
         }
     }
@@ -422,9 +419,6 @@ public class CreateItineraryController {
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get attraction");
         }
     }
@@ -439,9 +433,6 @@ public class CreateItineraryController {
                 itineraryDao.addPhotoFile(file, itineraryID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Set Photo");
             }
         }

@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import it.uniroma2.ispw.globe.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.PaymentBean;
 import it.uniroma2.ispw.globe.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
@@ -28,7 +29,7 @@ class AcceptItineraryControllerTest {
     // Teo Miozzi
 
     @Test
-    void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException {
+    void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException, IncorrectDataException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
@@ -37,13 +38,13 @@ class AcceptItineraryControllerTest {
         Proposal proposal = proposalDao.getProposal("id5678");
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
-        String result = controller.sendResponse(proposal.getId(),ACCEPTED,sessionID);
+        PaymentBean result = controller.sendResponse(proposal.getId(),ACCEPTED,sessionID);
         Assertions.assertEquals(ACCEPTED, proposal.getAccepted());
         assertNotNull(result);
     }
 
     @Test
-    void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException {
+    void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException, IncorrectDataException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
@@ -52,7 +53,7 @@ class AcceptItineraryControllerTest {
         Proposal proposal = proposalDao.getProposal("id5678");
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
-        String result = controller.sendResponse(proposal.getId(),REJECTED,sessionID);
+        PaymentBean result = controller.sendResponse(proposal.getId(),REJECTED,sessionID);
         Assertions.assertEquals(REJECTED, proposal.getAccepted());
         assertNull(result);
     }

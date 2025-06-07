@@ -1,5 +1,6 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
+import it.uniroma2.ispw.globe.bean.PaymentBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
@@ -131,23 +132,25 @@ public class DisplayProposalCLIController {
     }
 
     public void acceptProposal() {
-        String paymentResult;
+        PaymentBean paymentResult;
         try {
             paymentResult = new AcceptItineraryController().sendResponse(proposalId,ACCEPTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
             return;
         }
 
         if (paymentResult != null) {
-            System.out.println(paymentResult);
+            System.out.println("Payment from " + paymentResult.getPayerUsername() + " to " + paymentResult.getPayeeUsername() + " accepted");
+        } else {
+            System.out.println("Payment from rejected");
         }
     }
 
     public void rejectProposal() {
         try {
             new AcceptItineraryController().sendResponse(proposalId,REJECTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }

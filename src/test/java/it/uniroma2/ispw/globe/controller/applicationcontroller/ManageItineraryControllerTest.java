@@ -38,7 +38,7 @@ class ManageItineraryControllerTest {
     }
 
     @Test
-    void testGetProposalItineraryIncorrectID() throws IncorrectDataException, DaoException {
+    void testGetItineraryIncorrectID() throws IncorrectDataException, DaoException {
         ManageItineraryController controller = new ManageItineraryController();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
