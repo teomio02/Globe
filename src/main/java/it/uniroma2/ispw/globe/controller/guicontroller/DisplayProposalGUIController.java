@@ -91,7 +91,7 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         viewManager.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID, root);
     }
 
-    public void acceptProposal(ActionEvent event) {
+    public void acceptProposal() {
         PaymentBean paymentResult;
         try {
             paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
