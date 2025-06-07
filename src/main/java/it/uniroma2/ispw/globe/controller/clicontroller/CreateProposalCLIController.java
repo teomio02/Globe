@@ -36,7 +36,7 @@ public class CreateProposalCLIController {
             } else {
                 System.out.println(ERROR + "No request found");
             }
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }

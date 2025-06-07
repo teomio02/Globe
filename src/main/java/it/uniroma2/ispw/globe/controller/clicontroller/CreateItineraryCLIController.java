@@ -46,7 +46,7 @@ public class CreateItineraryCLIController {
                     System.out.println("    > Cities: " + requestBean.getCities());
                     System.out.println("    > Attractions: " + requestBean.getAttractions());
                 }
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
             }
