@@ -26,31 +26,24 @@ public class DisplayRequestCLIController {
     public void start() {
         System.out.println("# DISPLAY REQUEST #");
 
-        RequestBean request = null;
-        List<Object> optionals = new ArrayList<>();
-        NatureBean nature;
-        OnTheRoadBean onTheRoad;
+        RequestBean request;
+        List<Object> optionals;
         List<AgencyBean> agencies = new ArrayList<>();
 
-        if (requestId == null) {
-            // requestItinerary use case
-            try {
+        try {
+            if (requestId == null) {
+                // requestItinerary use case
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
-            } catch (FailedOperationException | IncorrectDataException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
-            }
-        } else {
-            // createProposal use case
-            try {
+            } else {
+                // createProposal use case
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
                 optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
-            } catch (IncorrectDataException | FailedOperationException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
             }
+        } catch (FailedOperationException | IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+            return;
         }
 
         System.out.println("> ID: " + request.getID());
