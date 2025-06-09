@@ -24,7 +24,7 @@ public class PaymentBean {
     }
     public void setAmount(double amount) throws IncorrectDataException {
         if (amount < 0) {
-            throw new IncorrectDataException("amount not valid");
+            throw new IncorrectDataException("Payment amount not valid");
         }
         this.amount = amount;
     }
