@@ -81,13 +81,7 @@ public class ManageItineraryController {
                 throw new FailedOperationException("Get itinerary - itinerary not found");
             }
 
-            ItineraryBean itineraryBean = new ItineraryBean();
-            itineraryBean.setId(itinerary.getItineraryID());
-            itineraryBean.setName(itinerary.getName());
-            itineraryBean.setDescription(itinerary.getDescription());
-            itineraryBean.setTypes(itinerary.getTypes());
-            itineraryBean.setDuration(itinerary.getDaysNumber());
-            itineraryBean.setPhoto(itinerary.getPhotoFile());
+            ItineraryBean itineraryBean = createItineraryBean(itinerary);
 
             itineraryBean.setInboundFlightDepartureTime(-1);
             itineraryBean.setInboundFlightArrivalTime(-1);
@@ -240,13 +234,7 @@ public class ManageItineraryController {
         List<Itinerary> itineraries = user.getItineraries();
         List<ItineraryBean> itineraryBeans = new ArrayList<>();
         for (Itinerary itinerary : itineraries) {
-            ItineraryBean itineraryBean = new ItineraryBean();
-            itineraryBean.setId(itinerary.getItineraryID());
-            itineraryBean.setName(itinerary.getName());
-            itineraryBean.setDescription(itinerary.getDescription());
-            itineraryBean.setTypes(itinerary.getTypes());
-            itineraryBean.setDuration(itinerary.getDaysNumber());
-            itineraryBean.setPhoto(itinerary.getPhotoFile());
+            ItineraryBean itineraryBean = createItineraryBean(itinerary);
 
             itineraryBeans.add(itineraryBean);
         }
@@ -286,5 +274,17 @@ public class ManageItineraryController {
     public String getAccountType(String sessionId) {
         Account account = SessionManager.getInstance().getSession(sessionId).getAccount();
         return account.getType();
+    }
+
+    public ItineraryBean createItineraryBean(Itinerary itinerary) throws IncorrectDataException {
+        ItineraryBean itineraryBean = new ItineraryBean();
+        itineraryBean.setId(itinerary.getItineraryID());
+        itineraryBean.setName(itinerary.getName());
+        itineraryBean.setDescription(itinerary.getDescription());
+        itineraryBean.setTypes(itinerary.getTypes());
+        itineraryBean.setDuration(itinerary.getDaysNumber());
+        itineraryBean.setPhoto(itinerary.getPhotoFile());
+
+        return itineraryBean;
     }
 }

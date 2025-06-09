@@ -90,20 +90,24 @@ public class RequestItineraryController {
         try {
             AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
             List<Agency> agencies = accountDao.getAgenciesByType(types);
-            List<AgencyBean> agencyBeans = new ArrayList<>();
-
-            for (Agency agency: agencies){
-                AgencyBean agencyBean = new AgencyBean();
-                agencyBean.setName(agency.getUsername());
-                agencyBean.setRating(agency.getRating());
-                agencyBean.setItineraryTypes(agency.getPreferences());
-                agencyBeans.add(agencyBean);
-            }
-            return agencyBeans;
+            return getAgencyBeans(agencies);
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             throw new FailedOperationException("Get agency by type");
         }
+    }
+
+    private List<AgencyBean> getAgencyBeans(List<Agency> agencies) throws IncorrectDataException {
+        List<AgencyBean> agencyBeans = new ArrayList<>();
+
+        for (Agency agency: agencies){
+            AgencyBean agencyBean = new AgencyBean();
+            agencyBean.setName(agency.getUsername());
+            agencyBean.setRating(agency.getRating());
+            agencyBean.setItineraryTypes(agency.getPreferences());
+            agencyBeans.add(agencyBean);
+        }
+        return agencyBeans;
     }
 
     public RequestBean getRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException {
@@ -209,17 +213,7 @@ public class RequestItineraryController {
 
     public List<AgencyBean> getAgencies(String sessionID) throws IncorrectDataException {
         List<Agency> agencies = SessionManager.getInstance().getSession(sessionID).getPendingAgencies();
-        List<AgencyBean> agencyBeans = new ArrayList<>();
-
-        for (Agency agency: agencies) {
-            AgencyBean agencyBean = new AgencyBean();
-            agencyBean.setName(agency.getUsername());
-            agencyBean.setRating(agency.getRating());
-            agencyBean.setItineraryTypes(agency.getPreferences());
-            agencyBeans.add(agencyBean);
-        }
-
-        return agencyBeans;
+        return getAgencyBeans(agencies);
     }
 
     public void createRequest(RequestBean requestBean, OnTheRoadBean onTheRoadBean, NatureBean natureBean, String sessionID) throws FailedOperationException, DuplicateItemException {

@@ -84,108 +84,41 @@ public class LogInCLIController {
     }
 
     public void userSignIn() {
-        String username;
-        String password;
-        String paymentCredentials;
+        CredentialsBean credentialsBean = getCredentials();
 
-        Scanner input = new Scanner(System.in);
-
-        while (true){
-            System.out.print("Please enter Username: ");
-            username = input.nextLine();
-            if (!username.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-        while (true){
-            System.out.print(PASSWORD_REQUEST);
-            password = input.nextLine();
-            if (!password.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-        while (true){
-            System.out.print("Please enter payment credentials: ");
-            paymentCredentials = input.nextLine();
-            if (!username.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-        CredentialsBean credentials = new CredentialsBean();
         try {
-            credentials.setUsername(username);
-            credentials.setPassword(password);
-            credentials.setType(USER);
-            credentials.setPaymentCredentials(paymentCredentials);
-
-            new LogInController().signIn(credentials);
-        } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
+            credentialsBean.setType(USER);
+            new LogInController().signIn(credentialsBean);
+        } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
             System.out.println();
         }
     }
 
     public void agencySignIn() {
-        String username;
-        String password;
         String description;
-        String paymentCredentials;
         List<String> preferences;
 
+        CredentialsBean credentials = getCredentials();
+
         Scanner input = new Scanner(System.in);
-
-        while (true){
-            System.out.print("Please enter Agency Name: ");
-            username = input.nextLine();
-            if (!username.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-        while (true){
-            System.out.print(PASSWORD_REQUEST);
-            password = input.nextLine();
-            if (!password.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-        while (true){
-            System.out.print("Please enter payment credentials: ");
-            paymentCredentials = input.nextLine();
-            if (!username.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
 
         preferences = getAgencyPreferences();
 
         while (true){
             System.out.print("Please enter a description for your agency: ");
             description = input.nextLine();
-            if (!username.isEmpty()) {
+            try {
+                credentials.setDescription(description);
                 break;
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
+                System.out.println();
             }
-            System.out.println(CHOICE_ERROR);
         }
 
-        CredentialsBean credentials = new CredentialsBean();
         try {
-            credentials.setUsername(username);
-            credentials.setPassword(password);
-            credentials.setType(USER);
-            credentials.setPaymentCredentials(paymentCredentials);
             credentials.setPreferences(preferences);
-            credentials.setDescription(description);
 
             new LogInController().signIn(credentials);
 
@@ -238,37 +171,12 @@ public class LogInCLIController {
 
     public void logIn() {
 
-        String username;
-        String password;
-
-        Scanner input = new Scanner(System.in);
-
-        while (true){
-            System.out.print("Please enter Username: ");
-            username = input.nextLine();
-            if (!username.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-        while (true){
-            System.out.print(PASSWORD_REQUEST);
-            password = input.nextLine();
-            if (!password.isEmpty()) {
-                break;
-            }
-            System.out.println(CHOICE_ERROR);
-        }
-
-
-        CredentialsBean credentials = new CredentialsBean();
         String sessionId;
+        CredentialsBean credentials;
         try {
-            credentials.setUsername(username);
-            credentials.setPassword(password);
+            credentials = getCredentials();
             sessionId = new LogInController().logIn(credentials);
-        } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
             System.out.println();
             return;
@@ -276,7 +184,7 @@ public class LogInCLIController {
 
         if (sessionId != null) {
             String type = new LogInController().getUserType(sessionId);
-            System.out.println("Benvenuto "+ username);
+            System.out.println("Hello "+ credentials.getUsername());
 
             if (type.equals(USER)) {
                 ManageItineraryCLIController controller = new ManageItineraryCLIController(sessionId);
@@ -311,5 +219,50 @@ public class LogInCLIController {
         } else {
             System.out.println("ERROR\n");
         }
+    }
+
+    public CredentialsBean getCredentials() {
+        Scanner input = new Scanner(System.in);
+
+        String username;
+        String password;
+        String paymentCredentials;
+        CredentialsBean credentials = new CredentialsBean();
+
+        while (true){
+            System.out.print("Please enter Username: ");
+            username = input.nextLine();
+            try {
+                credentials.setUsername(username);
+                break;
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
+                System.out.println();
+            }
+        }
+
+        while (true){
+            System.out.print(PASSWORD_REQUEST);
+            password = input.nextLine();
+            try {
+                credentials.setPassword(password);
+                break;
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
+                System.out.println();
+            }
+        }
+        while (true){
+            System.out.print("Please enter payment credentials: ");
+            paymentCredentials = input.nextLine();
+            try {
+                credentials.setPaymentCredentials(paymentCredentials);
+                break;
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
+                System.out.println();
+            }
+        }
+        return credentials;
     }
 }
