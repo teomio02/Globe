@@ -4,6 +4,7 @@ import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -128,7 +129,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             nextAgencyButton.setVisible(true);
             try {
                 nextAgencyButton.setVisible(new ResponseRequestController().getProposal(null, sessionId) == null);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
@@ -217,7 +218,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
         try {
             new CreateItineraryController().setItineraryPhoto(file, itineraryId, sessionId);
-        } catch (DuplicateItemException | FailedOperationException e) {
+        } catch (FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-package it.uniroma2.ispw.globe.bean;
+package it.uniroma2.ispw.globe.engineering.session;
 
 import javafx.scene.Node;
 

@@ -32,9 +32,9 @@ public class ResponseRequestController {
 
     public void createProposal(ProposalBean proposalBean, String userUsername, String requestId, String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             User user = (User) accountDao.getAccount(userUsername);
             String proposalID = UUID.randomUUID().toString();
@@ -61,10 +61,10 @@ public class ResponseRequestController {
 
     public void saveProposal(String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
-            ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
+            ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             Session session = SessionManager.getInstance().getSession(sessionID);
             Agency agency = (Agency) session.getAccount();
@@ -96,7 +96,7 @@ public class ResponseRequestController {
         }
     }
 
-    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             Proposal proposal;
             User user;
@@ -117,8 +117,8 @@ public class ResponseRequestController {
                     return null;
                 }
             } else {
-                ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
-                AccountDao accountDao = Persistence.getFactory().getAccountDao();
+                ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
+                AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
                 proposal = proposalDao.getProposal(proposalID);
                 agency = accountDao.getAgencyByProposal(proposalID);
                 user = accountDao.getUserByProposal(proposalID);
@@ -135,21 +135,18 @@ public class ResponseRequestController {
             return proposalBean;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get proposal");
         }
     }
 
-    public RequestBean getAgencyRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException, DuplicateItemException {
+    public RequestBean getAgencyRequest(String requestID, String sessionID) throws IncorrectDataException, FailedOperationException {
         Request request;
         Agency agency;
         User user;
 
         if (requestID != null) {
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             try {
                 request = requestDao.getRequest(requestID);
@@ -157,9 +154,6 @@ public class ResponseRequestController {
                 user = accountDao.getUserByRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Get proposal");
             }
         } else {
@@ -204,18 +198,15 @@ public class ResponseRequestController {
         return requestBean;
     }
 
-    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException, DuplicateItemException {
+    public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException {
         Request request = null;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
             try {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Get proposal");
             }
         } else {
@@ -242,9 +233,9 @@ public class ResponseRequestController {
         return optionals;
     }
 
-    public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<ProposalBean> getAgencyProposals(String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
             List<Proposal> proposals = agency.getProposals();
@@ -265,16 +256,13 @@ public class ResponseRequestController {
             return proposalBeans;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get agency's proposals");
         }
     }
 
-    public List<RequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, DuplicateItemException, IncorrectDataException {
+    public List<RequestBean> getAgencyRequests(String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             Agency agency = (Agency) SessionManager.getInstance().getSession(sessionID).getAccount();
             List<Request> requests = agency.getRequests();
@@ -296,24 +284,18 @@ public class ResponseRequestController {
             return requestBeans;
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get agency's requests");
         }
     }
 
-    public void setPendingRequest(String sessionID,String requestID) throws FailedOperationException, DuplicateItemException {
+    public void setPendingRequest(String sessionID,String requestID) throws FailedOperationException {
         try {
-            RequestDao requestDao = Persistence.getFactory().getRequestDao();
+            RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
             Request request = requestDao.getRequest(requestID);
 
             SessionManager.getInstance().getSession(sessionID).setPendingRequest(request);
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get pending request");
         }
     }

@@ -6,6 +6,7 @@ import it.uniroma2.ispw.globe.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.exception.AttractionNotAddedException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -45,7 +46,7 @@ public class CreateItineraryCLIController {
                     System.out.println("    > Cities: " + requestBean.getCities());
                     System.out.println("    > Attractions: " + requestBean.getAttractions());
                 }
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
             }
@@ -113,6 +114,8 @@ public class CreateItineraryCLIController {
         } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
             return;
+        } catch (AttractionNotAddedException e) {
+            System.out.println(ERROR + e.getMessage());
         }
 
         if (requestId != null) {

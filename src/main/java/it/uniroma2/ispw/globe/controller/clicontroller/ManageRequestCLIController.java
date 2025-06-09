@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.bean.RequestBean;
@@ -83,7 +82,7 @@ public class ManageRequestCLIController {
                 DisplayProposalCLIController controller = new DisplayProposalCLIController(sessionId, null, choice);
                 controller.start();
             }
-        } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
+        } catch (IncorrectDataException | FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
     }
@@ -115,7 +114,7 @@ public class ManageRequestCLIController {
                 DisplayRequestCLIController controller = new DisplayRequestCLIController(sessionId,choice);
                 controller.start();
             }
-        } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
+        } catch (IncorrectDataException | FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
 
         }

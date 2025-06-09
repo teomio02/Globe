@@ -3,6 +3,7 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -82,7 +83,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
                 optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
@@ -99,7 +100,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 new ErrorPopUpGUIController().createPopUp(e.getMessage());
                 goBack();
                 return;
@@ -176,7 +177,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     public void createItinerary(ActionEvent event) {
         try {
             new ResponseRequestController().setPendingRequest(sessionId,requestId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

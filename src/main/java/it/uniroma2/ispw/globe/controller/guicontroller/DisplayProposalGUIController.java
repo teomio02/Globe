@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.bean.PaymentBean;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
@@ -11,27 +12,12 @@ import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_IO;
 import static it.uniroma2.ispw.globe.constants.ProposalState.*;
 import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
 
@@ -48,11 +34,6 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     private HBox responseHBox;
     @FXML
     private Button saveButton;
-    @FXML
-    private Button closeButton;
-    @FXML
-    private Slider ratingSlider;
-
 
     private String sessionId;
     private String requestID;
@@ -110,60 +91,32 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         viewManager.goToDisplayItineraryGUI(sessionId,itineraryId,requestID,proposalID, root);
     }
 
-    public void acceptProposal(ActionEvent event) {
-        String paymentResult;
+    public void acceptProposal() {
+        PaymentBean paymentResult;
         try {
-            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+            paymentResult = new AcceptItineraryController().sendResponse(proposalID,ACCEPTED);
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }
 
         if (paymentResult != null) {
-            try {
-                URL url = new File("src/main/java/it/uniroma2/ispw/globe/view/PaymentPopUp.fxml").toURI().toURL();
-                FXMLLoader loader = new FXMLLoader(url);
-                loader.setController(this);
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                scene.setFill(Color.TRANSPARENT);
+            responseHBox.getChildren().clear();
 
-                Stage popupStage = new Stage();
-                popupStage.setScene(scene);
+            new PaymentGUIController().createPopUp(paymentResult, proposalID);
 
-                popupStage.initStyle(StageStyle.TRANSPARENT);
-                popupStage.initModality(Modality.APPLICATION_MODAL);
-
-                closeButton.setOnAction(e -> {
-                    try {
-                        new AcceptItineraryController().addRaiting(ratingSlider.getValue(), proposalID);
-                    } catch (FailedOperationException ex) {
-                        new ErrorPopUpGUIController().createPopUp(ex.getMessage());
-                        return;
-                    }
-
-                    BorderPane rootVM = (BorderPane) ((Node) event.getSource()).getScene().getRoot();
-                    ViewManager viewManager = new ViewManager();
-                    viewManager.goToManageItineraryGUI(sessionId, rootVM);
-
-                    popupStage.close();
-                });
-
-                popupStage.setScene(scene);
-                popupStage.showAndWait();
-                
-                responseHBox.getChildren().clear();
-
-            } catch (IOException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_IO, e);
-            }
+            BorderPane rootVM = (BorderPane) priceLabel.getScene().getRoot();
+            ViewManager viewManager = new ViewManager();
+            viewManager.goToManageItineraryGUI(sessionId, rootVM);
+        } else {
+            new ErrorPopUpGUIController().createPopUp("Payment failed");
         }
     }
 
     public void rejectProposal(ActionEvent event) {
         try {
-            new AcceptItineraryController().sendResponse(proposalID,REJECTED,sessionId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+            new AcceptItineraryController().sendResponse(proposalID,REJECTED);
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

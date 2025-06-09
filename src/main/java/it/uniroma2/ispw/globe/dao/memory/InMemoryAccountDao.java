@@ -152,6 +152,11 @@ public class InMemoryAccountDao extends AccountDao {
         return null;
     }
 
+    @Override
+    public void updateAgencyRating(Agency agency) throws DaoException {
+        // not necessary
+    }
+
     public void addAgency(CredentialsBean credentials) {
         for (Agency a : agencies) {
             if (credentials.getUsername().equals(a.getUsername())) {

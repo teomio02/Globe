@@ -41,8 +41,8 @@ public class ManageItineraryController {
                 }
 
             } else {
-                ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
-                AccountDao accountDao = Persistence.getFactory().getAccountDao();
+                ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
+                AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
                 proposal = proposalDao.getProposal(proposalID);
                 user = accountDao.getUserByProposal(proposalID);
                 agency = accountDao.getAgencyByProposal(proposalID);
@@ -73,7 +73,7 @@ public class ManageItineraryController {
                     return null;
                 }
             } else {
-                ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
+                ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
                 itinerary = itineraryDao.getItinerary(itineraryId);
             }
 
@@ -134,7 +134,7 @@ public class ManageItineraryController {
             if (itineraryId == null) {
                 itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
             } else {
-                ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
+                ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
                 itinerary = itineraryDao.getItinerary(itineraryId);
             }
 
@@ -163,7 +163,7 @@ public class ManageItineraryController {
 
     public CityBean getCity(int stepNum, String cityID, String sessionID) throws FailedOperationException {
         try {
-            CityDao cityDao = Persistence.getFactory().getCityDao();
+            CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
             City city = null;
 
             if (sessionID != null) {
@@ -197,7 +197,7 @@ public class ManageItineraryController {
 
     public AttractionBean getAttraction(int stepNum, String attractionID, String sessionID) throws FailedOperationException {
         try {
-            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
+            AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
             Attraction attraction = null;
 
             if (sessionID != null) {
@@ -255,7 +255,7 @@ public class ManageItineraryController {
 
     public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, IncorrectDataException {
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
             Session session = SessionManager.getInstance().getSession(sessionId);
             if (session == null) {
                 throw new FailedOperationException("GetUserProposals - Session not found");

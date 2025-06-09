@@ -427,7 +427,7 @@ public class CreateRequestCLIController {
 
         try {
             agencies = new RequestItineraryController().getAgenciesByType(types);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
             return null;
         }

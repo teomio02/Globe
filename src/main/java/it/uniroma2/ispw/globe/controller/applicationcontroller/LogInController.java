@@ -26,7 +26,7 @@ public class LogInController{
                 Persistence.getInstance().setDefault();
             }
 
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
             if (credentials.getType()!=null && credentials.getType().equals(GUEST)) {
                 accountDao.addAccount(credentials);
@@ -54,7 +54,7 @@ public class LogInController{
         }
 
         try {
-            AccountDao accountDao = Persistence.getFactory().getAccountDao();
+            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
             accountDao.addAccount(credentials);
 
         } catch (DaoException e) {
@@ -75,7 +75,7 @@ public class LogInController{
                 credentialsBean.setPassword(account.getPassword());
                 credentialsBean.setType(account.getType());
 
-                AccountDao accountDao = Persistence.getFactory().getAccountDao();
+                AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
                 accountDao.removeAccount(credentialsBean);
             }
             SessionManager.getInstance().removeSession(sessionId);

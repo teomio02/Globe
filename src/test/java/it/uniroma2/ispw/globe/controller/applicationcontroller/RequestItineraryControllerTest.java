@@ -27,7 +27,7 @@ class RequestItineraryControllerTest {
     @Test
     void testCreateRequestCorrect() throws FailedOperationException, DuplicateItemException, DaoException, IncorrectDataException {
         RequestItineraryController controller = new RequestItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
         RequestBean request = new RequestBean();
 
@@ -57,7 +57,7 @@ class RequestItineraryControllerTest {
     @Test
     void testGetRequestCorrectID() throws FailedOperationException, DaoException, IncorrectDataException {
         RequestItineraryController controller = new RequestItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
         String requestId = "id1234";
@@ -68,7 +68,7 @@ class RequestItineraryControllerTest {
     @Test
     void testGetRequestIncorrectID() throws DaoException {
         RequestItineraryController controller = new RequestItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
         String requestId = "id0000";
@@ -89,10 +89,10 @@ class RequestItineraryControllerTest {
     void testSaveRequestCorrect() throws FailedOperationException, DuplicateItemException, DaoException {
         RequestItineraryController controller = new RequestItineraryController();
 
-        CityDao cityDao = Persistence.getFactory().getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        RequestDao requestDao = Persistence.getFactory().getRequestDao();
+        CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
 
         City city = cityDao.createCity("r41485");
         if (cityDao.getCity("r41485") == null) {
@@ -130,9 +130,9 @@ class RequestItineraryControllerTest {
     void testSaveRequestDuplicate() throws FailedOperationException, DaoException {
         RequestItineraryController controller = new RequestItineraryController();
 
-        CityDao cityDao = Persistence.getFactory().getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 
         City city = cityDao.createCity("r41485");
         if (cityDao.getCity("r41485") == null) {
@@ -174,10 +174,10 @@ class RequestItineraryControllerTest {
     @BeforeAll
     static void provideRequest() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        CityDao cityDao = Persistence.getFactory().getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-        RequestDao requestDao = Persistence.getFactory().getRequestDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+        RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
 
         CredentialsBean agencyCredentialsBean = new CredentialsBean();
         agencyCredentialsBean.setUsername("agencyTest");

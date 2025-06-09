@@ -315,7 +315,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
         try {
             agencies = new RequestItineraryController().getAgenciesByType(types);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
         }

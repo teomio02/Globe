@@ -1,6 +1,6 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
-import it.uniroma2.ispw.globe.bean.NavigationData;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.bean.RequestBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
@@ -49,7 +49,7 @@ public class CreateProposalGUIController extends AbstractGUIController{
         try {
             request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
             proposal = new ResponseRequestController().getProposal(null,sessionId);
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
             return;

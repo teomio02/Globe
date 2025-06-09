@@ -2,11 +2,10 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import it.uniroma2.ispw.globe.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.PaymentBean;
 import it.uniroma2.ispw.globe.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
-import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import it.uniroma2.ispw.globe.exception.DaoException;
-import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 import it.uniroma2.ispw.globe.model.*;
@@ -28,31 +27,27 @@ class AcceptItineraryControllerTest {
     // Teo Miozzi
 
     @Test
-    void testSendResponseAccepted() throws FailedOperationException, DuplicateItemException, DaoException {
+    void testSendResponseAccepted() throws FailedOperationException, DaoException, IncorrectDataException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
-        String result = controller.sendResponse(proposal.getId(),ACCEPTED,sessionID);
+        PaymentBean result = controller.sendResponse(proposal.getId(),ACCEPTED);
         Assertions.assertEquals(ACCEPTED, proposal.getAccepted());
         assertNotNull(result);
     }
 
     @Test
-    void testSendResponseRejected() throws FailedOperationException, DuplicateItemException, DaoException {
+    void testSendResponseRejected() throws FailedOperationException, DaoException, IncorrectDataException {
 
         AcceptItineraryController controller = new AcceptItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         Proposal proposal = proposalDao.getProposal("id5678");
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
-        String result = controller.sendResponse(proposal.getId(),REJECTED,sessionID);
+        PaymentBean result = controller.sendResponse(proposal.getId(),REJECTED);
         Assertions.assertEquals(REJECTED, proposal.getAccepted());
         assertNull(result);
     }
@@ -84,11 +79,11 @@ class AcceptItineraryControllerTest {
     @BeforeAll
     static void provideProposal() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        CityDao cityDao = Persistence.getFactory().getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-        ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+        ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         CredentialsBean agencyCredentialsBean = new CredentialsBean();
         agencyCredentialsBean.setUsername("agencyTest");

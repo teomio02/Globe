@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.engineering.session;
 
 import it.uniroma2.ispw.globe.model.*;
-import it.uniroma2.ispw.globe.bean.NavigationData;
 import it.uniroma2.ispw.globe.model.Itinerary;
 import it.uniroma2.ispw.globe.model.Request;
 

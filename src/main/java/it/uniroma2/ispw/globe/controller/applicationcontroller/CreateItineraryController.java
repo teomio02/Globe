@@ -39,12 +39,12 @@ public class CreateItineraryController {
     private static final String CITY = "administrative";
     private static final String ATTRACTION = "";
 
-    public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws FailedOperationException, DuplicateItemException {
+    public void createItinerary(ItineraryBean itineraryBean, String sessionID) throws FailedOperationException, DuplicateItemException, AttractionNotAddedException {
         try {
-            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
-            DayDao dayDao = Persistence.getFactory().getDayDao();
-            CityDao cityDao = Persistence.getFactory().getCityDao();
-            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
+            ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
+            DayDao dayDao = Persistence.getInstance().getFactory().getDayDao();
+            CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+            AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
 
             String itineraryId = UUID.randomUUID().toString();
             itineraryBean.setId(itineraryId);
@@ -82,7 +82,7 @@ public class CreateItineraryController {
             calculateItinerary(itinerary);
 
             if (itineraryBean.getAccommodations() != null) {
-                AccommodationDao accommodationDao = Persistence.getFactory().getAccommodationDao();
+                AccommodationDao accommodationDao = Persistence.getInstance().getFactory().getAccommodationDao();
 
                 List<Accommodation> accommodations = new ArrayList<>();
                 for (Pair<String,String> a : itineraryBean.getAccommodations()) {
@@ -95,7 +95,7 @@ public class CreateItineraryController {
             }
 
             if (itineraryBean.getInboundFlightArrivalTime() != 0) {
-                FlightDao flightDao = Persistence.getFactory().getFlightDao();
+                FlightDao flightDao = Persistence.getInstance().getFactory().getFlightDao();
 
                 Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
                 Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
@@ -118,7 +118,7 @@ public class CreateItineraryController {
 
     public void saveItinerary(String sessionID) throws FailedOperationException, DuplicateItemException {
         try {
-            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
+            ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
 
             Session session = SessionManager.getInstance().getSession(sessionID);
             Account account = session.getAccount();
@@ -137,53 +137,68 @@ public class CreateItineraryController {
         }
     }
 
-    public void calculateItinerary(Itinerary itinerary) {
-        Map<String,List<Attraction>> attractionsByCity = getAttractionsByCity(itinerary);
-        int numAttraction = 0;
-        for (List<Attraction> list : attractionsByCity.values()) {
-            numAttraction += list.size();
-        }
-        itinerary.setDays(distributeAttraction(itinerary,attractionsByCity,numAttraction));
+    public void calculateItinerary(Itinerary itinerary) throws AttractionNotAddedException {
+        Map<City,List<Attraction>> attractionsByCity = getAttractionsByCity(itinerary);
+        itinerary.setDays(distributeAttraction(itinerary,attractionsByCity));
     }
 
-    public Map<String, List<Attraction>> getAttractionsByCity(Itinerary itinerary) {
+    public Map<City, List<Attraction>> getAttractionsByCity(Itinerary itinerary) throws AttractionNotAddedException {
         List<City> cities = itinerary.getDays().get(0).getCities();
         List<Attraction> attractions = itinerary.getDays().get(0).getAttractions();
         List<Attraction> otherAttractions = new ArrayList<>();
 
-        Map<String,List<Attraction>> attractionsByCity = new HashMap<>();
+        Map<City,List<Attraction>> attractionsByCity = new HashMap<>();
 
         for (City city : cities) {
-            attractionsByCity.put(city.getName(), new ArrayList<>());
+            attractionsByCity.put(city, new ArrayList<>());
         }
+
+        boolean flag = false;
         for (Attraction attraction : attractions) {
-            if (attractionsByCity.containsKey(attraction.getCity())) {
-                attractionsByCity.get(attraction.getCity()).add(attraction);
-            } else {
+            for (Map.Entry<City, List<Attraction>> entry : attractionsByCity.entrySet()) {
+                if (attraction.getCity().equals(entry.getKey().getName())) {
+                    attractionsByCity.get(entry.getKey()).add(attraction);
+                    flag = true;
+                }
+            }
+            if (!flag) {
                 otherAttractions.add(attraction);
             }
+        }
+
+        if (!otherAttractions.isEmpty()) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Attraction attraction : otherAttractions) {
+                stringBuilder.append("- ").append(attraction.getName()).append(", ").append(attraction.getCity()).append("\n");
+            }
+            throw new AttractionNotAddedException(stringBuilder.toString());
         }
         return attractionsByCity;
     }
 
-    public List<Day> distributeAttraction(Itinerary itinerary, Map<String, List<Attraction>> attractionsByCity, int attrNum) {
+    public List<Day> distributeAttraction(Itinerary itinerary, Map<City, List<Attraction>> attractionsByCity) {
         List<Day> newDays = new ArrayList<>();
-        int curDay = 1;
+        List<Integer> attrForCity = new ArrayList<>();
 
-        for (Map.Entry<String, List<Attraction>> entry : attractionsByCity.entrySet()) {
+        for (List<Attraction> attractions : attractionsByCity.values()) {
+            attrForCity.add(attractions.size());
+        }
+        List<Integer> daysForCity = assignDays(itinerary.getDaysNumber(),attractionsByCity.keySet().size(),attrForCity);
+
+        int current = 0;
+        int curDay = 1;
+        for (Map.Entry<City, List<Attraction>> entry : attractionsByCity.entrySet()) {
 
             List<Attraction> attractionPath = getShortestPath(entry.getValue());
 
-            int daysForCity = Math.max(1, (int) Math.round((double) entry.getValue().size() / attrNum * itinerary.getDaysNumber()));
-
-            int attrDayNum = (int)Math.ceil(attractionPath.size()/(double)daysForCity);
+            int attrDayNum = (int)Math.ceil((double)attractionPath.size()/daysForCity.get(current));
 
             int curAttr = 0;
 
-            for (int i = 0; i<daysForCity ; i++) {
+            for (int i = 0; i<daysForCity.get(current) ; i++) {
                 Day day = itinerary.getDays().get(curDay);
                 for (City city : itinerary.getDays().get(0).getCities()) {
-                    if (city.getName().equals(entry.getKey())) {
+                    if (city.getName().equals(entry.getKey().getName())) {
                         day.getCities().add(city);
                     }
                 }
@@ -193,8 +208,46 @@ public class CreateItineraryController {
                 newDays.add(day);
                 curDay++;
             }
+            current++;
         }
         return newDays;
+    }
+
+    public List<Integer> assignDays(int numDays, int numCity, List<Integer> attrForCity) { // n k h
+        List<Integer> daysForCity = new ArrayList<>();
+        for (int i = 0; i < numCity; i++) {
+            daysForCity.add(1);
+        }
+
+        int daysLeft = numDays - numCity;
+
+        while (daysLeft > 0) {
+            int bestCity = -1;
+            double bestGain = 0;
+
+            for (int i = 0; i < numCity; i++) {
+                double currentLoad = (double) attrForCity.get(i) / daysForCity.get(i);
+                double projectedLoad = (double) attrForCity.get(i) / (daysForCity.get(i) + 1);
+                double gain = currentLoad - projectedLoad;
+
+                if (gain > bestGain) {
+                    bestGain = gain;
+                    bestCity = i;
+                }
+            }
+
+            if (bestCity != -1) {
+                int current = daysForCity.get(bestCity);
+                daysForCity.set(bestCity, current + 1);
+                daysLeft--;
+            } else {
+                int current = daysForCity.get(0);
+                daysForCity.set(0, current + daysLeft);
+                daysLeft = 0;
+            }
+        }
+
+        return daysForCity;
     }
 
     public List<Attraction> getShortestPath(List<Attraction> attractions) {
@@ -300,9 +353,9 @@ public class CreateItineraryController {
         return citiesBeans;
     }
 
-    public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException, DuplicateItemException {
+    public CityBean getCity(int stepNum,String cityID,String sessionID) throws FailedOperationException {
         try {
-            CityDao cityDao = Persistence.getFactory().getCityDao();
+            CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
             City city = null;
 
             if (sessionID != null) {
@@ -330,16 +383,13 @@ public class CreateItineraryController {
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get city");
         }
     }
 
-    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws FailedOperationException, DuplicateItemException {
+    public AttractionBean getAttraction(int stepNum,String attractionID,String sessionID) throws FailedOperationException {
         try {
-            AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
+            AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
             Attraction attraction = null;
 
             if (sessionID != null) {
@@ -369,26 +419,20 @@ public class CreateItineraryController {
             }
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            if (e.getType() == DUPLICATE) {
-                throw new DuplicateItemException();
-            }
             throw new FailedOperationException("Get attraction");
         }
     }
 
-    public void setItineraryPhoto (File file, String itineraryID, String sessionID) throws DuplicateItemException, FailedOperationException {
+    public void setItineraryPhoto (File file, String itineraryID, String sessionID) throws FailedOperationException {
         if (itineraryID == null) {
             Itinerary itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
             itinerary.setPhotoFile(file);
         } else {
-            ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
+            ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
             try {
                 itineraryDao.addPhotoFile(file, itineraryID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                if (e.getType() == DUPLICATE) {
-                    throw new DuplicateItemException();
-                }
                 throw new FailedOperationException("Set Photo");
             }
         }

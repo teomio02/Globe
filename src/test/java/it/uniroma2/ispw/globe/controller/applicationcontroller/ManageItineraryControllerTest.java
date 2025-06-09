@@ -27,7 +27,7 @@ class ManageItineraryControllerTest {
 
     @Test
     void testGetItineraryCorrectID() throws FailedOperationException, IncorrectDataException, DaoException {
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
 
         ManageItineraryController controller = new ManageItineraryController();
@@ -38,9 +38,9 @@ class ManageItineraryControllerTest {
     }
 
     @Test
-    void testGetProposalItineraryIncorrectID() throws IncorrectDataException, DaoException {
+    void testGetItineraryIncorrectID() throws IncorrectDataException, DaoException {
         ManageItineraryController controller = new ManageItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
         String itineraryID = "id0000";
         String errorMess = "";
@@ -57,7 +57,7 @@ class ManageItineraryControllerTest {
     @Test
     void testGetUserItinerariesCorrect() throws DaoException, IncorrectDataException, FailedOperationException {
         ManageItineraryController controller = new ManageItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
         List<ItineraryBean> itineraries = controller.getUserItineraries(sessionID);
         assertNotNull(itineraries);
@@ -81,7 +81,7 @@ class ManageItineraryControllerTest {
     @Test
     void testGetAccountType() throws DaoException {
         ManageItineraryController controller = new ManageItineraryController();
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
         String type = controller.getAccountType(sessionID);
         Assertions.assertEquals(USER, type);
@@ -90,11 +90,11 @@ class ManageItineraryControllerTest {
     @BeforeAll
     static void provideData() throws IncorrectDataException, DaoException {
         Persistence.getInstance().setType(Persistence.IN_MEMORY);
-        AccountDao accountDao = Persistence.getFactory().getAccountDao();
-        CityDao cityDao = Persistence.getFactory().getCityDao();
-        AttractionDao attractionDao = Persistence.getFactory().getAttractionDao();
-        ItineraryDao itineraryDao = Persistence.getFactory().getItineraryDao();
-        ProposalDao proposalDao = Persistence.getFactory().getProposalDao();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        CityDao cityDao = Persistence.getInstance().getFactory().getCityDao();
+        AttractionDao attractionDao = Persistence.getInstance().getFactory().getAttractionDao();
+        ItineraryDao itineraryDao = Persistence.getInstance().getFactory().getItineraryDao();
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
 
         CredentialsBean agencyCredentialsBean = new CredentialsBean();
         agencyCredentialsBean.setUsername("agencyTest");

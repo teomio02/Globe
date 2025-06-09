@@ -3,6 +3,8 @@ package it.uniroma2.ispw.globe.controller.guicontroller;
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
+import it.uniroma2.ispw.globe.engineering.session.NavigationData;
+import it.uniroma2.ispw.globe.exception.AttractionNotAddedException;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -163,7 +165,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                     accommodationButton.setVisible(false);
                 }
             }
-        } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+        } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
         }
@@ -212,20 +214,20 @@ public class CreateItineraryGUIController extends AbstractGUIController {
             }
 
             if (flightVBox.isVisible()) {
-                if (!inArrivalTimeLabel.getText().isEmpty() && !inDepartureTimeLabel.getText().isEmpty()) {
-                    itineraryBean.setInboundFlightDepartureTime(Double.valueOf(inDepartureTimeLabel.getText()));
-                    itineraryBean.setInboundFlightArrivalTime(Double.valueOf(inArrivalTimeLabel.getText()));
-                }
-                if (!outArrivalTimeLabel.getText().isEmpty() && !outDepartureTimeLabel.getText().isEmpty()) {
-                    itineraryBean.setOutboundFlightArrivalTime(Double.valueOf(outArrivalTimeLabel.getText()));
-                    itineraryBean.setOutboundFlightDepartureTime(Double.valueOf(outDepartureTimeLabel.getText()));
-                }
+                itineraryBean.setInboundFlightDepartureTime(Double.parseDouble(inDepartureTimeLabel.getText()));
+                itineraryBean.setInboundFlightArrivalTime(Double.parseDouble(inArrivalTimeLabel.getText()));
+
+                itineraryBean.setOutboundFlightArrivalTime(Double.parseDouble(outArrivalTimeLabel.getText()));
+                itineraryBean.setOutboundFlightDepartureTime(Double.parseDouble(outDepartureTimeLabel.getText()));
+
             }
 
             new CreateItineraryController().createItinerary(itineraryBean,sessionId);
         } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             return;
+        } catch (AttractionNotAddedException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
         }
 
         BorderPane root = (BorderPane) ((Node) event.getSource()).getScene().getRoot();

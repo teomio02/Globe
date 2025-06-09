@@ -38,7 +38,7 @@ public class DisplayRequestCLIController {
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
-            } catch (FailedOperationException | DuplicateItemException | IncorrectDataException e) {
+            } catch (FailedOperationException | IncorrectDataException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
             }
@@ -47,7 +47,7 @@ public class DisplayRequestCLIController {
             try {
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
                 optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
-            } catch (IncorrectDataException | FailedOperationException | DuplicateItemException e) {
+            } catch (IncorrectDataException | FailedOperationException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
             }
@@ -170,7 +170,7 @@ public class DisplayRequestCLIController {
     public void createItinerary() {
         try {
             new ResponseRequestController().setPendingRequest(sessionId, requestId);
-        } catch (FailedOperationException | DuplicateItemException e) {
+        } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
         CreateItineraryCLIController controller = new CreateItineraryCLIController(sessionId,requestId);
