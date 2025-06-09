@@ -129,7 +129,12 @@ public class CreateRequestGUIController extends AbstractGUIController {
         List<CityBean> cities;
         cityResultVBox.getChildren().clear();
         String city = citiesField.getText();
-        cities = new RequestItineraryController().getCities(city);
+        try {
+            cities = new RequestItineraryController().getCities(city);
+        } catch (FailedOperationException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityResultButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
@@ -178,7 +183,12 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
         String attraction = attractionsField.getText();
 
-        attractions = new RequestItineraryController().getAttractions(attraction);
+        try {
+            attractions = new RequestItineraryController().getAttractions(attraction);
+        } catch (FailedOperationException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
 
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {

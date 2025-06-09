@@ -30,18 +30,18 @@ public class RequestItineraryController {
 
 
     // da risistemare in teoria dovrebbe fare dao
-    public List<JsonObject> getPlaces(String name, String type) {
+    public List<JsonObject> getPlaces(String name, String type) throws FailedOperationException {
         NominatimAPIClient api = new NominatimAPIClient();
         List<JsonObject> apiPlaces;
         try {
             apiPlaces = api.getPlaces(name,type);
         } catch (PlaceApiException e) {
-            throw new RuntimeException(e);
+            throw new FailedOperationException("Get agency by type");
         }
         return apiPlaces;
     }
 
-    public List<AttractionBean> getAttractions(String name) {
+    public List<AttractionBean> getAttractions(String name) throws FailedOperationException {
 //        //chiama la DAO/API per ottenere i nomi delle attrazioni
         List<JsonObject> jsonAttractions = getPlaces(name, ATTRACTION);
         List<Attraction> attractions = new ArrayList<>();
@@ -65,7 +65,7 @@ public class RequestItineraryController {
         return attractionBeans;
     }
 
-    public List<CityBean> getCities(String name) {
+    public List<CityBean> getCities(String name) throws FailedOperationException {
         List<JsonObject> jsonCities = getPlaces(name, CITY);
         List<City> cities = new ArrayList<>();
         List<CityBean> citiesBeans = new ArrayList<>();

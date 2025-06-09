@@ -135,7 +135,7 @@ public class CreateRequestCLIController {
     public String getCity(String city) {
         List<CityBean> citiesResult = new ArrayList<>();
         try {
-            citiesResult = new CreateItineraryController().getCities(city);
+            citiesResult = new RequestItineraryController().getCities(city);
         } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
@@ -204,7 +204,7 @@ public class CreateRequestCLIController {
     public String getAttraction(String attr) {
         List<AttractionBean> attractionsResult = new ArrayList<>();
         try {
-            attractionsResult = new CreateItineraryController().getAttractions(attr);
+            attractionsResult = new RequestItineraryController().getAttractions(attr);
         } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
