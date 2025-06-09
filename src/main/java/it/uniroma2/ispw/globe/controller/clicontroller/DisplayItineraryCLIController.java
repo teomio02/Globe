@@ -76,13 +76,13 @@ public class DisplayItineraryCLIController {
         System.out.println("What do you want do?\n");
 
         System.out.println("1 -> Save Itinerary");
-        System.out.println("2 -> Go Back");
+        System.out.println("2 -> Go Back ");
 
         Scanner input = new Scanner(System.in);
         String strChoice;
         int choice;
         while (true) {
-            System.out.print("Please enter your choice: ");
+            System.out.print("Please enter your choice : ");
             strChoice = input.nextLine();
             if (!strChoice.isEmpty() && strChoice.matches("[1-2]")) {
                 choice = Integer.parseInt(strChoice);

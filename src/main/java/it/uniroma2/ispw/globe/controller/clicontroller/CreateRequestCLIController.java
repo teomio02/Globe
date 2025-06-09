@@ -114,7 +114,7 @@ public class CreateRequestCLIController {
         Scanner input = new Scanner(System.in);
 
         while (true){
-            System.out.print("Please enter City (enter stop to terminate): ");
+            System.out.print("Please enter City name (enter stop to terminate): ");
             city = input.nextLine();
             if (!city.isEmpty()) {
                 if (city.equalsIgnoreCase("stop")) {
@@ -143,7 +143,7 @@ public class CreateRequestCLIController {
             int i = 0;
             for (CityBean cityResult : citiesResult) {
                 i++;
-                System.out.println(i + " -> " + cityResult.getName()+" - "+ cityResult.getCountry());
+                System.out.println(i + " --> " + cityResult.getName()+" - "+ cityResult.getCountry());
                 if (i == 3) {
                     break;
                 }
@@ -212,7 +212,7 @@ public class CreateRequestCLIController {
             int i = 0;
             for (AttractionBean attractionResult : attractionsResult) {
                 i++;
-                System.out.println(i + " -> " + attractionResult.getName()+" - "+ attractionResult.getCity());
+                System.out.println(i + "  -> " + attractionResult.getName()+" - "+ attractionResult.getCity());
                 if (i == 3) {
                     break;
                 }
@@ -249,12 +249,12 @@ public class CreateRequestCLIController {
         List<String> types = new ArrayList<>();
 
         do {
-            System.out.println("Please enter the number of the type for your itinerary");
-            System.out.println("1 -> " + ON_THE_ROAD);
-            System.out.println("2 -> " + NATURE);
-            System.out.println("3 -> " + CULTURE);
-            System.out.println("4 -> " + RELAX);
-            System.out.println("5 -> " + CITY);
+            System.out.println("Please enter the number of the type for your request");
+            System.out.println("1 --> " + ON_THE_ROAD);
+            System.out.println("2 --> " + NATURE);
+            System.out.println("3 --> " + CULTURE);
+            System.out.println("4 --> " + RELAX);
+            System.out.println("5 --> " + CITY);
 
             types.add(getType(types));
 

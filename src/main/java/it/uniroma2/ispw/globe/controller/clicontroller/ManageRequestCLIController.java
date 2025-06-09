@@ -121,7 +121,7 @@ public class ManageRequestCLIController {
     }
 
     public String getProposalID(List<ProposalBean> proposals) {
-        System.out.println("Which one do you want to see (insert ID to see or insert 'back' to go back)? ");
+        System.out.println("Which request do you want to see (insert ID to see or insert 'back' to go back)? ");
 
         Scanner input = new Scanner(System.in);
         String choice;

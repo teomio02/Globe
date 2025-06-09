@@ -137,7 +137,7 @@ public class DisplayRequestCLIController {
         String strChoice;
         int choice;
         while (true) {
-            System.out.print("Please enter your choice: ");
+            System.out.print("Please enter your choice : ");
             strChoice = input.nextLine();
             if (!strChoice.isEmpty() && strChoice.matches("[1-2]")) {
                 choice = Integer.parseInt(strChoice);

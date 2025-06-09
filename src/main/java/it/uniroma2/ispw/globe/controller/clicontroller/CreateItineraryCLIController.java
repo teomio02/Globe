@@ -153,7 +153,7 @@ public class CreateItineraryCLIController {
         Scanner input = new Scanner(System.in);
 
         while (true) {
-            System.out.print("Please enter your choice: ");
+            System.out.print("Please enter your choice : ");
             strChoice = input.nextLine();
             if (!strChoice.isEmpty() && strChoice.matches("[1-5]")) {
                 choice = Integer.parseInt(strChoice);
