@@ -160,7 +160,7 @@ public class CreateRequestCLIController {
         String strChoice;
         int choice;
         while (true) {
-            System.out.println("Please enter the number of the city for your request: ");
+            System.out.println("Please enter city number for your request: ");
             strChoice = input.nextLine();
             try {
                 choice = Integer.parseInt(strChoice);
@@ -229,7 +229,7 @@ public class CreateRequestCLIController {
         String strChoice;
         int choice;
         while (true) {
-            System.out.println("Please enter the number of the attraction for your request: ");
+            System.out.println("Please enter attraction number for your request: ");
             strChoice = input.nextLine();
             try {
                 choice = Integer.parseInt(strChoice);
