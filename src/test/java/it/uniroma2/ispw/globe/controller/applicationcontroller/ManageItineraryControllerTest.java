@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import it.uniroma2.ispw.globe.bean.CredentialsBean;
 import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
@@ -55,27 +56,27 @@ class ManageItineraryControllerTest {
     }
 
     @Test
-    void testGetUserItinerariesCorrect() throws DaoException, IncorrectDataException, FailedOperationException {
+    void testGetUserProposalsCorrect() throws DaoException, IncorrectDataException, FailedOperationException {
         ManageItineraryController controller = new ManageItineraryController();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
-        List<ItineraryBean> itineraries = controller.getUserItineraries(sessionID);
-        assertNotNull(itineraries);
-        assertFalse(itineraries.isEmpty());
+        List<ProposalBean> proposalBeans = controller.getUserProposals(sessionID);
+        assertNotNull(proposalBeans);
+        assertFalse(proposalBeans.isEmpty());
     }
 
     @Test
-    void testGetUserItinerariesIncorrect() throws IncorrectDataException {
+    void testGetUserProposalsIncorrect() throws IncorrectDataException {
         ManageItineraryController controller = new ManageItineraryController();
         String sessionID = "00000";
         String errorMess = "";
 
         try {
-            controller.getUserItineraries(sessionID);
+            controller.getUserProposals(sessionID);
         } catch (FailedOperationException e) {
-            errorMess = "GetUserItineraries - Session not found operation failed";
+            errorMess = e.getMessage();
         }
-        Assertions.assertEquals("GetUserItineraries - Session not found operation failed", errorMess);
+        Assertions.assertEquals("GetUserProposals - Session not found operation failed", errorMess);
     }
 
     @Test

@@ -3,6 +3,8 @@ package it.uniroma2.ispw.globe.bean;
 
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 
+import static it.uniroma2.ispw.globe.constants.ProposalState.*;
+
 public class ProposalBean {
     private String id;
     private double price;
@@ -24,8 +26,8 @@ public class ProposalBean {
     }
 
     public void setPrice(double price) throws IncorrectDataException {
-        if (price < 0) {
-            throw new IncorrectDataException("Price not valid");
+        if (price <= 0) {
+            throw new IncorrectDataException("Proposal price not valid");
         }
         this.price = price;
     }
@@ -34,7 +36,10 @@ public class ProposalBean {
         return agency;
     }
 
-    public void setAgency(String agency) {
+    public void setAgency(String agency) throws IncorrectDataException {
+        if (agency == null || agency.isEmpty()) {
+            throw new IncorrectDataException("Proposal agency not valid");
+        }
         this.agency = agency;
     }
 
@@ -42,7 +47,10 @@ public class ProposalBean {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(String user) throws IncorrectDataException {
+        if (user == null || user.isEmpty()) {
+            throw new IncorrectDataException("Proposal user not valid");
+        }
         this.user = user;
     }
 
@@ -51,8 +59,8 @@ public class ProposalBean {
     }
 
     public void setDescription(String description) throws IncorrectDataException {
-        if (description == null || description.isEmpty()) {
-            throw new IncorrectDataException("Description not valid");
+        if (description == null || description.isEmpty() || description.length()>999) {
+            throw new IncorrectDataException("Proposal description not valid");
         }
         this.description = description;
     }
@@ -61,7 +69,10 @@ public class ProposalBean {
         return accepted;
     }
 
-    public void setAccepted(String accepted) {
+    public void setAccepted(String accepted) throws IncorrectDataException {
+        if (!(accepted.equals(ACCEPTED) || accepted.equals(REJECTED) || accepted.equals(PENDING))) {
+            throw new IncorrectDataException("Proposal status not valid");
+        }
         this.accepted = accepted;
     }
 }
