@@ -133,7 +133,7 @@ public class LogInCLIController {
 
         Scanner input = new Scanner(System.in);
 
-        System.out.println("-> Select tour preferences? (select stop to terminate)\n");
+        System.out.println("-> Select your preferences? (select stop to terminate)\n");
         System.out.println("1 -> "+ON_THE_ROAD);
         System.out.println("2 -> "+NATURE);
         System.out.println("3 -> "+CULTURE);
