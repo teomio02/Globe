@@ -449,19 +449,25 @@ public class CreateRequestCLIController {
                 if (agency.equalsIgnoreCase("stop")) {
                     break;
                 }
-                for (AgencyBean agencyResult : agencies) {
-                    if (agencyResult.getName().equals(agency)) {
-                        agenciesSelected.add(agencyResult.getName());
-                    } else {
-                        System.out.println(ERROR + "Agency " + agency + " does not exist");
-                    }
-                }
+                agenciesSelected = selectAgency(agencies, agency);
             }else {
                 System.out.println(CHOICE_ERROR);
             }
         }
 
         return agenciesSelected;
+    }
 
+    public List<String> selectAgency(List<AgencyBean> agencies, String agency) {
+        List<String> agenciesSelected = new ArrayList<>();
+        for (AgencyBean agencyResult : agencies) {
+            if (agencyResult.getName().equals(agency)) {
+                agenciesSelected.add(agencyResult.getName());
+            } else {
+                System.out.println(ERROR + "Agency " + agency + " does not exist");
+            }
+        }
+
+        return agenciesSelected;
     }
 }

@@ -68,44 +68,13 @@ public class DisplayRequestCLIController {
         System.out.println("    > Requests: " + request.getOtherRequests());
         System.out.println("    > Types: " + request.getTypes());
 
-        for (Object optional: optionals) {
-            if (optional instanceof OnTheRoadBean) {
-                onTheRoad = (OnTheRoadBean) optional;
-                System.out.println("    > Travel mode: " + onTheRoad.getMode());
-                System.out.println("    > Day driving hours: " + onTheRoad.getDayDrivingHours());
-
-            } else if (optional instanceof NatureBean) {
-                nature = (NatureBean) optional;
-                System.out.println("    > Trekking difficulty: " + nature.getDifficulty());
-                System.out.println("    > Trekking distance:   " + nature.getTrekkingDistance());
-            }
-        }
-
+        displayOptional(optionals);
 
         List<String> citiesID = request.getCities();
         List<String> attractionsID = request.getAttractions();
 
-        System.out.println("    > Cities: ");
-        for (String cityID: citiesID) {
-            try {
-                CityBean city =  new RequestItineraryController().getCity(cityID);
-                System.out.println("        - " + city.getName() + ", " + city.getCountry());
-            } catch (FailedOperationException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
-            }
-        }
-
-        System.out.println("    > Attractions: ");
-        for (String attractionID: attractionsID) {
-            try {
-                AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
-                System.out.println("        - " + attraction.getName() + ", " + attraction.getAddress());
-            } catch (FailedOperationException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
-            }
-        }
+        displayCities(citiesID);
+        displayAttractions(attractionsID);
 
         if (requestId == null) {
             int choice = showUserMenu();
@@ -122,6 +91,45 @@ public class DisplayRequestCLIController {
                 case 2 -> {
                     // go back
                 }
+            }
+        }
+    }
+
+    public void displayOptional(List<Object> optionals) {
+        for (Object optional: optionals) {
+            if (optional instanceof OnTheRoadBean onTheRoad) {
+                System.out.println("    > Travel mode: " + onTheRoad.getMode());
+                System.out.println("    > Day driving hours: " + onTheRoad.getDayDrivingHours());
+
+            } else if (optional instanceof NatureBean nature) {
+                System.out.println("    > Trekking difficulty: " + nature.getDifficulty());
+                System.out.println("    > Trekking distance:   " + nature.getTrekkingDistance());
+            }
+        }
+    }
+
+    public void displayCities(List<String> citiesID) {
+        System.out.println("    > Cities: ");
+        for (String cityID: citiesID) {
+            try {
+                CityBean city =  new RequestItineraryController().getCity(cityID);
+                System.out.println("        - " + city.getName() + ", " + city.getCountry());
+            } catch (FailedOperationException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
+            }
+        }
+    }
+
+    public void displayAttractions(List<String> attractionsID) {
+        System.out.println("    > Attractions: ");
+        for (String attractionID: attractionsID) {
+            try {
+                AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
+                System.out.println("        - " + attraction.getName() + ", " + attraction.getAddress());
+            } catch (FailedOperationException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
             }
         }
     }
