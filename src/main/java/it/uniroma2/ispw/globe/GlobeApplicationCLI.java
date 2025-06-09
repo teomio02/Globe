@@ -4,7 +4,7 @@ import it.uniroma2.ispw.globe.controller.clicontroller.LogInCLIController;
 
 public class GlobeApplicationCLI {
 
-    static void run(String[] args) {
+    static void run() {
 
         System.out.println("*********************************");
         System.out.println("*      GLOBE  APPLICATION       *");

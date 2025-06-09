@@ -20,7 +20,6 @@ import javafx.scene.layout.HBox;
 
 import static it.uniroma2.ispw.globe.constants.ProposalState.*;
 import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
-import static it.uniroma2.ispw.globe.constants.UserType.USER;
 
 public class DisplayProposalGUIController extends AbstractGUIController {
     @FXML

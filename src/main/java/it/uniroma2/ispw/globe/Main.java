@@ -5,20 +5,9 @@ import it.uniroma2.ispw.globe.engineering.Persistence;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
-import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_SQL;
 
 public class Main {
-
-    private static final String VIEW_TYPE = "VIEW_TYPE";
-    private static final String DAO_TYPE = "DAO_TYPE";
-
 
     public static void main(String[] args) throws IOException {
 
@@ -41,7 +30,7 @@ public class Main {
         if (view.equals("GUI")) {
             GlobeApplicationGUI.run(args);
         } else if (view.equals("CLI")) {
-            GlobeApplicationCLI.run(args);
+            GlobeApplicationCLI.run();
         } else {
             throw new IllegalArgumentException("Invalid view type");
         }
