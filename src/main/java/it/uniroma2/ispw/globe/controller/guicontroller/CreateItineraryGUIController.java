@@ -359,6 +359,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                 Label accommodationLabel = new Label(accommodationField.getText()+", "+addressField.getText());
                 Pair<String,String> accommodation = new Pair<>(accommodationField.getText(),addressField.getText());
                 accommodationLabel.setUserData(accommodation);
+                accommodationLabel.getStyleClass().add(LABEL_LIGHT);
                 accommodationResultVBox.getChildren().add(accommodationLabel);
                 accommodationField.setText("");
                 addressField.setText("");

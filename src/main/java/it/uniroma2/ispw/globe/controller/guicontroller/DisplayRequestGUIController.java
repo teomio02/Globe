@@ -158,15 +158,22 @@ public class DisplayRequestGUIController extends AbstractGUIController {
 
     public void displayOptinal(List<Object> optionals) {
         if (optionals != null && !optionals.isEmpty()) {
+            boolean selected = false;
             for (Object optional: optionals) {
                 if (optional instanceof OnTheRoadBean onTheRoad) {
                     onTheRoadTab.setDisable(false);
-                    typeTabPane.getSelectionModel().select(onTheRoadTab);
+                    if (!selected) {
+                        typeTabPane.getSelectionModel().select(onTheRoadTab);
+                        selected = true;
+                    }
                     drivingHoursLabel.setText(String.valueOf((onTheRoad).getDayDrivingHours()));
                     modeLabel.setText(onTheRoad.getMode());
                 } else if (optional instanceof NatureBean nature) {
                     natureTab.setDisable(false);
-                    typeTabPane.getSelectionModel().select(natureTab);
+                    if (!selected) {
+                        typeTabPane.getSelectionModel().select(natureTab);
+                        selected = true;
+                    }
                     difficultLabel.setText(nature.getDifficulty());
                     distanceLabel.setText(String.valueOf(nature.getTrekkingDistance()));
                 }

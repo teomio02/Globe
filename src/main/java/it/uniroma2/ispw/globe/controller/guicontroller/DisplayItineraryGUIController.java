@@ -115,8 +115,12 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
         if (itinerary.getInboundFlightDepartureTime() != -1) {
             flightVBox.setVisible(true);
-            flightVBox.getChildren().add(new Label("Inbound: "+itinerary.getInboundFlightDepartureTime()+" - "+itinerary.getInboundFlightArrivalTime()));
-            flightVBox.getChildren().add(new Label("Outbound: "+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime()));
+            Label inFlightLabel = new Label("Inbound: "+itinerary.getInboundFlightDepartureTime()+" - "+itinerary.getInboundFlightArrivalTime());
+            inFlightLabel.getStyleClass().add(LIGHT);
+            Label outFlightLabel = new Label("Outbound: "+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime());
+            outFlightLabel.getStyleClass().add(LIGHT);
+            flightVBox.getChildren().add(inFlightLabel);
+            flightVBox.getChildren().add(outFlightLabel);
         }
 
         nextAgencyButton.setVisible(false);

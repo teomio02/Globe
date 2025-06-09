@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe;
 
-import it.uniroma2.ispw.globe.engineering.Persistence;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,6 +12,10 @@ import java.io.InputStream;
 
 public class GlobeApplicationGUI extends Application {
 
+    static void run(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -23,9 +26,6 @@ public class GlobeApplicationGUI extends Application {
             Image icon = new Image(url);
             stage.getIcons().add(icon);
         }
-
-        Persistence.getInstance().setDefaultType(Persistence.IN_DATABASE);
-        Persistence.getInstance().setType(Persistence.IN_DATABASE);
 
         Scene scene = new Scene(fxmlLoader.load());
 

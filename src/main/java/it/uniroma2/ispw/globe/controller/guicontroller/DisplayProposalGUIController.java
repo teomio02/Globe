@@ -20,6 +20,7 @@ import javafx.scene.layout.HBox;
 
 import static it.uniroma2.ispw.globe.constants.ProposalState.*;
 import static it.uniroma2.ispw.globe.constants.UserType.AGENCY;
+import static it.uniroma2.ispw.globe.constants.UserType.USER;
 
 public class DisplayProposalGUIController extends AbstractGUIController {
     @FXML
@@ -28,8 +29,6 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     private Label agencyLabel;
     @FXML
     private Label descriptionLabel;
-    @FXML
-    private Label nameLabel;
     @FXML
     private HBox responseHBox;
     @FXML
@@ -57,13 +56,14 @@ public class DisplayProposalGUIController extends AbstractGUIController {
             goBack();
             return;
         }
-        nameLabel.setText(proposal.getID());
         descriptionLabel.setText(proposal.getDescription());
         agencyLabel.setText(proposal.getAgency());
         priceLabel.setText(String.valueOf(proposal.getPrice()));
         saveButton.setVisible(false);
         if (!proposal.getAccepted().equals(PENDING) || type.equals(AGENCY)){
             responseHBox.getChildren().clear();
+        }
+        if (type.equals(AGENCY)){
             agencyLabel.setText(proposal.getUser());
         }
         if (requestID != null) {

@@ -17,7 +17,7 @@ public class DBConnection {
     private DBConnection(){}
 
     public Connection getConnection() {
-        try (InputStream input = new FileInputStream("src/main/resources/application.properties")){
+        try (InputStream input = new FileInputStream("src/main/resources/db.properties")){
             Properties properties = new Properties();
             properties.load(input);
 

@@ -441,7 +441,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
                 mode = MORNING_MODE;
             } else if ((boolean) lateAfternoonMode.getUserData()) {
                 mode = AFTERNOON_MODE;
-            } else if ((boolean) natureButton.getUserData()) {
+            } else if ((boolean) nightMode.getUserData()) {
                 mode = NIGHT_MODE;
             }
 

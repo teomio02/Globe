@@ -24,6 +24,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.DisplayRequestGUIController">
    <children>
+      <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <image>
+            <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
+         </image>
+      </ImageView>
       <VBox prefHeight="691.0" prefWidth="606.0" spacing="30.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="10.0">
          <children>
             <HBox prefHeight="63.0" prefWidth="279.0">
@@ -125,7 +130,7 @@
                            <content>
                               <VBox fx:id="citiesVBox" prefWidth="256.0" style="-fx-background-color: #314c1c; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 2;">
                                  <padding>
-                                    <Insets left="8.0" right="8.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </VBox>
                            </content>
@@ -139,7 +144,7 @@
                            <content>
                               <VBox fx:id="attractionsVBox" prefWidth="256.0" style="-fx-background-color: #314c1c; -fx-border-color: #97c093; -fx-border-radius: 40; -fx-border-width: 2;">
                                  <padding>
-                                    <Insets left="8.0" right="8.0" />
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                               </VBox>
                            </content>
@@ -301,10 +306,5 @@
             </TabPane>
          </children>
       </VBox>
-      <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <image>
-            <Image url="@../../../../../../resources/it/uniroma2/ispw/globe/Background.png" />
-         </image>
-      </ImageView>
    </children>
 </AnchorPane>
