@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.ManageRequestGUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../../../../../../resources/css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.ManageRequestGUIController">
    <children>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
          <image>
@@ -53,7 +53,7 @@
                   </Text>
                </children>
             </HBox>
-            <TabPane stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/ManageTabPane.css" tabClosingPolicy="UNAVAILABLE">
+            <TabPane stylesheets="@../../../../../../resources/css/ManageTabPane.css" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="User Request">
                      <content>

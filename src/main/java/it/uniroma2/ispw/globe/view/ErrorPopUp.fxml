@@ -9,7 +9,7 @@
 
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #97c093; -fx-background-radius: 50;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="390.0" spacing="5.0" style="-fx-background-radius: 50; -fx-background-color: #97c093; -fx-border-color: #314c1c; -fx-border-radius: 50; -fx-border-width: 5;" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/general.css">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="390.0" spacing="5.0" style="-fx-background-radius: 50; -fx-background-color: #97c093; -fx-border-color: #314c1c; -fx-border-radius: 50; -fx-border-width: 5;" stylesheets="@../../../../../../resources/css/general.css">
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="100.0" spacing="3.0">
                <children>
@@ -21,7 +21,7 @@
                               <Insets left="8.0" right="8.0" />
                            </padding>
                            <children>
-                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefWidth="362.0" style="-fx-background-color: #97c093;" styleClass="label-center-dark" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/general.css" text="asfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkvasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflk" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
+                              <Label fx:id="descriptionLabel" alignment="TOP_LEFT" prefWidth="362.0" style="-fx-background-color: #97c093;" styleClass="label-center-dark" stylesheets="@../../../../../../resources/css/general.css" text="asfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkvasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflkasfakmsakfakfnasfnaflk" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                      </content>

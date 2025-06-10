@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<Button fx:id="itineraryButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="620.0" style="-fx-background-color: #97c093; -fx-background-radius: 50; -fx-border-radius: 50;" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/general.css" text="Button" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Button fx:id="itineraryButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="620.0" style="-fx-background-color: #97c093; -fx-background-radius: 50; -fx-border-radius: 50;" stylesheets="@../../../../../../resources/css/general.css" text="Button" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <graphic>
       <HBox fx:id="itineraryHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="600.0">
          <children>

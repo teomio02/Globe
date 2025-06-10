@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.CreateRequestGUIController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #314c1c;" stylesheets="@../../../../../../resources/css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.uniroma2.ispw.globe.controller.guicontroller.CreateRequestGUIController">
    <children>
       <ImageView fitHeight="576.0" fitWidth="543.0" layoutX="720.0" layoutY="601.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0">
          <image>
@@ -96,7 +96,7 @@
                                     <Insets />
                                  </HBox.margin>
                               </Button>
-                              <VBox fx:id="cityVBox" prefHeight="113.0" prefWidth="276.0" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/general.css" />
+                              <VBox fx:id="cityVBox" prefHeight="113.0" prefWidth="276.0" stylesheets="@../../../../../../resources/css/general.css" />
                            </children>
                         </HBox>
                         <HBox prefHeight="120.0" prefWidth="625.0" spacing="3.0">
@@ -354,7 +354,7 @@
             </VBox>
             <VBox alignment="CENTER" maxHeight="290.0" prefHeight="290.0" prefWidth="512.0" style="-fx-background-color: #97c093; -fx-background-radius: 25;">
                <children>
-                  <TabPane fx:id="typeTabPane" prefHeight="260.0" prefWidth="489.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../../../../../../resources/it/uniroma2/ispw/css/DayTabPane.css" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane fx:id="typeTabPane" prefHeight="260.0" prefWidth="489.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../../../../../../resources/css/DayTabPane.css" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="onTheRoadTab" disable="true" text="On The Road">
                         <content>
