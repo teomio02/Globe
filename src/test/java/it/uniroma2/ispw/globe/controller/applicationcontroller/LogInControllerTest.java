@@ -84,7 +84,7 @@ class LogInControllerTest {
 
 
     @Test
-    void testUserTypeCorrect() throws DaoException {
+    void testGetUserTypeCorrect() throws DaoException {
         LogInController logInController = new LogInController();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
 

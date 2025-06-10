@@ -133,15 +133,21 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                 userLabel.setText(requestBean.getUser());
                 descriptionLabel.setText(requestBean.getOtherRequests());
                 for (String type : requestBean.getTypes()) {
-                    typesHBox.getChildren().add(new Label(type));
+                    Label typeLabel = new Label(type+ " ");
+                    typeLabel.getStyleClass().add(LABEL_LIGHT);
+                    typesHBox.getChildren().add(typeLabel);
                 }
                 for (String city : requestBean.getCities()) {
                     CityBean cityBean = new AcceptItineraryController().getCity(0,city,null);
-                    requestCityVBox.getChildren().add(new Label(cityBean.getName()+" - "+cityBean.getCountry()));
+                    Label cityLabel = new Label(cityBean.getName()+" - "+cityBean.getCountry());
+                    cityLabel.getStyleClass().add(LABEL_LIGHT);
+                    requestCityVBox.getChildren().add(cityLabel);
                 }
                 for (String attraction : requestBean.getAttractions()) {
                     AttractionBean attractionBean = new AcceptItineraryController().getAttraction(0,attraction,null);
-                    requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
+                    Label attractionLabel = new Label(attractionBean.getName()+" - "+attractionBean.getCity());
+                    attractionLabel.getStyleClass().add(LABEL_LIGHT);
+                    requestAttractionVBox.getChildren().add(attractionLabel);
                 }
                 if (requestBean.isFlight()) {
                     flightVBox.setVisible(true);

@@ -44,7 +44,6 @@ public class ManageItineraryController {
     }
 
     public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, IncorrectDataException {
-        ProposalBean proposalBean = new ProposalBean();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         Session session = SessionManager.getInstance().getSession(sessionId);
         if (session == null) {
@@ -55,6 +54,8 @@ public class ManageItineraryController {
             List<Proposal> proposals = user.getProposals();
             List<ProposalBean> proposalBeans = new ArrayList<>();
             for (Proposal proposal : proposals) {
+                ProposalBean proposalBean = new ProposalBean();
+
                 proposalBean.setID(proposal.getId());
                 proposalBean.setPrice(proposal.getPrice());
 
