@@ -333,6 +333,13 @@ public class CreateItineraryCLIController {
 
         Scanner input = new Scanner(System.in);
 
+        if (itineraryBean.getAccommodations() == null) {
+            try {
+                itineraryBean.setAccommodations(new ArrayList<>());
+            } catch (IncorrectDataException e) {
+                System.out.println(ERROR + e.getMessage());
+            }
+        }
         do {
             while (true) {
                 System.out.print("Please enter accommodation name: ");

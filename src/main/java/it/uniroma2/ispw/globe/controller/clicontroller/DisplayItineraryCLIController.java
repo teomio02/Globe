@@ -63,8 +63,12 @@ public class DisplayItineraryCLIController {
             System.out.println(ERROR + e.getMessage());
         }
 
+        if (requestId != null) {
+            return;
+        }
+
         int choice;
-        if (!(proposalId != null || requestId != null || itineraryId != null)) {
+        if (!(proposalId != null || itineraryId != null)) {
             choice = showUserMenu();
             if (choice == 1) {
                 saveItinerary();

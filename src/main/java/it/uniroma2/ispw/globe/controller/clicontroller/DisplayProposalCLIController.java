@@ -47,27 +47,29 @@ public class DisplayProposalCLIController {
             System.out.println("    > Status: " + proposal.getAccepted());
             System.out.println();
 
-            int choice;
-            choice = showMenu(proposal.getAccepted());
+            while (true) {
+                int choice;
+                choice = showMenu(proposal.getAccepted());
 
-            switch(choice) {
-                case 1 -> showItinerary();
-                case 2 -> {
-                    if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
-                        acceptProposal();
-                    } else if (requestId != null) {
-                        saveProposal();
+                switch(choice) {
+                    case 1 -> showItinerary();
+                    case 2 -> {
+                        if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
+                            acceptProposal();
+                        } else if (requestId != null) {
+                            saveProposal();
+                        }
                     }
-                }
-                case 3 -> {
-                    if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
-                        rejectProposal();
+                    case 3 -> {
+                        if (proposal.getAccepted().equals(PENDING) && !type.equals(AGENCY)){
+                            rejectProposal();
+                        }
                     }
+                    case 4 -> {
+                        return;
+                    }
+                    default -> System.out.println(CHOICE_ERROR);
                 }
-                case 4 -> {
-                    // go back action
-                }
-                default -> System.out.println(CHOICE_ERROR);
             }
         } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
