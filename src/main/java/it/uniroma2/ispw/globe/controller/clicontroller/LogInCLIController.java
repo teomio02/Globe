@@ -84,7 +84,7 @@ public class LogInCLIController {
     }
 
     public void userSignIn() {
-        CredentialsBean credentialsBean = getCredentials();
+        CredentialsBean credentialsBean = getCredentials(false);
 
         try {
             credentialsBean.setType(USER);
@@ -99,7 +99,7 @@ public class LogInCLIController {
         String description;
         List<String> preferences;
 
-        CredentialsBean credentials = getCredentials();
+        CredentialsBean credentials = getCredentials(false);
 
         Scanner input = new Scanner(System.in);
 
@@ -174,7 +174,7 @@ public class LogInCLIController {
         String sessionId;
         CredentialsBean credentials;
         try {
-            credentials = getCredentials();
+            credentials = getCredentials(true);
             sessionId = new LogInController().logIn(credentials);
         } catch (FailedOperationException | DuplicateItemException e) {
             System.out.println(ERROR + e.getMessage());
@@ -221,7 +221,7 @@ public class LogInCLIController {
         }
     }
 
-    public CredentialsBean getCredentials() {
+    public CredentialsBean getCredentials(boolean isLogin) {
         Scanner input = new Scanner(System.in);
 
         String username;
@@ -252,6 +252,10 @@ public class LogInCLIController {
                 System.out.println();
             }
         }
+        if (isLogin) {
+            return credentials;
+        }
+
         while (true){
             System.out.print("Please enter payment credentials: ");
             paymentCredentials = input.nextLine();
