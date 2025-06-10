@@ -96,6 +96,9 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
     private static final String LABEL_LIGHT = "label-light";
 
+    private static final String CITY = "city";
+    private static final String ATTRACTIONS = "attractions";
+
     private String sessionId;
 
     public void initialize(String sessionId) {

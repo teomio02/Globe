@@ -101,6 +101,9 @@ public class RequestItineraryController {
         RequestBean requestBean = new RequestBean();
         requestBean.setID(request.getId());
         requestBean.setUser(user.getUsername());
+        requestBean.setCities(citiesID);
+        requestBean.setAttractions(attractionsID);
+
         if (requestID != null) {
             requestBean.setAgency(agency.getUsername());
         } else {
@@ -113,8 +116,6 @@ public class RequestItineraryController {
         requestBean.setOtherRequests(request.getOtherRequest());
         requestBean.setDayNum(request.getDayNum());
         requestBean.setTypes(request.getItineraryType());
-        requestBean.setCities(citiesID);
-        requestBean.setAttractions(attractionsID);
         requestBean.setAccepted(request.getAccepted());
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());

@@ -22,11 +22,11 @@ import static it.uniroma2.ispw.globe.constants.ProposalState.ACCEPTED;
 public class AcceptItineraryController {
 
     public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, IncorrectDataException {
+        Proposal proposal;
+        User user;
+        Agency agency;
+        ProposalBean proposalBean = new ProposalBean();
         try {
-            Proposal proposal;
-            User user;
-            Agency agency;
-
             if (proposalID == null) {
                 Session session = SessionManager.getInstance().getSession(sessionID);
                 proposal = session.getPendingProposal();
@@ -46,7 +46,6 @@ public class AcceptItineraryController {
                 agency = accountDao.getAgencyByProposal(proposalID);
             }
 
-            ProposalBean proposalBean = new ProposalBean();
             proposalBean.setID(proposalID);
             proposalBean.setPrice(proposal.getPrice());
             proposalBean.setAgency(agency.getUsername());
@@ -107,15 +106,16 @@ public class AcceptItineraryController {
     }
 
     public ItineraryBean getProposalItinerary(String proposalId) throws FailedOperationException, IncorrectDataException {
+        ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
+        Proposal proposal;
+        ItineraryBean itineraryBean = new ItineraryBean();
         try {
-            ProposalDao proposalDao = Persistence.getInstance().getFactory().getProposalDao();
-            Proposal proposal = proposalDao.getProposal(proposalId);
+            proposal = proposalDao.getProposal(proposalId);
             if (proposal == null) {
                 throw new FailedOperationException("Get proposal's itinerary - proposal not found");
             }
             Itinerary itinerary = proposal.getItinerary();
 
-            ItineraryBean itineraryBean = new ItineraryBean();
             itineraryBean.setId(itinerary.getItineraryID());
             itineraryBean.setName(itinerary.getName());
             itineraryBean.setDescription(itinerary.getDescription());
@@ -225,7 +225,7 @@ public class AcceptItineraryController {
             throw new FailedOperationException("Get attraction");
         }
     }
-    
+
     public List<StepBean> getSteps(String itineraryId, String sessionID) throws FailedOperationException, IncorrectDataException {
         try {
             List<StepBean> steps = new ArrayList<>();
@@ -240,18 +240,7 @@ public class AcceptItineraryController {
 
             List<Day> days = itinerary.getDays();
             for (Day day : days) {
-                List<String> attractions = new ArrayList<>();
-                for (Attraction attraction : day.getAttractions()) {
-                    attractions.add(attraction.getPlaceID());
-                }
-                List<String> cities = new ArrayList<>();
-                for (City city : day.getCities()) {
-                    cities.add(city.getPlaceID());
-                }
-                StepBean stepBean = new StepBean();
-                stepBean.setNum(day.getDayNum()-1);
-                stepBean.setAttractions(attractions);
-                stepBean.setCity(cities);
+                StepBean stepBean = getStepBean(day);
                 steps.add(stepBean);
             }
             return steps;
@@ -259,5 +248,21 @@ public class AcceptItineraryController {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
             throw new FailedOperationException("Get steps");
         }
+    }
+
+    private StepBean getStepBean(Day day) throws IncorrectDataException {
+        List<String> attractions = new ArrayList<>();
+        for (Attraction attraction : day.getAttractions()) {
+            attractions.add(attraction.getPlaceID());
+        }
+        List<String> cities = new ArrayList<>();
+        for (City city : day.getCities()) {
+            cities.add(city.getPlaceID());
+        }
+        StepBean stepBean = new StepBean();
+        stepBean.setNum(day.getDayNum()-1);
+        stepBean.setAttractions(attractions);
+        stepBean.setCity(cities);
+        return stepBean;
     }
 }

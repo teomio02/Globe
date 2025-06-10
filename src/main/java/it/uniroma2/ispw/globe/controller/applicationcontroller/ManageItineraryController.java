@@ -44,21 +44,22 @@ public class ManageItineraryController {
     }
 
     public List<ProposalBean> getUserProposals(String sessionId) throws FailedOperationException, IncorrectDataException {
+        ProposalBean proposalBean = new ProposalBean();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        Session session = SessionManager.getInstance().getSession(sessionId);
+        if (session == null) {
+            throw new FailedOperationException("GetUserProposals - Session not found");
+        }
         try {
-            AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
-            Session session = SessionManager.getInstance().getSession(sessionId);
-            if (session == null) {
-                throw new FailedOperationException("GetUserProposals - Session not found");
-            }
             User user = (User) session.getAccount();
             List<Proposal> proposals = user.getProposals();
             List<ProposalBean> proposalBeans = new ArrayList<>();
             for (Proposal proposal : proposals) {
-                Agency agency = accountDao.getAgencyByProposal(proposal.getId());
-
-                ProposalBean proposalBean = new ProposalBean();
                 proposalBean.setID(proposal.getId());
                 proposalBean.setPrice(proposal.getPrice());
+
+                Agency agency = accountDao.getAgencyByProposal(proposal.getId());
+
                 proposalBean.setAgency(agency.getUsername());
                 proposalBean.setUser(user.getUsername());
                 proposalBean.setDescription(proposal.getDescription());

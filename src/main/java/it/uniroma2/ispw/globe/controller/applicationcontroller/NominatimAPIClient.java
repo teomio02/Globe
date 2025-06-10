@@ -81,7 +81,7 @@ public class NominatimAPIClient {
             JsonObject place = results.get(i).getAsJsonObject();
             if (type.equals("id")) {
                 places.add(place);
-            } else if (type.equals("administrative")) {
+            } else if (type.equals(CITY)) {
                 if (place.get(TYPE).getAsString().equals("city")||place.get(TYPE).getAsString().equals("town")||place.get(TYPE).getAsString().equals("village")) {
                     places.add(place);
                 }

@@ -36,8 +36,9 @@ import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 public class CreateItineraryController {
 
     public ItineraryBean getItinerary(String itineraryId, String sessionID) throws FailedOperationException, IncorrectDataException {
+        Itinerary itinerary;
+        ItineraryBean itineraryBean = new ItineraryBean();
         try {
-            Itinerary itinerary;
 
             if (itineraryId == null) {
                 itinerary = SessionManager.getInstance().getSession(sessionID).getPendingItinerary();
@@ -53,7 +54,6 @@ public class CreateItineraryController {
                 throw new FailedOperationException("Get itinerary - itinerary not found");
             }
 
-            ItineraryBean itineraryBean = new ItineraryBean();
             itineraryBean.setId(itinerary.getItineraryID());
             itineraryBean.setName(itinerary.getName());
             itineraryBean.setDescription(itinerary.getDescription());
@@ -142,28 +142,11 @@ public class CreateItineraryController {
             calculateItinerary(itinerary);
 
             if (itineraryBean.getAccommodations() != null) {
-                AccommodationDao accommodationDao = Persistence.getInstance().getFactory().getAccommodationDao();
-
-                List<Accommodation> accommodations = new ArrayList<>();
-                for (Pair<String,String> a : itineraryBean.getAccommodations()) {
-                    Accommodation accommodation = accommodationDao.createAccommodation(a.getKey(), a.getValue());
-                    accommodations.add(accommodation);
-                }
-                AccommodationDecorator accommodationItinerary = new AccommodationDecorator(itinerary);
-                accommodationItinerary.setAccommodations(accommodations);
-                itinerary = accommodationItinerary;
+                itinerary = getAccommodationDecorator(itineraryBean, itinerary);
             }
 
             if (itineraryBean.getInboundFlightArrivalTime() != 0) {
-                FlightDao flightDao = Persistence.getInstance().getFactory().getFlightDao();
-
-                Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
-                Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
-
-                FlightDecorator flightItinerary = new FlightDecorator(itinerary);
-                flightItinerary.setInFlight(inFlight);
-                flightItinerary.setOutFlight(outFlight);
-                itinerary = flightItinerary;
+                itinerary = getFlightDecorator(itineraryBean, itinerary);
             }
 
             SessionManager.getInstance().getSession(sessionID).setPendingItinerary(itinerary);
@@ -174,6 +157,31 @@ public class CreateItineraryController {
             }
             throw new FailedOperationException("Create itinerary");
         }
+    }
+
+    private FlightDecorator getFlightDecorator(ItineraryBean itineraryBean, Itinerary itinerary) {
+        FlightDao flightDao = Persistence.getInstance().getFactory().getFlightDao();
+
+        Flight inFlight = flightDao.createFlight(itineraryBean.getInboundFlightDepartureTime(), itineraryBean.getInboundFlightArrivalTime());
+        Flight outFlight = flightDao.createFlight(itineraryBean.getOutboundFlightDepartureTime(), itineraryBean.getOutboundFlightArrivalTime());
+
+        FlightDecorator flightItinerary = new FlightDecorator(itinerary);
+        flightItinerary.setInFlight(inFlight);
+        flightItinerary.setOutFlight(outFlight);
+        return flightItinerary;
+    }
+
+    private AccommodationDecorator getAccommodationDecorator(ItineraryBean itineraryBean, Itinerary itinerary) {
+        AccommodationDao accommodationDao = Persistence.getInstance().getFactory().getAccommodationDao();
+
+        List<Accommodation> accommodations = new ArrayList<>();
+        for (Pair<String,String> a : itineraryBean.getAccommodations()) {
+            Accommodation accommodation = accommodationDao.createAccommodation(a.getKey(), a.getValue());
+            accommodations.add(accommodation);
+        }
+        AccommodationDecorator accommodationItinerary = new AccommodationDecorator(itinerary);
+        accommodationItinerary.setAccommodations(accommodations);
+        return accommodationItinerary;
     }
 
     public void saveItinerary(String sessionID) throws FailedOperationException, DuplicateItemException {
