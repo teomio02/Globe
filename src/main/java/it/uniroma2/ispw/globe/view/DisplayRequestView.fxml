@@ -185,7 +185,7 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="634.0" layoutY="221.0" maxHeight="290.0" prefHeight="290.0" prefWidth="551.0" style="-fx-background-color: #97c093; -fx-background-radius: 25;">
          <children>
-            <TabPane fx:id="typeTabPane" prefHeight="260.0" prefWidth="489.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../../../../../../resources/css/DayTabPane.fx.css" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="typeTabPane" prefHeight="260.0" prefWidth="489.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../../../../../../resources/css/DayTabPane.css" tabClosingPolicy="UNAVAILABLE">
                <tabs>
                   <Tab fx:id="onTheRoadTab" disable="true" text="On The Road">
                      <content>
