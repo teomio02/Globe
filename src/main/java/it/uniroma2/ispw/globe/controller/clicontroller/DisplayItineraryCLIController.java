@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
+import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -36,8 +36,8 @@ public class DisplayItineraryCLIController {
         ItineraryBean itinerary;
         List<StepBean> steps;
         try {
-            itinerary = new ManageItineraryController().getItinerary(itineraryId,sessionId);
-            steps = new ManageItineraryController().getSteps(itineraryId,sessionId);
+            itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
+            steps = new AcceptItineraryController().getSteps(itineraryId,sessionId);
 
             System.out.println("> ID: " + itinerary.getId());
             System.out.println("    > Name: " + itinerary.getName());
@@ -97,12 +97,12 @@ public class DisplayItineraryCLIController {
         try {
             System.out.println("    > Steps: ");
             for (StepBean step : steps) {
-                CityBean city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
+                CityBean city = new AcceptItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
                 System.out.println("        > Day " + step.getNum() + ": ");
                 System.out.println("            > City: " + city.getName() + ", " + city.getCountry());
                 System.out.println("            > Attractions: ");
                 for (String attractionID : step.getAttractions()) {
-                    AttractionBean attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,null);
+                    AttractionBean attraction = new AcceptItineraryController().getAttraction(step.getNum(),attractionID,null);
                     System.out.println("                -" + attraction.getName() + ", " + attraction.getAddress());
                 }
             }

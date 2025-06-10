@@ -1,6 +1,5 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
-import com.google.gson.JsonObject;
 import it.uniroma2.ispw.globe.bean.*;
 import it.uniroma2.ispw.globe.dao.AccountDao;
 import it.uniroma2.ispw.globe.dao.AttractionDao;
@@ -11,7 +10,6 @@ import it.uniroma2.ispw.globe.model.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.session.Session;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
-import it.uniroma2.ispw.globe.engineering.adapter.PlaceAdapter;
 import it.uniroma2.ispw.globe.engineering.decorator.*;
 
 import java.util.ArrayList;
@@ -25,65 +23,13 @@ import static it.uniroma2.ispw.globe.exception.ErrorMessage.ERROR_DAO;
 import static it.uniroma2.ispw.globe.constants.ProposalState.PENDING;
 
 public class RequestItineraryController {
-    private static final String CITY = "administrative";
-    private static final String ATTRACTION = "";
-
-
-    // da risistemare in teoria dovrebbe fare dao
-    public List<JsonObject> getPlaces(String name, String type) throws FailedOperationException {
-        NominatimAPIClient api = new NominatimAPIClient();
-        List<JsonObject> apiPlaces;
-        try {
-            apiPlaces = api.getPlaces(name,type);
-        } catch (PlaceApiException e) {
-            throw new FailedOperationException("Get agency by type");
-        }
-        return apiPlaces;
-    }
 
     public List<AttractionBean> getAttractions(String name) throws FailedOperationException {
-//        //chiama la DAO/API per ottenere i nomi delle attrazioni
-        List<JsonObject> jsonAttractions = getPlaces(name, ATTRACTION);
-        List<Attraction> attractions = new ArrayList<>();
-        List<AttractionBean> attractionBeans = new ArrayList<>();
-
-        for (JsonObject json_attraction : jsonAttractions) {
-            Attraction attraction = new PlaceAdapter(json_attraction);
-            attractions.add(attraction);
-        }
-
-        for (Attraction attraction : attractions) {
-            AttractionBean attractionBean = new AttractionBean();
-            attractionBean.setId(attraction.getPlaceID());
-            attractionBean.setName(attraction.getName());
-            attractionBean.setAddress(attraction.getAddress());
-            attractionBean.setCity(attraction.getCity());
-
-            attractionBeans.add(attractionBean);
-        }
-
-        return attractionBeans;
+        return new NominatimAPIClient ().getAttractions(name);
     }
 
     public List<CityBean> getCities(String name) throws FailedOperationException {
-        List<JsonObject> jsonCities = getPlaces(name, CITY);
-        List<City> cities = new ArrayList<>();
-        List<CityBean> citiesBeans = new ArrayList<>();
-
-        for (JsonObject json_city : jsonCities) {
-            City city = new PlaceAdapter(json_city);
-            cities.add(city);
-        }
-
-        for (City city : cities) {
-            CityBean cityBean = new CityBean();
-            cityBean.setId(city.getPlaceID());
-            cityBean.setName(city.getName());
-            cityBean.setCountry(city.getCountry());
-
-            citiesBeans.add(cityBean);
-        }
-        return citiesBeans;
+        return new NominatimAPIClient ().getCities(name);
     }
 
     public List<AgencyBean> getAgenciesByType(List<String> types) throws FailedOperationException, IncorrectDataException {

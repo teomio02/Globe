@@ -5,6 +5,7 @@ import it.uniroma2.ispw.globe.bean.ItineraryBean;
 import it.uniroma2.ispw.globe.bean.PaymentBean;
 import it.uniroma2.ispw.globe.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
+import it.uniroma2.ispw.globe.engineering.session.SessionManager;
 import it.uniroma2.ispw.globe.exception.DaoException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
@@ -74,6 +75,15 @@ class AcceptItineraryControllerTest {
         }
 
         Assertions.assertEquals("Get proposal's itinerary - proposal not found operation failed", errorMess);
+    }
+
+    @Test
+    void testGetAccountType() throws DaoException {
+        AcceptItineraryController controller = new AcceptItineraryController();
+        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
+        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
+        String type = controller.getAccountType(sessionID);
+        Assertions.assertEquals(USER, type);
     }
 
     @BeforeAll
