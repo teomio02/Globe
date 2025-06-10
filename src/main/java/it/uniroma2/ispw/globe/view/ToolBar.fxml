@@ -6,11 +6,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 
-<AnchorPane minWidth="1200.0" prefHeight="70.0" prefWidth="1200.0" stylesheets="@../css/ToolBar.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minWidth="1200.0" prefHeight="70.0" prefWidth="1200.0" stylesheets="@../../../../../../resources/css/ToolBar.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane prefHeight="70.0" prefWidth="1200.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="754.0" spacing="50.0" style="-fx-background-color: #97c093;" stylesheets="@../css/ToolBar.css">
+            <HBox alignment="CENTER" prefHeight="60.0" prefWidth="754.0" spacing="50.0" style="-fx-background-color: #97c093;" stylesheets="@../../../../../../resources/css/ToolBar.css">
                <children>
                   <Button fx:id="requestButton" alignment="BASELINE_LEFT" graphicTextGap="5.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#requestItinerary" prefHeight="60.0" prefWidth="200.0" styleClass="button-default" text="Richiedi" textFill="#2f471a">
                      <font>

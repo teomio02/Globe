@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="600.0" minHeight="0.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="600.0" minHeight="0.0" style="-fx-background-color: #314c1c; -fx-background-radius: 30;" stylesheets="@../../../../../../resources/css/general.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="5.0">
          <children>
