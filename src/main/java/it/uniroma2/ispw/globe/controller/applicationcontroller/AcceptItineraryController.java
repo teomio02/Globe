@@ -90,7 +90,7 @@ public class AcceptItineraryController {
 
             PaymentBean paymentResult = null;
 
-            if (new PaymentApi().processPayment(proposal.getPrice(),payer,payee)) {
+            if (new PaymentApi().processPayment(proposal.getPrice(),payer.getPaymentCredential(),payee.getPaymentCredential())) {
                 paymentResult = new PaymentBean();
                 paymentResult.setAmount(proposal.getPrice());
                 paymentResult.setPayeeUsername(payee.getUsername());
