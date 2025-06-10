@@ -2,6 +2,7 @@ package it.uniroma2.ispw.globe.dao.fs;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvException;
 import com.opencsv.exceptions.CsvValidationException;
 import it.uniroma2.ispw.globe.dao.AccountDao;
 import it.uniroma2.ispw.globe.exception.DaoException;
@@ -184,13 +185,35 @@ public class InFSAccountDao extends AccountDao {
 
     @Override
     public void updateAgencyRating(Agency agency) throws DaoException {
+        List<String[]> allRows;
 
+        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
+            allRows = reader.readAll();
+        } catch (CsvException | IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
+
+        for (int i = 0; i < allRows.size(); i++) {
+            String[] row = allRows.get(i);
+            if (row[0].equals(agency.getUsername())) {
+                row[7] = String.valueOf(agency.getRating());
+                allRows.set(i, row);
+                break;
+            }
+        }
+
+        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
+            writer.writeAll(allRows);
+        } catch (IOException e) {
+            throw new DaoException(e.getMessage(),GENERAL);
+        }
     }
 
     public void addAgency(CredentialsBean credentials) throws DaoException {
         Agency agency = new Agency();
         agency.setUsername(credentials.getUsername());
         agency.setPassword(credentials.getPassword());
+        agency.setPaymentCredential(credentials.getPaymentCredentials());
         agency.setType(credentials.getType());
         agency.setProposals(new ArrayList<>());
         agency.setItineraries(new ArrayList<>());
@@ -211,6 +234,7 @@ public class InFSAccountDao extends AccountDao {
         User user = new User();
         user.setUsername(credentials.getUsername());
         user.setPassword(credentials.getPassword());
+        user.setPaymentCredential(credentials.getPaymentCredentials());
         user.setType(credentials.getType());
         user.setItineraries(new ArrayList<>());
         user.setProposals(new ArrayList<>());

@@ -26,31 +26,24 @@ public class DisplayRequestCLIController {
     public void start() {
         System.out.println("# DISPLAY REQUEST #");
 
-        RequestBean request = null;
-        List<Object> optionals = new ArrayList<>();
-        NatureBean nature;
-        OnTheRoadBean onTheRoad;
+        RequestBean request;
+        List<Object> optionals;
         List<AgencyBean> agencies = new ArrayList<>();
 
-        if (requestId == null) {
-            // requestItinerary use case
-            try {
+        try {
+            if (requestId == null) {
+                // requestItinerary use case
                 request = new RequestItineraryController().getRequest(requestId, sessionId);
                 optionals = new RequestItineraryController().getRequestOptional(requestId, sessionId);
                 agencies = new RequestItineraryController().getAgencies(sessionId);
-            } catch (FailedOperationException | IncorrectDataException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
-            }
-        } else {
-            // createProposal use case
-            try {
+            } else {
+                // createProposal use case
                 request = new ResponseRequestController().getAgencyRequest(requestId, sessionId);
                 optionals = new ResponseRequestController().getRequestOptional(requestId, sessionId);
-            } catch (IncorrectDataException | FailedOperationException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
             }
+        } catch (FailedOperationException | IncorrectDataException e) {
+            System.out.println(ERROR + e.getMessage());
+            return;
         }
 
         System.out.println("> ID: " + request.getID());
@@ -68,44 +61,13 @@ public class DisplayRequestCLIController {
         System.out.println("    > Requests: " + request.getOtherRequests());
         System.out.println("    > Types: " + request.getTypes());
 
-        for (Object optional: optionals) {
-            if (optional instanceof OnTheRoadBean) {
-                onTheRoad = (OnTheRoadBean) optional;
-                System.out.println("    > Travel mode: " + onTheRoad.getMode());
-                System.out.println("    > Day driving hours: " + onTheRoad.getDayDrivingHours());
-
-            } else if (optional instanceof NatureBean) {
-                nature = (NatureBean) optional;
-                System.out.println("    > Trekking difficulty: " + nature.getDifficulty());
-                System.out.println("    > Trekking distance:   " + nature.getTrekkingDistance());
-            }
-        }
-
+        displayOptional(optionals);
 
         List<String> citiesID = request.getCities();
         List<String> attractionsID = request.getAttractions();
 
-        System.out.println("    > Cities: ");
-        for (String cityID: citiesID) {
-            try {
-                CityBean city =  new RequestItineraryController().getCity(cityID);
-                System.out.println("        - " + city.getName() + ", " + city.getCountry());
-            } catch (FailedOperationException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
-            }
-        }
-
-        System.out.println("    > Attractions: ");
-        for (String attractionID: attractionsID) {
-            try {
-                AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
-                System.out.println("        - " + attraction.getName() + ", " + attraction.getAddress());
-            } catch (FailedOperationException e) {
-                System.out.println(ERROR + e.getMessage());
-                return;
-            }
-        }
+        displayCities(citiesID);
+        displayAttractions(attractionsID);
 
         if (requestId == null) {
             int choice = showUserMenu();
@@ -126,6 +88,45 @@ public class DisplayRequestCLIController {
         }
     }
 
+    public void displayOptional(List<Object> optionals) {
+        for (Object optional: optionals) {
+            if (optional instanceof OnTheRoadBean onTheRoad) {
+                System.out.println("    > Travel mode: " + onTheRoad.getMode());
+                System.out.println("    > Day driving hours: " + onTheRoad.getDayDrivingHours());
+
+            } else if (optional instanceof NatureBean nature) {
+                System.out.println("    > Trekking difficulty: " + nature.getDifficulty());
+                System.out.println("    > Trekking distance:   " + nature.getTrekkingDistance());
+            }
+        }
+    }
+
+    public void displayCities(List<String> citiesID) {
+        System.out.println("    > Cities: ");
+        for (String cityID: citiesID) {
+            try {
+                CityBean city =  new RequestItineraryController().getCity(cityID);
+                System.out.println("        - " + city.getName() + ", " + city.getCountry());
+            } catch (FailedOperationException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
+            }
+        }
+    }
+
+    public void displayAttractions(List<String> attractionsID) {
+        System.out.println("    > Attractions: ");
+        for (String attractionID: attractionsID) {
+            try {
+                AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
+                System.out.println("        - " + attraction.getName() + ", " + attraction.getAddress());
+            } catch (FailedOperationException e) {
+                System.out.println(ERROR + e.getMessage());
+                return;
+            }
+        }
+    }
+
     public int showUserMenu() {
         System.out.println("What do you want do?\n");
 
@@ -136,7 +137,7 @@ public class DisplayRequestCLIController {
         String strChoice;
         int choice;
         while (true) {
-            System.out.print("Please enter your choice: ");
+            System.out.print("Please enter your choice : ");
             strChoice = input.nextLine();
             if (!strChoice.isEmpty() && strChoice.matches("[1-2]")) {
                 choice = Integer.parseInt(strChoice);

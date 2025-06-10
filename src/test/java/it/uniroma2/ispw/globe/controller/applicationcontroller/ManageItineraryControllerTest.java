@@ -1,7 +1,7 @@
 package it.uniroma2.ispw.globe.controller.applicationcontroller;
 
 import it.uniroma2.ispw.globe.bean.CredentialsBean;
-import it.uniroma2.ispw.globe.bean.ItineraryBean;
+import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.dao.*;
 import it.uniroma2.ispw.globe.engineering.Persistence;
 import it.uniroma2.ispw.globe.engineering.session.SessionManager;
@@ -26,65 +26,27 @@ class ManageItineraryControllerTest {
     // Teo Miozzi
 
     @Test
-    void testGetItineraryCorrectID() throws FailedOperationException, IncorrectDataException, DaoException {
-        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
-
-        ManageItineraryController controller = new ManageItineraryController();
-        String itineraryID = "id1234";
-
-        ItineraryBean itinerary = controller.getItinerary(itineraryID,sessionID);
-        assertNotNull(itinerary);
-    }
-
-    @Test
-    void testGetItineraryIncorrectID() throws IncorrectDataException, DaoException {
+    void testGetUserProposalsCorrect() throws DaoException, IncorrectDataException, FailedOperationException {
         ManageItineraryController controller = new ManageItineraryController();
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
-        String itineraryID = "id0000";
-        String errorMess = "";
-
-        try {
-            controller.getItinerary(itineraryID,sessionID);
-        } catch (FailedOperationException e) {
-            errorMess = e.getMessage();
-        }
-
-        Assertions.assertEquals("Get itinerary - itinerary not found operation failed", errorMess);
+        List<ProposalBean> proposalBeans = controller.getUserProposals(sessionID);
+        assertNotNull(proposalBeans);
+        assertFalse(proposalBeans.isEmpty());
     }
 
     @Test
-    void testGetUserItinerariesCorrect() throws DaoException, IncorrectDataException, FailedOperationException {
-        ManageItineraryController controller = new ManageItineraryController();
-        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
-        List<ItineraryBean> itineraries = controller.getUserItineraries(sessionID);
-        assertNotNull(itineraries);
-        assertFalse(itineraries.isEmpty());
-    }
-
-    @Test
-    void testGetUserItinerariesIncorrect() throws IncorrectDataException {
+    void testGetUserProposalsIncorrect() throws IncorrectDataException {
         ManageItineraryController controller = new ManageItineraryController();
         String sessionID = "00000";
         String errorMess = "";
 
         try {
-            controller.getUserItineraries(sessionID);
+            controller.getUserProposals(sessionID);
         } catch (FailedOperationException e) {
-            errorMess = "GetUserItineraries - Session not found operation failed";
+            errorMess = e.getMessage();
         }
-        Assertions.assertEquals("GetUserItineraries - Session not found operation failed", errorMess);
-    }
-
-    @Test
-    void testGetAccountType() throws DaoException {
-        ManageItineraryController controller = new ManageItineraryController();
-        AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
-        String sessionID = SessionManager.getInstance().addSession(accountDao.getAccount("userTest"));
-        String type = controller.getAccountType(sessionID);
-        Assertions.assertEquals(USER, type);
+        Assertions.assertEquals("GetUserProposals - Session not found operation failed", errorMess);
     }
 
     @BeforeAll

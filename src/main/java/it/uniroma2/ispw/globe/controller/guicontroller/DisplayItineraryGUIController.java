@@ -1,8 +1,8 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.bean.*;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
@@ -73,8 +73,8 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         ItineraryBean itinerary;
         List<StepBean> steps;
         try {
-            itinerary = new ManageItineraryController().getItinerary(itineraryId,sessionId);
-            steps = new ManageItineraryController().getSteps(itineraryId,sessionId);
+            itinerary = new CreateItineraryController().getItinerary(itineraryId,sessionId);
+            steps = new AcceptItineraryController().getSteps(itineraryId,sessionId);
         } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
@@ -115,8 +115,12 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
         }
         if (itinerary.getInboundFlightDepartureTime() != -1) {
             flightVBox.setVisible(true);
-            flightVBox.getChildren().add(new Label("Inbound: "+itinerary.getInboundFlightDepartureTime()+" - "+itinerary.getInboundFlightArrivalTime()));
-            flightVBox.getChildren().add(new Label("Outbound: "+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime()));
+            Label inFlightLabel = new Label("Inbound: "+itinerary.getInboundFlightDepartureTime()+" - "+itinerary.getInboundFlightArrivalTime());
+            inFlightLabel.getStyleClass().add(LIGHT);
+            Label outFlightLabel = new Label("Outbound: "+itinerary.getOutboundFlightDepartureTime()+" - "+itinerary.getOutboundFlightArrivalTime());
+            outFlightLabel.getStyleClass().add(LIGHT);
+            flightVBox.getChildren().add(inFlightLabel);
+            flightVBox.getChildren().add(outFlightLabel);
         }
 
         nextAgencyButton.setVisible(false);
@@ -143,7 +147,7 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
     public void drawDay(StepBean step, int day) {
         Tab tab = new Tab(String.valueOf(day));
         URL url;
-        VBox dayVBox = null;
+        VBox dayVBox;
         try {
             url = new File("src/main/java/it/uniroma2/ispw/globe/view/DayTab.fxml").toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
@@ -152,10 +156,10 @@ public class DisplayItineraryGUIController extends AbstractGUIController {
             ScrollPane scrollPane = (ScrollPane) dayVBox.lookup("#scrollPane");
             VBox attractionVBox = (VBox) scrollPane.getContent();
             Label cityLabel = (Label) dayVBox.lookup("#cityLabel");
-            CityBean city = new ManageItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
+            CityBean city = new AcceptItineraryController().getCity(step.getNum(),step.getCity().get(0),null);
             cityLabel.setText(city.getName()+", "+city.getCountry());
             for (String attractionID : step.getAttractions()) {
-                AttractionBean attraction = new ManageItineraryController().getAttraction(step.getNum(),attractionID,null);
+                AttractionBean attraction = new AcceptItineraryController().getAttraction(step.getNum(),attractionID,null);
                 Label attractionLabel = new Label(attraction.getName());
                 Label addressLabel = new Label(attraction.getCity()+", "+attraction.getAddress());
                 attractionLabel.setMaxWidth(Double.MAX_VALUE);

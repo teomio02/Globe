@@ -2,7 +2,6 @@ package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.bean.PaymentBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
@@ -32,10 +31,10 @@ public class DisplayProposalCLIController {
         System.out.println("# DISPLAY PROPOSAL #");
 
         ProposalBean proposal;
-        String type = new ManageItineraryController().getAccountType(sessionId);
+        String type = new AcceptItineraryController().getAccountType(sessionId);
 
         try {
-            proposal = new ManageItineraryController().getProposal(proposalId,sessionId);
+            proposal = new AcceptItineraryController().getProposal(proposalId,sessionId);
 
             System.out.println("> ID: " + proposal.getID());
             System.out.println("    > Description: " + proposal.getDescription());
@@ -77,7 +76,7 @@ public class DisplayProposalCLIController {
 
     public int showMenu(String status) {
 
-        String type = new ManageItineraryController().getAccountType(sessionId);
+        String type = new AcceptItineraryController().getAccountType(sessionId);
         int maxChoice;
 
         System.out.println("What do you want do?\n");

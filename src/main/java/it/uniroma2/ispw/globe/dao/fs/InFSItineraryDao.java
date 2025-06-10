@@ -22,6 +22,7 @@ import static it.uniroma2.ispw.globe.exception.DaoException.GENERAL;
 
 public class InFSItineraryDao extends ItineraryDao {
     private static final String FILE_PATH = "src/main/resources/it/uniroma2/ispw/data/itinerary.csv";
+    private static final String ACCOUNT_FILE_PATH = "src/main/resources/it/uniroma2/ispw/data/account.csv";
 
     @Override
     public void addItinerary(Itinerary itinerary, Account account) throws DaoException {
@@ -115,7 +116,7 @@ public class InFSItineraryDao extends ItineraryDao {
         }
         itineraryCsv.setLength(itineraryCsv.length() - 1);
 
-        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
+        try (CSVReader reader = new CSVReader(new FileReader(ACCOUNT_FILE_PATH))) {
             allRows = reader.readAll();
         } catch (CsvException | IOException e) {
             throw new DaoException(e.getMessage(),GENERAL);
@@ -130,7 +131,7 @@ public class InFSItineraryDao extends ItineraryDao {
             }
         }
 
-        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(ACCOUNT_FILE_PATH, true))) {
             writer.writeAll(allRows);
         } catch (IOException e) {
             throw new DaoException(e.getMessage(),GENERAL);

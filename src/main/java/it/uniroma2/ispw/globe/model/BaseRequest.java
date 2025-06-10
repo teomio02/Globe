@@ -2,7 +2,7 @@ package it.uniroma2.ispw.globe.model;
 
 import java.util.List;
 
-public class BaseRequest extends Request {
+public class BaseRequest implements Request {
     private String id;
     private String accepted;
     private String otherRequest;

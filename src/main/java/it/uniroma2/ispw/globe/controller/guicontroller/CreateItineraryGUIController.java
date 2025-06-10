@@ -1,6 +1,7 @@
 package it.uniroma2.ispw.globe.controller.guicontroller;
 
 import it.uniroma2.ispw.globe.bean.*;
+import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.engineering.session.NavigationData;
@@ -79,10 +80,6 @@ public class CreateItineraryGUIController extends AbstractGUIController {
     @FXML
     private VBox accommodationResultVBox;
     @FXML
-    private Button plusButton;
-    @FXML
-    private Button minusButton;
-    @FXML
     private Button onTheRoadButton;
     @FXML
     private Button natureButton;
@@ -139,11 +136,11 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                     typesHBox.getChildren().add(new Label(type));
                 }
                 for (String city : requestBean.getCities()) {
-                    CityBean cityBean = new CreateItineraryController().getCity(0,city,null);
+                    CityBean cityBean = new AcceptItineraryController().getCity(0,city,null);
                     requestCityVBox.getChildren().add(new Label(cityBean.getName()+" - "+cityBean.getCountry()));
                 }
                 for (String attraction : requestBean.getAttractions()) {
-                    AttractionBean attractionBean = new CreateItineraryController().getAttraction(0,attraction,null);
+                    AttractionBean attractionBean = new AcceptItineraryController().getAttraction(0,attraction,null);
                     requestAttractionVBox.getChildren().add(new Label(attractionBean.getName()+" - "+attractionBean.getCity()));
                 }
                 if (requestBean.isFlight()) {
@@ -359,6 +356,7 @@ public class CreateItineraryGUIController extends AbstractGUIController {
                 Label accommodationLabel = new Label(accommodationField.getText()+", "+addressField.getText());
                 Pair<String,String> accommodation = new Pair<>(accommodationField.getText(),addressField.getText());
                 accommodationLabel.setUserData(accommodation);
+                accommodationLabel.getStyleClass().add(LABEL_LIGHT);
                 accommodationResultVBox.getChildren().add(accommodationLabel);
                 accommodationField.setText("");
                 addressField.setText("");

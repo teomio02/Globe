@@ -4,7 +4,6 @@ import it.uniroma2.ispw.globe.bean.PaymentBean;
 import it.uniroma2.ispw.globe.engineering.session.NavigationData;
 import it.uniroma2.ispw.globe.bean.ProposalBean;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.AcceptItineraryController;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.ManageItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.ResponseRequestController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
@@ -29,8 +28,6 @@ public class DisplayProposalGUIController extends AbstractGUIController {
     @FXML
     private Label descriptionLabel;
     @FXML
-    private Label nameLabel;
-    @FXML
     private HBox responseHBox;
     @FXML
     private Button saveButton;
@@ -47,23 +44,24 @@ public class DisplayProposalGUIController extends AbstractGUIController {
         this.proposalID = data.getProposalID();
         this.prev = data.getPrev();
 
-        String type = new ManageItineraryController().getAccountType(sessionId);
+        String type = new AcceptItineraryController().getAccountType(sessionId);
 
         ProposalBean proposal;
         try {
-            proposal = new ManageItineraryController().getProposal(proposalID, sessionId);
+            proposal = new AcceptItineraryController().getProposal(proposalID, sessionId);
         } catch (FailedOperationException | IncorrectDataException e) {
             new ErrorPopUpGUIController().createPopUp(e.getMessage());
             goBack();
             return;
         }
-        nameLabel.setText(proposal.getID());
         descriptionLabel.setText(proposal.getDescription());
         agencyLabel.setText(proposal.getAgency());
         priceLabel.setText(String.valueOf(proposal.getPrice()));
         saveButton.setVisible(false);
         if (!proposal.getAccepted().equals(PENDING) || type.equals(AGENCY)){
             responseHBox.getChildren().clear();
+        }
+        if (type.equals(AGENCY)){
             agencyLabel.setText(proposal.getUser());
         }
         if (requestID != null) {

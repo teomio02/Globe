@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class ItineraryDecorator implements Itinerary {
     private Itinerary itinerary;
 
-    protected ItineraryDecorator( Itinerary itinerary){
+    protected ItineraryDecorator(Itinerary itinerary){
         this.itinerary = itinerary;
     }
 

@@ -45,20 +45,16 @@ public class ViewManager {
     }
 
     public void goToLogInGUI(Stage stage) {
-        try {
-            URL url = new File(LOGIN).toURI().toURL();
-            FXMLLoader loader = new FXMLLoader(url);
-            Scene scene = new Scene(loader.load());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_VIEW, e);
-            new ErrorPopUpGUIController().createPopUp(ERROR_MESSAGE);
-        }
+        loadAuthenticateGUI(stage, LOGIN);
     }
 
     public void goToSignInGUI(Stage stage) {
+        loadAuthenticateGUI(stage, SIGNIN);
+    }
+
+    private void loadAuthenticateGUI(Stage stage, String type) {
         try {
-            URL url = new File(SIGNIN).toURI().toURL();
+            URL url = new File(type).toURI().toURL();
             FXMLLoader loader = new FXMLLoader(url);
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);

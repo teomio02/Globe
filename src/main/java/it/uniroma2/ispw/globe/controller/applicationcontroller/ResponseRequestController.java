@@ -97,11 +97,12 @@ public class ResponseRequestController {
     }
 
     public ProposalBean getProposal(String proposalID, String sessionID) throws FailedOperationException, IncorrectDataException {
+        Proposal proposal;
+        User user;
+        Agency agency;
+        ProposalBean proposalBean = new ProposalBean();
+        proposalBean.setID(proposalID);
         try {
-            Proposal proposal;
-            User user;
-            Agency agency;
-
             if (proposalID == null) {
                 Session session = SessionManager.getInstance().getSession(sessionID);
                 proposal = session.getPendingProposal();
@@ -124,8 +125,6 @@ public class ResponseRequestController {
                 user = accountDao.getUserByProposal(proposalID);
             }
 
-            ProposalBean proposalBean = new ProposalBean();
-            proposalBean.setID(proposalID);
             proposalBean.setPrice(proposal.getPrice());
             proposalBean.setAgency(agency.getUsername());
             proposalBean.setUser(user.getUsername());
@@ -154,7 +153,7 @@ public class ResponseRequestController {
                 user = accountDao.getUserByRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                throw new FailedOperationException("Get proposal");
+                throw new FailedOperationException("Get request");
             }
         } else {
             Session session = SessionManager.getInstance().getSession(sessionID);
@@ -172,16 +171,10 @@ public class ResponseRequestController {
             throw new FailedOperationException("Get Request");
         }
 
-        List<String> citiesID = new ArrayList<>();
-        for (City city : request.getCities()) {
-            citiesID.add(city.getPlaceID());
-        }
+        return getRequestBean(request, user, agency);
+    }
 
-        List<String> attractionsID = new ArrayList<>();
-        for (Attraction attraction : request.getAttractions()) {
-            attractionsID.add(attraction.getPlaceID());
-        }
-
+    private RequestBean getRequestBean(Request request, User user, Agency agency) throws IncorrectDataException {
         RequestBean requestBean = new RequestBean();
         requestBean.setID(request.getId());
         requestBean.setUser(user.getUsername());
@@ -189,17 +182,28 @@ public class ResponseRequestController {
         requestBean.setOtherRequests(request.getOtherRequest());
         requestBean.setDayNum(request.getDayNum());
         requestBean.setTypes(request.getItineraryType());
-        requestBean.setCities(citiesID);
+
+        List<String> attractionsID = new ArrayList<>();
+        for (Attraction attraction : request.getAttractions()) {
+            attractionsID.add(attraction.getPlaceID());
+        }
         requestBean.setAttractions(attractionsID);
+
+
+        List<String> citiesID = new ArrayList<>();
+        for (City city : request.getCities()) {
+            citiesID.add(city.getPlaceID());
+        }
+        requestBean.setCities(citiesID);
+
         requestBean.setAccepted(request.getAccepted());
         requestBean.setFlight(request.getFlightRequest());
         requestBean.setAccommodation(request.getAccommodationRequest());
-
         return requestBean;
     }
 
     public List<Object> getRequestOptional(String requestID, String sessionID) throws FailedOperationException, IncorrectDataException {
-        Request request = null;
+        Request request;
         List<Object> optionals = new ArrayList<>();
         if (requestID != null) {
             RequestDao requestDao = Persistence.getInstance().getFactory().getRequestDao();
@@ -207,7 +211,7 @@ public class ResponseRequestController {
                 request = requestDao.getRequest(requestID);
             } catch (DaoException e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-                throw new FailedOperationException("Get proposal");
+                throw new FailedOperationException("Get request optional");
             }
         } else {
             request = SessionManager.getInstance().getSession(sessionID).getPendingRequest();
@@ -215,17 +219,17 @@ public class ResponseRequestController {
 
         Request current = request;
         while (current instanceof RequestDecorator requestDecorator) {
-            if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
-                OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
-                onTheRoadBean.setMode(onTheRoadRequestDecorator.getTravelMode());
-                onTheRoadBean.setDayDrivingHours(onTheRoadRequestDecorator.getDayDrivingHours());
-                optionals.add(onTheRoadBean);
-            }
             if (current instanceof NatureRequestDecorator natureRequestDecorator) {
                 NatureBean natureBean = new NatureBean();
                 natureBean.setDifficulty(natureRequestDecorator.getTrekkingDifficulty());
                 natureBean.setTrekkingDistance(natureRequestDecorator.getTrekkingDistance());
                 optionals.add(natureBean);
+            }
+            if (current instanceof OnTheRoadRequestDecorator onTheRoadRequestDecorator) {
+                OnTheRoadBean onTheRoadBean = new OnTheRoadBean();
+                onTheRoadBean.setMode(onTheRoadRequestDecorator.getTravelMode());
+                onTheRoadBean.setDayDrivingHours(onTheRoadRequestDecorator.getDayDrivingHours());
+                optionals.add(onTheRoadBean);
             }
             current = requestDecorator.getRequest();
         }

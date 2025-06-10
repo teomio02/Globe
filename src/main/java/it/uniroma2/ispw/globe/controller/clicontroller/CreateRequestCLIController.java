@@ -1,7 +1,6 @@
 package it.uniroma2.ispw.globe.controller.clicontroller;
 
 import it.uniroma2.ispw.globe.bean.*;
-import it.uniroma2.ispw.globe.controller.applicationcontroller.CreateItineraryController;
 import it.uniroma2.ispw.globe.controller.applicationcontroller.RequestItineraryController;
 import it.uniroma2.ispw.globe.exception.DuplicateItemException;
 import it.uniroma2.ispw.globe.exception.FailedOperationException;
@@ -114,7 +113,7 @@ public class CreateRequestCLIController {
         Scanner input = new Scanner(System.in);
 
         while (true){
-            System.out.print("Please enter City (enter stop to terminate): ");
+            System.out.print("Please enter City name (enter stop to terminate): ");
             city = input.nextLine();
             if (!city.isEmpty()) {
                 if (city.equalsIgnoreCase("stop")) {
@@ -135,7 +134,7 @@ public class CreateRequestCLIController {
     public String getCity(String city) {
         List<CityBean> citiesResult = new ArrayList<>();
         try {
-            citiesResult = new CreateItineraryController().getCities(city);
+            citiesResult = new RequestItineraryController().getCities(city);
         } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
@@ -143,7 +142,7 @@ public class CreateRequestCLIController {
             int i = 0;
             for (CityBean cityResult : citiesResult) {
                 i++;
-                System.out.println(i + " -> " + cityResult.getName()+" - "+ cityResult.getCountry());
+                System.out.println(i + " --> " + cityResult.getName()+" - "+ cityResult.getCountry());
                 if (i == 3) {
                     break;
                 }
@@ -160,7 +159,7 @@ public class CreateRequestCLIController {
         String strChoice;
         int choice;
         while (true) {
-            System.out.println("Please enter the number of the city for your request: ");
+            System.out.println("Please enter city number for your request: ");
             strChoice = input.nextLine();
             try {
                 choice = Integer.parseInt(strChoice);
@@ -204,7 +203,7 @@ public class CreateRequestCLIController {
     public String getAttraction(String attr) {
         List<AttractionBean> attractionsResult = new ArrayList<>();
         try {
-            attractionsResult = new CreateItineraryController().getAttractions(attr);
+            attractionsResult = new RequestItineraryController().getAttractions(attr);
         } catch (FailedOperationException e) {
             System.out.println(ERROR + e.getMessage());
         }
@@ -212,7 +211,7 @@ public class CreateRequestCLIController {
             int i = 0;
             for (AttractionBean attractionResult : attractionsResult) {
                 i++;
-                System.out.println(i + " -> " + attractionResult.getName()+" - "+ attractionResult.getCity());
+                System.out.println(i + "  -> " + attractionResult.getName()+" - "+ attractionResult.getCity());
                 if (i == 3) {
                     break;
                 }
@@ -229,7 +228,7 @@ public class CreateRequestCLIController {
         String strChoice;
         int choice;
         while (true) {
-            System.out.println("Please enter the number of the attraction for your request: ");
+            System.out.println("Please enter attraction number for your request: ");
             strChoice = input.nextLine();
             try {
                 choice = Integer.parseInt(strChoice);
@@ -249,12 +248,12 @@ public class CreateRequestCLIController {
         List<String> types = new ArrayList<>();
 
         do {
-            System.out.println("Please enter the number of the type for your itinerary");
-            System.out.println("1 -> " + ON_THE_ROAD);
-            System.out.println("2 -> " + NATURE);
-            System.out.println("3 -> " + CULTURE);
-            System.out.println("4 -> " + RELAX);
-            System.out.println("5 -> " + CITY);
+            System.out.println("Please enter the number of the type for your request");
+            System.out.println("1 --> " + ON_THE_ROAD);
+            System.out.println("2 --> " + NATURE);
+            System.out.println("3 --> " + CULTURE);
+            System.out.println("4 --> " + RELAX);
+            System.out.println("5 --> " + CITY);
 
             types.add(getType(types));
 
@@ -449,19 +448,25 @@ public class CreateRequestCLIController {
                 if (agency.equalsIgnoreCase("stop")) {
                     break;
                 }
-                for (AgencyBean agencyResult : agencies) {
-                    if (agencyResult.getName().equals(agency)) {
-                        agenciesSelected.add(agencyResult.getName());
-                    } else {
-                        System.out.println(ERROR + "Agency " + agency + " does not exist");
-                    }
-                }
+                agenciesSelected = selectAgency(agencies, agency);
             }else {
                 System.out.println(CHOICE_ERROR);
             }
         }
 
         return agenciesSelected;
+    }
 
+    public List<String> selectAgency(List<AgencyBean> agencies, String agency) {
+        List<String> agenciesSelected = new ArrayList<>();
+        for (AgencyBean agencyResult : agencies) {
+            if (agencyResult.getName().equals(agency)) {
+                agenciesSelected.add(agencyResult.getName());
+            } else {
+                System.out.println(ERROR + "Agency " + agency + " does not exist");
+            }
+        }
+
+        return agenciesSelected;
     }
 }

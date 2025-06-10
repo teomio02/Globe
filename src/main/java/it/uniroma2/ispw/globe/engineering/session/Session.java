@@ -75,7 +75,9 @@ public class Session {
         this.pendingAgencies = pendingAgencies;
     }
 
-    public Account getPendingAccount() { return this.pendingAccount; }
+    public Account getPendingAccount() {
+        return this.pendingAccount;
+    }
 
     public void setPendingAccount(Account pendingAccount) {
         this.pendingAccount = pendingAccount;

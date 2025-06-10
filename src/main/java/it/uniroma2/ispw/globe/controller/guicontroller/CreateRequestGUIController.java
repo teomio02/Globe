@@ -40,15 +40,9 @@ public class CreateRequestGUIController extends AbstractGUIController {
     @FXML
     private VBox attractionVBox;
     @FXML
-    private VBox otherRequestsVBox;
-    @FXML
     private VBox agencyResultVBox;
     @FXML
     private VBox agencyVBox;
-    @FXML
-    private VBox natureVBox;
-    @FXML
-    private VBox onTheRoadVBox;
     @FXML
     private Button flightButton;
     @FXML
@@ -96,6 +90,8 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
     private static final String LABEL_LIGHT = "label-light";
 
+    private static final String CITY = "city";
+
     private String sessionId;
 
     public void initialize(String sessionId) {
@@ -112,13 +108,13 @@ public class CreateRequestGUIController extends AbstractGUIController {
     }
 
     public void removeDay() {
-        int dayNum = Integer.valueOf(dayLabel.getText());
+        int dayNum = Integer.parseInt(dayLabel.getText());
         if(dayNum>0){
             dayLabel.setText(String.valueOf(dayNum-1));}
     }
 
     public void addDay() {
-        int dayNum = Integer.valueOf(dayLabel.getText());
+        int dayNum = Integer.parseInt(dayLabel.getText());
         if (dayNum < 99) {
             dayLabel.setText(String.valueOf(dayNum + 1));
         }
@@ -129,7 +125,12 @@ public class CreateRequestGUIController extends AbstractGUIController {
         List<CityBean> cities;
         cityResultVBox.getChildren().clear();
         String city = citiesField.getText();
-        cities = new RequestItineraryController().getCities(city);
+        try {
+            cities = new RequestItineraryController().getCities(city);
+        } catch (FailedOperationException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
         if (!cities.isEmpty()) {
             for (CityBean cityResult : cities) {
                 Button cityResultButton = new Button(cityResult.getName()+" - "+ cityResult.getCountry());
@@ -141,8 +142,8 @@ public class CreateRequestGUIController extends AbstractGUIController {
                 }
             }
         } else {
-            Label errorLabel = new Label("Error: no place");
-            cityResultVBox.getChildren().add(errorLabel);
+            Label errorCityLabel = new Label("Error: no place");
+            cityResultVBox.getChildren().add(errorCityLabel);
         }
 
     }
@@ -178,7 +179,12 @@ public class CreateRequestGUIController extends AbstractGUIController {
 
         String attraction = attractionsField.getText();
 
-        attractions = new RequestItineraryController().getAttractions(attraction);
+        try {
+            attractions = new RequestItineraryController().getAttractions(attraction);
+        } catch (FailedOperationException e) {
+            new ErrorPopUpGUIController().createPopUp(e.getMessage());
+            return;
+        }
 
         if (!attractions.isEmpty()) {
             for (AttractionBean attractionResult : attractions) {
@@ -191,8 +197,8 @@ public class CreateRequestGUIController extends AbstractGUIController {
                 }
             }
         } else {
-            Label errorLabel = new Label("Error: no place");
-            cityResultVBox.getChildren().add(errorLabel);
+            Label errorAttractionLabel = new Label("Error: no place");
+            cityResultVBox.getChildren().add(errorAttractionLabel);
         }
     }
 
@@ -441,7 +447,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
                 mode = MORNING_MODE;
             } else if ((boolean) lateAfternoonMode.getUserData()) {
                 mode = AFTERNOON_MODE;
-            } else if ((boolean) natureButton.getUserData()) {
+            } else if ((boolean) nightMode.getUserData()) {
                 mode = NIGHT_MODE;
             }
 

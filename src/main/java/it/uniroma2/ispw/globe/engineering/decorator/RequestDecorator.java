@@ -4,7 +4,7 @@ import it.uniroma2.ispw.globe.model.*;
 
 import java.util.List;
 
-public abstract class RequestDecorator extends Request {
+public abstract class RequestDecorator implements Request {
     private Request request;
 
     protected RequestDecorator(Request request) {
