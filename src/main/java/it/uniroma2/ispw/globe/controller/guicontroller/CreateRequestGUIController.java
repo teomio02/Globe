@@ -40,15 +40,9 @@ public class CreateRequestGUIController extends AbstractGUIController {
     @FXML
     private VBox attractionVBox;
     @FXML
-    private VBox otherRequestsVBox;
-    @FXML
     private VBox agencyResultVBox;
     @FXML
     private VBox agencyVBox;
-    @FXML
-    private VBox natureVBox;
-    @FXML
-    private VBox onTheRoadVBox;
     @FXML
     private Button flightButton;
     @FXML
@@ -97,7 +91,6 @@ public class CreateRequestGUIController extends AbstractGUIController {
     private static final String LABEL_LIGHT = "label-light";
 
     private static final String CITY = "city";
-    private static final String ATTRACTIONS = "attractions";
 
     private String sessionId;
 
@@ -115,13 +108,13 @@ public class CreateRequestGUIController extends AbstractGUIController {
     }
 
     public void removeDay() {
-        int dayNum = Integer.valueOf(dayLabel.getText());
+        int dayNum = Integer.parseInt(dayLabel.getText());
         if(dayNum>0){
             dayLabel.setText(String.valueOf(dayNum-1));}
     }
 
     public void addDay() {
-        int dayNum = Integer.valueOf(dayLabel.getText());
+        int dayNum = Integer.parseInt(dayLabel.getText());
         if (dayNum < 99) {
             dayLabel.setText(String.valueOf(dayNum + 1));
         }

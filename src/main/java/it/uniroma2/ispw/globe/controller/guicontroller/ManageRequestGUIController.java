@@ -35,8 +35,8 @@ public class ManageRequestGUIController extends AbstractGUIController {
     public void initialize(String sessionId) {
         this.sessionId = sessionId;
 
-        List<ProposalBean> proposals = null;
-        List<RequestBean> requests = null;
+        List<ProposalBean> proposals;
+        List<RequestBean> requests;
         try {
             proposals = new ResponseRequestController().getAgencyProposals(sessionId);
             requests = new ResponseRequestController().getAgencyRequests(sessionId);

@@ -29,8 +29,6 @@ public class CreateProposalGUIController extends AbstractGUIController{
     @FXML
     private TextField descriptionField;
     @FXML
-    private VBox createVBox;
-    @FXML
     private HBox typesHBox;
 
     private String sessionId;

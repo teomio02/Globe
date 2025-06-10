@@ -49,12 +49,6 @@ public class DisplayRequestGUIController extends AbstractGUIController {
     @FXML
     private Tab natureTab;
     @FXML
-    private Tab relaxTab;
-    @FXML
-    private Tab cultureTab;
-    @FXML
-    private Tab cityTab;
-    @FXML
     private VBox attractionsVBox;
     @FXML
     private VBox citiesVBox;
@@ -90,9 +84,7 @@ public class DisplayRequestGUIController extends AbstractGUIController {
             }
             userLabel.setText(request.getUser());
         } else {
-            if (requestId == null) {
-                saveRequestButton.setVisible(true);
-            }
+            saveRequestButton.setVisible(true);
             createItineraryButton.setVisible(false);
 
             List<AgencyBean> agencies;

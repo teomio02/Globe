@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -35,16 +34,6 @@ public class LogInGUIController {
     private Label errorLabel;
     @FXML
     private Button loginButton;
-    @FXML
-    private Button signInButton;
-    @FXML
-    private Button guestButton;
-    @FXML
-    private VBox signInVBox;
-    @FXML
-    private Label yesLabel;
-    @FXML
-    private Label noLabel;
 
     public void signIn(ActionEvent event) {
 

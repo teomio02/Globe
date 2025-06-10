@@ -80,10 +80,6 @@ public class CreateItineraryGUIController extends AbstractGUIController {
     @FXML
     private VBox accommodationResultVBox;
     @FXML
-    private Button plusButton;
-    @FXML
-    private Button minusButton;
-    @FXML
     private Button onTheRoadButton;
     @FXML
     private Button natureButton;
