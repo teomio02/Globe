@@ -131,7 +131,7 @@ public class AcceptItineraryController {
         }
     }
 
-    public void addRaiting(Double rating, String proposalId) throws FailedOperationException {
+    public void addRating(Double rating, String proposalId) throws FailedOperationException {
         AccountDao accountDao = Persistence.getInstance().getFactory().getAccountDao();
         try {
 
@@ -147,7 +147,7 @@ public class AcceptItineraryController {
 
         } catch (DaoException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, ERROR_DAO, e);
-            throw new FailedOperationException("Send response");
+            throw new FailedOperationException("Add rating");
         }
     }
 

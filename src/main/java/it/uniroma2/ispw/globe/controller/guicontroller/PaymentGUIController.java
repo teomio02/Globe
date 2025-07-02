@@ -58,7 +58,7 @@ public class PaymentGUIController {
                     if (controller.ratingSlider.getValue() == 0) {
                         new ErrorPopUpGUIController().createPopUp("select rating");
                     } else {
-                        new AcceptItineraryController().addRaiting(controller.ratingSlider.getValue(), proposalID);
+                        new AcceptItineraryController().addRating(controller.ratingSlider.getValue(), proposalID);
                         popupStage.close();
                     }
                 } catch (FailedOperationException ex) {
