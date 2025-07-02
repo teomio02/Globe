@@ -270,7 +270,7 @@ public class CreateRequestCLIController {
         Scanner input = new Scanner(System.in);
 
         while (true) {
-            System.out.print("Please enter your choice: ");
+            System.out.print(ENTER_CHOICE);
             strChoice = input.nextLine();
             if (!strChoice.isEmpty() && strChoice.matches("[1-5]")) {
                 choice = Integer.parseInt(strChoice);
