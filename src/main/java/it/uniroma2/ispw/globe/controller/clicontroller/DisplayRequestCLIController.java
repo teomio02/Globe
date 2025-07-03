@@ -19,6 +19,7 @@ public class DisplayRequestCLIController {
     private static final String ERROR = "ERROR: ";
     private static final String DASH = "        - ";
 
+
     DisplayRequestCLIController(String sessionId, String requestId) {
         this.sessionId = sessionId;
         this.requestId = requestId;

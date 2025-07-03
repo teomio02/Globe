@@ -198,7 +198,7 @@ public class CreateRequestGUIController extends AbstractGUIController {
             }
         } else {
             Label errorAttractionLabel = new Label("Error: no place");
-            cityResultVBox.getChildren().add(errorAttractionLabel);
+            attractionResultVBox.getChildren().add(errorAttractionLabel);
         }
     }
 
