@@ -77,7 +77,9 @@ public class DisplayRequestCLIController {
                 case 2 -> {
                     // go back
                 }
-                default -> System.out.println( CHOICE_ERROR);
+                default -> {
+                    // no default case
+                }
             }
         } else {
             int choice = showAgencyMenu();
@@ -86,7 +88,9 @@ public class DisplayRequestCLIController {
                 case 2 -> {
                     // go back
                 }
-                default -> System.out.println( CHOICE_ERROR);
+                default -> {
+                    // no default case
+                }
             }
         }
     }
