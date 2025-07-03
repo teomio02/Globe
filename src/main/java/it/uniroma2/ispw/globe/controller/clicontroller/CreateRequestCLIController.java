@@ -7,6 +7,7 @@ import it.uniroma2.ispw.globe.exception.FailedOperationException;
 import it.uniroma2.ispw.globe.exception.IncorrectDataException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -428,7 +429,7 @@ public class CreateRequestCLIController {
             agencies = new RequestItineraryController().getAgenciesByType(types);
         } catch (FailedOperationException | IncorrectDataException e) {
             System.out.println(ERROR + e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
         if (agencies != null && !agencies.isEmpty()) {
             for (AgencyBean agencyResult : agencies) {
@@ -436,7 +437,7 @@ public class CreateRequestCLIController {
             }
         } else {
             System.out.println(ERROR + "No agencies found");
-            return null;
+            return Collections.emptyList();
         }
 
         Scanner input = new Scanner(System.in);
