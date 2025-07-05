@@ -18,6 +18,7 @@ public class DisplayRequestCLIController {
     private static final String CHOICE_ERROR = "ERROR: Invalid option\n";
     private static final String ERROR = "ERROR: ";
     private static final String DASH = "        - ";
+    private static final String DASH2 = ", ";
 
 
     DisplayRequestCLIController(String sessionId, String requestId) {
@@ -53,7 +54,7 @@ public class DisplayRequestCLIController {
         if (requestId == null) {
             System.out.println("    > Agencies: ");
             for (AgencyBean agency : agencies) {
-                System.out.println(DASH + agency.getName() + ", " + agency.getRating());
+                System.out.println( DASH + agency.getName() + DASH2 + agency.getRating());
             }
         } else {
             System.out.println("    > User: "+ request.getUser());
@@ -93,7 +94,7 @@ public class DisplayRequestCLIController {
             }
         }
     }
-    
+
     public void displayOptional(List<Object> optionals) {
         for (Object optional: optionals) {
             if (optional instanceof OnTheRoadBean onTheRoad) {
@@ -112,7 +113,7 @@ public class DisplayRequestCLIController {
         for (String cityID: citiesID) {
             try {
                 CityBean city =  new RequestItineraryController().getCity(cityID);
-                System.out.println(DASH + city.getName() + ", " + city.getCountry());
+                System.out.println( DASH + city.getName() + DASH2 + city.getCountry());
             } catch (FailedOperationException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
@@ -125,7 +126,7 @@ public class DisplayRequestCLIController {
         for (String attractionID: attractionsID) {
             try {
                 AttractionBean attraction = new RequestItineraryController().getAttraction(attractionID);
-                System.out.println(DASH + attraction.getName() + ", " + attraction.getAddress());
+                System.out.println( DASH + attraction.getName() + DASH2 + attraction.getAddress());
             } catch (FailedOperationException e) {
                 System.out.println(ERROR + e.getMessage());
                 return;
