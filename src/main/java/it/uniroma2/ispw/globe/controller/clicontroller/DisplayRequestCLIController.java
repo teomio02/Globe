@@ -64,10 +64,8 @@ public class DisplayRequestCLIController {
         System.out.println("    > Types: " + request.getTypes());
 
         displayOptional(optionals);
-
         List<String> citiesID = request.getCities();
         List<String> attractionsID = request.getAttractions();
-
         displayCities(citiesID);
         displayAttractions(attractionsID);
 
@@ -95,7 +93,7 @@ public class DisplayRequestCLIController {
             }
         }
     }
-
+    
     public void displayOptional(List<Object> optionals) {
         for (Object optional: optionals) {
             if (optional instanceof OnTheRoadBean onTheRoad) {

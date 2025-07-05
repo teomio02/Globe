@@ -7,6 +7,7 @@ public class Agency extends Account{
     private String description;
     private List<String> preferences;
 
+
     public double getRating() {
         return rating;
     }
@@ -30,5 +31,4 @@ public class Agency extends Account{
     public void setPreferences(List<String> preferences) {
         this.preferences = preferences;
     }
-    
 }
