@@ -64,9 +64,12 @@ public class DisplayRequestCLIController {
         System.out.println("    > Types: " + request.getTypes());
 
         displayOptional(optionals);
+        
         List<String> citiesID = request.getCities();
+
         List<String> attractionsID = request.getAttractions();
         displayCities(citiesID);
+
         displayAttractions(attractionsID);
 
         if (requestId == null) {
