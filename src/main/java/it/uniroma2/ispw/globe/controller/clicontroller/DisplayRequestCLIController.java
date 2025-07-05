@@ -59,7 +59,6 @@ public class DisplayRequestCLIController {
         } else {
             System.out.println("    > User: "+ request.getUser());
         }
-
         System.out.println("    > Days: " + request.getDayNum());
         System.out.println("    > Requests: " + request.getOtherRequests());
         System.out.println("    > Types: " + request.getTypes());
@@ -175,6 +174,7 @@ public class DisplayRequestCLIController {
         }
         return choice;
     }
+
     public void createItinerary() {
         try {
             new ResponseRequestController().setPendingRequest(sessionId, requestId);
@@ -184,6 +184,7 @@ public class DisplayRequestCLIController {
         CreateItineraryCLIController controller = new CreateItineraryCLIController(sessionId,requestId);
         controller.start();
     }
+
 
     public void saveRequest() {
         try {
